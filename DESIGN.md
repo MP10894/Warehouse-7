@@ -283,6 +283,7 @@ tag `warehouse-prototype`.
 | 2026-10-22 | Art spec agreed: Blockbench, 32 px per metre (terrain 16), shared 65-colour palette, budgets weapons 300 / crates and pickups 60 / upgrades 150 / hands 100, gloved first-person hands |
 | 2026-10-22 | Art workflow: reference picture → Claude drafts the Blockbench model → Martial refines → Claude checks |
 | 2026-10-22 | Recoil returns: after you stop firing the view comes back to where you were aiming (sustained fire still climbs; bloom still spreads shots). Pulling down yourself counts towards the return |
+| 2026-10-22 | Weapons and first-person hands drawn at 256 px per metre (seen close); first drawn weapon: Sig P320 from an OpenArt reference sheet |
 
 ## Open questions
 

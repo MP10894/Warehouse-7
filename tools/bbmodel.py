@@ -3,7 +3,8 @@
     python3 tools/bbmodel.py assets/sources/enemy_insurgent.bbmodel assets/characters/enemy_insurgent.glb
     python3 tools/bbmodel.py assets/sources/enemy_insurgent.bbmodel          (check only)
 
-Units: 1 Blockbench unit = 1 texture pixel = 1/32 m (ART_SPEC.md, section 2).
+Units: 1 Blockbench unit = 1 texture pixel = 1/32 m (ART_SPEC.md, section 2);
+weapons and first-person hands 1/256 m (section 5), picked from the output folder.
 Blockbench's own File → Export → glTF works too (export scale 32); this script is a
 fallback and what Claude uses to check files.
 """
@@ -89,13 +90,16 @@ def names(tree):
     return out
 
 
-def to_glb(path_in, path_out):
+def to_glb(path_in, path_out, units_per_m=None):
+    """units_per_m: 32 for characters, items and blocks; 256 for weapons and first-person hands."""
+    if units_per_m is None:
+        units_per_m = 256 if ('/weapons/' in path_out.replace('\\', '/') or 'player_hands' in path_out) else UNITS_PER_M
     bb, elements, groups = load(path_in)
     tree = walk(bb, elements, groups)
     tex = (bb.get('textures') or [None])[0]
     tw = (tex or {}).get('uv_width') or bb.get('resolution', {}).get('width', 16)
     th = (tex or {}).get('uv_height') or bb.get('resolution', {}).get('height', 16)
-    s = 1 / UNITS_PER_M
+    s = 1 / units_per_m
 
     nodes, meshes, accessors, views = [], [], [], []
     blob = bytearray()

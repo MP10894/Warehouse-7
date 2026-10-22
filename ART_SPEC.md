@@ -27,12 +27,12 @@ not easier to hit.
 | Rule | Value |
 |---|---|
 | Tool | **Blockbench** (free), project type **Generic Model**. |
-| Scale | **1 Blockbench unit = 1 texture pixel = 1/32 m.** A 1.8 m character is about 58 units tall; a 1 m wall block is 32 units. |
+| Scale | **1 Blockbench unit = 1 texture pixel = 1/32 m** for characters, items and blocks: a 1.8 m character is about 58 units tall. **Weapons and first-person hands are 8× finer: 1 unit = 1/256 m** (section 5). |
 | Pixel density | **32 pixels per metre** for everything except the terrain (16 per metre). Because 1 unit = 1 pixel, Blockbench's UV editor gives exactly this density when the texture is painted 1 : 1. |
 | Up | **+Y** |
 | Front | The model faces **north** in Blockbench (−Z in the game). |
 | Colours | Only colours from the **shared palette** (`assets/palette/`, section 10). |
-| 3D file format | **glTF binary (`.glb`)**: File → Export → Export glTF Model, with *Embed textures* on and **scale 32**. One model per file. Or save the `.bbmodel` in `assets/sources/` and Claude converts it (`tools/bbmodel.py`). |
+| 3D file format | **glTF binary (`.glb`)**: File → Export → Export glTF Model, with *Embed textures* on and **scale 32** (weapons and hands: **256**). One model per file. Or save the `.bbmodel` in `assets/sources/` and Claude converts it (`tools/bbmodel.py`). |
 | Texture format | **PNG**, sizes in powers of two (8, 16, 32, 64, 128). One texture per model, embedded in the `.glb`. |
 | Texture filtering | Pixels stay sharp: the game turns off smoothing. Don't pre-blur. |
 | Lighting | Don't paint strong light or shadow direction into textures. The game adds simple sun shading to models and darkens blocks under roofs itself. Gentle wear, dirt and edge darkening are fine. |
@@ -121,6 +121,11 @@ One `.glb` per weapon, named with the weapon id from the Weapons tab
 
 **Budget: 300 triangles** (weapons are on screen all the time).
 
+**Scale: 1 Blockbench unit = 1 texture pixel = 1/256 m (256 px per metre).** A weapon in
+your hands is seen far closer than any wall, so at the world's 32 px per metre a pistol
+would be only 6 pixels long. At 256 it is about 50 units (and pixels) long, a rifle about
+225. Export with scale 256.
+
 - **Origin at the grip** (where the right hand holds it). Barrel points **north** (−Z).
 - Real-world size. The game draws weapons 1.4× bigger in other soldiers' hands so they
   read at a distance; model them true size.
@@ -145,7 +150,7 @@ One `.glb` per weapon, named with the weapon id from the Weapons tab
 A weapon more than 50 % shorter or longer than the placeholder is refused (usually a wrong
 export scale).
 
-**First-person hands:** `items/player_hands.glb`, **≤ 100 triangles**, with two groups
+**First-person hands:** `items/player_hands.glb`, **≤ 100 triangles**, same 1/256 m scale, with two groups
 `hand_R` and `hand_L`, each with its pivot at the centre of the palm, glove plus the end of
 the sleeve, fingers pointing north. The game places `hand_R` on the weapon's grip and
 `hand_L` on `hand_left`. Until the file exists, simple gloves made of boxes are drawn.
@@ -219,7 +224,7 @@ black, white, muzzle-flash yellow, flame orange, sky). Picture: `docs/palette.pn
 ## 11. Checklist before committing a piece of art
 
 - [ ] Right folder, right name.
-- [ ] Scale: 1 unit = 1/32 m, exported with scale 32 (or the `.bbmodel` saved in `sources/`).
+- [ ] Scale: 1 unit = 1/32 m, exported with scale 32; weapons and hands 1/256 m, scale 256 (or just save the `.bbmodel` in `sources/`).
 - [ ] Faces north.
 - [ ] Origin in the right place (feet, grip or bottom centre).
 - [ ] Named groups and points present (characters: section 4; weapons: `muzzle`, `sight`).
@@ -238,7 +243,8 @@ black, white, muzzle-flash yellow, flame orange, sky). Picture: `docs/palette.pn
 4. **Check**: Claude checks the saved file (`tools/bbmodel.py`) and converts or commits it.
 
 Drafts so far: `assets/blocks/wall.png`, `assets/sources/enemy_insurgent.bbmodel`
-(→ `assets/characters/enemy_insurgent.glb`).
+(→ `assets/characters/enemy_insurgent.glb`), `assets/sources/sig_p320.bbmodel`
+(→ `assets/weapons/sig_p320.glb`, from the OpenArt reference in `assets/sources/reference/`).
 
 ## Decisions (2026-10-22)
 
@@ -249,3 +255,4 @@ Drafts so far: `assets/blocks/wall.png`, `assets/sources/enemy_insurgent.bbmodel
 4. **Simple gloved hands** in first person.
 5. One **shared palette** for all art (section 10).
 6. First test pieces: `wall.png` and the insurgent, drafted by Claude.
+7. Weapons and first-person hands use 256 px per metre (1 unit = 1/256 m), because they are seen so close.
