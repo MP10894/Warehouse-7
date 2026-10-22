@@ -241,13 +241,11 @@ tag `warehouse-prototype`.
 | 2026-10-22 | Level engine: 1 m blocks, one text grid per floor; ground from a text height map |
 | 2026-10-22 | `data/weapons.csv` is the game's weapon source (edit in Excel, save as CSV) |
 | 2026-10-22 | Bullet speed factor set to 100%: the sheet's muzzle velocities are already about half of real |
+| 2026-10-22 | RPG-7 area of effect 30 (3 m blast); Sig P320 recoil lowered to 5 |
 
 ## Open questions
 
-1. **RPG area of effect.** The sheet says 3, which on the agreed scale (100 = 10 m) is a
-   0.3 m blast: it only damages what it hits directly. A real RPG warhead would be
-   around 30–50 (3–5 m). Kept at 3 until decided.
-2. **Upgrade levels.** Walls currently go to level 2 (2 blocks high). What each level of
+1. **Upgrade levels.** Walls currently go to level 2 (2 blocks high). What each level of
    each upgrade does, and what it costs.
-3. **Enemy roster** file (later).
-4. **Name** of the game.
+2. **Enemy roster** file (later).
+3. **Name** of the game.
