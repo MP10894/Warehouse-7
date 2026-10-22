@@ -1,0 +1,928 @@
+{
+ "name": "Najaf",
+ "title": "Najaf",
+ "subtitle": "Level 1 \u00b7 city district only",
+ "summary": "The outskirts and the refinery are open sand for now.",
+ "briefing": [
+  "Head north-west from the crossroads into the city.",
+  "Clear the police station courtyard. It becomes your base.",
+  "Fetch the construction crate from the building site (east of the market), build walls, then hold out."
+ ],
+ "goals": {
+  "claim": "Clear the police station (in the city, north-west) to claim a base",
+  "fetch": "Fetch the construction crate from the building site (east of the market)"
+ },
+ "size": 256,
+ "max_height": 16,
+ "time_limit": 900,
+ "terrain_spacing": 4,
+ "player_spawns": [
+  {
+   "x": 126,
+   "z": 150,
+   "facing": 40
+  },
+  {
+   "x": 129,
+   "z": 151,
+   "facing": 40
+  }
+ ],
+ "buildings": [
+  {
+   "file": "clinic.txt",
+   "x": 4,
+   "z": 4
+  },
+  {
+   "file": "police_hq.txt",
+   "x": 60,
+   "z": 56
+  },
+  {
+   "file": "police_wing.txt",
+   "x": 60,
+   "z": 64
+  },
+  {
+   "file": "minaret.txt",
+   "x": 90,
+   "z": 30
+  },
+  {
+   "file": "site_frame.txt",
+   "x": 106,
+   "z": 86
+  },
+  {
+   "file": "site_frame.txt",
+   "x": 119,
+   "z": 90,
+   "turn": 90
+  },
+  {
+   "file": "l1_damaged.txt",
+   "x": 2,
+   "z": 28,
+   "turn": 180
+  },
+  {
+   "file": "s3_ruined.txt",
+   "x": 16,
+   "z": 28,
+   "turn": 270
+  },
+  {
+   "file": "s3_damaged.txt",
+   "x": 2,
+   "z": 40,
+   "turn": 90
+  },
+  {
+   "file": "s1_damaged.txt",
+   "x": 12,
+   "z": 40,
+   "turn": 270
+  },
+  {
+   "file": "l3_damaged.txt",
+   "x": 2,
+   "z": 56,
+   "turn": 90
+  },
+  {
+   "file": "s2_damaged.txt",
+   "x": 14,
+   "z": 56,
+   "turn": 90
+  },
+  {
+   "file": "s1_damaged.txt",
+   "x": 2,
+   "z": 84,
+   "turn": 90
+  },
+  {
+   "file": "m2_intact.txt",
+   "x": 11,
+   "z": 84,
+   "turn": 270
+  },
+  {
+   "file": "s1_damaged.txt",
+   "x": 2,
+   "z": 96,
+   "turn": 90
+  },
+  {
+   "file": "s1_intact.txt",
+   "x": 11,
+   "z": 96
+  },
+  {
+   "file": "l3_damaged.txt",
+   "x": 2,
+   "z": 112
+  },
+  {
+   "file": "s3_ruined.txt",
+   "x": 16,
+   "z": 112,
+   "turn": 180
+  },
+  {
+   "file": "s3_intact.txt",
+   "x": 32,
+   "z": 2,
+   "turn": 90
+  },
+  {
+   "file": "m1_damaged.txt",
+   "x": 42,
+   "z": 2,
+   "turn": 90
+  },
+  {
+   "file": "l1_intact.txt",
+   "x": 32,
+   "z": 28,
+   "turn": 270
+  },
+  {
+   "file": "s2_intact.txt",
+   "x": 44,
+   "z": 28
+  },
+  {
+   "file": "m2_intact.txt",
+   "x": 32,
+   "z": 56,
+   "turn": 270
+  },
+  {
+   "file": "m1_damaged.txt",
+   "x": 43,
+   "z": 56,
+   "turn": 90
+  },
+  {
+   "file": "s1_ruined.txt",
+   "x": 38,
+   "z": 68,
+   "turn": 90
+  },
+  {
+   "file": "l1_intact.txt",
+   "x": 32,
+   "z": 112
+  },
+  {
+   "file": "s2_intact.txt",
+   "x": 60,
+   "z": 2
+  },
+  {
+   "file": "l1_ruined.txt",
+   "x": 70,
+   "z": 2,
+   "turn": 90
+  },
+  {
+   "file": "l1_intact.txt",
+   "x": 60,
+   "z": 28,
+   "turn": 180
+  },
+  {
+   "file": "s2_intact.txt",
+   "x": 60,
+   "z": 40
+  },
+  {
+   "file": "s2_damaged.txt",
+   "x": 70,
+   "z": 40,
+   "turn": 90
+  },
+  {
+   "file": "l1_damaged.txt",
+   "x": 60,
+   "z": 84
+  },
+  {
+   "file": "s1_damaged.txt",
+   "x": 60,
+   "z": 96
+  },
+  {
+   "file": "s3_damaged.txt",
+   "x": 70,
+   "z": 96,
+   "turn": 270
+  },
+  {
+   "file": "m2_intact.txt",
+   "x": 60,
+   "z": 112,
+   "turn": 90
+  },
+  {
+   "file": "s3_ruined.txt",
+   "x": 72,
+   "z": 112,
+   "turn": 270
+  },
+  {
+   "file": "s2_intact.txt",
+   "x": 88,
+   "z": 2,
+   "turn": 270
+  },
+  {
+   "file": "s2_intact.txt",
+   "x": 88,
+   "z": 12,
+   "turn": 270
+  },
+  {
+   "file": "s2_damaged.txt",
+   "x": 88,
+   "z": 36
+  },
+  {
+   "file": "s2_intact.txt",
+   "x": 88,
+   "z": 56,
+   "turn": 90
+  },
+  {
+   "file": "s3_intact.txt",
+   "x": 88,
+   "z": 66,
+   "turn": 270
+  },
+  {
+   "file": "s2_intact.txt",
+   "x": 88,
+   "z": 84,
+   "turn": 270
+  },
+  {
+   "file": "s2_damaged.txt",
+   "x": 88,
+   "z": 94,
+   "turn": 90
+  },
+  {
+   "file": "s2_ruined.txt",
+   "x": 88,
+   "z": 112,
+   "turn": 180
+  },
+  {
+   "file": "s2_ruined.txt",
+   "x": 88,
+   "z": 121,
+   "turn": 90
+  },
+  {
+   "file": "m1_intact.txt",
+   "x": 104,
+   "z": 2,
+   "turn": 90
+  },
+  {
+   "file": "m2_intact.txt",
+   "x": 115,
+   "z": 2
+  },
+  {
+   "file": "l2_intact.txt",
+   "x": 104,
+   "z": 28,
+   "turn": 90
+  },
+  {
+   "file": "l1_intact.txt",
+   "x": 116,
+   "z": 28,
+   "turn": 180
+  },
+  {
+   "file": "m3_damaged.txt",
+   "x": 107,
+   "z": 56
+  },
+  {
+   "file": "s3_intact.txt",
+   "x": 119,
+   "z": 56,
+   "turn": 180
+  },
+  {
+   "file": "m2_intact.txt",
+   "x": 104,
+   "z": 67,
+   "turn": 180
+  },
+  {
+   "file": "m1_intact.txt",
+   "x": 117,
+   "z": 67
+  },
+  {
+   "file": "s3_ruined.txt",
+   "x": 104,
+   "z": 112,
+   "turn": 90
+  },
+  {
+   "file": "l3_intact.txt",
+   "x": 114,
+   "z": 112,
+   "turn": 180
+  }
+ ],
+ "props": [
+  {
+   "type": "crate",
+   "x": 35,
+   "z": 88,
+   "w": 2,
+   "d": 1
+  },
+  {
+   "type": "crate",
+   "x": 35,
+   "z": 97,
+   "w": 2,
+   "d": 1
+  },
+  {
+   "type": "crate",
+   "x": 41,
+   "z": 88,
+   "w": 2,
+   "d": 1
+  },
+  {
+   "type": "crate",
+   "x": 41,
+   "z": 97,
+   "w": 2,
+   "d": 1
+  },
+  {
+   "type": "crate",
+   "x": 47,
+   "z": 88,
+   "w": 2,
+   "d": 1
+  },
+  {
+   "type": "crate",
+   "x": 47,
+   "z": 97,
+   "w": 2,
+   "d": 1
+  },
+  {
+   "type": "lowwall",
+   "x": 34,
+   "z": 95,
+   "w": 5,
+   "d": 1
+  },
+  {
+   "type": "lowwall",
+   "x": 44,
+   "z": 95,
+   "w": 5,
+   "d": 1
+  },
+  {
+   "type": "crate",
+   "x": 49,
+   "z": 100,
+   "w": 1,
+   "d": 1,
+   "h": 2
+  },
+  {
+   "type": "crate",
+   "x": 70,
+   "z": 66,
+   "w": 2,
+   "d": 1
+  },
+  {
+   "type": "lowwall",
+   "x": 74,
+   "z": 70,
+   "w": 3,
+   "d": 1
+  },
+  {
+   "type": "crate",
+   "x": 69,
+   "z": 72,
+   "w": 1,
+   "d": 1,
+   "h": 2
+  },
+  {
+   "type": "crate",
+   "x": 108,
+   "z": 99,
+   "w": 3,
+   "d": 2
+  },
+  {
+   "type": "crate",
+   "x": 109,
+   "z": 99,
+   "w": 1,
+   "d": 1,
+   "h": 2
+  },
+  {
+   "type": "lowwall",
+   "x": 104,
+   "z": 103,
+   "w": 10,
+   "d": 1
+  },
+  {
+   "type": "crate",
+   "x": 125,
+   "z": 86,
+   "w": 2,
+   "d": 2
+  },
+  {
+   "type": "lowwall",
+   "x": 26,
+   "z": 36,
+   "w": 4,
+   "d": 1
+  },
+  {
+   "type": "lowwall",
+   "x": 40,
+   "z": 51,
+   "w": 1,
+   "d": 3
+  },
+  {
+   "type": "crate",
+   "x": 82,
+   "z": 92,
+   "w": 2,
+   "d": 1
+  },
+  {
+   "type": "lowwall",
+   "x": 98,
+   "z": 64,
+   "w": 4,
+   "d": 1
+  },
+  {
+   "type": "lowwall",
+   "x": 10,
+   "z": 79,
+   "w": 6,
+   "d": 1
+  },
+  {
+   "type": "crate",
+   "x": 55,
+   "z": 22,
+   "w": 1,
+   "d": 2
+  },
+  {
+   "type": "lowwall",
+   "x": 100,
+   "z": 116,
+   "w": 1,
+   "d": 4
+  },
+  {
+   "type": "crate",
+   "x": 70,
+   "z": 107,
+   "w": 2,
+   "d": 2
+  }
+ ],
+ "base": {
+  "name": "Police station",
+  "area": {
+   "x0": 60,
+   "z0": 56,
+   "x1": 80,
+   "z1": 76
+  },
+  "build_spots": [
+   {
+    "x": 73,
+    "z": 68,
+    "upgrade": "walls",
+    "needs": "construction_crate"
+   }
+  ],
+  "wall_plan": [
+   {
+    "x": 67,
+    "z": 74,
+    "w": 5,
+    "d": 1
+   },
+   {
+    "x": 74,
+    "z": 74,
+    "w": 5,
+    "d": 1
+   },
+   {
+    "x": 78,
+    "z": 64,
+    "w": 1,
+    "d": 4
+   },
+   {
+    "x": 78,
+    "z": 70,
+    "w": 1,
+    "d": 3
+   }
+  ]
+ },
+ "base_items": [
+  {
+   "item": "construction_crate",
+   "x": 110.5,
+   "z": 88.5,
+   "y": 3
+  }
+ ],
+ "enemy_groups": [
+  {
+   "id": "clinic",
+   "behaviour": "guard",
+   "respawn": 60,
+   "spawns": [
+    {
+     "x": 7,
+     "z": 9,
+     "y": 0
+    },
+    {
+     "x": 15,
+     "z": 11,
+     "y": 3
+    },
+    {
+     "x": 18,
+     "z": 7,
+     "y": 6
+    },
+    {
+     "x": 10,
+     "z": 12,
+     "y": 9
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.3,
+   "armour": 50
+  },
+  {
+   "id": "police",
+   "behaviour": "guard",
+   "respawn": 45,
+   "holds_base": true,
+   "spawns": [
+    {
+     "x": 64,
+     "z": 59,
+     "y": 0
+    },
+    {
+     "x": 74,
+     "z": 60,
+     "y": 3
+    },
+    {
+     "x": 71,
+     "z": 69,
+     "y": 0
+    },
+    {
+     "x": 76,
+     "z": 72,
+     "y": 0
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.25,
+   "armour": 50
+  },
+  {
+   "id": "site",
+   "behaviour": "guard",
+   "respawn": 50,
+   "spawns": [
+    {
+     "x": 112,
+     "z": 101,
+     "y": 0
+    },
+    {
+     "x": 123,
+     "z": 105,
+     "y": 0
+    },
+    {
+     "x": 114,
+     "z": 93,
+     "y": 3
+    },
+    {
+     "x": 127,
+     "z": 90,
+     "y": 0
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.25,
+   "armour": 50
+  },
+  {
+   "id": "market",
+   "behaviour": "roam",
+   "respawn": 50,
+   "radius": 14,
+   "spawns": [
+    {
+     "x": 38,
+     "z": 92
+    },
+    {
+     "x": 46,
+     "z": 99
+    },
+    {
+     "x": 42,
+     "z": 86
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.15,
+   "armour": 50
+  },
+  {
+   "id": "northwest",
+   "behaviour": "roam",
+   "respawn": 50,
+   "radius": 16,
+   "spawns": [
+    {
+     "x": 28,
+     "z": 40
+    },
+    {
+     "x": 42,
+     "z": 24
+    },
+    {
+     "x": 56,
+     "z": 38
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.15,
+   "armour": 50
+  },
+  {
+   "id": "minaret",
+   "behaviour": "roam",
+   "respawn": 55,
+   "radius": 12,
+   "spawns": [
+    {
+     "x": 84,
+     "z": 40
+    },
+    {
+     "x": 92,
+     "z": 24
+    }
+   ],
+   "weapons": {
+    "ak47": 1
+   },
+   "armour_chance": 0.1,
+   "armour": 50
+  },
+  {
+   "id": "avenue",
+   "behaviour": "roam",
+   "respawn": 55,
+   "radius": 20,
+   "spawns": [
+    {
+     "x": 100,
+     "z": 12
+    },
+    {
+     "x": 100,
+     "z": 44
+    }
+   ],
+   "weapons": {
+    "ak47": 2,
+    "rpg7": 1
+   },
+   "armour_chance": 0.1,
+   "armour": 50
+  },
+  {
+   "id": "west",
+   "behaviour": "roam",
+   "respawn": 55,
+   "radius": 18,
+   "spawns": [
+    {
+     "x": 28,
+     "z": 64
+    },
+    {
+     "x": 12,
+     "z": 108
+    }
+   ],
+   "weapons": {
+    "ak47": 1
+   },
+   "armour_chance": 0.1,
+   "armour": 50
+  },
+  {
+   "id": "east",
+   "behaviour": "roam",
+   "respawn": 50,
+   "radius": 18,
+   "spawns": [
+    {
+     "x": 108,
+     "z": 52
+    },
+    {
+     "x": 125,
+     "z": 65
+    },
+    {
+     "x": 113,
+     "z": 123
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.2,
+   "armour": 50
+  }
+ ],
+ "wave_spawns": [
+  {
+   "x": 98,
+   "z": 3
+  },
+  {
+   "x": 3,
+   "z": 112
+  },
+  {
+   "x": 252,
+   "z": 6
+  },
+  {
+   "x": 252,
+   "z": 176
+  },
+  {
+   "x": 200,
+   "z": 252
+  },
+  {
+   "x": 8,
+   "z": 250
+  }
+ ],
+ "pickups": [
+  {
+   "type": "armour",
+   "amount": 50,
+   "x": 116,
+   "z": 140
+  },
+  {
+   "type": "weapon",
+   "weapon": "ak47",
+   "x": 28.5,
+   "z": 50.5
+  },
+  {
+   "type": "ammo",
+   "calibre": "7.62x39mm",
+   "amount": 60,
+   "x": 29.5,
+   "z": 51.5
+  },
+  {
+   "type": "weapon",
+   "weapon": "m4a1",
+   "x": 84.5,
+   "z": 100.5
+  },
+  {
+   "type": "ammo",
+   "calibre": "5.56mm",
+   "amount": 60,
+   "x": 85.5,
+   "z": 101.5
+  },
+  {
+   "type": "ammo",
+   "calibre": "9mm",
+   "amount": 34,
+   "x": 104,
+   "z": 128
+  },
+  {
+   "type": "weapon",
+   "weapon": "rpg7",
+   "x": 56.5,
+   "z": 80.5
+  },
+  {
+   "type": "ammo",
+   "calibre": "40mm",
+   "amount": 3,
+   "x": 57.5,
+   "z": 80.5
+  },
+  {
+   "type": "armour",
+   "amount": 100,
+   "x": 12,
+   "z": 9,
+   "y": 9
+  },
+  {
+   "type": "ammo",
+   "calibre": "7.62x39mm",
+   "amount": 60,
+   "x": 92,
+   "z": 80
+  }
+ ],
+ "weather_zones": [
+  {
+   "type": "sandstorm",
+   "x": 60,
+   "z": 210,
+   "radius": 60,
+   "chance_per_minute": 0.5,
+   "min_duration": 30,
+   "max_duration": 60
+  },
+  {
+   "type": "sandstorm",
+   "x": 205,
+   "z": 212,
+   "radius": 40,
+   "chance_per_minute": 0.5,
+   "min_duration": 30,
+   "max_duration": 60
+  }
+ ]
+}

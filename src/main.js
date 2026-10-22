@@ -37,7 +37,7 @@ const $ = id => document.getElementById(id);
 const app = $('app');
 const view = createView({ app, viewCanvas: $('view'), hudCanvas: $('hud'), settings: S });
 const handlers = { start: null, coop: null };
-const screens = createScreens({ view, onStart: () => handlers.start && handlers.start(), onCoop: () => handlers.coop && handlers.coop() });
+const screens = createScreens({ view, onStart: () => handlers.start && handlers.start(), onCoop: () => handlers.coop && handlers.coop(), onLevel: id => handlers.level && handlers.level(id) });
 
 if (!view) {
   screens.showError('No WebGL', 'This browser could not start WebGL, which the game needs.');
@@ -55,7 +55,11 @@ if (!view) {
   let role = 'solo';          // 'solo' | 'host' | 'guest'
   let localId = 'p1';
   let mode = 'menu';          // 'menu' | 'lobby' | 'playing' | 'won' | 'lost'
-  const newWorld = (seed, ids) => createWorld({ data: DATA, levelId: S.level, seed, playerIds: ids });
+  // the chosen level is remembered on this device; the host's choice decides in co-op
+  let levelId = S.level;
+  try { const saved = localStorage.getItem('w7-level'); if (saved && DATA.levels[saved]) levelId = saved; } catch (e) { /* storage unavailable */ }
+  if (!DATA.levels[levelId]) levelId = Object.keys(DATA.levels)[0];
+  const newWorld = (seed, ids) => createWorld({ data: DATA, levelId, seed, playerIds: ids });
   let world = newWorld((Math.random() * 1e9) | 0, ['p1']);
 
   const tex = makeTextures();
@@ -94,8 +98,9 @@ if (!view) {
     prevFire: false, lostAt: 0
   };
 
-  function enterPlay(seed, ids) {
+  function enterPlay(seed, ids, level) {
     audio.init();
+    if (level && DATA.levels[level]) levelId = level;
     world = newWorld(seed, ids);
     buildScenery();
     worldView.reset(); effects.reset();
@@ -124,10 +129,18 @@ if (!view) {
     net.seen = c ? { fire: c[5], reload: c[6], swap: c[7], interact: c[8] } : { fire: 0, reload: 0, swap: 0, interact: 0 };
     const seed = (Math.random() * 1e9) | 0;
     enterPlay(seed, ['p1', 'p2']);
-    net.session.set({ role: 'host', run: net.run, seed, started: 1 });
+    net.session.set({ role: 'host', run: net.run, seed, level: levelId, started: 1 });
   }
 
   handlers.start = () => (role === 'host' && net.session ? hostStart() : startSolo());
+  handlers.level = id => {
+    if (!DATA.levels[id] || id === levelId) return;
+    levelId = id;
+    try { localStorage.setItem('w7-level', id); } catch (e) { /* storage unavailable */ }
+    world = newWorld((Math.random() * 1e9) | 0, ['p1']);
+    buildScenery(); worldView.reset();
+    screens.showMenu(world);
+  };
 
   function leaveCoop() {
     if (net.session) net.session.leave();
@@ -232,7 +245,7 @@ if (!view) {
           screens.setLobbyStatus(st && st.role === 'host' ? 'Connected. Waiting for the host to start…' : 'Looking for the host…');
           if (st && st.role === 'host' && st.started && st.run !== net.run && typeof st.seed === 'number') {
             net.run = st.run; net.decoder.reset();
-            enterPlay(st.seed, ['p1', 'p2']);
+            enterPlay(st.seed, ['p1', 'p2'], st.level);
             net.session.set({ run: net.run });
             p = local();
           }
@@ -240,7 +253,7 @@ if (!view) {
       } else if (role === 'guest' && st && st.role === 'host' && st.started && st.run !== net.run && typeof st.seed === 'number') {
         // the host started another run (from the results screen)
         net.run = st.run; net.decoder.reset();
-        enterPlay(st.seed, ['p1', 'p2']);
+        enterPlay(st.seed, ['p1', 'p2'], st.level);
         net.session.set({ run: net.run });
         p = local();
       }

@@ -1,6 +1,6 @@
 # Najaf (Level 1): layout plan
 
-Status: **layout agreed 2026-10-22**, one small question still open (end of page).
+Status: **layout agreed 2026-10-22.** City district built (v0.3) for a frame-rate check; outskirts and refinery next.
 
 Map: [`najaf_layout.png`](najaf_layout.png). Grid squares are 32 m and labelled A–H
 across and 1–8 down, so notes can say things like "move the clinic to B2".
@@ -63,7 +63,8 @@ locker, armour locker), plus room for walls around it.
 players included, and breaks walls and upgrades in range. That makes the refinery base (C)
 risky: a stray enemy rocket at a tank next to it can wreck it. Proposed starting values,
 to be tuned in the data files: blast radius 12 m, damage like four RPG hits at the
-centre, falling off to nothing at the edge. Bullets don't set tanks off.
+centre, falling off to nothing at the edge. Bullets don't set tanks off, and **one tank exploding does not set off its neighbours**
+(no chain reactions).
 
 ## Weather
 
@@ -103,7 +104,7 @@ centre, falling off to nothing at the edge. Bullets don't set tanks off.
 - Crate positions as drawn; 3 upgrade levels; one crate per level; crates respawn until
   the matching upgrade is maxed (construction crates always).
 - About 60 enemies at the start; adjust after play-testing.
-- Fuel tanks explode in a wide radius when hit by an RPG.
+- Fuel tanks explode in a wide radius when hit by an RPG; no chain reactions between tanks.
 - Permanent smoke around the flare stack.
 - Time limit: **15 minutes**.
 - Map edge: collapsed buildings in the city, a fence at the refinery, high dunes and cliffs
@@ -111,5 +112,4 @@ centre, falling off to nothing at the edge. Bullets don't set tanks off.
 
 ## Still open
 
-1. **Chain reactions:** should one exploding tank set off tanks next to it? The tank farm
-   (F3–G3) would go up all at once.
+Nothing for the layout. Upgrade effects per level are still open in DESIGN.md.

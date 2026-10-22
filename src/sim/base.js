@@ -1,6 +1,7 @@
 // The player base: claiming it, carrying base-building items, building upgrades.
 import { placeBlocks } from './level.js';
 import { V } from './grid.js';
+import { markNavDirty } from './nav.js';
 import { emit, dropPickup } from './damage.js';
 
 export function createBase(level) {
@@ -50,7 +51,7 @@ export function placeWalls(world, level) {
     }
   }
   world.voxelVersion++;
-  world.cache.navDirty = true;
+  for (const r of b.wallPlan) markNavDirty(world, r.x, r.z, r.x + (r.w || 1) - 1, r.z + (r.d || 1) - 1);
   emit(world, { type: 'blocks', cells: [], material: 'sandbags', rebuild: true });
 }
 

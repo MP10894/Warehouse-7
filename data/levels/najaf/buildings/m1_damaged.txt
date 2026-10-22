@@ -1,0 +1,25 @@
+# City building, size M
+# 10 x 9 m, 1 floor + roof, damaged.
+# Symbol guide: data/levels/README.md
+
+floor 0
+Xw##w..w#X
+w.>>>....w
+#....#...#
+#....#...#
+d..,,d...d
+...,,#...#
+#....#...#
+w........w
+Xw##.d#w#X
+
+floor 1
+llllllllll
+l........l
+l........l
+l........l
+l..   ...l
+l..   ...l
+l........l
+l........l
+llllllllll

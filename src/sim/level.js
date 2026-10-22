@@ -47,8 +47,32 @@ export function clearCell(world, x, y, z, replaceWith = V.AIR) {
   g.cells[i] = replaceWith;
 }
 
-function stampBuilding(world, text, ox, oz) {
-  const floors = parseBuilding(text);
+const TURN_CW = { '>': 'v', 'v': '<', '<': '^', '^': '>' };
+const MIRROR = { '>': '<', '<': '>' };
+
+/** Turn a building clockwise (seen from above) by 90, 180 or 270 degrees, and/or mirror it
+ *  left to right. Stairs keep pointing the right way. */
+export function orientFloors(floors, turn = 0, mirror = false) {
+  const w = Math.max(...floors.flatMap(f => f.rows.map(r => r.length)));
+  const d = Math.max(...floors.map(f => f.rows.length));
+  let out = floors.map(f => ({
+    floor: f.floor,
+    grid: Array.from({ length: d }, (_, j) => Array.from({ length: w }, (_, i) => (f.rows[j] || '')[i] || ' '))
+  }));
+  if (mirror) out = out.map(f => ({ floor: f.floor, grid: f.grid.map(r => r.slice().reverse().map(c => MIRROR[c] || c)) }));
+  const steps = ((Math.round((turn || 0) / 90) % 4) + 4) % 4;
+  for (let s = 0; s < steps; s++) {
+    out = out.map(f => {
+      const H = f.grid.length, W = f.grid[0].length;
+      return { floor: f.floor, grid: Array.from({ length: W }, (_, i) => Array.from({ length: H }, (_, j) => { const c = f.grid[H - 1 - j][i]; return TURN_CW[c] || c; })) };
+    });
+  }
+  return out.map(f => ({ floor: f.floor, rows: f.grid.map(r => r.join('')) }));
+}
+
+function stampBuilding(world, text, ox, oz, turn = 0, mirror = false) {
+  let floors = parseBuilding(text);
+  if (floors.length && (turn || mirror)) floors = orientFloors(floors, turn, mirror);
   if (!floors.length) return;
   const g = world.grid;
   const w = Math.max(...floors.flatMap(f => f.rows.map(r => r.length)));
@@ -132,7 +156,7 @@ export function buildLevel(world, level) {
   for (const b of level.buildings || []) {
     const text = level.buildingTexts[b.file];
     if (!text) throw new Error(`Building file not found: ${b.file}`);
-    stampBuilding(world, text, b.x, b.z);
+    stampBuilding(world, text, b.x, b.z, b.turn || 0, !!b.mirror);
   }
   for (const p of level.props || []) stampProp(world, p);
   world.voxelVersion = 1;

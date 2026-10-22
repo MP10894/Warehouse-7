@@ -124,7 +124,11 @@ canvas.layer {
 .card {
   width: 100%; max-width: 600px; background: var(--panel); border: 1px solid var(--line); padding: 22px 24px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, .6); display: grid; gap: 12px;
+  max-height: 100%; overflow-y: auto;
 }
+/* on a phone the desktop keys are noise; give the space to the briefing */
+#app.touch .ctrl > div:nth-child(2) { display: none; }
+#app.touch .ctrl, #app.rotated.touch .ctrl { grid-template-columns: 1fr; }
 .eyebrow { font-family: var(--hud); font-size: 18px; letter-spacing: .14em; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; }
 .card h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(32px, 6vw, 48px); line-height: .95; color: var(--amber); letter-spacing: .03em; text-wrap: balance; }
 .card p { margin: 0; line-height: 1.45; max-width: 62ch; }
@@ -138,6 +142,10 @@ canvas.layer {
 .results div { border-top: 1px solid var(--line); padding-top: 6px; }
 .results span { display: block; font-size: 14px; letter-spacing: .12em; color: var(--muted); }
 .results b { font-weight: 400; font-size: 28px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.levels { display: flex; flex-wrap: wrap; gap: 8px; }
+.lvl { font-family: var(--hud); font-size: 18px; letter-spacing: .08em; color: var(--muted); background: transparent; border: 1px solid var(--line); padding: 6px 14px; cursor: pointer; }
+.lvl.on { color: #1a140a; background: var(--ink); border-color: var(--ink); }
+.lvl:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .go { font-family: var(--display); font-size: 20px; letter-spacing: .06em; color: #1a140a; background: var(--amber); border: 0; padding: 12px 30px; cursor: pointer; }
 .view { display: none; font-family: var(--body); font-size: 15px; color: var(--ink); background: transparent; border: 1px solid var(--line); padding: 11px 16px; cursor: pointer; }
@@ -153,6 +161,7 @@ canvas.layer {
 }
 /* Sideways mode: media queries see the real (portrait) screen, so mirror the compact rules here. */
 #app.rotated .card { gap: 8px; padding: 14px 18px; }
+#app.rotated .rot { display: none; } /* already sideways */
 #app.rotated .card h1 { font-size: 30px; }
 #app.rotated .card p, #app.rotated .steps { font-size: 13px; }
 #app.rotated .ctrl { grid-template-columns: 1fr 1fr; }

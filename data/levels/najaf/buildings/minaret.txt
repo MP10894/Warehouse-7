@@ -1,0 +1,26 @@
+# Minaret: a landmark you can see from far away. Solid, not climbable.
+
+floor 0
+XXX
+XXX
+XXX
+
+floor 1
+XXX
+XXX
+XXX
+
+floor 2
+XXX
+XXX
+XXX
+
+floor 3
+XXX
+XXX
+XXX
+
+floor 4
+lll
+l.l
+lll

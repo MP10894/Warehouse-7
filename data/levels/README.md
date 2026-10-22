@@ -10,7 +10,10 @@ Each level is a folder in `data/levels/` with:
 | `buildings/*.txt` | Building floor plans, one text grid per floor |
 
 Coordinates are in metres: **x** runs west → east (left → right in the text files),
-**z** runs north → south (top → bottom). The test level is 100 × 100 m.
+**z** runs north → south (top → bottom). Najaf is 256 × 256 m; the test slice is 100 × 100 m.
+
+Najaf's files were first drafted by `tools/make_najaf.py`. Edit the files here directly
+from now on (running the script again would overwrite your edits).
 
 ## Building files
 
@@ -36,6 +39,22 @@ last, so three of them climb exactly one floor, and you step off onto the floor 
 at the next square. The hole in the floor above is cut automatically.
 
 Floors, columns and stairs never break, so a building can't collapse or block itself.
+
+## Turning and mirroring buildings
+
+In `level.json`, a building can be placed turned or mirrored, so one file can be reused:
+
+```json
+{ "file": "m2_damaged.txt", "x": 40, "z": 30, "turn": 90, "mirror": true }
+```
+
+`turn` is clockwise seen from above (0, 90, 180 or 270). `mirror` flips it left to right
+before turning. Stairs keep working either way. `x` and `z` are still the north-west
+corner of the building as it ends up on the map.
+
+Najaf's city buildings are named by size, floors and state: `s` 8 × 7 m, `m` 10 × 9 m,
+`l` 12 × 10 m, then `1`–`3` floors, then `intact`, `damaged` or `ruined`
+(for example `l3_ruined.txt`).
 
 ## Props in level.json
 

@@ -4,6 +4,7 @@
 import { V, V_INFO, getV, cellXYZ, gidx } from './grid.js';
 import { terrainHeight } from './terrain.js';
 import { rand } from './rng.js';
+import { markNavDirty } from './nav.js';
 
 export const emit = (world, ev) => world.events.push(ev);
 
@@ -119,7 +120,10 @@ export function destroyPiece(world, p) {
   }
   p.cells = [];
   world.voxelVersion++;
-  world.cache.navDirty = true;
+  if (changed.length) {
+    const xyz = changed.map(i => cellXYZ(g, i));
+    markNavDirty(world, Math.min(...xyz.map(c => c[0])), Math.min(...xyz.map(c => c[2])), Math.max(...xyz.map(c => c[0])), Math.max(...xyz.map(c => c[2])));
+  }
   emit(world, { type: 'blocks', cells: changed, material: p.material });
 }
 

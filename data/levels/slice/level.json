@@ -1,5 +1,17 @@
 {
   "name": "Ruined city — test slice",
+  "title": "Test slice",
+  "subtitle": "100 m piece of Najaf · v0.2",
+  "summary": "A small 100 m test area. You start with a pistol. Enemies drop their weapons.",
+  "briefing": [
+    "Clear the compound east of the crossroads. It becomes your base.",
+    "Fetch the construction crate from the roof of the tall building (north-west). It slows you down.",
+    "Build walls at your base, then hold out. Every build brings the next wave sooner."
+  ],
+  "goals": {
+    "claim": "Clear the compound (east of the crossroads) to claim a base",
+    "fetch": "Fetch the construction crate from the tower roof"
+  },
   "size": 100,
   "max_height": 16,
   "time_limit": 300,

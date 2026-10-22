@@ -76,35 +76,41 @@ export function createMinimap(canvas) {
   return {
     draw(world, player, now) {
       if (!base || version !== world.voxelVersion || base.width !== world.level.size) bake(world);
-      const W = canvas.width, H = canvas.height, k = W / world.level.size;
+      // big levels show a window around the player instead of the whole map
+      const size = world.level.size, span = Math.min(size, 120);
+      const W = canvas.width, H = canvas.height, k = W / span;
+      const cx = player ? player.x : size / 2, cz = player ? player.z : size / 2;
+      const ox = Math.max(0, Math.min(size - span, cx - span / 2)), oz = Math.max(0, Math.min(size - span, cz - span / 2));
+      const X = x => (x - ox) * k, Z = z => (z - oz) * k;
+      const edge = v => Math.max(3, Math.min(W - 3, v));
       g.imageSmoothingEnabled = false;
-      g.drawImage(base, 0, 0, W, H);
+      g.drawImage(base, ox, oz, span, span, 0, 0, W, H);
       const a = world.base.area;
       g.strokeStyle = world.base.claimed ? '#f0a23a' : '#c8402e';
       g.lineWidth = 2;
-      g.strokeRect(a.x0 * k, a.z0 * k, (a.x1 - a.x0) * k, (a.z1 - a.z0) * k);
+      g.strokeRect(X(a.x0), Z(a.z0), (a.x1 - a.x0) * k, (a.z1 - a.z0) * k);
       for (const pk of world.pickups) {
         if (pk.type !== 'item') continue;
-        if (Math.floor(now / 300) % 2) { g.fillStyle = '#ffd040'; g.fillRect(pk.x * k - 3, pk.z * k - 3, 6, 6); }
+        if (Math.floor(now / 300) % 2) { g.fillStyle = '#ffd040'; g.fillRect(edge(X(pk.x)) - 3, edge(Z(pk.z)) - 3, 6, 6); }
       }
       for (const s of world.base.buildSpots) {
         if (!world.base.claimed) continue;
-        g.strokeStyle = '#ffd040'; g.lineWidth = 1; g.strokeRect(s.x * k - 3, s.z * k - 3, 6, 6);
+        g.strokeStyle = '#ffd040'; g.lineWidth = 1; g.strokeRect(X(s.x) - 3, Z(s.z) - 3, 6, 6);
       }
       for (const w of world.weather) {
         if (!w.active) continue;
         g.fillStyle = `rgba(180,140,80,${0.45 * w.intensity})`;
-        g.beginPath(); g.arc(w.x * k, w.z * k, w.radius * k, 0, Math.PI * 2); g.fill();
+        g.beginPath(); g.arc(X(w.x), Z(w.z), w.radius * k, 0, Math.PI * 2); g.fill();
       }
       if (player) {
         for (const e of world.enemies) {
           if (!e.alive || Math.hypot(e.x - player.x, e.z - player.z) > 22) continue;
-          g.fillStyle = '#e03020'; g.fillRect(e.x * k - 2, e.z * k - 2, 4, 4);
+          g.fillStyle = '#e03020'; g.fillRect(X(e.x) - 2, Z(e.z) - 2, 4, 4);
         }
         for (const p of world.players) {
           const me = p === player;
           g.save();
-          g.translate(p.x * k, p.z * k);
+          g.translate(edge(X(p.x)), edge(Z(p.z)));
           g.rotate(-p.yaw);
           g.fillStyle = me ? '#ffffff' : '#60d0ff';
           g.beginPath(); g.moveTo(0, -6); g.lineTo(4, 4); g.lineTo(-4, 4); g.closePath(); g.fill();

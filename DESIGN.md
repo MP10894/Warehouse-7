@@ -193,14 +193,21 @@ Known limits of the test version: the guest's shots, recoil and ammo count arriv
 after a short delay (one round trip); if the host leaves, the game ends for the guest;
 joining a game already in progress isn't supported.
 
-## Current build: test slice (v0.2)
+## Current build
 
-A 100 × 100 m piece of Level 1 (Najaf) (`data/levels/slice/`) with everything in the vertical
+**Test slice (v0.2).** A 100 × 100 m piece of Level 1 (`data/levels/slice/`) with everything in the vertical
 slice: a three-storey tower with stairs and a walkable roof, a ruined concrete shell,
 city and desert houses, dunes, the compound base, all four weapons from the sheet,
 travelling bullets and rockets, armour, two weapon slots, enemies that guard, roam and
 attack in waves, the construction crate and sandbag walls, destructible walls, and a
 sandstorm zone in the north-east desert. Single player, plus a two-player co-op test (Co-op test button).
+
+**Najaf, city district (v0.3, frame-rate test).** The full 256 × 256 m Najaf map with
+only the city district built (`data/levels/najaf/`): 55 buildings of 1–3 floors (intact,
+damaged or ruined), the clinic, the minaret, the market square, the building site with
+the construction crate, and the police station as the base. 27 enemies in 9 groups.
+The outskirts and the refinery are open sand with dunes for now. Pick the level on the
+start screen; the choice is remembered, and in co-op the host's choice is used.
 
 The earlier Warehouse 7 prototype (flat, Doom-style) is kept in git history under the
 tag `warehouse-prototype`.
@@ -215,6 +222,10 @@ tag `warehouse-prototype`.
 - Walking, stairs, bullets, sight lines, path-finding and destruction all use the same
   block grid. Floors, columns and stairs are unbreakable; walls, low walls, crates and
   sandbags break into rubble.
+- A building file can be placed turned (90°, 180°, 270°) or mirrored, so a handful of
+  building files make a varied city.
+- When something breaks, path-finding is only worked out again around it, so big maps
+  don't stutter.
 
 ### Data files
 
@@ -265,7 +276,8 @@ tag `warehouse-prototype`.
 | 2026-10-22 | Level 1 is named **Najaf**; layout agreed: 256 × 256 m, start at the central crossroads, three base areas (police station, truck stop, control building) |
 | 2026-10-22 | Upgrades have 3 levels, each costing one crate of its type; crates respawn until the matching upgrade is maxed; construction crates always respawn |
 | 2026-10-22 | Najaf starts with about 60 enemies; adjust after play-testing |
-| 2026-10-22 | Refinery fuel tanks explode in a wide radius when hit by an RPG |
+| 2026-10-22 | Refinery fuel tanks explode in a wide radius when hit by an RPG; one tank exploding does not set off others |
+| 2026-10-22 | Build Najaf district by district, the city first, to check the frame rate on the phone early |
 | 2026-10-22 | Najaf: permanent smoke at the flare stack; 15-minute time limit; map edges are collapsed buildings, a refinery fence, high dunes and cliffs |
 
 ## Open questions

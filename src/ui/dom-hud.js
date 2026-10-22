@@ -16,10 +16,10 @@ export function createDomHud() {
   const set = (k, node, prop, v) => { if (cache[k] !== v) { cache[k] = v; node[prop] = v; } };
 
   function goal(world, p) {
-    const b = world.base;
-    if (!b.claimed) return 'Clear the compound (east of the crossroads) to claim a base';
+    const b = world.base, goals = world.data.levels[world.levelId].goals || {};
+    if (!b.claimed) return goals.claim || `Clear the ${b.name.toLowerCase()} to claim a base`;
     if (p.carrying) return 'Take the crate to the build spot in your base';
-    if (b.upgrades.walls.level === 0) return 'Fetch the construction crate from the tower roof';
+    if (b.upgrades.walls.level === 0) return goals.fetch || 'Fetch the construction crate';
     return `Hold out until the timer runs out · walls level ${b.upgrades.walls.level}`;
   }
 

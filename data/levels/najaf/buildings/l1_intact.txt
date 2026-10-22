@@ -1,0 +1,27 @@
+# City building, size L
+# 12 x 10 m, 1 floor + roof, intact.
+# Symbol guide: data/levels/README.md
+
+floor 0
+Xw##w##w##wX
+w.>>>......w
+#.....#....#
+#.....#....#
+w.....#....w
+d.....d....d
+#.....#....#
+w.....#....w
+#..........#
+Xw##w#dw##wX
+
+floor 1
+llllllllllll
+l..........l
+l..........l
+l..........l
+l..........l
+l..........l
+l..........l
+l..........l
+l..........l
+llllllllllll

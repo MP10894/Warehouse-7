@@ -25,7 +25,8 @@ export function createView({ app, viewCanvas, hudCanvas, settings }) {
   const sun = new THREE.DirectionalLight(0xfff4e0, 2.4);
   sun.position.set(-45, 80, 35);
   scene.add(sun);
-  const camera = new THREE.PerspectiveCamera(72, 1, 0.05, 140);
+  // nothing beyond the fog is visible, so don't draw it (saves work on big levels)
+  const camera = new THREE.PerspectiveCamera(72, 1, 0.05, settings.world.fog_far + 10);
   camera.rotation.order = 'YXZ';
   const hud = hudCanvas.getContext('2d');
 

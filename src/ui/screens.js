@@ -1,7 +1,7 @@
 // Briefing screen and after-action report.
 import { fmtTime } from './dom-hud.js';
 
-export function createScreens({ view, onStart, onCoop }) {
+export function createScreens({ view, onStart, onCoop, onLevel }) {
   const screen = document.getElementById('screen');
   const card = document.getElementById('card');
 
@@ -9,6 +9,7 @@ export function createScreens({ view, onStart, onCoop }) {
     document.getElementById('go').addEventListener('click', onStart);
     const coop = document.getElementById('coopBtn');
     if (coop) coop.addEventListener('click', onCoop);
+    for (const b of document.querySelectorAll('.lvl')) b.addEventListener('click', () => onLevel && onLevel(b.dataset.level));
     const vb = document.getElementById('viewBtn');
     if (vb) vb.addEventListener('click', () => { vb.textContent = view.cycleViewPref(); });
   }
@@ -18,15 +19,15 @@ export function createScreens({ view, onStart, onCoop }) {
     hide() { screen.hidden = true; },
 
     showMenu(world) {
+      const lv = world.data.levels[world.levelId];
+      const picks = Object.entries(world.data.levels)
+        .map(([id, l]) => `<button class="lvl${id === world.levelId ? ' on' : ''}" type="button" data-level="${id}" aria-pressed="${id === world.levelId}">${l.title || l.name}</button>`).join('');
       card.innerHTML = `
-        <div class="eyebrow"><span>Test slice · v0.2</span><span>Working title TBD</span></div>
-        <h1>Ruined City</h1>
-        <p>Survive ${fmtTime(world.timeLeft)} in a 100 m slice of Level 1. You start with a pistol. Enemies drop their weapons.</p>
-        <ol class="steps">
-          <li>Clear the compound east of the crossroads. It becomes your base.</li>
-          <li>Fetch the construction crate from the roof of the tall building (north-west). It slows you down.</li>
-          <li>Build walls at your base, then hold out. Every build brings the next wave sooner.</li>
-        </ol>
+        <div class="eyebrow"><span>${lv.subtitle || ''}</span><span>Working title TBD</span></div>
+        <h1>${lv.title || lv.name}</h1>
+        <div class="levels" role="group" aria-label="Level">${picks}</div>
+        <p>Survive ${fmtTime(world.timeLeft)}. ${lv.summary || ''}</p>
+        <ol class="steps">${(lv.briefing || []).map(b => `<li>${b}</li>`).join('')}</ol>
         <div class="ctrl">
           <div><h2>Phone</h2><ul><li>Left thumb <kbd>move</kbd> · right thumb <kbd>look</kbd></li><li><kbd>FIRE</kbd> (drag it to aim too) · <kbd>AIM</kbd> toggles sights</li><li><kbd>RELOAD</kbd> · <kbd>SWAP</kbd> · yellow button to use</li></ul></div>
           <div><h2>Desktop</h2><ul><li><kbd>WASD</kbd> move · click to lock the mouse</li><li>Click fire · right-click aim</li><li><kbd>R</kbd> reload · <kbd>Q</kbd> swap · <kbd>E</kbd> use</li></ul></div>
@@ -97,7 +98,8 @@ export function createScreens({ view, onStart, onCoop }) {
       if (go) go.addEventListener('click', onStart);
       const lc = document.getElementById('leaveCoop');
       if (lc && coop) lc.addEventListener('click', coop.onLeave);
-      const vb = document.getElementById('viewBtn');
+      for (const b of document.querySelectorAll('.lvl')) b.addEventListener('click', () => onLevel && onLevel(b.dataset.level));
+    const vb = document.getElementById('viewBtn');
       if (vb) vb.addEventListener('click', () => { vb.textContent = view.cycleViewPref(); });
     },
 
