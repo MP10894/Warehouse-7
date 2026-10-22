@@ -180,7 +180,7 @@ export async function loadArt(tex) {
         if (tris > BUDGET.weapon) { skip(path, `${tris} triangles, budget ${BUDGET.weapon}`); continue; }
         const len = WEAPON_LENGTH[name];
         if (len && (sz.z < len * 0.5 || sz.z > len * 1.5)) { skip(path, `is ${sz.z.toFixed(2)} m long, expected about ${len} m (check the export scale is 32)`); continue; }
-        ART.weapons[name] = { root, muzzle, sight, handLeft: pointOf(root, 'hand_left'), warhead: root.getObjectByName('warhead') };
+        ART.weapons[name] = { root, muzzle, sight, back: new THREE.Box3().setFromObject(root).max.z, handLeft: pointOf(root, 'hand_left'), warhead: root.getObjectByName('warhead') };
         ok(path, `${tris} triangles, ${sz.z.toFixed(2)} m long`);
       } else if (kind === 'items') {
         if (name === 'player_hands') {

@@ -286,6 +286,7 @@ tag `warehouse-prototype`.
 | 2026-10-22 | Weapons and first-person hands drawn at 256 px per metre (seen close); first drawn weapon: Sig P320 from an OpenArt reference sheet |
 | 2026-10-22 | First-person hands: tan tactical gloves with hard knuckle plates and grey cuffs, sleeve in the team's grey-blue |
 | 2026-10-22 | First-person hands: budget raised to 300 triangles with separate fingers and thumb; forearms added and aimed at the shoulders so hands never float |
+| 2026-10-22 | AK-47 drawn: real proportions, look from the OpenArt sheet; when aiming a rifle the view keeps its stock in front of the eye |
 
 ## Open questions
 
