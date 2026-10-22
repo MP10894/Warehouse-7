@@ -41,6 +41,9 @@ well-defended base-building items:
    single-storey buildings.
 3. Industrial: an oil refinery with many pipelines.
 
+Layout proposal under review: [docs/LEVEL1_PLAN.md](docs/LEVEL1_PLAN.md) (map in
+`docs/level1_layout.png`).
+
 ## Bases and building
 
 - A player or team can hold **one base**. The first base area cleared is the base;
@@ -135,6 +138,7 @@ well-defended base-building items:
 - Characters can be built from separate rigid parts (head, torso, upper and lower limbs)
   animated in code, as on the original PlayStation. That needs no skeleton or rigging,
   so placeholder models can be made in code and swapped for drawn art later.
+- File rules for art (sizes, names, pivots, budgets): [ART_SPEC.md](ART_SPEC.md), draft under review.
 
 ## Controls (phone, held sideways)
 
