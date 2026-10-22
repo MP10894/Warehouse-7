@@ -2,6 +2,7 @@
 // Usage: npm run test:sim
 import { readFileSync, readdirSync } from 'node:fs';
 import { buildData } from '../src/data/parse.js';
+import { weaponsFromXlsx } from '../src/data/xlsx.js';
 import { createWorld } from '../src/sim/world.js';
 import { stepWorld } from '../src/sim/step.js';
 import { groundAt } from '../src/sim/body.js';
@@ -14,7 +15,7 @@ const lv = 'data/levels/slice/';
 const buildings = {};
 for (const f of readdirSync(new URL('../' + lv + 'buildings', import.meta.url))) buildings[f] = read(lv + 'buildings/' + f);
 const data = buildData({
-  weaponsCsv: read('data/weapons.csv'), materialsCsv: read('data/materials.csv'),
+  weaponsRows: weaponsFromXlsx(readFileSync(new URL('../data/Weapons.xlsx', import.meta.url))), materialsCsv: read('data/materials.csv'),
   enemiesCsv: read('data/enemies.csv'), wavesCsv: read('data/waves.csv'),
   settings: JSON.parse(read('data/settings.json')),
   levels: { slice: { json: read(lv + 'level.json'), terrain: read(lv + 'terrain.txt'), ground: read(lv + 'ground.txt'), buildings } }
@@ -37,9 +38,10 @@ const fresh = (opts = {}) => createWorld({ data, levelId: 'slice', ...opts });
 const noEnemies = w => { w.enemies = []; w.groups = []; w.waves.nextT = 1e9; };
 
 // --- data
-check(data.weapons.rpg7.calibre === '40mm' && data.calibres['5.56mm'] === 270, 'weapons.csv loaded, ammo caps per calibre');
-const semi = buildData({ weaponsCsv: '﻿id;mag_size;max_total;calibre\r\nx;30;300;y\r\n', materialsCsv: 'id\n', enemiesCsv: 'id\n', wavesCsv: 'wave\n', settings: {}, levels: {} });
-check(semi.weapons.x.mag_size === 30, 'reads semicolon CSV (Hungarian Excel)');
+check(data.weapons.rpg7.calibre === '40mm' && data.calibres['5.56mm'] === 270, 'weapons loaded from Weapons.xlsx, ammo caps per calibre');
+const semi = buildData({ weaponsRows: [], materialsCsv: '\uFEFFid;health;armour\r\nx;60;2,5\r\n', enemiesCsv: 'id\n', wavesCsv: 'wave\n', settings: {}, levels: {} });
+check(semi.materials.x.armour === 2.5, 'reads semicolon CSV with decimal commas (Hungarian Excel)');
+check(data.weapons.sig_p320.max_total === 102 && data.weapons.sig_p320.muzzle_velocity === 187, 'Weapons.xlsx formulas worked out (=+C4*6, =374/2)');
 
 // --- damage rule from DESIGN.md
 {
