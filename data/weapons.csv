@@ -1,0 +1,2 @@
+id,name,damage,headshot_damage,fire_interval,spread,moving_spread,range,start_ammo
+carbine,Carbine,1,3,0.11,0.008,0.016,60,90

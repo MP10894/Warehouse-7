@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Warehouse 7</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Chakra+Petch:wght@400;600&family=VT323&display=swap">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div id="app">
+    <canvas id="view" class="layer"></canvas>
+    <canvas id="hud" class="layer"></canvas>
+    <div id="hurt"></div>
+    <div id="touch"></div>
+    <div id="stick"><div id="knob"></div></div>
+    <div id="stats">
+      <div class="stat" id="stHp"><span class="k">HP</span><b id="sHp">100</b></div>
+      <div class="stat" id="stAmmo"><span class="k">AMMO</span><b id="sAmmo">90</b></div>
+      <div class="stat"><span class="k">HOSTILES</span><b id="sFoes">10</b></div>
+      <div class="stat" id="timer"><b id="sTime">0:00</b></div>
+    </div>
+    <div id="toast"></div>
+    <div id="hint">Click to lock mouse · WASD move · hold click to fire · Esc to release</div>
+    <button id="fire" type="button" aria-label="Fire">FIRE</button>
+    <section class="overlay" id="screen">
+      <div class="card" id="card"></div>
+    </section>
+  </div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

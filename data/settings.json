@@ -1,0 +1,41 @@
+{
+  "player": {
+    "max_health": 100,
+    "move_speed": 4.6,
+    "radius": 0.3,
+    "eye_height": 1.55,
+    "keyboard_turn_speed": 2.4,
+    "start_weapon": "carbine"
+  },
+  "controls": {
+    "touch_look_x": 0.0062,
+    "touch_look_y": 0.0052,
+    "mouse_look_locked": 0.0024,
+    "mouse_look_drag": 0.004,
+    "joystick_radius_px": 46,
+    "max_pitch": 1.1
+  },
+  "camera": {
+    "target_horizontal_fov": 100,
+    "min_vertical_fov": 58,
+    "max_vertical_fov": 75,
+    "pixel_rows": 230
+  },
+  "world": {
+    "fixed_step_hz": 60,
+    "fog_near": 5,
+    "fog_far": 34,
+    "end_delay": 1.4
+  },
+  "barrel": {
+    "blast_radius": 3.6,
+    "enemy_damage": 8,
+    "player_damage_max": 50,
+    "chain_radius": 3.2,
+    "chain_delay": 0.16
+  },
+  "enemy_alerting": {
+    "hearing_range": 13,
+    "alert_radius": 9
+  }
+}
