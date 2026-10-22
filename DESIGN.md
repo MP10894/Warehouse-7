@@ -82,6 +82,8 @@ well-defended base-building items:
   rate. (Example: 10 armour left, bullet does 50 to armour and 40 to health → armour
   absorbs 20% of the bullet, health takes 80% of 40 = 32.)
 - **Headshots:** ×2 damage, applied to both armour damage and health damage.
+- **Health regeneration:** after **7 seconds** without taking damage, health climbs back
+  to **50** over **3 seconds** (never above 50; armour never regenerates).
 - **Death:** permanent in single player (the level is lost). In co-op a downed player can
   be revived by the other within **15 seconds**; if both are down, the level is lost.
 - **Start:** each player starts with a pistol.
@@ -93,12 +95,11 @@ well-defended base-building items:
 - Dead enemies drop their weapon and some ammunition.
 - **Ammunition is shared by calibre** (any 5.56 mm weapon uses the same pool).
 - **Aim down sights** on every weapon.
-- Attributes per weapon (in `docs/Weapons.xlsx`, to be converted to `data/weapons.csv`):
+- Attributes per weapon (Weapons tab of `data/Game Data.xlsx`, read directly by the game):
   magazine size; maximum carried ammunition (including the loaded magazine); reload time;
   damage to health; damage to armour; damage to environment; area of effect (0–100,
   where **100 = 10 m radius**); fire mode (semi or automatic); rate of fire; recoil (0–100);
-  bloom (0–100). To add: calibre, muzzle velocity, effective range, maximum rate for
-  semi-automatic weapons.
+  bloom (0–100); muzzle velocity; calibre; projectile (bullet or rocket); aim-down-sights zoom.
 - **Recoil** kicks the camera upwards; the player pulls back down.
 - **Bloom** is spread that grows the longer you fire and shrinks when you stop.
   Moving increases it.
@@ -205,8 +206,8 @@ tag `warehouse-prototype`.
 
 | File | Controls |
 |---|---|
-| `data/weapons.csv` | All weapon attributes (converted from `docs/Weapons.xlsx`, which it now replaces as the game's source) |
-| `data/enemies.csv` | Enemy health, speed, sight, hearing, reaction time, accuracy, burst lengths, ammo drops |
+| `data/Game Data.xlsx` | Weapons tab and Enemies tab, read directly by the game (`Weapons.xlsx` still works until renamed) |
+| `data/enemies.csv` | Fallback for any enemy value the Enemies tab leaves out |
 | `data/waves.csv` | Size, armour and weapon mix of each wave |
 | `data/materials.csv` | Health and armour of each breakable material, and whether it leaves rubble |
 | `data/settings.json` | Player, controls, camera, ballistics (bullet speed factor, recoil, bloom), waves timing, base, weather |
@@ -239,15 +240,15 @@ tag `warehouse-prototype`.
 | 2026-10-22 | Art: low-poly 3D, 300 triangles or fewer per character |
 | 2026-10-22 | Wave difficulty for now: enemy count, weapons, armour on/off |
 | 2026-10-22 | Level engine: 1 m blocks, one text grid per floor; ground from a text height map |
-| 2026-10-22 | `data/weapons.csv` is the game's weapon source (edit in Excel, save as CSV) |
+| 2026-10-22 | The weapons workbook is the single source: `data/Weapons.xlsx`, read directly by the game (no CSV copy) |
 | 2026-10-22 | Bullet speed factor set to 100%: the sheet's muzzle velocities are already about half of real |
+| 2026-10-22 | RPG-7 area of effect 30 (3 m blast); Sig P320 recoil lowered to 5 |
+| 2026-10-22 | Health regenerates to 50 over 3 s after 7 s without damage (difficulty was too high) |
+| 2026-10-22 | Workbook renamed Game Data.xlsx with a Weapons tab and an Enemies tab |
 
 ## Open questions
 
-1. **RPG area of effect.** The sheet says 3, which on the agreed scale (100 = 10 m) is a
-   0.3 m blast: it only damages what it hits directly. A real RPG warhead would be
-   around 30–50 (3–5 m). Kept at 3 until decided.
-2. **Upgrade levels.** Walls currently go to level 2 (2 blocks high). What each level of
+1. **Upgrade levels.** Walls currently go to level 2 (2 blocks high). What each level of
    each upgrade does, and what it costs.
-3. **Enemy roster** file (later).
-4. **Name** of the game.
+2. **Enemy roster** file (later).
+3. **Name** of the game.

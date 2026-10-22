@@ -31,13 +31,18 @@ Other commands:
 | File | What it controls |
 |---|---|
 | `data/levels/slice/` | The level: building floor plans, ground heights, where everything goes ([guide](data/levels/README.md)) |
-| `data/weapons.csv` | Every weapon attribute: damage, fire rate, recoil, bloom, muzzle velocity, calibre… |
-| `data/enemies.csv` | Enemy health, speed, sight, reaction time, accuracy |
+| `data/Game Data.xlsx` | The game-data workbook (still called `Weapons.xlsx` until renamed; both names work). **Weapons** tab: every weapon attribute. **Enemies** tab (optional): enemy health, speed, sight, reaction time, aim error in degrees… Edit in Excel as normal; formulas are fine |
+| `data/enemies.csv` | Fallback enemy values, used for anything the Enemies tab leaves out |
 | `data/waves.csv` | How big and how well armed each attack wave is |
 | `data/materials.csv` | How tough each breakable wall, crate and sandbag is |
 | `data/settings.json` | Player speed, look sensitivity, field of view, recoil and bloom feel, wave timing, weather |
 
 The CSV files open in Excel. Save them as CSV; both comma and semicolon formats work.
+
+Other files refer to a weapon by its **id**, made from its name in the workbook: lower
+case, spaces become `_`, hyphens are dropped (`Sig P320` → `sig_p320`, `RPG-7` → `rpg7`).
+Renaming a weapon in the workbook changes its id, so update `waves.csv`,
+`settings.json` and `level.json` to match.
 
 ## How the code is organised
 

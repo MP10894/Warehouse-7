@@ -2,6 +2,9 @@
 // Usage: npm run test:sim
 import { readFileSync, readdirSync } from 'node:fs';
 import { buildData } from '../src/data/parse.js';
+import { existsSync } from 'node:fs';
+import { gameDataFromXlsx, readSheets } from '../src/data/xlsx.js';
+import { parseCsv, byKey } from '../src/data/parse.js';
 import { createWorld } from '../src/sim/world.js';
 import { stepWorld } from '../src/sim/step.js';
 import { groundAt } from '../src/sim/body.js';
@@ -13,8 +16,10 @@ const read = p => readFileSync(new URL('../' + p, import.meta.url), 'utf8');
 const lv = 'data/levels/slice/';
 const buildings = {};
 for (const f of readdirSync(new URL('../' + lv + 'buildings', import.meta.url))) buildings[f] = read(lv + 'buildings/' + f);
+const workbook = ['Game Data.xlsx', 'Weapons.xlsx'].map(f => new URL('../data/' + f, import.meta.url)).find(u => existsSync(u));
+const gameData = gameDataFromXlsx(readFileSync(workbook), byKey(parseCsv(read('data/enemies.csv')), 'id'));
 const data = buildData({
-  weaponsCsv: read('data/weapons.csv'), materialsCsv: read('data/materials.csv'),
+  weaponsRows: gameData.weapons, enemiesRows: gameData.enemies, materialsCsv: read('data/materials.csv'),
   enemiesCsv: read('data/enemies.csv'), wavesCsv: read('data/waves.csv'),
   settings: JSON.parse(read('data/settings.json')),
   levels: { slice: { json: read(lv + 'level.json'), terrain: read(lv + 'terrain.txt'), ground: read(lv + 'ground.txt'), buildings } }
@@ -37,9 +42,10 @@ const fresh = (opts = {}) => createWorld({ data, levelId: 'slice', ...opts });
 const noEnemies = w => { w.enemies = []; w.groups = []; w.waves.nextT = 1e9; };
 
 // --- data
-check(data.weapons.rpg7.calibre === '40mm' && data.calibres['5.56mm'] === 270, 'weapons.csv loaded, ammo caps per calibre');
-const semi = buildData({ weaponsCsv: '﻿id;mag_size;max_total;calibre\r\nx;30;300;y\r\n', materialsCsv: 'id\n', enemiesCsv: 'id\n', wavesCsv: 'wave\n', settings: {}, levels: {} });
-check(semi.weapons.x.mag_size === 30, 'reads semicolon CSV (Hungarian Excel)');
+check(data.weapons.rpg7.calibre === '40mm' && data.calibres['5.56mm'] === 270, 'weapons loaded from Weapons.xlsx, ammo caps per calibre');
+const semi = buildData({ weaponsRows: [], materialsCsv: '\uFEFFid;health;armour\r\nx;60;2,5\r\n', enemiesCsv: 'id\n', wavesCsv: 'wave\n', settings: {}, levels: {} });
+check(semi.materials.x.armour === 2.5, 'reads semicolon CSV with decimal commas (Hungarian Excel)');
+check(data.weapons.sig_p320.max_total === 102 && data.weapons.sig_p320.muzzle_velocity === 187, 'Weapons.xlsx formulas worked out (=+C4*6, =374/2)');
 
 // --- damage rule from DESIGN.md
 {
@@ -179,6 +185,23 @@ check(w0.players.length === 1 && w0.enemies.length >= 10, `level built: ${w0.ene
   const w2 = fresh(); noEnemies(w2); w2.players[0].hp = 1e9;
   run(w2, 303, () => ({}));
   check(w2.status === 'won', `surviving the 5-minute timer wins the level (status: ${w2.status})`);
+}
+
+// --- health regeneration: after 7 s without damage, back up to 50 over 3 s
+{
+  const w = fresh(); noEnemies(w);
+  const p = w.players[0];
+  run(w, 1, () => ({}));
+  const { damageActor } = await import('../src/sim/damage.js');
+  damageActor(w, p, 90, 0, null);
+  run(w, 6.9, () => ({}));
+  const waited = p.hp;
+  run(w, 1.6, () => ({}));
+  const half = p.hp;
+  run(w, 2, () => ({}));
+  check(waited === 10 && half > 10 && half < 50 && Math.abs(p.hp - 50) < 1e-6, `health regenerates after 7 s (10 → ${half.toFixed(0)} → ${p.hp.toFixed(0)}), capped at 50`);
+  p.hp = 80; run(w, 10, () => ({}));
+  check(p.hp === 80, 'no regeneration above 50');
 }
 
 // --- co-op ready: downed and revive

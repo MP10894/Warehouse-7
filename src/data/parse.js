@@ -34,10 +34,12 @@ export function byKey(rows, key) {
 
 /**
  * Build the game's data object from raw file contents.
+ * weaponsRows / enemiesRows: rows from the game-data workbook (see xlsx.js); enemiesRows
+ * may be null, in which case data/enemies.csv is used.
  * levels: { [levelId]: { json, terrain, ground, buildings: { 'tower.txt': text, ... } } }
  */
-export function buildData({ weaponsCsv, materialsCsv, enemiesCsv, wavesCsv, settings, levels }) {
-  const weapons = byKey(parseCsv(weaponsCsv), 'id');
+export function buildData({ weaponsRows, enemiesRows = null, materialsCsv, enemiesCsv, wavesCsv, settings, levels }) {
+  const weapons = byKey(weaponsRows, 'id');
   // Ammunition carried per calibre: the largest (max_total − magazine) among weapons of that calibre.
   const calibres = {};
   for (const w of Object.values(weapons)) {
@@ -56,7 +58,7 @@ export function buildData({ weaponsCsv, materialsCsv, enemiesCsv, wavesCsv, sett
     weapons,
     calibres,
     materials: byKey(parseCsv(materialsCsv), 'id'),
-    enemies: byKey(parseCsv(enemiesCsv), 'id'),
+    enemies: enemiesRows && enemiesRows.length ? byKey(enemiesRows, 'id') : byKey(parseCsv(enemiesCsv), 'id'),
     waves: parseCsv(wavesCsv),
     settings,
     levels: parsedLevels
