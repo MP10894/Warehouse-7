@@ -22,7 +22,9 @@ export function blocked(world, x, z, y, r, height, step) {
   const size = world.level.size;
   if (x < r || z < r || x > size - r || z > size - r) return true;
   const g = world.grid;
-  const y0 = Math.max(0, Math.floor(y + step)), y1 = Math.floor(y + height - 0.05);
+  // where the feet would end up after stepping onto rubble or a stair: the body must fit there too
+  const feet = Math.max(y, groundAt(world, x, z, y + step));
+  const y0 = Math.max(0, Math.floor(y + step)), y1 = Math.floor(feet + height - 0.05);
   for (let cz = Math.floor(z - r); cz <= Math.floor(z + r); cz++) {
     for (let cx = Math.floor(x - r); cx <= Math.floor(x + r); cx++) {
       // closest point of this cell to the body's centre
@@ -31,7 +33,7 @@ export function blocked(world, x, z, y, r, height, step) {
       const near2 = (px - x) ** 2 + (pz - z) ** 2;
       for (let cy = y0; cy <= y1; cy++) {
         // shoulders and head are narrower than the body, so stairs next to a low ceiling work
-        if (cy + 1 > y + 1.2 && near2 >= (r * 0.5) ** 2) continue;
+        if (cy + 1 > feet + 1.2 && near2 >= (r * 0.5) ** 2) continue;
         const t = getV(g, cx, cy, cz);
         if (t === V.AIR) continue;
         if (blockTop(t, cy, Math.min(px, cx + 0.999), Math.min(pz, cz + 0.999)) > y + step) return true;

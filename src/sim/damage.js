@@ -116,7 +116,10 @@ export function destroyPiece(world, p) {
   if (lowest && mat && String(mat.leaves_rubble).toLowerCase() === 'yes') {
     const [x, y, z] = lowest;
     const supported = y === 0 || getV(g, x, y - 1, z) !== V.AIR || terrainHeight(world.terrain, x + 0.5, z + 0.5) >= y - 0.3;
-    if (supported) g.cells[gidx(g, x, y, z)] = V.RUBBLE;
+    // no rubble where it would leave too little headroom (under a floor above): people
+    // would get stuck, and a broken wall must open a way through, not block it
+    const headroom = getV(g, x, y + 1, z) === V.AIR && getV(g, x, y + 2, z) === V.AIR;
+    if (supported && headroom) g.cells[gidx(g, x, y, z)] = V.RUBBLE;
   }
   p.cells = [];
   world.voxelVersion++;

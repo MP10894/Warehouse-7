@@ -7,6 +7,8 @@ import { createWorld } from '../src/sim/world.js';
 import { stepWorld } from '../src/sim/step.js';
 import { buildNav, nodeAt, flowField, maintainNav } from '../src/sim/nav.js';
 import { destroyPiece } from '../src/sim/damage.js';
+import { V, getV, setV } from '../src/sim/grid.js';
+import { moveBody } from '../src/sim/body.js';
 import { parseBuilding, orientFloors } from '../src/sim/level.js';
 
 const read = p => readFileSync(new URL('../' + p, import.meta.url), 'utf8');
@@ -74,6 +76,34 @@ check(bad.length === 0, `the roof of every building with stairs can be reached${
   const same = full.count === part.count && full.links.every((l, i) => l === part.links[i]) && full.y.every((y, i) => y === part.y[i]);
   check(same, `partial path-finding update after ${targets.length} walls broke matches a full rebuild`);
   check(tPart < tNav / 2, `partial update is quick (${tPart.toFixed(0)} ms vs ${tNav.toFixed(0)} ms for everything)`);
+}
+
+// rubble never leaves people stuck under a floor (play-test bug, 2026-10-22)
+{
+  const w = createWorld({ data, levelId: 'najaf', seed: 9 });
+  const g = w.grid;
+  let trapped = 0;
+  for (let i = 0; i < g.cells.length; i++) if (g.cells[i] === V.RUBBLE) {
+    const x = i % g.w, z = ((i / g.w) | 0) % g.d, y = (i / (g.w * g.d)) | 0;
+    if (getV(g, x, y + 1, z) !== V.AIR || getV(g, x, y + 2, z) !== V.AIR) trapped++;
+  }
+  check(trapped === 0, `no rubble placed under a floor (${trapped})`);
+  // blow out a ground-floor wall that has a floor above it, then walk through the gap
+  const pc = w.pieces.find(p => p.alive && p.material === 'wall' && p.cells.length === 2 && p.cells.every(i => {
+    const x = i % g.w, z = ((i / g.w) | 0) % g.d;
+    return getV(g, x, 2, z) === V.SLAB && getV(g, x - 1, 0, z) === V.AIR && getV(g, x + 1, 0, z) === V.AIR && getV(g, x - 1, 1, z) === V.AIR && getV(g, x + 1, 1, z) === V.AIR;
+  }));
+  const i0 = pc.cells[0], gx = i0 % g.w, gz = ((i0 / g.w) | 0) % g.d;
+  destroyPiece(w, pc);
+  check(getV(g, gx, 0, gz) === V.AIR, 'a wall broken under a floor leaves an opening, not rubble');
+  const body = { x: gx - 1.5, y: 0, z: gz + 0.5, vy: 0, onGround: true };
+  for (let k = 0; k < 120; k++) moveBody(w, body, 3 / 60, 0, 1 / 60);
+  check(body.x > gx + 1.2, `walked through the hole in the wall (x ${body.x.toFixed(1)}, gap at ${gx})`);
+  // and if rubble were under a low ceiling, you couldn't climb into it and get stuck
+  setV(g, gx, 0, gz, V.RUBBLE);
+  const b2 = { x: gx - 1.5, y: 0, z: gz + 0.5, vy: 0, onGround: true };
+  for (let k = 0; k < 120; k++) moveBody(w, b2, 3 / 60, 0, 1 / 60);
+  check(b2.y < 0.1 && b2.x < gx, 'you can\'t step onto rubble where your head would hit the floor above');
 }
 
 // claiming the police station and building walls there

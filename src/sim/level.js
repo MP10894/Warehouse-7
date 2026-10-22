@@ -84,7 +84,7 @@ function stampBuilding(world, text, ox, oz, turn = 0, mirror = false) {
   const base = Math.round(samples.reduce((s, [x, z]) => s + terrainHeight(t, x, z), 0) / samples.length);
   flattenTerrain(t, ox - 1, oz - 1, ox + w + 1, oz + d + 1, base);
 
-  const ramps = [];
+  const ramps = [], rubble = [];
   for (const f of floors) {
     const by = base + f.floor * FLOOR_H;
     f.rows.forEach((row, j) => {
@@ -104,7 +104,7 @@ function stampBuilding(world, text, ox, oz, turn = 0, mirror = false) {
           case 'X': for (let y = by; y < by + 3; y++) setV(g, x, y, z, V.COLUMN); break;
           case 'l': setV(g, x, by, z, V.LOWWALL); addPiece(world, 'lowwall', [gidx(g, x, by, z)]); break;
           case 'c': setV(g, x, by, z, V.CRATE); addPiece(world, 'crate', [gidx(g, x, by, z)]); break;
-          case ',': setV(g, x, by, z, V.RUBBLE); break;
+          case ',': rubble.push([x, by, z]); break;
           case '.': if (f.floor === 0) world.level.decals.push([x, base, z]); break;
           default:
             if (RAMP[ch]) {
@@ -116,6 +116,10 @@ function stampBuilding(world, text, ox, oz, turn = 0, mirror = false) {
         }
       }
     });
+  }
+  // Rubble only where there's standing room above it (not under a floor).
+  for (const [x, y, z] of rubble) {
+    if (getV(g, x, y, z) === V.AIR && getV(g, x, y + 1, z) === V.AIR && getV(g, x, y + 2, z) === V.AIR) setV(g, x, y, z, V.RUBBLE);
   }
   // Stairs last, so they cut through the floors above them.
   for (const r of ramps) {
