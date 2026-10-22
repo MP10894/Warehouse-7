@@ -4,3 +4,6 @@ dist/
 Thumbs.db
 desktop.ini
 *.log
+
+# Office temporary/lock files (created while a document is open)
+~$*
