@@ -28,7 +28,8 @@ weapons kick, walls break.
 - Each level has a theme that sets its map design, objects, colours and weather.
   Winning a level unlocks the next.
 - Target size: about **1 minute to walk across** (roughly 250–300 m at walking speed).
-- Target length: about **5 minutes of play** per level for now.
+- **Winning:** survive until the level timer runs out. The first test uses **5 minutes**;
+  real levels will run longer.
 - Buildings have up to 3 floors (ground + 2). Floors, structural columns, stairs and level
   boundaries are indestructible; ordinary walls can be destroyed.
 
@@ -67,6 +68,8 @@ well-defended base-building items:
   - with a base, they attack the base;
   - without one, they head for the players' location.
 - Waves get harder over time, and **build progress speeds up the escalation**.
+- For now, difficulty varies only by **number of enemies, their weapons, and whether
+  they wear armour**. A full enemy roster file will come later.
 - Attacking enemies' shots and explosions damage base walls and upgrades as a side effect.
 
 ## Players
@@ -74,7 +77,11 @@ well-defended base-building items:
 - **Health:** 100 for players and enemies alike.
 - **Armour:** picked up in amounts of 50–300; stacks up to **300**. Armour takes all
   damage until it reaches 0, then the rest spills into health. Armour also protects the head.
-- **Headshots:** ×2 damage.
+  While armour lasts, a bullet removes its *damage to armour* from armour. If armour runs
+  out mid-bullet, the unused share of the bullet hits health at its *damage to health*
+  rate. (Example: 10 armour left, bullet does 50 to armour and 40 to health → armour
+  absorbs 20% of the bullet, health takes 80% of 40 = 32.)
+- **Headshots:** ×2 damage, applied to both armour damage and health damage.
 - **Death:** permanent in single player (the level is lost). In co-op a downed player can
   be revived by the other within **15 seconds**; if both are down, the level is lost.
 - **Start:** each player starts with a pistol.
@@ -99,8 +106,9 @@ well-defended base-building items:
 ## Ballistics
 
 - No hit-scan. Bullets are physical objects that travel and drop.
-- Speeds are reduced from real life so drop is noticeable in play. A global
-  "bullet speed" factor in settings keeps the weapon sheet realistic and the feel tunable.
+- The weapon sheet holds real muzzle velocities. A global "bullet speed" factor in
+  settings scales them down so drop is noticeable in play; it starts at **50%** and is
+  tuned in the game.
 
 ## Destruction
 
@@ -117,6 +125,14 @@ well-defended base-building items:
   players and enemies alike, with matching visual and sound effects.
 - Weather is part of the game rules (it changes what enemies can see), so co-op players
   share the same weather.
+
+## Art direction
+
+- **Low-poly 3D**, PS1 style: characters at **300 triangles or fewer**, small pixelated
+  textures, low-resolution rendering scaled up.
+- Characters can be built from separate rigid parts (head, torso, upper and lower limbs)
+  animated in code, as on the original PlayStation. That needs no skeleton or rigging,
+  so placeholder models can be made in code and swapped for drawn art later.
 
 ## Controls (phone, held sideways)
 
@@ -192,28 +208,18 @@ like Doom, does not.
 | 2026-10-22 | Physical bullets with drop at reduced speeds; recoil kicks the camera; bloom grows with sustained fire and movement |
 | 2026-10-22 | Destruction mainly from explosives and large calibres; rubble is walkable; destruction never blocks routes |
 | 2026-10-22 | No crouch, jump or prone. Friendly NPCs out of the first version |
+| 2026-10-22 | Win by surviving a level timer; 5 minutes for the test level |
+| 2026-10-22 | Armour spill-over rule adopted; headshot ×2 applies to armour damage too |
+| 2026-10-22 | Bullet speed: real values in the sheet, global factor starting at 50% |
+| 2026-10-22 | Art: low-poly 3D, 300 triangles or fewer per character |
+| 2026-10-22 | Wave difficulty for now: enemy count, weapons, armour on/off |
 
 ## Open questions
 
-1. **Win condition.** What ends a level in victory: surviving a fixed number of waves,
-   surviving until a timer runs out, or something else? And does 5 minutes leave enough
-   time to clear a base, fetch items and survive escalating waves, or is it a target
-   for the first test only?
-2. **Armour damage rule.** Weapons have separate "damage to armour" and "damage to
-   health" values. Proposed: while armour lasts, a bullet removes its armour damage
-   from armour; if armour runs out mid-bullet, the unused share of the bullet becomes
-   health damage at the health rate. (Example: 10 armour left, bullet does 50 to armour
-   and 40 to health → armour absorbs 20% of the bullet, health takes 80% of 40 = 32.)
-   Does the headshot ×2 apply to the armour damage as well?
-3. **Bullet speed.** "Slightly" slower than real life won't make drop visible at these
-   distances; around half speed would. Proposed: start at 50% and tune it in the game.
-4. **Level engine and art.** Multi-floor buildings and dunes need a full 3D level
-   engine, and flat Doom-style sprites look wrong from above or below, which points to
-   low-poly 3D models (PS1 style). How levels are authored (per-floor text grids plus a
-   height image, or a 3D editor) also needs deciding.
-5. **Enemy roster.** Which enemy types, and what makes later waves "tougher"
-   (more enemies, better weapons, more armour, different types)?
-6. **Upgrade levels.** What each improvement level of each upgrade does, and what it costs.
-7. **Weapon list.** Which weapons are in the first version; `Weapons.xlsx` is being
+1. **Level engine and authoring.** Proposed in chat (22 Oct): a 1-metre block grid per
+   floor for buildings, a height image for terrain. Awaiting a go-ahead.
+2. **Upgrade levels.** What each improvement level of each upgrade does, and what it costs.
+3. **Weapon list.** Which weapons are in the first version; `Weapons.xlsx` is being
    updated with calibre, muzzle velocity, range and semi-automatic fire rate.
-8. **Name** of the game.
+4. **Enemy roster** file (later).
+5. **Name** of the game.
