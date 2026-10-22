@@ -1,49 +1,162 @@
-# Warehouse 7: design document
+# Design document
 
 The source of truth for what the game is. Update it when a decision is made, so later
-sessions start from the same page.
+sessions start from the same page. Martial's original concept is in
+`docs/20261022 - Planning & Process.docx`; this file is the agreed, structured version.
+
+Working title: not decided yet (the repository is called Warehouse 7 after the first prototype).
+The game is separate from PMC Ltd.
 
 ## Vision
 
-A short, tense, retro first-person shooter in the spirit of Doom and Duke Nukem 3D,
-playable on a phone held sideways. Chunky pixels, dark industrial spaces, quick fights.
-It doubles as a technical test: can a prompt-driven workflow produce a game that feels
-good on a mid-range Android phone?
+A co-op survival shooter for phones. One or two players are dropped into a ruined,
+open level, fight their way into one of several enemy-held areas, claim it as a base,
+and fortify it with salvaged supplies while ever larger enemy waves try to wipe them out.
+Retro low-resolution look, quick sessions, physical gunplay: bullets travel and drop,
+weapons kick, walls break.
 
 ## Core loop
 
-Enter a bay → spot or hear hostiles → use cover (racks, crates) and explosive drums →
-clear the bay → collect health and ammo → move to the next bay. The level is won when
-every hostile is down.
+1. Explore the level, fight roaming enemies, pick up weapons and ammunition they drop.
+2. Clear one of the level's base areas. The first one cleared becomes your base, for good.
+3. Venture out to fetch base-building items (well defended), carry them home one at a
+   time, and build or improve upgrades.
+4. Every upgrade makes the enemy waves come faster and harder. Survive to the end.
 
-## Platforms and controls
+## Levels
 
-- **Phone (primary):** browser now, Android app via Capacitor later. Played sideways.
-  Left thumb: floating joystick to move. Right thumb: drag to look. Hold FIRE to shoot.
-- **Desktop:** WASD to move, mouse to look (click to lock), hold click or Space to fire.
+- Each level has a theme that sets its map design, objects, colours and weather.
+  Winning a level unlocks the next.
+- Target size: about **1 minute to walk across** (roughly 250–300 m at walking speed).
+- **Winning:** survive until the level timer runs out. The first test uses **5 minutes**;
+  real levels will run longer.
+- Buildings have up to 3 floors (ground + 2). Floors, structural columns, stairs and level
+  boundaries are indestructible; ordinary walls can be destroyed.
 
-## Look and feel
+**Level 1: ruined city, arid.** Three districts, each with one base area and
+well-defended base-building items:
 
-- 3D world with flat 2D sprite enemies and pickups (Doom style).
-- Rendered at about 230 pixel rows and scaled up, so pixels stay chunky on every screen.
-- Lighting baked into the level per tile: warm sodium lamps in the west halls, cold
-  fluorescents in the east, one red alarm lamp.
-- All art is currently drawn in code. Real art will replace it (see open questions).
+1. Dense urban: buildings ruined (superstructure only), partly damaged, or intact.
+2. Arid outskirts: a few roads, sand dunes for elevation, rocky outcrops, scattered
+   single-storey buildings.
+3. Industrial: an oil refinery with many pipelines.
 
-## Current content (v0.1)
+## Bases and building
 
-- One level: `data/levels/warehouse.txt`.
-- One enemy type: insurgent (4 health; headshots do triple damage).
-- One weapon: carbine (90 rounds at start).
-- Pickups: medkit (+30 health), ammo box (+30). Enemies sometimes drop ammo.
-- Explosive drums that chain-react.
+- A player or team can hold **one base**. The first base area cleared is the base;
+  the other base areas stay enemy territory.
+- Enemies no longer respawn inside a cleared base area.
+- A base can't be lost, but enemies can destroy everything built in it.
+- Base-building items are scattered around the level. Picking one up puts it in your
+  inventory and **slows you down**. You can carry **one at a time**.
+- Building is contextual: a Build button appears when you're in the right spot with the
+  right item.
+- Upgrades can be built and then **improved** (levels to be defined):
 
-## Not in scope (for now)
+| Upgrade | Needs | Effect |
+|---|---|---|
+| Open ammunition crate | Closed ammunition crate | Spawns ammunition periodically |
+| First aid locker | Medical crate | Spawns health packs periodically |
+| Armour locker | Armour crate | Spawns armour periodically |
+| Walls | Construction crate (respawns, since walls get destroyed) | Destructible cover around the base |
 
-- Jumping, crouching, reloading
-- Multiple weapons
-- Saving progress, menus beyond start and results
-- Online multiplayer (prepared for, not built; see below)
+## Enemies and waves
+
+- Enemies roam the level: some stay near their spawn zones, some range further.
+  They respawn periodically, except in a cleared base.
+- Waves of attackers are always coming:
+  - with a base, they attack the base;
+  - without one, they head for the players' location.
+- Waves get harder over time, and **build progress speeds up the escalation**.
+- For now, difficulty varies only by **number of enemies, their weapons, and whether
+  they wear armour**. A full enemy roster file will come later.
+- Attacking enemies' shots and explosions damage base walls and upgrades as a side effect.
+
+## Players
+
+- **Health:** 100 for players and enemies alike.
+- **Armour:** picked up in amounts of 50–300; stacks up to **300**. Armour takes all
+  damage until it reaches 0, then the rest spills into health. Armour also protects the head.
+  While armour lasts, a bullet removes its *damage to armour* from armour. If armour runs
+  out mid-bullet, the unused share of the bullet hits health at its *damage to health*
+  rate. (Example: 10 armour left, bullet does 50 to armour and 40 to health → armour
+  absorbs 20% of the bullet, health takes 80% of 40 = 32.)
+- **Headshots:** ×2 damage, applied to both armour damage and health damage.
+- **Death:** permanent in single player (the level is lost). In co-op a downed player can
+  be revived by the other within **15 seconds**; if both are down, the level is lost.
+- **Start:** each player starts with a pistol.
+
+## Weapons
+
+- Carry **up to 2 weapons**. Walking over a weapon picks it up automatically if you have
+  a free slot; otherwise a Pick up button appears and swaps it with the weapon in hand.
+- Dead enemies drop their weapon and some ammunition.
+- **Ammunition is shared by calibre** (any 5.56 mm weapon uses the same pool).
+- **Aim down sights** on every weapon.
+- Attributes per weapon (in `docs/Weapons.xlsx`, to be converted to `data/weapons.csv`):
+  magazine size; maximum carried ammunition (including the loaded magazine); reload time;
+  damage to health; damage to armour; damage to environment; area of effect (0–100,
+  where **100 = 10 m radius**); fire mode (semi or automatic); rate of fire; recoil (0–100);
+  bloom (0–100). To add: calibre, muzzle velocity, effective range, maximum rate for
+  semi-automatic weapons.
+- **Recoil** kicks the camera upwards; the player pulls back down.
+- **Bloom** is spread that grows the longer you fire and shrinks when you stop.
+  Moving increases it.
+
+## Ballistics
+
+- No hit-scan. Bullets are physical objects that travel and drop.
+- The weapon sheet holds real muzzle velocities. A global "bullet speed" factor in
+  settings scales them down so drop is noticeable in play; it starts at **50%** and is
+  tuned in the game.
+
+## Destruction
+
+- Destructible pieces use the same damage model as characters (health, then armour on
+  top), without the 100/300 caps, so armoured doors or reinforced walls can be very tough.
+- Destruction comes mainly from explosives and large-calibre weapons.
+- Destroyed walls leave **rubble you can walk over**. Destruction only ever opens space;
+  it never seals a route, so a level can't become impossible.
+
+## Weather
+
+- Outdoor areas can have sandstorms, rain or snowstorms, depending on the level's theme.
+- Weather appears in random areas for random lengths of time, reducing visibility for
+  players and enemies alike, with matching visual and sound effects.
+- Weather is part of the game rules (it changes what enemies can see), so co-op players
+  share the same weather.
+
+## Art direction
+
+- **Low-poly 3D**, PS1 style: characters at **300 triangles or fewer**, small pixelated
+  textures, low-resolution rendering scaled up.
+- Characters can be built from separate rigid parts (head, torso, upper and lower limbs)
+  animated in code, as on the original PlayStation. That needs no skeleton or rigging,
+  so placeholder models can be made in code and swapped for drawn art later.
+
+## Controls (phone, held sideways)
+
+- Left thumb: move. Right thumb: look. Fire (hold for automatic, tap for semi-automatic).
+- Buttons: Reload, Swap weapon, Aim down sights.
+- Contextual buttons: Pick up (weapon on the ground, slots full), Build (at a build spot
+  with the right item), Revive (co-op).
+- No crouch, jump or prone.
+
+## Platforms and co-op
+
+- Phone browser first, then an Android app via Capacitor. Desktop browser also works.
+- **Co-op (2 players) is a launch feature.** Development starts single-player, on code
+  that is co-op ready from the start (see Architecture), with networking added once the
+  core game works.
+
+## Not in scope (first version)
+
+- Friendly NPCs (tents for allies, allied AI)
+- Crouching, jumping, going prone
+- Vehicles
+- More than 2 players
+- Competitive multiplayer (players against each other)
+- Collapsing buildings or free-form destruction (only designated pieces break)
 
 ## Architecture (agreed)
 
@@ -53,17 +166,26 @@ every hostile is down.
   graphics, sound and HUD only read. The rules are deterministic for a given seed.
 - Balance numbers live in `/data` (CSV and JSON), never hard-coded in game logic.
 
-### How co-op would be added later
+### How co-op is added
 
 1. One player hosts. Their game runs `stepWorld` with both players' commands.
-2. The guest sends its command (movement, aim, fire) to the host every tick.
+2. The guest sends its command (movement, aim, fire, buttons) to the host every tick.
 3. The host sends world snapshots and events back; the guest draws them, smoothing
    movement between updates.
 4. A small WebSocket relay server (Node.js) connects the two, with a room code to join.
 5. Already in place: players are a list, enemies target the nearest living player,
    path-finding leads to all players, the map has a second spawn point (`2`), events
-   name which player they belong to, and the HUD and feedback only react to the
-   local player.
+   name which player they belong to, and HUD and feedback only react to the local player.
+6. To design in from the start: the "downed" state and revive, shared base ownership,
+   and carried items belonging to a specific player.
+
+## Prototype: Warehouse 7 (v0.1)
+
+The current playable build is a technical test, not the game: one flat indoor level
+(`data/levels/warehouse.txt`), one enemy type, one weapon (hit-scan), medkits, ammo and
+explosive drums, with sideways phone controls. Its structure (game rules, data files,
+controls, sideways view) carries over; its level engine, which is flat and single-floor
+like Doom, does not.
 
 ## Decision log
 
@@ -72,11 +194,32 @@ every hostile is down.
 | 2026-10-22 | Engine: Three.js in the browser, wrapped for Android later |
 | 2026-10-22 | Sideways view: the game rotates itself when the browser stays portrait; the View button flips or turns it off |
 | 2026-10-22 | Field of view aims for about 100° across, capped to avoid fisheye stretching |
-| 2026-10-22 | Code split into modules; simulation kept separate so two-player co-op can be added later |
+| 2026-10-22 | Code split into modules; simulation kept separate so co-op can be added |
+| 2026-10-22 | Game concept adopted: open levels, one claimable base, base building, escalating waves |
+| 2026-10-22 | Separate game from PMC Ltd. |
+| 2026-10-22 | Co-op is a launch feature; built single-player first on co-op-ready code |
+| 2026-10-22 | Level size about 1 minute to cross; about 5 minutes of play per level for now |
+| 2026-10-22 | One base per player/team; first cleared base area is the base; bases can't be lost |
+| 2026-10-22 | Base items: in inventory, one at a time, slow the carrier. Upgrades can be improved |
+| 2026-10-22 | Permadeath in single player; 15-second revive window in co-op |
+| 2026-10-22 | Health 100; armour up to 300 absorbs all damage first, covers the head; headshots ×2 |
+| 2026-10-22 | Two weapon slots, start with a pistol, ammunition shared by calibre, aim down sights on all weapons |
+| 2026-10-22 | Area of effect scale: 100 = 10 m radius |
+| 2026-10-22 | Physical bullets with drop at reduced speeds; recoil kicks the camera; bloom grows with sustained fire and movement |
+| 2026-10-22 | Destruction mainly from explosives and large calibres; rubble is walkable; destruction never blocks routes |
+| 2026-10-22 | No crouch, jump or prone. Friendly NPCs out of the first version |
+| 2026-10-22 | Win by surviving a level timer; 5 minutes for the test level |
+| 2026-10-22 | Armour spill-over rule adopted; headshot ×2 applies to armour damage too |
+| 2026-10-22 | Bullet speed: real values in the sheet, global factor starting at 50% |
+| 2026-10-22 | Art: low-poly 3D, 300 triangles or fewer per character |
+| 2026-10-22 | Wave difficulty for now: enemy count, weapons, armour on/off |
 
 ## Open questions
 
-- **Art direction:** keep 2D sprites, or move to low-poly 3D models (PS1 style)?
-  Affects the asset pipeline more than the code.
-- Art specifications (texture sizes, palette, file names) to be fixed before generating art.
-- Tuning panel in-game for sensitivity, accuracy and speed.
+1. **Level engine and authoring.** Proposed in chat (22 Oct): a 1-metre block grid per
+   floor for buildings, a height image for terrain. Awaiting a go-ahead.
+2. **Upgrade levels.** What each improvement level of each upgrade does, and what it costs.
+3. **Weapon list.** Which weapons are in the first version; `Weapons.xlsx` is being
+   updated with calibre, muzzle velocity, range and semi-automatic fire rate.
+4. **Enemy roster** file (later).
+5. **Name** of the game.
