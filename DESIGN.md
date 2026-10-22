@@ -284,6 +284,7 @@ tag `warehouse-prototype`.
 | 2026-10-22 | Art workflow: reference picture → Claude drafts the Blockbench model → Martial refines → Claude checks |
 | 2026-10-22 | Recoil returns: after you stop firing the view comes back to where you were aiming (sustained fire still climbs; bloom still spreads shots). Pulling down yourself counts towards the return |
 | 2026-10-22 | Weapons and first-person hands drawn at 256 px per metre (seen close); first drawn weapon: Sig P320 from an OpenArt reference sheet |
+| 2026-10-22 | First-person hands: tan tactical gloves with hard knuckle plates and grey cuffs, sleeve in the team's grey-blue |
 
 ## Open questions
 

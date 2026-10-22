@@ -70,7 +70,12 @@ export const muzzleOf = id => (ART.weapons[id] && ART.weapons[id].muzzle) || MUZ
 /** The aiming point (eye looks through it) of a drawn weapon, or null for placeholders. */
 export const sightOf = id => (ART.weapons[id] && ART.weapons[id].sight) || null;
 /** Where the left hand holds the weapon. */
-const HAND_LEFT = { sig_p320: [-0.03, -0.01, 0.03], m4a1: [0, 0.03, -0.3], ak47: [0, 0.035, -0.3], rpg7: [0, 0.02, -0.16] };
+const HAND_LEFT = { sig_p320: [-0.03, -0.01, 0.03], m4a1: [-0.01, 0.03, -0.3], ak47: [-0.01, 0.035, -0.3], rpg7: [0, -0.02, 0.08] };
+/** Where the right hand holds a placeholder weapon (drawn weapons: their origin, the grip). */
+const HAND_RIGHT = { m4a1: [0, -0.04, -0.11], ak47: [0, -0.05, -0.12], rpg7: [0, -0.02, -0.15] };
+export const handRightOf = id => (ART.weapons[id] ? [0, 0, 0] : HAND_RIGHT[id] || [0, 0, 0.02]);
+/** Weapons whose left hand also holds an upright grip (rather than a handguard). */
+export const LEFT_HAND_UPRIGHT = new Set(['sig_p320', 'rpg7']);
 export const handLeftOf = id => (ART.weapons[id] && ART.weapons[id].handLeft) || HAND_LEFT[id] || [0, 0, -0.25];
 
 /** A flying rocket: the RPG-7's warhead. */

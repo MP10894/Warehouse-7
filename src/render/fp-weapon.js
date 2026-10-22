@@ -2,7 +2,7 @@
 // clips into walls. Handles aiming down sights, recoil kick, reload and swap motions,
 // walking sway and the muzzle flash.
 import * as THREE from 'three';
-import { weaponModel, muzzleOf, sightOf, handLeftOf, box } from './models.js';
+import { weaponModel, muzzleOf, sightOf, handLeftOf, handRightOf, LEFT_HAND_UPRIGHT, box } from './models.js';
 import { ART, cloneArt } from './assets.js';
 import { makeCanvas, pixelTexture } from './textures.js';
 
@@ -67,9 +67,13 @@ export function createFpWeapon() {
     const m = muzzleOf(id);
     flash.position.set(m[0], m[1], m[2] - 0.05);
     hands.R.visible = hands.L.visible = !!gun;
-    hands.R.position.set(0, 0, 0.02);
+    const hr = handRightOf(id);
+    hands.R.position.set(hr[0], hr[1], hr[2]);
     const hl = handLeftOf(id);
     hands.L.position.set(hl[0], hl[1], hl[2]);
+    // drawn hands are fists round an upright grip: on a rifle the left hand turns to clamp
+    // the handguard from the side, back of the hand (and its knuckle plate) facing you
+    hands.L.rotation.set(ART.hands && !LEFT_HAND_UPRIGHT.has(id) ? Math.PI / 2 : 0, 0, 0);
     const sight = sightOf(id);
     adsTarget = sight ? new THREE.Vector3(-sight[0] * HOLDER_SCALE, -sight[1] * HOLDER_SCALE, -SIGHT_DISTANCE - sight[2] * HOLDER_SCALE) : null;
   }

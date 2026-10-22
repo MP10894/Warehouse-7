@@ -150,10 +150,15 @@ would be only 6 pixels long. At 256 it is about 50 units (and pixels) long, a ri
 A weapon more than 50 % shorter or longer than the placeholder is refused (usually a wrong
 export scale).
 
-**First-person hands:** `items/player_hands.glb`, **≤ 100 triangles**, same 1/256 m scale, with two groups
-`hand_R` and `hand_L`, each with its pivot at the centre of the palm, glove plus the end of
-the sleeve, fingers pointing north. The game places `hand_R` on the weapon's grip and
-`hand_L` on `hand_left`. Until the file exists, simple gloves made of boxes are drawn.
+**First-person hands:** `items/player_hands.glb`, **≤ 100 triangles** for both, same 1/256 m
+scale, with two groups `hand_R` and `hand_L`. Each hand is a **fist closed round an upright
+grip** whose centre line runs through the group's pivot: back of the hand on the outside,
+fingers wrapped round the front (north), thumb over the inside, wrist and cuff running
+back (south). `hand_L` is the mirror image. The game puts `hand_R` on the weapon's grip
+(its origin) and `hand_L` on `hand_left`; on rifles the left hand is turned a quarter turn
+to clamp the handguard from the side, knuckle plate facing you. Draft: tan tactical glove
+with hard knuckle plate (reference in `assets/sources/reference/player_hands_views.png`),
+4 boxes per hand, 96 triangles.
 
 ## 6. Pickups, crates and base upgrades
 
@@ -244,7 +249,8 @@ black, white, muzzle-flash yellow, flame orange, sky). Picture: `docs/palette.pn
 
 Drafts so far: `assets/blocks/wall.png`, `assets/sources/enemy_insurgent.bbmodel`
 (→ `assets/characters/enemy_insurgent.glb`), `assets/sources/sig_p320.bbmodel`
-(→ `assets/weapons/sig_p320.glb`, from the OpenArt reference in `assets/sources/reference/`).
+(→ `assets/weapons/sig_p320.glb`), `assets/sources/player_hands.bbmodel` (→ `assets/items/player_hands.glb`),
+both from OpenArt references in `assets/sources/reference/`.
 
 ## Decisions (2026-10-22)
 
