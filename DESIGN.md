@@ -33,7 +33,7 @@ weapons kick, walls break.
 - Buildings have up to 3 floors (ground + 2). Floors, structural columns, stairs and level
   boundaries are indestructible; ordinary walls can be destroyed.
 
-**Level 1: ruined city, arid.** Three districts, each with one base area and
+**Level 1: Najaf, a ruined city, arid.** Three districts, each with one base area and
 well-defended base-building items:
 
 1. Dense urban: buildings ruined (superstructure only), partly damaged, or intact.
@@ -41,8 +41,8 @@ well-defended base-building items:
    single-storey buildings.
 3. Industrial: an oil refinery with many pipelines.
 
-Layout proposal under review: [docs/LEVEL1_PLAN.md](docs/LEVEL1_PLAN.md) (map in
-`docs/level1_layout.png`).
+Layout plan (agreed): [docs/NAJAF_PLAN.md](docs/NAJAF_PLAN.md) (map in
+`docs/najaf_layout.png`).
 
 ## Bases and building
 
@@ -195,7 +195,7 @@ joining a game already in progress isn't supported.
 
 ## Current build: test slice (v0.2)
 
-A 100 × 100 m piece of Level 1 (`data/levels/slice/`) with everything in the vertical
+A 100 × 100 m piece of Level 1 (Najaf) (`data/levels/slice/`) with everything in the vertical
 slice: a three-storey tower with stairs and a walkable roof, a ruined concrete shell,
 city and desert houses, dunes, the compound base, all four weapons from the sheet,
 travelling bullets and rockets, armour, two weapon slots, enemies that guard, roam and
@@ -262,10 +262,15 @@ tag `warehouse-prototype`.
 | 2026-10-22 | Insurgents tuned on the Enemies tab: reaction 0.9 s, aim error 2° + 1.2° per 10 m, carry only AK-47 or RPG-7 |
 | 2026-10-22 | In-game tuning panel and frame-rate counter for play-testing; tuned values are sent back and written into settings.json |
 | 2026-10-22 | Co-op test: host-run game, snapshots over the play link's live room, guest moves locally; room codes |
+| 2026-10-22 | Level 1 is named **Najaf**; layout agreed: 256 × 256 m, start at the central crossroads, three base areas (police station, truck stop, control building) |
+| 2026-10-22 | Upgrades have 3 levels, each costing one crate of its type; crates respawn until the matching upgrade is maxed; construction crates always respawn |
+| 2026-10-22 | Najaf starts with about 60 enemies; adjust after play-testing |
+| 2026-10-22 | Refinery fuel tanks explode in a wide radius when hit by an RPG |
+| 2026-10-22 | Najaf: permanent smoke at the flare stack; 15-minute time limit; map edges are collapsed buildings, a refinery fence, high dunes and cliffs |
 
 ## Open questions
 
-1. **Upgrade levels.** Walls currently go to level 2 (2 blocks high). What each level of
-   each upgrade does, and what it costs.
+1. **Upgrade levels.** 3 levels, one crate each (agreed). Still to define: what each level
+   of each upgrade does (spawn rate, amount). Walls currently go to level 2 (2 blocks high).
 2. **Enemy roster** file (later).
 3. **Name** of the game.

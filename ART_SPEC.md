@@ -60,7 +60,7 @@ and the top into the bottom, with no visible seam.
 
 The densities are mixed today because they were drawn quickly. Choice 1 below fixes one rule.
 
-New block textures expected for Level 1 (names reserved, see LEVEL1_PLAN.md):
+New block textures expected for Najaf (names reserved, see docs/NAJAF_PLAN.md):
 `metal.png` (refinery walls and walkways), `pipe.png`, `tank.png`, `asphalt.png` (roads),
 `rock.png` (outcrops), `plaster.png` (intact city houses).
 

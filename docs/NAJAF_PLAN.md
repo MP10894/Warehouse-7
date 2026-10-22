@@ -1,6 +1,8 @@
-# Level 1 layout proposal (v1, for review)
+# Najaf (Level 1): layout plan
 
-Map: [`level1_layout.png`](level1_layout.png). Grid squares are 32 m and labelled A–H
+Status: **layout agreed 2026-10-22**, one small question still open (end of page).
+
+Map: [`najaf_layout.png`](najaf_layout.png). Grid squares are 32 m and labelled A–H
 across and 1–8 down, so notes can say things like "move the clinic to B2".
 Nothing here is built yet.
 
@@ -37,7 +39,12 @@ base area, so whichever base you take, you have to go out for them.
 | Ammunition | Army checkpoint, outskirts (F8) | 4 behind a sandbag ring |
 | Armour | Refinery security post (H1) | 4 |
 
-Construction crates come back after being used, since walls get destroyed.
+**Crates respawn** at their spot after being used, **until your base's matching upgrade
+reaches its top level** (level 3). Then that crate stops appearing. Construction crates
+always respawn, since walls get destroyed.
+
+**Upgrades have 3 levels. Each level costs one crate of its type**, so a fully upgraded
+base takes 3 ammunition, 3 medical and 3 armour crates, plus construction crates for walls.
 Each base area has **three build spots** for the upgrades (ammunition crate, first aid
 locker, armour locker), plus room for walls around it.
 
@@ -50,12 +57,20 @@ locker, armour locker), plus room for walls around it.
 - **Waves** enter at six points on the edges (red arrows), chosen far from all three bases
   so attackers cross open ground before they arrive.
 
+## Exploding fuel tanks
+
+**Fuel tanks explode when hit by an RPG**, with a wide blast that hurts everyone nearby,
+players included, and breaks walls and upgrades in range. That makes the refinery base (C)
+risky: a stray enemy rocket at a tank next to it can wreck it. Proposed starting values,
+to be tuned in the data files: blast radius 12 m, damage like four RPG hits at the
+centre, falling off to nothing at the edge. Bullets don't set tanks off.
+
 ## Weather
 
 - **Sandstorm zones** over the outskirts (south-west and south-east). As in the slice,
   storms start randomly and cut how far everyone can see. The truck stop base sits inside
   one: cheaper to reach, harder to defend in a storm.
-- *Idea, not agreed:* permanent smoke drifting from the flare stack (H2), a small area
+- **Flare smoke:** permanent smoke drifting from the flare stack (H2), a small area
   where sight is always short.
 
 ## How it would be built
@@ -80,17 +95,21 @@ locker, armour locker), plus room for walls around it.
 3. **Enemy path-finding** over a bigger map costs more. It's built to only update when the
    map changes, so it should be fine, and I'll measure it.
 
-## Questions for Martial
+## Agreed (2026-10-22)
 
-1. **Start point:** in the middle (equal choice, as drawn), or at the edge (for example the
-   wrecked convoy, F8, so the outskirts base is the obvious first target)?
-2. **Base areas:** are the three choices and their trade-offs what you had in mind?
-3. **Crates:** happy with five crates in these places? How many upgrade levels (3?), and
-   does each level cost one crate of its type?
-4. **Enemy count:** about 60 at the start plus waves. More or fewer?
-5. **Refinery tanks:** should fuel tanks explode when hit by an RPG? It fits the place, but
-   it's a new rule and could wreck your own base at C.
-6. **Flare smoke:** yes or no?
-7. **Time limit** for Level 1 (the slice uses 5 minutes)?
-8. **Map edge:** what stops players at the boundary: collapsed buildings in the city, a
-   fence at the refinery, high dunes or a cliff in the outskirts (as assumed)?
+- Name: **Najaf**.
+- Start in the middle, at the crossroads.
+- The three base areas and their trade-offs as drawn.
+- Crate positions as drawn; 3 upgrade levels; one crate per level; crates respawn until
+  the matching upgrade is maxed (construction crates always).
+- About 60 enemies at the start; adjust after play-testing.
+- Fuel tanks explode in a wide radius when hit by an RPG.
+- Permanent smoke around the flare stack.
+- Time limit: **15 minutes**.
+- Map edge: collapsed buildings in the city, a fence at the refinery, high dunes and cliffs
+  in the outskirts. None of it can be destroyed or crossed.
+
+## Still open
+
+1. **Chain reactions:** should one exploding tank set off tanks next to it? The tank farm
+   (F3–G3) would go up all at once.

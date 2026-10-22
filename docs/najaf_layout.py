@@ -1,4 +1,4 @@
-"""Draws the Level 1 layout proposal (docs/level1_layout.png). 1 m = S pixels."""
+"""Draws the Najaf layout plan (docs/najaf_layout.png). 1 m = S pixels."""
 import math, random
 from PIL import Image, ImageDraw, ImageFont
 
@@ -306,7 +306,7 @@ for i in range(8):
 d.rectangle([OX, OY, OX + W * S, OY + W * S], outline=(30, 26, 20), width=3)
 
 # title
-d.text((OX, 20), 'Level 1 — Ruined city, arid  ·  layout proposal v1', font=f_t, fill=(30, 26, 20), anchor='lt')
+d.text((OX, 20), 'Najaf — ruined city, arid  ·  layout v2 (agreed)', font=f_t, fill=(30, 26, 20), anchor='lt')
 
 # ---------------- legend ----------------
 LX, LY = OX + W * S + 40, OY
@@ -334,13 +334,13 @@ row(lambda x, yy: d.rectangle([x - 12, yy - 6, x + 12, yy + 6], fill=ASPH), 'Roa
 row(lambda x, yy: d.ellipse([x - 13, yy - 8, x + 13, yy + 8], fill=(232, 210, 165), outline=(196, 172, 122)), 'Sand dune (high ground)')
 row(lambda x, yy: d.rectangle([x - 12, yy - 6, x + 12, yy + 6], fill=(176, 150, 108)), 'Wadi (low ground)')
 row(lambda x, yy: d.polygon([(x - 12, yy + 7), (x - 4, yy - 9), (x + 10, yy - 5), (x + 12, yy + 8)], fill=(136, 120, 100)), 'Rock outcrop')
-row(lambda x, yy: (d.ellipse([x - 11, yy - 11, x + 11, yy + 11], fill=(208, 212, 212), outline=(110, 116, 118), width=3)), 'Fuel tank')
+row(lambda x, yy: (d.ellipse([x - 11, yy - 11, x + 11, yy + 11], fill=(208, 212, 212), outline=(110, 116, 118), width=3)), 'Fuel tank (explodes if hit by RPG)')
 row(lambda x, yy: [d.line([(x - 13, yy + k), (x + 13, yy + k)], fill=PIPE, width=3) for k in (-4, 0, 4)], 'Pipe rack')
 y += 6
 head('Game')
 row(lambda x, yy: (d.rectangle([x - 13, yy - 10, x + 13, yy + 10], fill=(200, 216, 236), outline=(30, 110, 210), width=4)), 'Base area (first one cleared is yours)')
 row(lambda x, yy: d.rectangle([x - 5, yy - 5, x + 5, yy + 5], fill=(255, 255, 255), outline=(30, 90, 180), width=2), 'Build spot for an upgrade')
-for k, t in [('construction', 'Construction crate (respawns)'), ('ammo', 'Ammunition crate'), ('medical', 'Medical crate'), ('armour', 'Armour crate')]:
+for k, t in [('construction', 'Construction crate (always respawns)'), ('ammo', 'Ammunition crate'), ('medical', 'Medical crate'), ('armour', 'Armour crate')]:
     def fn(x, yy, k=k):
         d.rectangle([x - 12, yy - 12, x + 12, yy + 12], fill=CRATES[k], outline=(20, 20, 20), width=3)
         d.text((x, yy), SYM[k], font=f_b, fill=(200, 30, 30) if k == 'medical' else (20, 20, 20), anchor='mm')
@@ -349,7 +349,7 @@ row(lambda x, yy: [d.ellipse([x + dx - 5, yy + dy - 5, x + dx + 5, yy + dy + 5],
 row(lambda x, yy: d.polygon([(x + 14, yy), (x - 8, yy - 10), (x - 8, yy + 10)], fill=(205, 40, 35)), 'Wave entry point')
 row(lambda x, yy: d.polygon([(x + math.cos(math.radians(-90 + i * 36)) * (13 if i % 2 == 0 else 5), yy + math.sin(math.radians(-90 + i * 36)) * (13 if i % 2 == 0 else 5)) for i in range(10)], fill=(40, 200, 90)), 'Player start')
 row(lambda x, yy: d.ellipse([x - 13, yy - 9, x + 13, yy + 9], fill=(226, 190, 150), outline=(190, 110, 40), width=3), 'Sandstorm zone (random)')
-row(lambda x, yy: d.ellipse([x - 13, yy - 9, x + 13, yy + 9], fill=(190, 186, 176), outline=(60, 60, 60), width=3), 'Smoke from flare (idea)')
+row(lambda x, yy: d.ellipse([x - 13, yy - 9, x + 13, yy + 9], fill=(190, 186, 176), outline=(60, 60, 60), width=3), 'Smoke from flare (always there)')
 
-img.save('/home/claude/warehouse-7/docs/level1_layout.png', optimize=True)
+img.save('/home/claude/warehouse-7/docs/najaf_layout.png', optimize=True)
 print(img.size)

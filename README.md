@@ -1,7 +1,7 @@
 # Ruined City (working title)
 
 A retro low-poly survival shooter built with [Three.js](https://threejs.org), playable in a
-phone or desktop browser. The current build is a test slice of Level 1: claim a base in a
+phone or desktop browser. The current build is a test slice of Level 1 (Najaf): claim a base in a
 ruined desert city, fortify it, and survive escalating enemy waves. See `DESIGN.md`.
 
 ## Run it on your computer
