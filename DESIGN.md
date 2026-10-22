@@ -168,18 +168,26 @@ well-defended base-building items:
   graphics, sound and HUD only read. The rules are deterministic for a given seed.
 - Balance numbers live in `/data` (CSV and JSON), never hard-coded in game logic.
 
-### How co-op is added
+### How co-op works (test version, built)
 
-1. One player hosts. Their game runs `stepWorld` with both players' commands.
-2. The guest sends its command (movement, aim, fire, buttons) to the host every tick.
-3. The host sends world snapshots and events back; the guest draws them, smoothing
-   movement between updates.
-4. A small WebSocket relay server (Node.js) connects the two, with a room code to join.
-5. Already in place: players are a list, enemies target the nearest living player,
-   path-finding leads to all players, the map has a second spawn point (`2`), events
-   name which player they belong to, and HUD and feedback only react to the local player.
-6. To design in from the start: the "downed" state and revive, shared base ownership,
-   and carried items belonging to a specific player.
+1. One player hosts and gets a four-digit room code; the partner opens the same game
+   link and joins with it.
+2. Connection: the platform's live "room" for the play link (each player's state is
+   their room presence: latest value wins, about 30 updates a second, 4 KB limit). Two
+   tabs of one browser also work, for testing on one computer. No server of our own.
+3. The host runs the game rules for both players and publishes a compact snapshot of
+   everything that changes (people, bullets, pickups, broken walls, base walls, clock,
+   recent events) every frame. The guest builds the same level from the same seed and
+   copies the snapshot in.
+4. The guest moves their own player on their own phone (so walking and looking feel
+   instant) and sends position, aim and button presses; shooting, damage and pickups
+   are decided on the host.
+5. Downed players can be revived by the partner within 15 seconds; if both are down
+   the level is lost.
+
+Known limits of the test version: the guest's shots, recoil and ammo count arrive
+after a short delay (one round trip); if the host leaves, the game ends for the guest;
+joining a game already in progress isn't supported.
 
 ## Current build: test slice (v0.2)
 
@@ -188,7 +196,7 @@ slice: a three-storey tower with stairs and a walkable roof, a ruined concrete s
 city and desert houses, dunes, the compound base, all four weapons from the sheet,
 travelling bullets and rockets, armour, two weapon slots, enemies that guard, roam and
 attack in waves, the construction crate and sandbag walls, destructible walls, and a
-sandstorm zone in the north-east desert. Single player; the code is co-op ready.
+sandstorm zone in the north-east desert. Single player, plus a two-player co-op test (Co-op test button).
 
 The earlier Warehouse 7 prototype (flat, Doom-style) is kept in git history under the
 tag `warehouse-prototype`.
@@ -249,6 +257,7 @@ tag `warehouse-prototype`.
 | 2026-10-22 | Workbook renamed Game Data.xlsx with a Weapons tab and an Enemies tab |
 | 2026-10-22 | Insurgents tuned on the Enemies tab: reaction 0.9 s, aim error 2° + 1.2° per 10 m, carry only AK-47 or RPG-7 |
 | 2026-10-22 | In-game tuning panel and frame-rate counter for play-testing; tuned values are sent back and written into settings.json |
+| 2026-10-22 | Co-op test: host-run game, snapshots over the play link's live room, guest moves locally; room codes |
 
 ## Open questions
 

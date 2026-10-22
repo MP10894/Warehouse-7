@@ -39,21 +39,24 @@ export function buildSpotFor(world, p) {
   return b.buildSpots.find(s => s.needs === p.carrying.item && Math.hypot(s.x - p.x, s.z - p.z) <= r) || null;
 }
 
+/** Put the base walls up to `level` blocks high (also used by a co-op guest to mirror the host). */
+export function placeWalls(world, level) {
+  const b = world.base, up = b.upgrades.walls;
+  up.level = level;
+  for (const r of b.wallPlan) {
+    for (let dz = 0; dz < (r.d || 1); dz++) for (let dx = 0; dx < (r.w || 1); dx++) {
+      const pid = placeBlocks(world, r.x + dx, r.z + dz, V.SANDBAG, level);
+      if (pid) up.pieces.push(pid);
+    }
+  }
+  world.voxelVersion++;
+  world.cache.navDirty = true;
+  emit(world, { type: 'blocks', cells: [], material: 'sandbags', rebuild: true });
+}
+
 export function build(world, p, spot) {
   const b = world.base;
-  if (spot.upgrade === 'walls') {
-    const up = b.upgrades.walls;
-    up.level = Math.min(2, up.level + 1);
-    for (const r of b.wallPlan) {
-      for (let dz = 0; dz < (r.d || 1); dz++) for (let dx = 0; dx < (r.w || 1); dx++) {
-        const pid = placeBlocks(world, r.x + dx, r.z + dz, V.SANDBAG, up.level);
-        if (pid) up.pieces.push(pid);
-      }
-    }
-    world.voxelVersion++;
-    world.cache.navDirty = true;
-    emit(world, { type: 'blocks', cells: [], material: 'sandbags', rebuild: true });
-  }
+  if (spot.upgrade === 'walls') placeWalls(world, Math.min(2, b.upgrades.walls.level + 1));
   b.buildCount++;
   const origin = p.carrying.origin;
   world.pending.push({ kind: 'respawnItem', item: p.carrying.item, x: origin.x, y: origin.y, z: origin.z, t: world.data.settings.base.item_respawn });

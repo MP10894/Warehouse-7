@@ -1,0 +1,205 @@
+// Co-op snapshots: the host squeezes the parts of the world that change into a small
+// object (it must stay under 4 KB), and the guest copies them into its own world.
+// The guest builds the same level from the same seed, so only moving and changing
+// things travel: people, bullets, pickups, broken walls, base walls, clock, events.
+import { destroyPiece } from '../sim/damage.js';
+import { placeWalls } from '../sim/base.js';
+
+const STATES = ['idle', 'chase', 'aim', 'fire', 'pain', 'dead'];
+const STATUS = ['playing', 'won', 'lost'];
+const PICKUP_TYPES = ['weapon', 'ammo', 'armour', 'item'];
+// events the guest needs to replay for sound, effects and HUD (broken walls are rebuilt
+// from the piece list instead, so 'blocks' is not forwarded)
+const FORWARD = new Set(['shot', 'impact', 'explosion', 'hurt', 'death', 'downed', 'revived', 'pickup', 'message',
+  'wave', 'baseClaimed', 'built', 'weather', 'hitConfirm', 'reload', 'swap', 'empty', 'status']);
+const EVENT_WINDOW = 45; // ticks of recent events repeated in every snapshot (drops are common)
+const MAX_EVENTS = 22;
+
+const cm = v => Math.round(v * 100);
+const mr = v => Math.round(v * 1000);
+const r2 = v => Math.round(v * 100) / 100;
+
+/** Host side: keeps recent events with sequence numbers and builds snapshots. */
+export function createHostEncoder(data) {
+  const weaponIds = Object.keys(data.weapons);
+  const wIdx = id => weaponIds.indexOf(id);
+  const ring = [];
+  let seq = 0, lastPickups = '', lastPieces = '';
+
+  function slimEvent(ev, tick) {
+    const out = { q: ++seq, k: tick };
+    for (const [key, v] of Object.entries(ev)) {
+      if (key === '_applied') continue;
+      out[key] = typeof v === 'number' ? r2(v) : v;
+    }
+    return out;
+  }
+
+  return {
+    /** Remember this tick's events (call before the events are consumed). */
+    record(world, events) {
+      for (const ev of events) if (FORWARD.has(ev.type)) ring.push(slimEvent(ev, world.tick));
+      while (ring.length && ring[0].k < world.tick - EVENT_WINDOW) ring.shift();
+    },
+
+    /** Build the presence patch for this frame. Fields that didn't change are left out. */
+    encode(world) {
+      const patch = {};
+      const g = [cm(world.time), cm(world.timeLeft), STATUS.indexOf(world.status), world.kills,
+        world.waves.number, Math.round(world.waves.nextT * 10), world.base.claimed ? 1 : 0, world.base.upgrades.walls.level,
+        world.weather.map(z => (z.active ? Math.round(z.intensity * 100) : -1)), world.outcome ? STATUS.indexOf(world.outcome) : 0];
+      patch.t = world.tick;
+      patch.g = g;
+      patch.p = world.players.map(p => [
+        p.id, cm(p.x), cm(p.y), cm(p.z), mr(p.yaw), mr(p.pitch), Math.ceil(p.hp), Math.ceil(p.armour),
+        (p.alive ? 1 : 0) | (p.downed ? 2 : 0) | (p.moving ? 4 : 0) | (p.ads ? 8 : 0),
+        Math.round(p.downT * 10), p.active,
+        p.slots.map(s => (s ? `${wIdx(s.w)}:${s.mag}` : '')).join('|'),
+        Object.entries(p.reserve).map(([c, n]) => `${c}=${n}`).join('|'),
+        Math.round(p.reloadT * 100), Math.round(p.swapT * 100),
+        p.carrying ? p.carrying.item : '',
+        p.context ? `${p.context.kind}|${p.context.label}` : '',
+        Math.round(p.bloom * 1000),
+        `${p.stats.shots}|${p.stats.hits}|${p.stats.kills}`
+      ]);
+      patch.n = world.enemies.filter(e => e.alive || e.deadT < 12).map(e => [
+        e.id, cm(e.x), cm(e.y), cm(e.z), mr(e.yaw), mr(e.pitch || 0), Math.ceil(e.armour), STATES.indexOf(e.state), wIdx(e.weapon.w),
+        (e.alive ? 1 : 0) | (e.moving ? 2 : 0) | (e.aiming ? 4 : 0) | (e.wave ? 8 : 0),
+        Math.round(e.animT * 10), Math.round(e.deadT * 10)
+      ]);
+      patch.b = world.projectiles.slice(-14).map(pr => [pr.id, cm(pr.x), cm(pr.y), cm(pr.z), Math.round(pr.vx), Math.round(pr.vy), Math.round(pr.vz),
+        pr.team === 'enemy' ? 1 : 0, pr.kind === 'rocket' ? 1 : 0]);
+      patch.e = ring.slice(-MAX_EVENTS);
+
+      const pk = JSON.stringify(world.pickups.map(k => [k.id, PICKUP_TYPES.indexOf(k.type), cm(k.x), cm(k.y), cm(k.z),
+        k.type === 'weapon' ? wIdx(k.weapon) : k.type === 'ammo' ? k.calibre : k.type === 'item' ? k.item : k.amount, k.mag ?? k.amount ?? 0]));
+      if (pk !== lastPickups) { patch.k = JSON.parse(pk); lastPickups = pk; }
+
+      // broken pieces as a bit set, base64 (a few dozen characters)
+      const bits = new Uint8Array(Math.ceil(world.pieces.length / 8));
+      world.pieces.forEach((p, i) => { if (!p.alive) bits[i >> 3] |= 1 << (i & 7); });
+      let bin = '';
+      for (const b of bits) bin += String.fromCharCode(b);
+      const pieces = btoa(bin);
+      if (pieces !== lastPieces) { patch.d = pieces; lastPieces = pieces; }
+
+      // the room keeps every field, so the budget covers the parts not resent this time too;
+      // stay under the 4 KB limit by trimming the least important parts first
+      const kept = (patch.k ? 0 : lastPickups.length) + (patch.d ? 0 : lastPieces.length) + 250;
+      const size = () => JSON.stringify(patch).length + kept;
+      const LIMIT = 3900;
+      while (size() > LIMIT && patch.b.length) patch.b.shift();
+      while (size() > LIMIT && patch.e.length > 8) patch.e.shift();
+      while (size() > LIMIT && patch.n.some(n => !(n[9] & 1))) patch.n.splice(patch.n.findIndex(n => !(n[9] & 1)), 1);
+      while (size() > LIMIT && patch.e.length > 1) patch.e.shift();
+      return patch;
+    },
+
+    /** Everything again (when a guest joins mid-way, or after a reconnect). */
+    forceFull() { lastPickups = ''; lastPieces = ''; }
+  };
+}
+
+/** Guest side: copy a snapshot into the local world. Returns the events to replay. */
+export function createGuestDecoder(data) {
+  const weaponIds = Object.keys(data.weapons);
+  let lastTick = -1, lastSeq = 0;
+
+  return {
+    reset() { lastTick = -1; lastSeq = 0; },
+
+    apply(world, snap, localId) {
+      const replay = [];
+      if (!snap || typeof snap.t !== 'number' || snap.t <= lastTick) return replay;
+      lastTick = snap.t;
+      const [time, timeLeft, status, kills, waveNo, nextT, claimed, walls, weather, outcome] = snap.g;
+      world.tick = snap.t;
+      world.time = time / 100;
+      world.timeLeft = timeLeft / 100;
+      world.kills = kills;
+      world.waves.number = waveNo;
+      world.waves.nextT = nextT / 10;
+      world.outcome = outcome ? STATUS[outcome] : null;
+      if (claimed && !world.base.claimed) world.base.claimed = true;
+      for (let lv = world.base.upgrades.walls.level + 1; lv <= walls; lv++) placeWalls(world, lv);
+      (weather || []).forEach((v, i) => {
+        const z = world.weather[i];
+        if (!z) return;
+        z.active = v >= 0; z.intensity = Math.max(0, v) / 100;
+      });
+
+      for (const row of snap.p || []) {
+        const [id, x, y, z, yaw, pitch, hp, armour, flags, downT, active, slots, reserve, reloadT, swapT, carrying, ctx, bloom, stats] = row;
+        const p = world.players.find(q => q.id === id);
+        if (!p) continue;
+        const mine = id === localId;
+        const far = Math.hypot(x / 100 - p.x, z / 100 - p.z) > 3;
+        if (!mine || far || !(flags & 1) || (flags & 2)) { p.x = x / 100; p.y = y / 100; p.z = z / 100; }
+        if (!mine) { p.yaw = yaw / 1000; p.pitch = pitch / 1000; p.moving = !!(flags & 4); p.ads = !!(flags & 8); }
+        p.hp = hp; p.armour = armour;
+        p.alive = !!(flags & 1); p.downed = !!(flags & 2); p.downT = downT / 10;
+        p.active = active;
+        p.slots = slots.split('|').map(s => {
+          if (!s) return null;
+          const [w, mag] = s.split(':');
+          return { w: weaponIds[Number(w)], mag: Number(mag) };
+        });
+        p.reserve = {};
+        for (const part of reserve ? reserve.split('|') : []) { const [c, n] = part.split('='); p.reserve[c] = Number(n); }
+        p.reloadT = reloadT / 100; p.swapT = swapT / 100;
+        p.carrying = carrying ? { item: carrying, origin: { x: 0, y: 0, z: 0 } } : null;
+        if (ctx) { const [kind, label] = ctx.split('|'); p.context = { kind, label }; } else p.context = null;
+        p.bloom = bloom / 1000;
+        const [shots, hits, k] = stats.split('|').map(Number);
+        p.stats = { shots, hits, kills: k };
+      }
+
+      const byId = new Map(world.enemies.map(e => [e.id, e]));
+      world.enemies = (snap.n || []).map(row => {
+        const [id, x, y, z, yaw, pitch, armour, state, w, flags, animT, deadT] = row;
+        const e = byId.get(id) || { id, kind: 'enemy', type: 'insurgent', weapon: { w: weaponIds[w], mag: 1 }, hp: 100 };
+        Object.assign(e, {
+          x: x / 100, y: y / 100, z: z / 100, yaw: yaw / 1000, pitch: pitch / 1000, armour, state: STATES[state] || 'idle',
+          alive: !!(flags & 1), moving: !!(flags & 2), aiming: !!(flags & 4), wave: !!(flags & 8),
+          animT: animT / 10, deadT: deadT / 10
+        });
+        e.weapon.w = weaponIds[w];
+        return e;
+      });
+
+      world.projectiles = (snap.b || []).map(([id, x, y, z, vx, vy, vz, team, kind]) => ({
+        id, x: x / 100, y: y / 100, z: z / 100, vx, vy, vz, team: team ? 'enemy' : 'player', kind: kind ? 'rocket' : 'bullet'
+      }));
+
+      if (snap.k) {
+        world.pickups = snap.k.map(([id, type, x, y, z, extra, n]) => {
+          const t = PICKUP_TYPES[type];
+          const pk = { id, type: t, x: x / 100, y: y / 100, z: z / 100 };
+          if (t === 'weapon') { pk.weapon = weaponIds[extra]; pk.mag = n; }
+          else if (t === 'ammo') { pk.calibre = extra; pk.amount = n; }
+          else if (t === 'item') pk.item = extra;
+          else pk.amount = extra;
+          return pk;
+        });
+      }
+
+      if (snap.d) {
+        const bin = atob(snap.d);
+        world.pieces.forEach((p, i) => {
+          const broken = (bin.charCodeAt(i >> 3) >> (i & 7)) & 1;
+          if (broken && p.alive) destroyPiece(world, p); // emits a local 'blocks' event for the renderer
+        });
+      }
+
+      for (const ev of snap.e || []) {
+        if (ev.q <= lastSeq) continue;
+        lastSeq = ev.q;
+        const copy = { ...ev };
+        delete copy.q; delete copy.k;
+        replay.push(copy);
+      }
+      if (STATUS[status] !== world.status) world.status = STATUS[status];
+      return replay;
+    }
+  };
+}

@@ -123,6 +123,20 @@ function doContext(world, p, ctx) {
   }
 }
 
+/** Walk a player from a joystick/keys vector { x, y }. Shared with the co-op guest's own device. */
+export function walkPlayer(world, p, move, dt) {
+  const s = world.data.settings;
+  let f = -(move?.y || 0), r = move?.x || 0;
+  const len = Math.hypot(f, r);
+  if (len > 1) { f /= len; r /= len; }
+  let speed = s.player.walk_speed;
+  if (p.carrying) speed *= s.player.carry_speed_factor;
+  if (p.ads) speed *= s.player.ads_speed_factor;
+  const sy = Math.sin(p.yaw), cy = Math.cos(p.yaw);
+  const moved = moveBody(world, p, (-sy * f + cy * r) * speed * dt, (-cy * f - sy * r) * speed * dt, dt);
+  p.moving = moved > speed * dt * 0.3;
+}
+
 /**
  * Health slowly comes back after a while without being hit, but only up to a cap
  * (settings: regen_delay seconds without damage, then up to regen_cap health over
@@ -150,15 +164,13 @@ export function updatePlayer(world, p, cmd, dt) {
   if (cmd.pitch !== undefined) p.pitch = Math.max(-s.controls.max_pitch, Math.min(s.controls.max_pitch, cmd.pitch));
   p.ads = !!cmd.ads;
 
-  let f = -(cmd.move?.y || 0), r = cmd.move?.x || 0;
-  const len = Math.hypot(f, r);
-  if (len > 1) { f /= len; r /= len; }
-  let speed = s.player.walk_speed;
-  if (p.carrying) speed *= s.player.carry_speed_factor;
-  if (p.ads) speed *= s.player.ads_speed_factor;
-  const sy = Math.sin(p.yaw), cy = Math.cos(p.yaw);
-  const moved = moveBody(world, p, (-sy * f + cy * r) * speed * dt, (-cy * f - sy * r) * speed * dt, dt);
-  p.moving = moved > speed * dt * 0.3;
+  if (cmd.pos) {
+    // co-op guest: their own device moves them (so it feels instant) and reports where they are
+    p.x = cmd.pos[0]; p.y = cmd.pos[1]; p.z = cmd.pos[2];
+    p.moving = !!cmd.moving;
+  } else {
+    walkPlayer(world, p, cmd.move, dt);
+  }
 
   updatePlayerWeapon(world, p, cmd, dt);
 

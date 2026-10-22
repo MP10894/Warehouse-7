@@ -1,12 +1,14 @@
 // Briefing screen and after-action report.
 import { fmtTime } from './dom-hud.js';
 
-export function createScreens({ view, onStart }) {
+export function createScreens({ view, onStart, onCoop }) {
   const screen = document.getElementById('screen');
   const card = document.getElementById('card');
 
   function wire() {
     document.getElementById('go').addEventListener('click', onStart);
+    const coop = document.getElementById('coopBtn');
+    if (coop) coop.addEventListener('click', onCoop);
     const vb = document.getElementById('viewBtn');
     if (vb) vb.addEventListener('click', () => { vb.textContent = view.cycleViewPref(); });
   }
@@ -30,28 +32,73 @@ export function createScreens({ view, onStart }) {
           <div><h2>Desktop</h2><ul><li><kbd>WASD</kbd> move · click to lock the mouse</li><li>Click fire · right-click aim</li><li><kbd>R</kbd> reload · <kbd>Q</kbd> swap · <kbd>E</kbd> use</li></ul></div>
         </div>
         <span class="rot">Hold your phone sideways. If the picture is upside down, tap View to flip it.</span>
-        <div class="actions"><button class="go" id="go" type="button">Start</button>${viewButton()}</div>`;
+        <div class="actions"><button class="go" id="go" type="button">Start</button><button class="view coop" id="coopBtn" type="button">Co-op test</button>${viewButton()}</div>`;
       screen.hidden = false;
       wire();
     },
 
-    showResults(world, player) {
+    /** Co-op: choose to host or join. */
+    showCoop({ transportLabel, onHost, onJoin, onBack, error }) {
+      card.innerHTML = `
+        <div class="eyebrow"><span>Co-op test</span><span>2 players</span></div>
+        <h1>Play together</h1>
+        ${error ? `<p class="warn">${error}</p>` : ''}
+        <p>One phone hosts and gets a four-digit room code. Your partner opens this same game link, taps Co-op test, and joins with that code. You both need access to this page.</p>
+        <p class="small">Connection: ${transportLabel}</p>
+        <div class="actions"><button class="go" id="hostBtn" type="button">Host a game</button></div>
+        <div class="actions joinrow"><input id="codeIn" inputmode="numeric" maxlength="4" placeholder="Code" aria-label="Room code"><button class="view coop" id="joinBtn" type="button">Join</button><button class="view coop" id="backBtn" type="button">Back</button></div>`;
+      screen.hidden = false;
+      document.getElementById('hostBtn').addEventListener('click', onHost);
+      document.getElementById('joinBtn').addEventListener('click', () => {
+        const code = document.getElementById('codeIn').value.replace(/\D/g, '');
+        if (code.length === 4) onJoin(code);
+        else document.getElementById('codeIn').focus();
+      });
+      document.getElementById('backBtn').addEventListener('click', onBack);
+    },
+
+    /** Co-op lobby, for host or guest. */
+    showLobby({ role, code, onStart, onLeave }) {
+      card.innerHTML = `
+        <div class="eyebrow"><span>Co-op test · ${role === 'host' ? 'you are hosting' : 'you joined'}</span><span>Room</span></div>
+        <h1>Code ${code}</h1>
+        <p id="lobbyStatus">${role === 'host' ? 'Waiting for your partner to join…' : 'Connecting to the host…'}</p>
+        <div class="actions">${role === 'host' ? '<button class="go" id="lobbyStart" type="button" disabled>Start</button>' : ''}<button class="view coop" id="lobbyLeave" type="button">Leave</button></div>`;
+      screen.hidden = false;
+      const st = document.getElementById('lobbyStart');
+      if (st) st.addEventListener('click', onStart);
+      document.getElementById('lobbyLeave').addEventListener('click', onLeave);
+    },
+    setLobbyStatus(text, canStart) {
+      const el = document.getElementById('lobbyStatus');
+      if (el && el.textContent !== text) el.textContent = text;
+      const st = document.getElementById('lobbyStart');
+      if (st) st.disabled = !canStart;
+    },
+
+    showResults(world, player, coop = null) {
       const won = world.status === 'won';
       const acc = player.stats.shots ? Math.round(player.stats.hits / player.stats.shots * 100) : 0;
       const survived = world.data.levels[world.levelId].time_limit - world.timeLeft;
       card.innerHTML = `
         <div class="eyebrow"><span>After-action report</span><span>${won ? 'Status: survived' : 'Status: killed in action'}</span></div>
         <h1>${won ? 'Held out' : 'KIA'}</h1>
-        <p>${won ? `You survived until the timer ran out${world.base.claimed ? `, holding the ${world.base.name.toLowerCase()}` : ' without a base'}.` : 'Single-player death is permanent: the level is lost.'}</p>
+        <p>${won ? `You survived until the timer ran out${world.base.claimed ? `, holding the ${world.base.name.toLowerCase()}` : ' without a base'}.` : coop ? 'Both of you went down: the level is lost.' : 'Single-player death is permanent: the level is lost.'}</p>
         <div class="results">
           <div><span>Survived</span><b>${fmtTime(survived)}</b></div>
           <div><span>Kills</span><b>${player.stats.kills}</b></div>
           <div><span>Accuracy</span><b>${acc}%</b></div>
           <div><span>Waves</span><b>${world.waves.number}</b></div>
         </div>
-        <div class="actions"><button class="go" id="go" type="button">${won ? 'Play again' : 'Retry'}</button>${viewButton()}</div>`;
+        ${coop && coop.role === 'guest' ? '<p class="small">The host can start the next run.</p>' : ''}
+        <div class="actions">${coop && coop.role === 'guest' ? '' : `<button class="go" id="go" type="button">${won ? 'Play again' : 'Retry'}</button>`}${coop ? '<button class="view coop" id="leaveCoop" type="button">Leave co-op</button>' : ''}${viewButton()}</div>`;
       screen.hidden = false;
-      wire();
+      const go = document.getElementById('go');
+      if (go) go.addEventListener('click', onStart);
+      const lc = document.getElementById('leaveCoop');
+      if (lc && coop) lc.addEventListener('click', coop.onLeave);
+      const vb = document.getElementById('viewBtn');
+      if (vb) vb.addEventListener('click', () => { vb.textContent = view.cycleViewPref(); });
     },
 
     showError(title, text) {

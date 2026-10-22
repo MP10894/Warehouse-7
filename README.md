@@ -26,6 +26,13 @@ Other commands:
 | `npm run preview` | Plays the built version from `dist/` |
 | `npm run test:sim` | Checks the game rules still work (no graphics needed) |
 
+## Co-op test
+
+On the start screen, **Co-op test** lets one player host (they get a four-digit code) and
+the other join with that code. Both open the same game link; the partner needs access to
+it (share it from the page's Share menu). On one computer, two tabs of the same browser
+also work. Details in `DESIGN.md` → "How co-op works".
+
 ## What you can change without touching code
 
 | File | What it controls |
@@ -76,7 +83,8 @@ src/
   render/          everything you see (Three.js)
   input/           touch, mouse, keyboard
   audio/           sound effects
-  ui/              menus and the HUD text
+  ui/              menus, the HUD text and the tuning panel
+  net/             co-op: snapshots and the connection between two players
 tests/             rule checks that run without a browser
 ```
 

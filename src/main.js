@@ -4,11 +4,14 @@
 //                                              │
 //                     graphics, sound, HUD ◄───┘   (read-only)
 //
-// For co-op, a network layer slots in between "command" and "sim": the host runs
-// stepWorld with both players' commands and sends world state + events to the guest.
+// Co-op: the HOST runs stepWorld with both players' commands and publishes a snapshot of
+// the world every frame; the GUEST doesn't simulate, it copies the host's snapshot into
+// its own world, moves its own player locally (so walking feels instant) and sends its
+// command. See src/net/.
 import { DATA } from './data/index.js';
 import { createWorld } from './sim/world.js';
 import { stepWorld } from './sim/step.js';
+import { walkPlayer } from './sim/players.js';
 import { createView } from './render/view.js';
 import { makeTextures } from './render/textures.js';
 import { buildTerrain } from './render/terrain-mesh.js';
@@ -23,17 +26,17 @@ import { createAudio } from './audio/audio.js';
 import { createDomHud } from './ui/dom-hud.js';
 import { createScreens } from './ui/screens.js';
 import { createTuning } from './ui/tuning.js';
+import { getTransport } from './net/transport.js';
+import { createHostEncoder, createGuestDecoder } from './net/snapshot.js';
 
-const LOCAL_ID = 'p1';
 const S = DATA.settings;
 const STEP = 1 / S.world.fixed_step_hz;
 const $ = id => document.getElementById(id);
 
 const app = $('app');
 const view = createView({ app, viewCanvas: $('view'), hudCanvas: $('hud'), settings: S });
-let startHandler = null;
-const screens = createScreens({ view, onStart: () => startHandler && startHandler() });
-const newWorld = () => createWorld({ data: DATA, levelId: S.level, seed: (Math.random() * 1e9) | 0, playerIds: [LOCAL_ID] });
+const handlers = { start: null, coop: null };
+const screens = createScreens({ view, onStart: () => handlers.start && handlers.start(), onCoop: () => handlers.coop && handlers.coop() });
 
 if (!view) {
   screens.showError('No WebGL', 'This browser could not start WebGL, which the game needs.');
@@ -42,13 +45,18 @@ if (!view) {
   let paused = false;
   const tuning = createTuning({
     settings: S,
-    onOpen: () => { paused = true; input.setEnabled(false); },
+    onOpen: () => { if (role === 'solo') paused = true; input.setEnabled(false); },
     onClose: () => { paused = false; acc = 0; if (mode === 'playing') input.setEnabled(true); },
     onChange: path => { if (path.startsWith('camera.')) view.resize(); }
   });
   view.resize();
-  let world = newWorld();
-  let mode = 'menu';
+
+  let role = 'solo';          // 'solo' | 'host' | 'guest'
+  let localId = 'p1';
+  let mode = 'menu';          // 'menu' | 'lobby' | 'playing' | 'won' | 'lost'
+  const newWorld = (seed, ids) => createWorld({ data: DATA, levelId: S.level, seed, playerIds: ids });
+  let world = newWorld((Math.random() * 1e9) | 0, ['p1']);
+
   const tex = makeTextures();
   const scenery = { terrain: null, blocks: null };
   function buildScenery() {
@@ -59,7 +67,7 @@ if (!view) {
     scenery.blocks = createBlockMeshes(view.scene, world, tex);
   }
   buildScenery();
-  const worldView = createWorldView(view.scene, tex, LOCAL_ID);
+  const worldView = createWorldView(view.scene, tex, localId);
   const effects = createEffects(view.scene);
   const fp = createFpWeapon();
   const weatherFx = createWeatherFx(view.scene, S);
@@ -71,88 +79,250 @@ if (!view) {
   const input = createInput({ app, touchEl: $('touch'), stick: $('stick'), knob: $('knob'), buttons, view, settings: S });
   const aim = { yaw: 0, pitch: 0 };
   let acc = 0, shake = 0, recoilDebt = 0;
-  let fpsT = 0, fpsFrames = 0;
-  const fpsEl = $('fps');
-  const local = () => world.players.find(p => p.id === LOCAL_ID);
+  let fpsT = 0, fpsFrames = 0, prevFrame = 0;
+  const fpsEl = $('fps'), partnerEl = $('partner');
+  const local = () => world.players.find(p => p.id === localId) || world.players[0];
 
-  function begin() {
+  // ---------- co-op state ----------
+  const net = {
+    transport: null, session: null, code: '', run: 0,
+    encoder: createHostEncoder(DATA), decoder: createGuestDecoder(DATA),
+    edges: { fire: 0, reload: 0, swap: 0, interact: 0 }, // guest: press counters it sends
+    seen: { fire: 0, reload: 0, swap: 0, interact: 0 },  // host: last counters it acted on
+    prevFire: false, lostAt: 0
+  };
+
+  function enterPlay(seed, ids) {
     audio.init();
-    world = newWorld();
+    world = newWorld(seed, ids);
     buildScenery();
     worldView.reset(); effects.reset();
+    worldView.setLocal(localId);
     const p = local();
     aim.yaw = p.yaw; aim.pitch = 0;
     acc = 0; shake = 0; recoilDebt = 0;
     mode = 'playing';
     screens.hide();
-    tuning.setAvailable(true);
     input.setEnabled(true);
-    domHud.toast('SURVIVE — CLAIM A BASE');
+    tuning.setAvailable(true);
+    domHud.toast(role === 'solo' ? 'SURVIVE — CLAIM A BASE' : 'CO-OP — STICK TOGETHER');
     setTimeout(() => { $('hint').hidden = true; }, 12000);
     $('hint').hidden = false;
     try { navigator.wakeLock && navigator.wakeLock.request('screen').catch(() => {}); } catch (e) { /* optional */ }
   }
-  startHandler = begin;
 
-  let last = performance.now();
+  function startSolo() { role = 'solo'; localId = 'p1'; enterPlay((Math.random() * 1e9) | 0, ['p1']); }
+
+  function hostStart() {
+    net.run++;
+    net.encoder.forceFull();
+    // the guest's counters keep counting across runs; act only on presses from now on
+    const partner = net.session.partner();
+    const c = partner && partner.state && partner.state.c;
+    net.seen = c ? { fire: c[5], reload: c[6], swap: c[7], interact: c[8] } : { fire: 0, reload: 0, swap: 0, interact: 0 };
+    const seed = (Math.random() * 1e9) | 0;
+    enterPlay(seed, ['p1', 'p2']);
+    net.session.set({ role: 'host', run: net.run, seed, started: 1 });
+  }
+
+  handlers.start = () => (role === 'host' && net.session ? hostStart() : startSolo());
+
+  function leaveCoop() {
+    if (net.session) net.session.leave();
+    net.session = null; role = 'solo'; localId = 'p1';
+    partnerEl.hidden = true;
+    mode = 'menu';
+    input.setEnabled(false);
+    tuning.setAvailable(false);
+    world = newWorld((Math.random() * 1e9) | 0, ['p1']);
+    buildScenery(); worldView.reset(); worldView.setLocal('p1');
+    screens.showMenu(world);
+  }
+
+  handlers.coop = async () => {
+    audio.init();
+    screens.showCoop({ transportLabel: 'connecting…', onHost: () => {}, onJoin: () => {}, onBack: () => screens.showMenu(world) });
+    if (!net.transport) net.transport = await getTransport();
+    const t = net.transport;
+    screens.showCoop({
+      transportLabel: t ? t.label : 'not available here',
+      error: t ? '' : 'Co-op needs a browser that can connect. Open the game from its claude.ai link.',
+      onBack: () => screens.showMenu(world),
+      onHost: async () => {
+        if (!t) return;
+        net.code = String(1000 + Math.floor(Math.random() * 9000));
+        net.session = await t.join(net.code);
+        role = 'host'; localId = 'p1'; mode = 'lobby';
+        net.session.set({ app: 'w7', role: 'host', run: net.run, started: 0 });
+        screens.showLobby({ role: 'host', code: net.code, onStart: hostStart, onLeave: leaveCoop });
+      },
+      onJoin: async code => {
+        if (!t) return;
+        net.code = code;
+        net.session = await t.join(code);
+        role = 'guest'; localId = 'p2'; mode = 'lobby';
+        net.decoder.reset();
+        net.run = -1;
+        net.edges = { fire: 0, reload: 0, swap: 0, interact: 0 };
+        net.session.set({ app: 'w7', role: 'guest', run: -1 });
+        screens.showLobby({ role: 'guest', code, onLeave: leaveCoop });
+      }
+    });
+  };
+
+  // ---------- host: turn the guest's room state into a command ----------
+  function guestCommand(first) {
+    const partner = net.session && net.session.partner();
+    const st = partner && partner.state;
+    if (!st || st.role !== 'guest' || st.run !== net.run || !st.c || !st.pos) return {};
+    const [mx, my, yaw, pitch, flags, fireN, reloadN, swapN, interactN] = st.c;
+    const cmd = { move: { x: mx / 100, y: my / 100 }, yaw: yaw / 1000, pitch: pitch / 1000, ads: !!(flags & 2), moving: !!(flags & 4), pos: st.pos.map(v => v / 100) };
+    cmd.fire = !!(flags & 1);
+    if (first) {
+      if (fireN > net.seen.fire) { cmd.fire = true; net.seen.fire = fireN; }
+      if (reloadN > net.seen.reload) { cmd.reload = true; net.seen.reload = reloadN; }
+      if (swapN > net.seen.swap) { cmd.swap = true; net.seen.swap = swapN; }
+      if (interactN > net.seen.interact) { cmd.interact = true; net.seen.interact = interactN; }
+    }
+    return cmd;
+  }
+
+  function handleEvents(p) {
+    for (const ev of world.events.splice(0)) {
+      if (ev.type === 'shot' && ev.actorId === localId && role === 'guest') {
+        aim.pitch = Math.min(S.controls.max_pitch, aim.pitch + ev.kick);
+        aim.yaw += ev.side;
+        recoilDebt += ev.kick;
+      }
+      effects.handle(ev, world);
+      worldView.handle(ev);
+      fp.handle(ev, localId);
+      hud.handle(ev, p);
+      audio.handle(ev, p);
+      domHud.handle(ev, localId);
+      if (ev.type === 'blocks') scenery.blocks.update(ev.cells || [], !!ev.rebuild);
+      if (ev.type === 'explosion') shake = Math.max(shake, Math.max(0, 1 - Math.hypot(ev.x - p.x, ev.z - p.z) / 25));
+      if (ev.type === 'hurt' && ev.targetId === localId) shake = Math.max(shake, 0.25);
+      if (ev.type === 'status' && mode === 'playing') {
+        mode = ev.status;
+        input.setEnabled(false);
+        tuning.setAvailable(false);
+        screens.showResults(world, p, role === 'solo' ? null : { role, onLeave: leaveCoop });
+      }
+    }
+  }
+
   function frame(now) {
     requestAnimationFrame(frame);
-    const dt = Math.min(0.05, (now - last) / 1000);
-    last = now;
-    const p = local();
+    const dt = Math.min(0.05, (now - (prevFrame || now)) / 1000);
+    prevFrame = now;
+    let p = local();
+
+    // co-op lobby and connection status
+    if (net.session) {
+      const partner = net.session.partner();
+      const st = partner && partner.state;
+      if (partner) net.lostAt = 0; else if (!net.lostAt) net.lostAt = now;
+      const lost = net.lostAt && now - net.lostAt > 3000;
+      if (mode === 'lobby') {
+        if (role === 'host') screens.setLobbyStatus(st && st.role === 'guest' ? 'Partner connected. Start when ready.' : 'Waiting for your partner to join…', !!(st && st.role === 'guest'));
+        else {
+          screens.setLobbyStatus(st && st.role === 'host' ? 'Connected. Waiting for the host to start…' : 'Looking for the host…');
+          if (st && st.role === 'host' && st.started && st.run !== net.run && typeof st.seed === 'number') {
+            net.run = st.run; net.decoder.reset();
+            enterPlay(st.seed, ['p1', 'p2']);
+            net.session.set({ run: net.run });
+            p = local();
+          }
+        }
+      } else if (role === 'guest' && st && st.role === 'host' && st.started && st.run !== net.run && typeof st.seed === 'number') {
+        // the host started another run (from the results screen)
+        net.run = st.run; net.decoder.reset();
+        enterPlay(st.seed, ['p1', 'p2']);
+        net.session.set({ run: net.run });
+        p = local();
+      }
+      partnerEl.hidden = mode !== 'playing';
+      partnerEl.textContent = lost ? 'PARTNER: CONNECTION LOST' : `PARTNER: ${role === 'host' ? 'GUEST' : 'HOST'} CONNECTED`;
+    }
 
     if (mode === 'playing' && !paused) {
       const inp = input.sample();
       aim.yaw += -inp.lookX + inp.turn * 2.4 * dt;
       aim.pitch = Math.max(-S.controls.max_pitch, Math.min(S.controls.max_pitch, aim.pitch - inp.lookY));
-      const base = { move: { x: inp.moveX, y: inp.moveY }, fire: inp.fire, ads: inp.ads };
-      acc += dt;
-      let steps = 0, first = true;
-      while (acc >= STEP && steps < 5) {
-        const cmd = { ...base, yaw: aim.yaw, pitch: aim.pitch };
-        if (first) { cmd.reload = inp.reload; cmd.swap = inp.swap; cmd.interact = inp.interact; first = false; }
-        stepWorld(world, { [LOCAL_ID]: cmd }, STEP);
-        acc -= STEP; steps++;
-        // recoil from this step's shots moves the aim before the next step
-        for (const ev of world.events) {
-          if (ev.type === 'shot' && ev.actorId === LOCAL_ID && !ev._applied) {
-            ev._applied = true;
-            aim.pitch = Math.min(S.controls.max_pitch, aim.pitch + ev.kick);
-            aim.yaw += ev.side;
-            recoilDebt += ev.kick;
+
+      if (role !== 'guest') {
+        const base = { move: { x: inp.moveX, y: inp.moveY }, fire: inp.fire, ads: inp.ads };
+        acc += dt;
+        let steps = 0, first = true;
+        while (acc >= STEP && steps < 5) {
+          const cmd = { ...base, yaw: aim.yaw, pitch: aim.pitch };
+          if (first) { cmd.reload = inp.reload; cmd.swap = inp.swap; cmd.interact = inp.interact; }
+          const cmds = { [localId]: cmd };
+          if (role === 'host') cmds.p2 = guestCommand(first);
+          first = false;
+          stepWorld(world, cmds, STEP);
+          acc -= STEP; steps++;
+          // recoil from this step's shots moves the aim before the next step
+          for (const ev of world.events) {
+            if (ev.type === 'shot' && ev.actorId === localId && !ev._applied) {
+              ev._applied = true;
+              aim.pitch = Math.min(S.controls.max_pitch, aim.pitch + ev.kick);
+              aim.yaw += ev.side;
+              recoilDebt += ev.kick;
+            }
           }
         }
+        if (steps === 5) acc = 0;
+        if (role === 'host') {
+          net.encoder.record(world, world.events);
+          net.session.set(net.encoder.encode(world));
+        }
+      } else {
+        // guest: copy the host's world, move ourselves locally, send our command
+        const partner = net.session && net.session.partner();
+        if (partner && partner.state && partner.state.run === net.run) {
+          world.events.push(...net.decoder.apply(world, partner.state, localId));
+        }
+        p = local();
+        if (p.alive && !p.downed) {
+          p.yaw = aim.yaw; p.pitch = aim.pitch; p.ads = inp.ads;
+          walkPlayer(world, p, { x: inp.moveX, y: inp.moveY }, dt);
+        }
+        if (inp.fire && !net.prevFire) net.edges.fire++;
+        net.prevFire = inp.fire;
+        if (inp.reload) net.edges.reload++;
+        if (inp.swap) net.edges.swap++;
+        if (inp.interact) net.edges.interact++;
+        const e = net.edges;
+        net.session.set({
+          run: net.run,
+          c: [Math.round(inp.moveX * 100), Math.round(inp.moveY * 100), Math.round(aim.yaw * 1000), Math.round(aim.pitch * 1000),
+            (inp.fire ? 1 : 0) | (inp.ads ? 2 : 0) | (p.moving ? 4 : 0), e.fire, e.reload, e.swap, e.interact],
+          pos: [Math.round(p.x * 100), Math.round(p.y * 100), Math.round(p.z * 100)]
+        });
       }
-      if (steps === 5) acc = 0;
+
       // optional recoil recovery: the view drifts back down by a share of the kick
       if (S.ballistics.recoil_recovery > 0 && recoilDebt > 0) {
         const back = recoilDebt * Math.min(1, S.ballistics.recoil_recovery * 8 * dt);
         aim.pitch -= back; recoilDebt -= back;
       } else recoilDebt = 0;
 
-      for (const ev of world.events.splice(0)) {
-        effects.handle(ev, world);
-        worldView.handle(ev);
-        fp.handle(ev, LOCAL_ID);
-        hud.handle(ev, p);
-        audio.handle(ev, p);
-        domHud.handle(ev, LOCAL_ID);
-        if (ev.type === 'blocks') scenery.blocks.update(ev.cells || [], !!ev.rebuild);
-        if (ev.type === 'explosion') shake = Math.max(shake, Math.max(0, 1 - Math.hypot(ev.x - p.x, ev.z - p.z) / 25));
-        if (ev.type === 'hurt' && ev.targetId === LOCAL_ID) shake = Math.max(shake, 0.25);
-        if (ev.type === 'status') {
-          mode = world.status;
-          input.setEnabled(false);
-          tuning.setAvailable(false);
-          screens.showResults(world, p);
-        }
-      }
+      handleEvents(p);
+    } else if (mode === 'playing' && role === 'host' && net.session) {
+      // host's tuning panel is open: the game keeps running for the guest
+      acc += dt;
+      while (acc >= STEP) { stepWorld(world, { p1: {}, p2: guestCommand(true) }, STEP); acc -= STEP; }
+      net.encoder.record(world, world.events);
+      net.session.set(net.encoder.encode(world));
+      handleEvents(p);
     }
 
     shake = Math.max(0, shake - dt * 2);
     const slot = p.slots[p.active];
     const zoom = p.ads && slot ? DATA.weapons[slot.w].ads_zoom : 1;
-    view.follow(p, mode === 'playing' || mode === 'menu' ? aim : aim, zoom, shake, dt);
+    view.follow(p, aim, zoom, shake, dt);
     worldView.sync(world, dt);
     effects.update(dt);
     weatherFx.update(dt, world, view.camera);
@@ -163,10 +333,10 @@ if (!view) {
     minimap.draw(world, p, now);
     domHud.frame(dt, world, p, weatherFx.level * 0.8);
 
-    fpsFrames++; fpsT += (now - (frame.prev || now)) / 1000; frame.prev = now;
+    fpsFrames++; fpsT += dt;
     if (fpsT >= 0.5) {
       const fps = Math.round(fpsFrames / fpsT);
-      fpsEl.hidden = !tuning.showFps;
+      fpsEl.hidden = !tuning.showFps || mode !== 'playing';
       fpsEl.textContent = `${fps} fps · ${view.W}×${view.H}`;
       fpsEl.classList.toggle('slow', fps < 40);
       fpsT = 0; fpsFrames = 0;
@@ -175,7 +345,7 @@ if (!view) {
 
   aim.yaw = local().yaw;
   // handle for automated browser tests
-  window.__game = { get world() { return world; }, aim };
+  window.__game = { get world() { return world; }, aim, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
   screens.showMenu(world);
   requestAnimationFrame(frame);
 }

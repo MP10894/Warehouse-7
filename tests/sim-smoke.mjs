@@ -227,6 +227,35 @@ check(w0.players.length === 1 && w0.enemies.length >= 10, `level built: ${w0.ene
   check(!a.downed && a.hp === 30, 'partner revives them');
 }
 
+// --- co-op snapshots: a guest copy of the world follows the host and stays under 4 KB
+{
+  const { createHostEncoder, createGuestDecoder } = await import('../src/net/snapshot.js');
+  const host = fresh({ seed: 9, playerIds: ['p1', 'p2'] });
+  const guest = fresh({ seed: 9, playerIds: ['p1', 'p2'] });
+  const enc = createHostEncoder(data), dec = createGuestDecoder(data);
+  const [h1, h2] = host.players;
+  h1.slots[1] = { w: 'rpg7', mag: 1 }; h1.reserve['40mm'] = 3; h1.active = 1;
+  h1.x = 22.5; h1.z = 31.5;
+  let maxSize = 0, replayed = 0, merged = {};
+  for (let i = 0; i < 60 * 8; i++) {
+    stepWorld(host, { p1: { yaw: -Math.PI / 2, pitch: 0, fire: i % 90 === 0 }, p2: { pos: [h2.x + 0.01, h2.y, h2.z], moving: true, yaw: 0, pitch: 0 } }, 1 / 60);
+    enc.record(host, host.events);
+    host.events.length = 0;
+    // the room keeps the latest value of every field (like the platform's presence)
+    merged = { ...merged, ...enc.encode(host) };
+    maxSize = Math.max(maxSize, JSON.stringify(merged).length);
+    // simulate dropped updates: only every third one arrives
+    if (i % 3 === 0) { replayed += dec.apply(guest, merged, 'p2').length; guest.events.length = 0; }
+  }
+  merged = { ...merged, ...enc.encode(host) }; dec.apply(guest, merged, 'p2');
+  const brokenHost = host.pieces.filter(p => !p.alive).length, brokenGuest = guest.pieces.filter(p => !p.alive).length;
+  check(maxSize < 4000, `snapshots stay under 4 KB (largest ${maxSize} bytes)`);
+  check(brokenHost > 0 && brokenHost === brokenGuest, `broken walls match on the guest (${brokenGuest} of ${brokenHost})`);
+  check(Math.abs(guest.players[0].x - h1.x) < 0.01 && guest.enemies.length === host.enemies.filter(e => e.alive || e.deadT < 12).length, 'guest sees the host player and every enemy where the host has them');
+  check(replayed > 0 && Math.abs(guest.timeLeft - host.timeLeft) < 0.02, `guest replays events (${replayed}) and follows the clock`);
+  check(guest.players[0].slots[1].w === 'rpg7', 'guest sees the host\'s weapons');
+}
+
 // --- weather
 {
   const w = fresh(); noEnemies(w);

@@ -7,7 +7,8 @@ import { soldierModel, setSoldierWeapon, poseSoldier, pickupModel, weaponModel }
 
 const MAX_TRACERS = 256;
 
-export function createWorldView(scene, tex, localId) {
+export function createWorldView(scene, tex, initialLocalId) {
+  let localId = initialLocalId;
   const actors = new Map();   // actor id → { model, flinch }
   const pickups = new Map();  // pickup id → group
   const rockets = new Map();
@@ -32,6 +33,7 @@ export function createWorldView(scene, tex, localId) {
   }
 
   return {
+    setLocal(id) { localId = id; },
     reset() {
       for (const v of actors.values()) scene.remove(v.model.root);
       for (const g of pickups.values()) scene.remove(g);
