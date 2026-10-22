@@ -18,7 +18,7 @@ editor. Explain changes in plain language.
 - All state lives in the world object from `src/sim/world.js`. Keep it plain data
   (no class instances, no functions), except `world.cache` for derived data.
 - The simulation reports what happened through `world.events` (see `emit` in
-  `src/sim/combat.js`). Graphics, sound and HUD react to events and read state; they
+  `src/sim/damage.js`). Graphics, sound and HUD react to events and read state; they
   never change the world.
 - The level is a block grid (`src/sim/grid.js`) plus a ground height map. Anything that
   moves, shoots or sees uses those two; don't add a separate collision world.
