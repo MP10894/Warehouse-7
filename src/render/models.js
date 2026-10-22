@@ -31,7 +31,7 @@ function pivot(parent, x, y, z) {
 // ---------- weapons (barrel points along −z, origin at the grip) ----------
 export function weaponModel(id) {
   const g = new THREE.Group();
-  const black = 0x1d1d1c, grey = 0x3a3a38, wood = 0x7a4724, tan = 0x8c7a58, olive = 0x4d5233;
+  const black = 0x2a2a28, grey = 0x4a4a46, wood = 0x7a4724, tan = 0x8c7a58, olive = 0x4d5233;
   if (id === 'sig_p320') {
     box(0.032, 0.035, 0.19, grey, 0, 0.055, -0.05, g);
     const grip = box(0.03, 0.11, 0.05, black, 0, 0, 0.02, g); grip.rotation.x = 0.25;
@@ -66,9 +66,11 @@ export function weaponModel(id) {
 export const MUZZLE = { sig_p320: [0, 0.06, -0.15], m4a1: [0, 0.055, -0.6], ak47: [0, 0.065, -0.58], rpg7: [0, 0.07, -0.8] };
 
 // ---------- soldiers ----------
+export const THIRD_PERSON_GUN_SCALE = 1.4;
+
 const PALETTES = {
   enemy: { cloth: 0x6f6a4c, clothDark: 0x4d4a35, wrap: 0xb39b70, skin: 0x8c6448, boots: 0x2a241c, vest: 0x3e4130 },
-  player: { cloth: 0x4c5a66, clothDark: 0x37424b, wrap: 0x2e3438, skin: 0xb08566, boots: 0x1f1f1f, vest: 0x2c3a2c }
+  player: { cloth: 0x8296a4, clothDark: 0x627683, wrap: 0x56634a, skin: 0xb08566, boots: 0x2a2620, vest: 0x46553f }
 };
 
 export function soldierModel(kind = 'enemy') {
@@ -98,7 +100,7 @@ export function soldierModel(kind = 'enemy') {
     return { hip, knee };
   };
   const R = arm(1), L = arm(-1), RL = leg(1), LL = leg(-1);
-  const gunMount = pivot(torso, 0.12, 0.28, -0.2);
+  const gunMount = pivot(torso, 0.15, 0.3, -0.3);
   return { root, body, torso, neck, vest, R, L, RL, LL, gunMount, gun: null, gunId: null, fall: 0 };
 }
 
@@ -106,6 +108,8 @@ export function setSoldierWeapon(m, id) {
   if (m.gunId === id) return;
   if (m.gun) m.gunMount.remove(m.gun);
   m.gun = weaponModel(id);
+  // weapons in other people's hands are drawn larger so they read at a distance
+  m.gun.scale.setScalar(THIRD_PERSON_GUN_SCALE);
   m.gunId = id;
   m.gunMount.add(m.gun);
 }

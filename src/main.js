@@ -8,6 +8,7 @@
 // the world every frame; the GUEST doesn't simulate, it copies the host's snapshot into
 // its own world, moves its own player locally (so walking feels instant) and sends its
 // command. See src/net/.
+import * as THREE from 'three';
 import { DATA } from './data/index.js';
 import { createWorld } from './sim/world.js';
 import { stepWorld } from './sim/step.js';
@@ -80,7 +81,8 @@ if (!view) {
   const aim = { yaw: 0, pitch: 0 };
   let acc = 0, shake = 0, recoilDebt = 0;
   let fpsT = 0, fpsFrames = 0, prevFrame = 0;
-  const fpsEl = $('fps'), partnerEl = $('partner');
+  const fpsEl = $('fps'), partnerEl = $('partner'), tagEl = $('partnerTag'), tagText = tagEl.querySelector('span');
+  const tagPos = new THREE.Vector3();
   const local = () => world.players.find(p => p.id === localId) || world.players[0];
 
   // ---------- co-op state ----------
@@ -332,6 +334,21 @@ if (!view) {
     hud.draw(view.hud, view.W, view.H, mode === 'playing' ? p : null, world, dt);
     minimap.draw(world, p, now);
     domHud.frame(dt, world, p, weatherFx.level * 0.8);
+
+    // marker above your co-op partner (also visible through walls, so you can find each other)
+    const mate = role !== 'solo' && mode === 'playing' ? world.players.find(q => q.id !== localId && q.alive) : null;
+    let showTag = false;
+    if (mate) {
+      tagPos.set(mate.x, mate.y + (mate.downed ? 1.1 : 2.05), mate.z).project(view.camera);
+      if (tagPos.z < 1 && Math.abs(tagPos.x) < 1.05 && Math.abs(tagPos.y) < 1.05) {
+        showTag = true;
+        tagEl.style.left = `${(tagPos.x + 1) / 2 * view.localW()}px`;
+        tagEl.style.top = `${(1 - tagPos.y) / 2 * view.localH()}px`;
+        const d = Math.round(Math.hypot(mate.x - p.x, mate.z - p.z));
+        tagText.textContent = mate.downed ? `PARTNER DOWN · ${d} m` : `PARTNER · ${d} m`;
+      }
+    }
+    tagEl.hidden = !showTag;
 
     fpsFrames++; fpsT += dt;
     if (fpsT >= 0.5) {
