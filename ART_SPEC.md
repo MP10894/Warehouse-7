@@ -150,15 +150,26 @@ would be only 6 pixels long. At 256 it is about 50 units (and pixels) long, a ri
 A weapon more than 50 % shorter or longer than the placeholder is refused (usually a wrong
 export scale).
 
-**First-person hands:** `items/player_hands.glb`, **≤ 100 triangles** for both, same 1/256 m
-scale, with two groups `hand_R` and `hand_L`. Each hand is a **fist closed round an upright
-grip** whose centre line runs through the group's pivot: back of the hand on the outside,
-fingers wrapped round the front (north), thumb over the inside, wrist and cuff running
-back (south). `hand_L` is the mirror image. The game puts `hand_R` on the weapon's grip
-(its origin) and `hand_L` on `hand_left`; on rifles the left hand is turned a quarter turn
-to clamp the handguard from the side, knuckle plate facing you. Draft: tan tactical glove
-with hard knuckle plate (reference in `assets/sources/reference/player_hands_views.png`),
-4 boxes per hand, 96 triangles.
+**First-person hands and forearms:** `items/player_hands.glb`, **≤ 300 triangles** in all,
+same 1/256 m scale. Groups:
+
+- `hand_R`, `hand_L`: each a **fist closed round an upright grip** whose centre line runs
+  through the group's pivot: back of the hand on the outside, four separate fingers wrapped
+  round the front (north), thumb over the inside, cuff running back (south). `hand_L` is the
+  mirror image. Inside each, an empty group `wrist_R` / `wrist_L` marks where the forearm
+  starts.
+- `arm_R`, `arm_L`: a forearm sleeve running from the group's pivot along south (+z),
+  about 0.9 m long (it disappears past your eye).
+
+The game puts `hand_R` on the weapon's grip (its origin) and `hand_L` on `hand_left`; on
+rifles the left hand is turned a quarter turn to clamp the handguard from the side, knuckle
+plate facing you. Each forearm starts at its wrist and is pointed at your shoulder every
+frame, so hands never float. In Blockbench the four groups can sit anywhere (the draft
+spreads them out to make editing easy).
+
+Draft: tan tactical glove with hard knuckle plate (reference in
+`assets/sources/reference/player_hands_views.png`): 10 boxes per hand (back, palm, knuckle
+plate, four fingers, two-part thumb, cuff) plus one per forearm, 264 triangles.
 
 ## 6. Pickups, crates and base upgrades
 
@@ -257,7 +268,8 @@ both from OpenArt references in `assets/sources/reference/`.
 1. Pixel density **32 px per metre**; terrain 16.
 2. Tool: **Blockbench**.
 3. Triangle budgets: characters **300**, weapons **300**, carried crates and pickups **60**,
-   base upgrades **150**, first-person hands **100**.
+   base upgrades **150**, first-person hands and forearms **300** (raised from 100 on 2026-10-22
+   so the hands read as hands).
 4. **Simple gloved hands** in first person.
 5. One **shared palette** for all art (section 10).
 6. First test pieces: `wall.png` and the insurgent, drafted by Claude.

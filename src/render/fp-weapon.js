@@ -25,21 +25,43 @@ export function createFpWeapon() {
   const holder = new THREE.Group();
   holder.scale.setScalar(HOLDER_SCALE);
   rig.add(holder);
-  // gloved hands: drawn art (items/player_hands.glb) or simple boxes
+  // gloved hands and forearms: drawn art (items/player_hands.glb) or simple boxes.
+  // Each forearm starts at its hand's wrist and is pointed back towards your shoulder
+  // every frame, so a hand out on a rifle's handguard is still attached to an arm.
   const hands = { R: new THREE.Group(), L: new THREE.Group() };
-  holder.add(hands.R, hands.L);
+  const arms = { R: new THREE.Group(), L: new THREE.Group() };
+  const wrists = { R: null, L: null };
+  holder.add(hands.R, hands.L, arms.R, arms.L);
   function buildHands() {
     for (const side of ['R', 'L']) {
-      const h = hands[side];
-      h.clear();
-      if (ART.hands) {
-        const part = cloneArt(ART.hands).getObjectByName('hand_' + side);
-        if (part) { part.position.set(0, 0, 0); h.add(part); continue; }
+      const h = hands[side], a = arms[side];
+      h.clear(); a.clear();
+      const art = ART.hands ? cloneArt(ART.hands) : null;
+      const part = art && art.getObjectByName('hand_' + side);
+      if (part) {
+        part.position.set(0, 0, 0); h.add(part);
+        wrists[side] = part.getObjectByName('wrist_' + side);
+      } else {
+        // glove wrapped round the grip, with the cuff behind it
+        box(0.075, 0.085, 0.085, GLOVE, 0, -0.01, 0, h);
+        box(0.07, 0.075, 0.06, GLOVE_DARK, 0, -0.015, 0.065, h);
+        wrists[side] = null;
       }
-      // glove wrapped round the grip, with the end of the sleeve behind it
-      box(0.075, 0.085, 0.085, GLOVE, 0, -0.03, 0, h);
-      box(0.07, 0.075, 0.1, GLOVE_DARK, 0, -0.035, 0.085, h);
-      box(0.085, 0.09, 0.12, SLEEVE, 0, -0.045, 0.19, h);
+      if (!wrists[side]) { wrists[side] = new THREE.Object3D(); wrists[side].position.set(0, -0.01, 0.06); h.add(wrists[side]); }
+      const arm = art && art.getObjectByName('arm_' + side);
+      if (arm) { arm.position.set(0, 0, 0); arm.rotation.set(0, 0, 0); a.add(arm); }
+      else box(0.068, 0.068, 0.9, SLEEVE, 0, 0, 0.45, a);
+    }
+  }
+  // where the shoulders are, seen from your eye (metres: right, up, back)
+  const SHOULDER = { R: new THREE.Vector3(0.34, -0.52, 0.05), L: new THREE.Vector3(-0.34, -0.52, 0.05) };
+  const tmp = new THREE.Vector3();
+  function placeArms() {
+    holder.updateMatrixWorld(true);
+    for (const side of ['R', 'L']) {
+      wrists[side].getWorldPosition(tmp);
+      arms[side].position.copy(holder.worldToLocal(tmp));
+      arms[side].lookAt(SHOULDER[side]);
     }
   }
   buildHands();
@@ -66,7 +88,7 @@ export function createFpWeapon() {
     if (gun) holder.add(gun);
     const m = muzzleOf(id);
     flash.position.set(m[0], m[1], m[2] - 0.05);
-    hands.R.visible = hands.L.visible = !!gun;
+    hands.R.visible = hands.L.visible = arms.R.visible = arms.L.visible = !!gun;
     const hr = handRightOf(id);
     hands.R.position.set(hr[0], hr[1], hr[2]);
     const hl = handLeftOf(id);
@@ -111,6 +133,7 @@ export function createFpWeapon() {
       if (st.swap > 0) holder.position.y -= (st.swap / 0.4) * 0.3;
       flash.visible = st.flashT > 0;
       if (flash.visible) flash.material.rotation = Math.random() * 6;
+      placeArms();
     }
   };
 }
