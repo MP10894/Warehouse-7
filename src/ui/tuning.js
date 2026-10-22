@@ -32,7 +32,7 @@ const SLIDERS = [
   ['Waves', 'Each gap shrinks to (×)', 'waves.interval_decay', 0.6, 1, 0.01],
   ['Waves', 'Building brings next wave sooner by (s)', 'waves.build_interval_cut', 0, 40, 1]
 ];
-const TABS = ['Controls', 'Player', 'Recoil', 'Spread', 'Enemies', 'Waves'];
+const TABS = ['Controls', 'Player', 'Recoil', 'Spread', 'Enemies', 'Waves', 'Art'];
 
 const getPath = (o, p) => p.split('.').reduce((a, k) => a[k], o);
 function setPath(o, p, v) {
@@ -60,11 +60,15 @@ export function createTuning({ settings, onOpen, onClose, onChange }) {
   const panel = document.getElementById('tune');
   const button = document.getElementById('tuneBtn');
   let tab = 'Controls', open = false, showFps = true;
+  let artLines = ['Art files are still loading…'];
+  const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 
   const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch (e) { /* not available */ } };
 
   function render() {
-    const rows = SLIDERS.filter(s => s[0] === tab).map(([, label, p, min, max, step]) => {
+    const rows = tab === 'Art'
+      ? `<p class="tart">Which art files from the assets folder the game is using (see ART_SPEC.md).</p>` + artLines.map(l => `<div class="tart${l.startsWith('✗') ? ' bad' : ''}">${esc(l)}</div>`).join('')
+      : SLIDERS.filter(s => s[0] === tab).map(([, label, p, min, max, step]) => {
       const v = getPath(settings, p), changed = p in saved;
       return `<div class="trow${changed ? ' changed' : ''}">
         <label for="t_${p}">${label}</label>
@@ -144,6 +148,7 @@ export function createTuning({ settings, onOpen, onClose, onChange }) {
     get showFps() { return showFps; },
     open() { open = true; render(); panel.hidden = false; onOpen(); },
     close() { open = false; panel.hidden = true; onClose(); },
+    setArtReport(lines) { artLines = lines; if (open && tab === 'Art') render(); },
     setAvailable(on) { button.hidden = !on; if (!on && open) api.close(); }
   };
   return api;

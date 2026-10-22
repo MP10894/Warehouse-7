@@ -34,10 +34,26 @@ function gameDataWorkbook() {
   };
 }
 
+// Art files imported with `?art` become data URLs inside the game code, so the
+// single-file play link carries them (see src/render/assets.js).
+function artFiles() {
+  const types = { png: 'image/png', glb: 'model/gltf-binary' };
+  return {
+    name: 'art-files',
+    enforce: 'pre',
+    load(id) {
+      const m = id.match(/^(.*\.(png|glb))\?art$/);
+      if (!m) return null;
+      this.addWatchFile(m[1]);
+      return `export default ${JSON.stringify(`data:${types[m[2]]};base64,${readFileSync(m[1]).toString('base64')}`)};`;
+    }
+  };
+}
+
 // base './' keeps every path relative, so the built game works from any folder:
 // GitHub Pages, a Capacitor Android wrapper, or a plain web host.
 export default defineConfig({
   base: './',
-  plugins: [gameDataWorkbook()],
+  plugins: [artFiles(), gameDataWorkbook()],
   build: { target: 'es2020', chunkSizeWarningLimit: 1000 }
 });

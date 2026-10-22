@@ -234,3 +234,7 @@ canvas.layer {
 }
 #partnerTag span { font-size: 14px; letter-spacing: .08em; order: -1; }
 #partnerTag b { font-weight: 400; font-size: 14px; }
+
+.tart { font-size: 13px; line-height: 1.35; color: var(--ink); margin: 0; }
+p.tart { color: var(--muted); }
+.tart.bad { color: var(--red); }

@@ -15,6 +15,7 @@ import { stepWorld } from './sim/step.js';
 import { walkPlayer } from './sim/players.js';
 import { createView } from './render/view.js';
 import { makeTextures } from './render/textures.js';
+import { loadArt } from './render/assets.js';
 import { buildTerrain } from './render/terrain-mesh.js';
 import { createBlockMeshes } from './render/blocks-mesh.js';
 import { createWorldView } from './render/world-view.js';
@@ -75,6 +76,12 @@ if (!view) {
   const worldView = createWorldView(view.scene, tex, localId);
   const effects = createEffects(view.scene);
   const fp = createFpWeapon();
+  // drawn art replaces placeholders as soon as it has loaded (usually before you press Start)
+  loadArt(tex).then(art => {
+    worldView.reset(); fp.refresh();
+    tuning.setArtReport(art.report);
+    console.log('[art]\n' + art.report.join('\n'));
+  });
   const weatherFx = createWeatherFx(view.scene, S);
   const hud = createHud();
   const minimap = createMinimap($('minimap'));

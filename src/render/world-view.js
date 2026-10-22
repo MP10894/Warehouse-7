@@ -3,7 +3,7 @@
 // world, so this works the same whether the world was simulated here or received
 // from a co-op host.
 import * as THREE from 'three';
-import { soldierModel, setSoldierWeapon, poseSoldier, pickupModel, weaponModel } from './models.js';
+import { soldierModel, setSoldierWeapon, poseSoldier, pickupModel, rocketModel } from './models.js';
 
 const MAX_TRACERS = 256;
 
@@ -82,7 +82,7 @@ export function createWorldView(scene, tex, initialLocalId) {
         if (pr.kind === 'rocket') {
           seenR.add(pr.id);
           let r = rockets.get(pr.id);
-          if (!r) { r = weaponModel('rpg7').children.find(c => c.geometry && c.geometry.type === 'ConeGeometry').clone(); scene.add(r); rockets.set(pr.id, r); }
+          if (!r) { r = rocketModel(); scene.add(r); rockets.set(pr.id, r); }
           r.position.set(pr.x, pr.y, pr.z);
           r.lookAt(pr.x + pr.vx, pr.y + pr.vy, pr.z + pr.vz);
           r.rotateX(Math.PI / 2);

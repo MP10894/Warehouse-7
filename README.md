@@ -39,6 +39,7 @@ also work. Details in `DESIGN.md` → "How co-op works".
 |---|---|
 | `data/levels/najaf/` | Najaf (Level 1): building floor plans, ground heights, where everything goes ([guide](data/levels/README.md)) |
 | `data/levels/slice/` | The small test slice, same format |
+| `assets/` | Art files that replace the placeholders: rules in [ART_SPEC.md](ART_SPEC.md); Blockbench palette in `assets/palette/`; working `.bbmodel` files in `assets/sources/` |
 | `data/Game Data.xlsx` | The game-data workbook. **Weapons** tab: every weapon attribute. **Enemies** tab: health, speed, sight, reaction time, aim error in degrees, bursts, ammo drops, and which weapons each enemy type can carry. Edit in Excel as normal; formulas and "2 / 5" style min / max cells are fine |
 | `data/enemies.csv` | Fallback enemy values, used for anything the Enemies tab leaves out |
 | `data/waves.csv` | How big and how well armed each attack wave is |

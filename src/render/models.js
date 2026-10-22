@@ -3,6 +3,7 @@
 // so no skeleton or rigging is needed. Each soldier is about 250 triangles including
 // the gun. Real art can replace these part by part later.
 import * as THREE from 'three';
+import { ART, cloneArt } from './assets.js';
 
 const matCache = new Map();
 export function lambert(hex) {
@@ -30,6 +31,7 @@ function pivot(parent, x, y, z) {
 
 // ---------- weapons (barrel points along −z, origin at the grip) ----------
 export function weaponModel(id) {
+  if (ART.weapons[id]) return cloneArt(ART.weapons[id].root);
   const g = new THREE.Group();
   const black = 0x2a2a28, grey = 0x4a4a46, wood = 0x7a4724, tan = 0x8c7a58, olive = 0x4d5233;
   if (id === 'sig_p320') {
@@ -64,6 +66,29 @@ export function weaponModel(id) {
 
 /** Where the barrel ends, in the weapon model's own coordinates. */
 export const MUZZLE = { sig_p320: [0, 0.06, -0.15], m4a1: [0, 0.055, -0.6], ak47: [0, 0.065, -0.58], rpg7: [0, 0.07, -0.8] };
+export const muzzleOf = id => (ART.weapons[id] && ART.weapons[id].muzzle) || MUZZLE[id] || [0, 0, -0.5];
+/** The aiming point (eye looks through it) of a drawn weapon, or null for placeholders. */
+export const sightOf = id => (ART.weapons[id] && ART.weapons[id].sight) || null;
+/** Where the left hand holds the weapon. */
+const HAND_LEFT = { sig_p320: [-0.03, -0.01, 0.03], m4a1: [0, 0.03, -0.3], ak47: [0, 0.035, -0.3], rpg7: [0, 0.02, -0.16] };
+export const handLeftOf = id => (ART.weapons[id] && ART.weapons[id].handLeft) || HAND_LEFT[id] || [0, 0, -0.25];
+
+/** A flying rocket: the RPG-7's warhead. */
+export function rocketModel() {
+  // the group's +z faces the flight direction (the renderer uses lookAt)
+  const g = new THREE.Group();
+  const w = ART.weapons.rpg7;
+  if (w && w.warhead) {
+    const r = w.warhead.clone(true);
+    r.position.set(0, 0, 0); r.rotation.set(0, Math.PI, 0); // drawn pointing −z
+    g.add(r);
+    return g;
+  }
+  const head = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.26, 6), lambert(0x4e5a3a));
+  head.rotation.x = Math.PI / 2;
+  g.add(head);
+  return g;
+}
 
 // ---------- soldiers ----------
 export const THIRD_PERSON_GUN_SCALE = 1.4;
@@ -73,7 +98,23 @@ const PALETTES = {
   player: { cloth: 0x8296a4, clothDark: 0x627683, wrap: 0x56634a, skin: 0xb08566, boots: 0x2a2620, vest: 0x46553f }
 };
 
+/** A soldier from drawn art (characters/*.glb), using the named parts from ART_SPEC.md. */
+function soldierFromArt(art) {
+  const root = new THREE.Group();
+  const inst = cloneArt(art);
+  root.add(inst);
+  const n = name => inst.getObjectByName(name);
+  return {
+    root, body: n('body'), torso: n('torso'), neck: n('head'), vest: n('vest'),
+    R: { sh: n('upper_arm_R'), el: n('lower_arm_R') }, L: { sh: n('upper_arm_L'), el: n('lower_arm_L') },
+    RL: { hip: n('upper_leg_R'), knee: n('lower_leg_R') }, LL: { hip: n('upper_leg_L'), knee: n('lower_leg_L') },
+    gunMount: n('gun_mount'), gun: null, gunId: null, fall: 0
+  };
+}
+
 export function soldierModel(kind = 'enemy') {
+  const art = ART.characters[kind === 'enemy' ? 'enemy_insurgent' : 'player'];
+  if (art) return soldierFromArt(art);
   const c = PALETTES[kind];
   const root = new THREE.Group();
   const body = pivot(root, 0, 0, 0); // tilts as a whole when falling
@@ -157,6 +198,8 @@ export function pickupModel(pk, tex) {
     w.rotation.set(0, 0, Math.PI / 2);
     w.position.y = 0.06;
     g.add(w);
+  } else if (ART.items['pickup_' + pk.type]) {
+    g.add(cloneArt(ART.items['pickup_' + pk.type]));
   } else if (pk.type === 'ammo') {
     box(0.28, 0.16, 0.18, 0x4d5631, 0, 0.08, 0, g);
     box(0.29, 0.03, 0.19, 0xc9a43a, 0, 0.12, 0, g);
@@ -164,9 +207,13 @@ export function pickupModel(pk, tex) {
     box(0.42, 0.42, 0.12, 0x2e3a2c, 0, 0.25, 0, g);
     box(0.3, 0.12, 0.13, 0x4a5a44, 0, 0.32, 0, g);
   } else if (pk.type === 'item') {
-    const crate = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.55, 0.55), new THREE.MeshLambertMaterial({ map: tex.crate, flatShading: true }));
-    crate.position.y = 0.28; g.add(crate);
-    box(0.82, 0.08, 0.57, 0xe0b030, 0, 0.3, 0, g);
+    const art = ART.items['crate_' + String(pk.item).replace(/_crate$/, '')];
+    if (art) g.add(cloneArt(art));
+    else {
+      const crate = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.55, 0.55), new THREE.MeshLambertMaterial({ map: tex.crate, flatShading: true }));
+      crate.position.y = 0.28; g.add(crate);
+      box(0.82, 0.08, 0.57, 0xe0b030, 0, 0.3, 0, g);
+    }
     const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 30, 6, 1, true),
       new THREE.MeshBasicMaterial({ color: 0xffd060, transparent: true, opacity: 0.35, depthWrite: false, fog: false }));
     beam.position.y = 15.5; g.add(beam);

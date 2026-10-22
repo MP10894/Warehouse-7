@@ -1,24 +1,22 @@
-# Warehouse 7: Art specification (draft for review)
+# Warehouse 7: Art specification
 
 This document says what each piece of art must look like **as a file**, so it can drop into
 the game without code changes. It does not decide the artistic style beyond what
 DESIGN.md already says (low-poly, PS1 look, arid ruined city).
 
-Status: **draft**. The choices marked **▶ Choice** at the end need Martial's decision.
-The numbers in the tables are taken from the placeholder art in the game today.
+Status: **agreed 2026-10-22** (decisions at the end). The asset loader is built.
 
 ---
 
 ## 1. How art gets into the game
 
-Once the asset loader is built (a one-time code change, not done yet):
-
 1. Put a correctly named file in the `assets/` folder (names in section 9).
-2. Commit and push. The next build uses it.
+2. Commit and push. The next build of the game (and the play link) uses it.
 3. Any file that is missing keeps using the code-drawn placeholder, so art can arrive one
    piece at a time.
 4. A file that breaks a rule below (wrong size, missing part name, too many triangles) is
-   skipped and its placeholder is used. The tuning panel will list what was skipped and why.
+   skipped and its placeholder is used. **Tuning panel → Art tab** lists every file the
+   game found, whether it is in use, and if not, why.
 
 Art never changes how the game plays. Hit boxes, collision and bullet paths come from the
 block grid and the game rules, not from the shape of a model. A bigger enemy model is
@@ -28,37 +26,41 @@ not easier to hit.
 
 | Rule | Value |
 |---|---|
-| Unit | 1 unit = **1 metre** |
+| Tool | **Blockbench** (free), project type **Generic Model**. |
+| Scale | **1 Blockbench unit = 1 texture pixel = 1/32 m.** A 1.8 m character is about 58 units tall; a 1 m wall block is 32 units. |
+| Pixel density | **32 pixels per metre** for everything except the terrain (16 per metre). Because 1 unit = 1 pixel, Blockbench's UV editor gives exactly this density when the texture is painted 1 : 1. |
 | Up | **+Y** |
-| Front | The model faces **−Z**. In Blockbench that is "north". In Blender, export as glTF with "+Y up" ticked and model the front facing **+Y** (Blender's back view). If something arrives facing backwards, it's a one-line fix. |
-| 3D file format | **glTF binary (`.glb`)**, one model per file. Blockbench and Blender both export it. |
-| Texture format | **PNG**, sizes in powers of two (8, 16, 32, 64, 128), embedded in the `.glb` or alongside it with the same name. |
+| Front | The model faces **north** in Blockbench (−Z in the game). |
+| Colours | Only colours from the **shared palette** (`assets/palette/`, section 10). |
+| 3D file format | **glTF binary (`.glb`)**: File → Export → Export glTF Model, with *Embed textures* on and **scale 32**. One model per file. Or save the `.bbmodel` in `assets/sources/` and Claude converts it (`tools/bbmodel.py`). |
+| Texture format | **PNG**, sizes in powers of two (8, 16, 32, 64, 128). One texture per model, embedded in the `.glb`. |
 | Texture filtering | Pixels stay sharp: the game turns off smoothing. Don't pre-blur. |
 | Lighting | Don't paint strong light or shadow direction into textures. The game adds simple sun shading to models and darkens blocks under roofs itself. Gentle wear, dirt and edge darkening are fine. |
-| Transparency | None, except windows' broken glass and effect sprites (section 8). |
-| Animation | None inside files. Characters are animated by the game rotating named parts (section 4). |
-| Materials | One texture per model (an atlas). Base colour only: no normal maps, no shine. |
+| Transparency | None, except effect sprites (section 8). |
+| Animation | None inside files. Characters are animated by the game turning named parts (section 4). |
+| Materials | Base colour texture only: no normal maps, no shine. |
 
 ## 3. World blocks (walls, floors, crates…)
 
-The level is built from 1 m blocks. Each block type uses one tileable square texture that
-repeats across the surface. **Tileable** means the left edge continues into the right edge
-and the top into the bottom, with no visible seam.
+The level is built from 1 m blocks. Each block type uses one **tileable** square texture
+that repeats across the surface: the left edge continues into the right edge and the top
+into the bottom, with no visible seam. The size is fixed by how many metres the texture
+covers:
 
-| File | Used for | Today: size, metres covered | Pixels per metre today |
+| File | Used for | Covers | Size |
 |---|---|---|---|
-| `ground.png` | Terrain (sand, dirt) | 32 px over 4 m | 8 |
-| `concrete.png` | Floors, roofs, slabs | 32 px over 2 m | 16 |
-| `wall.png` | Ordinary walls (breakable) | 32 px over 1 m | 32 |
-| `column.png` | Structural columns (unbreakable) | 16 px over 1 m | 16 |
-| `lowwall.png` | Low walls | 32 px over 1 m | 32 |
-| `crate.png` | Wooden crates (scenery) | 32 px over 1 m | 32 |
-| `sandbag.png` | Sandbag walls (player-built) | 32 px over 1 m | 32 |
-| `stairs.png` | Stairs (stepped stripes run across) | 16 px over 1 m | 16 |
-| `rubble.png` | Rubble from destroyed walls | 16 px over 1 m | 16 |
-| `floor_tile.png` | Painted marks on the ground (base build spots) | 16 px over 1 m | 16 |
+| `ground.png` | Terrain (sand, dirt; tinted by the game) | 4 × 4 m | **64 × 64** (16 px/m) |
+| `concrete.png` | Floors, roofs, slabs | 2 × 2 m | **64 × 64** |
+| `wall.png` | Ordinary walls (breakable) | 1 × 1 m | **32 × 32** |
+| `column.png` | Structural columns (unbreakable) | 1 × 1 m | **32 × 32** |
+| `lowwall.png` | Low walls | 1 × 1 m | **32 × 32** |
+| `crate.png` | Wooden crates (scenery) | 1 × 1 m | **32 × 32** |
+| `sandbag.png` | Sandbag walls (player-built) | 1 × 1 m | **32 × 32** |
+| `stairs.png` | Stairs (stepped stripes run across) | 1 × 1 m | **32 × 32** |
+| `rubble.png` | Rubble from destroyed walls | 1 × 1 m | **32 × 32** |
+| `floor_tile.png` | Painted marks on the ground (base build spots) | 1 × 1 m | **32 × 32** |
 
-The densities are mixed today because they were drawn quickly. Choice 1 below fixes one rule.
+Block textures are plain PNG files (any paint program; Blockbench isn't needed).
 
 New block textures expected for Najaf (names reserved, see docs/NAJAF_PLAN.md):
 `metal.png` (refinery walls and walkways), `pipe.png`, `tank.png`, `asphalt.png` (roads),
@@ -66,71 +68,93 @@ New block textures expected for Najaf (names reserved, see docs/NAJAF_PLAN.md):
 
 ## 4. Characters
 
-A character is **separate rigid parts**, each in its own named object inside one `.glb`.
-The game rotates the parts to walk, aim, fall and lie downed. There is no skeleton and
-no skinning, so joints can be simple: overlapping ends hide the gaps.
+A character is **separate rigid parts** in one `.glb`. In Blockbench each moving part is a
+**group** (folder in the outliner) whose **pivot point** sits on the joint it turns around;
+the boxes inside a group move with it. There is no skeleton and no skinning, so joints can
+be simple: overlapping ends hide the gaps.
 
-**Budget: 300 triangles or fewer for the whole character, gun not included.**
-(The placeholder uses about 180.)
+**Budget: 300 triangles or fewer for the whole character, gun not included** (a box is
+12 triangles, so 25 boxes). The draft insurgent uses 228.
 
-Each part's **pivot** (its origin in the modelling tool) must sit at the joint it turns
-around. Positions are in metres from the point between the feet, character facing −Z.
+The groups must have exactly these names and be nested like this (boxes inside them can
+have any name):
 
-| Part name | Pivot (x, y, z) | What turns it | Placeholder size (w × h × d) |
-|---|---|---|---|
-| `pelvis` | 0, 0.98, 0 | the whole body tips over when killed | 0.34 × 0.16 × 0.20 |
-| `torso` | 0, 1.04, 0 | leans with aim pitch, flinches | 0.38 × 0.48 × 0.22 |
-| `vest` | 0, 1.04, 0 | shown only while the character has armour | 0.42 × 0.36 × 0.28 |
-| `head` | 0, 1.52, 0 | (follows torso) | 0.21 × 0.23 × 0.23 |
-| `upper_arm_R` / `upper_arm_L` | ±0.24, 1.46, 0 | shoulder | 0.10 × 0.30 × 0.10 |
-| `lower_arm_R` / `lower_arm_L` | ±0.24, 1.16, 0 | elbow | 0.09 × 0.28 × 0.09 |
-| `upper_leg_R` / `upper_leg_L` | ±0.10, 0.94, 0 | hip | 0.14 × 0.44 × 0.15 |
-| `lower_leg_R` / `lower_leg_L` | ±0.10, 0.50, 0 | knee (boot included) | 0.12 × 0.42 × 0.13 |
-| `gun_mount` (empty point) | 0.15, 1.34, −0.30 | where the weapon's grip is placed | — |
+```
+body                 pivot 0, 0, 0          tips over at the feet when killed
+├─ (pelvis boxes)
+├─ torso             pivot 0, 1.04, 0       leans with aim, flinches
+│  ├─ vest           pivot 0, 1.04, 0       shown only while wearing armour
+│  ├─ head           pivot 0, 1.52, 0
+│  ├─ upper_arm_R    pivot 0.24, 1.46, 0    shoulder
+│  │  └─ lower_arm_R pivot 0.24, 1.16, 0    elbow (hand inside)
+│  ├─ upper_arm_L    pivot −0.24, 1.46, 0
+│  │  └─ lower_arm_L pivot −0.24, 1.16, 0
+│  └─ gun_mount      pivot 0.15, 1.34, −0.30   empty group: where the weapon's grip goes
+├─ upper_leg_R       pivot 0.10, 0.94, 0    hip
+│  └─ lower_leg_R    pivot 0.10, 0.50, 0    knee (boot inside)
+└─ upper_leg_L       pivot −0.10, 0.94, 0
+   └─ lower_leg_L    pivot −0.10, 0.50, 0
+```
 
-R is the character's own right (+x when facing −Z).
+Pivots are in metres from the point between the feet (multiply by 32 for Blockbench
+units: the shoulder is at 7.68, 46.72, 0). R is the character's own right (+x when facing
+north/−Z).
 
-- Overall height about **1.75–1.80 m**. Keep within ±10 % so heads line up with headshot zones.
-- Put the parts in the "standing, arms down" pose. The game raises the arms to aim.
+- Overall height **1.75–1.80 m** (the game refuses anything outside 1.5–2.1 m, which
+  usually means the export scale was wrong). Heads must line up with headshot zones.
+- Pose: standing, **arms hanging down**. The game raises the arms to aim.
 - Files: `enemy_insurgent.glb`, `player.glb`. Later enemy types get `enemy_<type>.glb`
   with the type name from the Enemies tab.
-- **Colour variants** (several insurgent outfits, partner colours in co-op) are separate
-  textures for the same model: `enemy_insurgent_2.png`, `player_p2.png`, and so on.
+- **Colour variants** (several insurgent outfits, partner colours in co-op) will be
+  separate textures for the same model: `enemy_insurgent_2.png`, `player_p2.png`, and so on.
+  (Not read by the game yet.)
 - The player team must be **easy to tell apart from enemies at 40 m**: different
   overall value (lighter or darker) as well as hue, because the screen is low resolution.
+  The palette's *Team blue* ramp is for the players; *Khaki cloth* and *Army green* for
+  insurgents.
 
-## 5. Weapons
+## 5. Weapons and hands
 
 One `.glb` per weapon, named with the weapon id from the Weapons tab
 (lowercase, spaces become `_`, hyphens dropped): `sig_p320.glb`, `m4a1.glb`, `ak47.glb`,
 `rpg7.glb`.
 
-- **Origin at the grip** (where the right hand holds it). Barrel points along **−Z**.
-- Real-world size. The game scales weapons up 1.4× in other soldiers' hands so they read
-  at a distance; draw them true size.
-- Two named empty points:
-  - `muzzle`: the end of the barrel. Bullets, flashes and smoke start here.
-  - `sight`: the point your eye looks through when aiming down sights. The game lines
-    this up with the centre of the screen.
+**Budget: 300 triangles** (weapons are on screen all the time).
+
+- **Origin at the grip** (where the right hand holds it). Barrel points **north** (−Z).
+- Real-world size. The game draws weapons 1.4× bigger in other soldiers' hands so they
+  read at a distance; model them true size.
+- Named **empty groups** used as points:
+  - `muzzle` (required): the end of the barrel. Bullets, flashes and smoke start here.
+  - `sight` (required): the point your eye looks through when aiming down sights. The
+    game puts it at the centre of the screen.
+  - `hand_left` (optional): where the left hand holds it (foregrip, or the grip itself for
+    the pistol). Without it the game uses a default.
+  - `warhead` (RPG-7 only, a group with the warhead boxes): the game uses it as the flying
+    rocket.
 - The same model is used in first person (seen close) and on soldiers (seen small), so the
   side facing the player's eye (top and right side) matters most.
 
-| Weapon | Placeholder length | Muzzle point today | Triangles today |
-|---|---|---|---|
-| Sig P320 | 0.19 m | 0, 0.06, −0.15 | 24 |
-| M4A1 | 0.85 m | 0, 0.055, −0.60 | 84 |
-| AK-47 | 0.88 m | 0, 0.065, −0.58 | 72 |
-| RPG-7 | 0.95 m (+ warhead) | 0, 0.07, −0.80 | about 55 |
+| Weapon | Placeholder length | Muzzle point today |
+|---|---|---|
+| Sig P320 | 0.19 m | 0, 0.06, −0.15 |
+| M4A1 | 0.85 m | 0, 0.055, −0.60 |
+| AK-47 | 0.88 m | 0, 0.065, −0.58 |
+| RPG-7 | 0.95 m (+ warhead) | 0, 0.07, −0.80 |
 
-The RPG-7 warhead should be a separate named part, `warhead`, so the game can hide it
-between firing and reloading (not done today).
+A weapon more than 50 % shorter or longer than the placeholder is refused (usually a wrong
+export scale).
 
-First-person **hands and arms are not drawn today**. Choice 4 below.
+**First-person hands:** `items/player_hands.glb`, **≤ 100 triangles**, with two groups
+`hand_R` and `hand_L`, each with its pivot at the centre of the palm, glove plus the end of
+the sleeve, fingers pointing north. The game places `hand_R` on the weapon's grip and
+`hand_L` on `hand_left`. Until the file exists, simple gloves made of boxes are drawn.
 
 ## 6. Pickups, crates and base upgrades
 
 Origin at the **bottom centre**, so the object sits on the floor. Pickups on the ground
-slowly turn, so all sides are seen.
+slowly turn, so all sides are seen. **Budgets: pickups and crates 60 triangles (5 boxes),
+upgrades 150.**
 
 | File | What | Rough size |
 |---|---|---|
@@ -150,20 +174,20 @@ slowly turn, so all sides are seen.
   white with a red cross for medical, grey-blue with a shield for armour.
 - Each upgrade level should look visibly better than the last (more stock on shelves,
   reinforced doors), because players check their base at a glance.
-- Upgrades sit on 1 m block spots, so they must not stick out of their 1 m footprint.
-- Triangle budget for these: see Choice 3.
+- Upgrades sit on 1 m block spots, so they must not stick out of their footprint.
+- The upgrades and the health pack are not in the game yet; their files will be read once
+  they are.
 
 ## 7. Destructible look
 
-Breakable walls, crates and sandbags show damage in three steps, as a second texture row
-or separate texture: `wall_damaged.png` (cracks, chips), then rubble when destroyed.
-Optional: the game falls back to darkening the block.
+Breakable walls, crates and sandbags may show damage before they break, with a second
+texture: `wall_damaged.png` (cracks, chips). Optional, not read by the game yet.
 
 ## 8. Effects and screen art (later, optional)
 
 Flat sprites, PNG with transparency, kept tiny (16 or 32 px):
 `fx_muzzle.png`, `fx_spark.png`, `fx_smoke.png`, `fx_explosion_<1-4>.png` (4 frames),
-`fx_sand.png`. HUD icons are drawn in code and stay that way unless we decide otherwise.
+`fx_sand.png`. Not read by the game yet. HUD icons are drawn in code.
 
 ## 9. Folder layout and names
 
@@ -172,45 +196,56 @@ assets/
   blocks/     ground.png, wall.png, concrete.png …   (section 3)
   characters/ enemy_insurgent.glb, player.glb …      (section 4)
   weapons/    sig_p320.glb, m4a1.glb …                (section 5)
-  items/      pickup_*.glb, crate_*.glb, upgrade_*.glb (section 6)
+  items/      pickup_*.glb, crate_*.glb, upgrade_*.glb, player_hands.glb (sections 5–6)
   fx/         fx_*.png                               (section 8)
-  sources/    your working files (.bbmodel, .blend). Ignored by the game.
+  palette/    najaf.gpl, najaf.hex, najaf.png        (section 10)
+  sources/    working files (.bbmodel and their textures). Ignored by the game.
 ```
 
 Names are **lowercase**, words joined with `_`, no spaces. A wrong name means the file
-is ignored and the placeholder shows. That is safe, just confusing.
+is ignored and the placeholder shows; the Art tab lists it as unknown.
 
-## 10. Checklist before committing a piece of art
+## 10. The shared palette
+
+65 colours in 13 ramps of 5 shades, dark to light (Sand, Plaster, Concrete, Wood, Khaki
+cloth, Army green, Team blue, Skin, Gun metal, Rust and oil, Red, Yellow, and Extras:
+black, white, muzzle-flash yellow, flame orange, sky). Picture: `docs/palette.png`.
+
+- In Blockbench: Paint mode → Color panel → *Import palette* → `assets/palette/najaf.gpl`.
+- In other paint programs: the same `.gpl` file (GIMP format) or the `.hex` list.
+- To change it, edit `tools/make_palette.py` (or ask Claude) and it rewrites all three files.
+- `tools/bbmodel.py` and the Art tab will later flag colours that aren't in the palette.
+
+## 11. Checklist before committing a piece of art
 
 - [ ] Right folder, right name.
-- [ ] 1 unit = 1 m; it looks the right size next to a 1 m grid in the tool.
-- [ ] Faces −Z (north in Blockbench).
+- [ ] Scale: 1 unit = 1/32 m, exported with scale 32 (or the `.bbmodel` saved in `sources/`).
+- [ ] Faces north.
 - [ ] Origin in the right place (feet, grip or bottom centre).
-- [ ] Named parts and points present (characters: section 4; weapons: `muzzle`, `sight`).
+- [ ] Named groups and points present (characters: section 4; weapons: `muzzle`, `sight`).
 - [ ] Under the triangle budget.
-- [ ] Texture is a power-of-two size, matches the pixel density, and has no baked lighting.
-- [ ] Looked at in the game on the phone, sideways, at play distance.
+- [ ] Texture painted 1 : 1, palette colours only, no baked lighting.
+- [ ] Opened the Art tab in the game: it says ✓ for the file.
+- [ ] Looked at it in the game on the phone, sideways, at play distance.
 
----
+## 12. How we make art (agreed workflow)
 
-## ▶ Choices for Martial
+1. **Reference**: a picture of what the piece should look like (e.g. made with OpenArt as
+   front/side/back views). Check the image licence allows use in a game.
+2. **Draft**: Claude builds a `.bbmodel` with the right sizes, group names, pivots and a
+   rough palette texture, plus the `.glb` so it's in the game at once.
+3. **Refine**: Martial opens the `.bbmodel` in Blockbench and makes it look right.
+4. **Check**: Claude checks the saved file (`tools/bbmodel.py`) and converts or commits it.
 
-1. **Pixel density.** One rule for all world textures.
-   - (a) **32 px per metre** for walls, props and floors; 16 for terrain. Crisp up close. *(recommended)*
-   - (b) 16 px per metre everywhere. Chunkier and more PS1-like; less drawing.
-2. **Modelling tool.**
-   - (a) **Blockbench**: free, made for box-built low-poly models with pixel textures,
-     paints textures directly on the model, exports `.glb`. Matches the current look. *(recommended)*
-   - (b) Blender: more powerful, steeper to learn.
-   - (c) Bought or free asset packs, adapted to the rules above. Check the licence allows games.
-3. **Triangle budgets** beyond characters (300 agreed).
-   - Proposed: weapons **≤ 200** (seen close in first person), carried crates and pickups
-     **≤ 60**, base upgrades **≤ 150** each.
-4. **First-person hands.** Today the gun floats with no hands.
-   - (a) Add simple gloved hands (two parts, ≤ 100 triangles, in `player_hands.glb`). *(recommended)*
-   - (b) Keep no hands.
-5. **Palette.** Keep free colour, or limit everything to one shared palette
-   (for example 32–64 colours). A shared palette makes art from different sources look like
-   one game. I can generate a starting palette from the current placeholder colours.
-6. **Who makes the first piece.** Suggested first test: one block texture (`wall.png`) and the
-   insurgent (`enemy_insurgent.glb`). That proves both paths of the loader.
+Drafts so far: `assets/blocks/wall.png`, `assets/sources/enemy_insurgent.bbmodel`
+(→ `assets/characters/enemy_insurgent.glb`).
+
+## Decisions (2026-10-22)
+
+1. Pixel density **32 px per metre**; terrain 16.
+2. Tool: **Blockbench**.
+3. Triangle budgets: characters **300**, weapons **300**, carried crates and pickups **60**,
+   base upgrades **150**, first-person hands **100**.
+4. **Simple gloved hands** in first person.
+5. One **shared palette** for all art (section 10).
+6. First test pieces: `wall.png` and the insurgent, drafted by Claude.

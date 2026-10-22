@@ -138,7 +138,8 @@ Layout plan (agreed): [docs/NAJAF_PLAN.md](docs/NAJAF_PLAN.md) (map in
 - Characters can be built from separate rigid parts (head, torso, upper and lower limbs)
   animated in code, as on the original PlayStation. That needs no skeleton or rigging,
   so placeholder models can be made in code and swapped for drawn art later.
-- File rules for art (sizes, names, pivots, budgets): [ART_SPEC.md](ART_SPEC.md), draft under review.
+- File rules for art (sizes, names, pivots, budgets, palette): [ART_SPEC.md](ART_SPEC.md). Art goes in
+  `assets/`; missing files keep the code-drawn placeholders.
 
 ## Controls (phone, held sideways)
 
@@ -279,6 +280,8 @@ tag `warehouse-prototype`.
 | 2026-10-22 | Refinery fuel tanks explode in a wide radius when hit by an RPG; one tank exploding does not set off others |
 | 2026-10-22 | Build Najaf district by district, the city first, to check the frame rate on the phone early |
 | 2026-10-22 | Najaf: permanent smoke at the flare stack; 15-minute time limit; map edges are collapsed buildings, a refinery fence, high dunes and cliffs |
+| 2026-10-22 | Art spec agreed: Blockbench, 32 px per metre (terrain 16), shared 65-colour palette, budgets weapons 300 / crates and pickups 60 / upgrades 150 / hands 100, gloved first-person hands |
+| 2026-10-22 | Art workflow: reference picture → Claude drafts the Blockbench model → Martial refines → Claude checks |
 
 ## Open questions
 
