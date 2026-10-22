@@ -27,8 +27,22 @@ export function spawnEnemy(world, { x, y, z, weapon, armour = 0, group = null, w
   return e;
 }
 
-export function rollLoadout(world, weights, armourChance, armourAmount) {
-  return { weapon: weightedPick(world, weights) || 'ak47', armour: rand(world) < armourChance ? armourAmount : 0 };
+/**
+ * Choose an enemy's weapon from { weaponId: weight }. If the enemy type has a
+ * "Possible Weapons Equipped" list (Enemies tab), only those weapons can be chosen.
+ */
+export function pickEnemyWeapon(world, weights, type = 'insurgent') {
+  const allowed = world.data.enemies[type] && world.data.enemies[type].allowed_weapons;
+  if (allowed && allowed.length) {
+    const w = {};
+    for (const id of allowed) w[id] = weights[id] || 0;
+    return weightedPick(world, w) || allowed[Math.floor(rand(world, 0, allowed.length))];
+  }
+  return weightedPick(world, weights) || 'ak47';
+}
+
+export function rollLoadout(world, weights, armourChance, armourAmount, type = 'insurgent') {
+  return { weapon: pickEnemyWeapon(world, weights, type), armour: rand(world) < armourChance ? armourAmount : 0 };
 }
 
 function sightRange(world, e, p) {

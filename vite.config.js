@@ -5,8 +5,7 @@ import { gameDataFromXlsx } from './src/data/xlsx.js';
 import { parseCsv, byKey } from './src/data/parse.js';
 
 const file = name => fileURLToPath(new URL(`./data/${name}`, import.meta.url));
-// The workbook was called Weapons.xlsx at first; Game Data.xlsx is the new name.
-const WORKBOOKS = [file('Game Data.xlsx'), file('Weapons.xlsx')];
+const WORKBOOKS = [file('Game Data.xlsx')];
 const ENEMIES_CSV = file('enemies.csv');
 
 // Lets the game import the Excel workbook directly: `import data from 'virtual:gamedata'`.

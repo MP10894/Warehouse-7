@@ -69,7 +69,9 @@ well-defended base-building items:
   - without one, they head for the players' location.
 - Waves get harder over time, and **build progress speeds up the escalation**.
 - For now, difficulty varies only by **number of enemies, their weapons, and whether
-  they wear armour**. A full enemy roster file will come later.
+  they wear armour**. A full enemy roster will come later (Enemies tab of the workbook).
+- Each enemy type only carries weapons from its **Possible Weapons Equipped** list on the
+  Enemies tab; the wave and group weapon weights choose among those.
 - Attacking enemies' shots and explosions damage base walls and upgrades as a side effect.
 
 ## Players
@@ -206,7 +208,7 @@ tag `warehouse-prototype`.
 
 | File | Controls |
 |---|---|
-| `data/Game Data.xlsx` | Weapons tab and Enemies tab, read directly by the game (`Weapons.xlsx` still works until renamed) |
+| `data/Game Data.xlsx` | Weapons tab and Enemies tab, read directly by the game |
 | `data/enemies.csv` | Fallback for any enemy value the Enemies tab leaves out |
 | `data/waves.csv` | Size, armour and weapon mix of each wave |
 | `data/materials.csv` | Health and armour of each breakable material, and whether it leaves rubble |
@@ -245,6 +247,7 @@ tag `warehouse-prototype`.
 | 2026-10-22 | RPG-7 area of effect 30 (3 m blast); Sig P320 recoil lowered to 5 |
 | 2026-10-22 | Health regenerates to 50 over 3 s after 7 s without damage (difficulty was too high) |
 | 2026-10-22 | Workbook renamed Game Data.xlsx with a Weapons tab and an Enemies tab |
+| 2026-10-22 | Insurgents tuned on the Enemies tab: reaction 0.9 s, aim error 2° + 1.2° per 10 m, carry only AK-47 or RPG-7 |
 
 ## Open questions
 

@@ -164,8 +164,14 @@ export function weaponsFromSheet(cells, label = 'Weapons tab') {
 // Enemies tab. Any column left out keeps the value from data/enemies.csv, so the tab can
 // start small. Aim error is written in degrees in Excel (easier to picture) and
 // converted here.
+const both = h => h.includes('min') && h.includes('max');
 const ENEMY_COLUMNS = [
   ['name', h => h === 'enemy' || h === 'name' || h === 'enemy type'],
+  ['weapons', h => h.includes('weapon')],
+  // one cell holding "min / max", e.g. "2 / 5"
+  ['burst_pair', h => h.includes('burst') && !h.includes('pause') && both(h)],
+  ['pause_pair', h => h.includes('pause') && both(h)],
+  ['ammo_pair', h => h.includes('ammo') && both(h)],
   ['health', h => h.includes('health')],
   ['move_speed', h => h.includes('speed')],
   ['sight_range', h => h.includes('sight') || h.includes('vision')],
@@ -184,12 +190,29 @@ const ENEMY_COLUMNS = [
 const DEG = Math.PI / 180;
 
 export function enemiesFromSheet(cells, defaults = {}, label = 'Enemies tab') {
-  return readTable(cells, ['enemy', 'name', 'enemy type'], ENEMY_COLUMNS, ['name'], label).map(({ name, num }) => {
+  return readTable(cells, ['enemy', 'name', 'enemy type'], ENEMY_COLUMNS, ['name'], label).map(({ name, v, num: single }) => {
     const id = weaponId(name);
     const base = defaults[id] || Object.values(defaults)[0] || {};
+    // "2 / 5" style cells: split into the two numbers
+    const pair = k => {
+      const x = v(k);
+      if (typeof x === 'number') return [x, x];
+      const m = String(x ?? '').replace(/,/g, '.').match(/(-?\d+(?:\.\d+)?)\s*[/\-–]\s*(-?\d+(?:\.\d+)?)/);
+      return m ? [Number(m[1]), Number(m[2])] : null;
+    };
+    const pairs = { burst_min: ['burst_pair', 0], burst_max: ['burst_pair', 1], burst_pause_min: ['pause_pair', 0], burst_pause_max: ['pause_pair', 1], ammo_drop_min: ['ammo_pair', 0], ammo_drop_max: ['ammo_pair', 1] };
+    const num = (k, d) => {
+      const x = single(k);
+      if (typeof x === 'number') return x;
+      if (pairs[k]) { const p = pair(pairs[k][0]); if (p) return p[pairs[k][1]]; }
+      return d;
+    };
+    const list = v('weapons');
+    const allowed = list ? String(list).split(/[,;\n]+/).map(s => weaponId(s.trim())).filter(Boolean) : null;
     return {
       ...base,
       id, name,
+      allowed_weapons: allowed && allowed.length ? allowed : null,
       health: num('health', base.health ?? 100),
       move_speed: num('move_speed', base.move_speed ?? 3.2),
       sight_range: num('sight_range', base.sight_range ?? 45),
@@ -216,10 +239,14 @@ export function gameDataFromXlsx(buffer, enemyDefaults = {}) {
   const sheets = readSheets(buffer);
   const weaponsTab = sheets.find(s => /weapon/i.test(s.name)) || sheets[0];
   const enemiesTab = sheets.find(s => /enem/i.test(s.name));
-  return {
-    weapons: weaponsFromSheet(weaponsTab.cells, `Tab "${weaponsTab.name}"`),
-    enemies: enemiesTab ? enemiesFromSheet(enemiesTab.cells, enemyDefaults, `Tab "${enemiesTab.name}"`) : null
-  };
+  const weapons = weaponsFromSheet(weaponsTab.cells, `Tab "${weaponsTab.name}"`);
+  const enemies = enemiesTab ? enemiesFromSheet(enemiesTab.cells, enemyDefaults, `Tab "${enemiesTab.name}"`) : null;
+  for (const e of enemies || []) {
+    for (const w of e.allowed_weapons || []) {
+      if (!weapons.some(x => x.id === w)) throw new Error(`Enemies tab: "${e.name}" lists a weapon that isn't on the Weapons tab (${w}). Use the weapon names exactly as on the Weapons tab.`);
+    }
+  }
+  return { weapons, enemies };
 }
 
 /** Older name kept for the tests: weapons only. */

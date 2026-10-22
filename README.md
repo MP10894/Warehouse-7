@@ -31,7 +31,7 @@ Other commands:
 | File | What it controls |
 |---|---|
 | `data/levels/slice/` | The level: building floor plans, ground heights, where everything goes ([guide](data/levels/README.md)) |
-| `data/Game Data.xlsx` | The game-data workbook (still called `Weapons.xlsx` until renamed; both names work). **Weapons** tab: every weapon attribute. **Enemies** tab (optional): enemy health, speed, sight, reaction time, aim error in degrees… Edit in Excel as normal; formulas are fine |
+| `data/Game Data.xlsx` | The game-data workbook. **Weapons** tab: every weapon attribute. **Enemies** tab: health, speed, sight, reaction time, aim error in degrees, bursts, ammo drops, and which weapons each enemy type can carry. Edit in Excel as normal; formulas and "2 / 5" style min / max cells are fine |
 | `data/enemies.csv` | Fallback enemy values, used for anything the Enemies tab leaves out |
 | `data/waves.csv` | How big and how well armed each attack wave is |
 | `data/materials.csv` | How tough each breakable wall, crate and sandbag is |

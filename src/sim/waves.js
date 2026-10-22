@@ -1,7 +1,7 @@
 // Attack waves: they come at shrinking intervals, get bigger and better armed, and
 // building upgrades makes them come sooner and harder. Composition is in waves.csv.
-import { rand, weightedPick } from './rng.js';
-import { spawnEnemy } from './enemies.js';
+import { rand } from './rng.js';
+import { spawnEnemy, pickEnemyWeapon } from './enemies.js';
 import { emit } from './damage.js';
 
 export function createWaves(settings) {
@@ -32,7 +32,7 @@ export function spawnWave(world) {
   }).slice(0, 2);
   for (let i = 0; i < row.count; i++) {
     const sp = pts[i % pts.length];
-    const weapon = weightedPick(world, row.weights) || 'ak47';
+    const weapon = pickEnemyWeapon(world, row.weights);
     const armour = rand(world) < row.armourChance ? row.armour : 0;
     spawnEnemy(world, { x: sp.x + rand(world, -3, 3), z: sp.z + rand(world, -3, 3), weapon, armour, wave: true, behaviour: 'assault' });
   }

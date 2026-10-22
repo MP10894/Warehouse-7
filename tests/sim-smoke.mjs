@@ -16,7 +16,7 @@ const read = p => readFileSync(new URL('../' + p, import.meta.url), 'utf8');
 const lv = 'data/levels/slice/';
 const buildings = {};
 for (const f of readdirSync(new URL('../' + lv + 'buildings', import.meta.url))) buildings[f] = read(lv + 'buildings/' + f);
-const workbook = ['Game Data.xlsx', 'Weapons.xlsx'].map(f => new URL('../data/' + f, import.meta.url)).find(u => existsSync(u));
+const workbook = ['Game Data.xlsx'].map(f => new URL('../data/' + f, import.meta.url)).find(u => existsSync(u));
 const gameData = gameDataFromXlsx(readFileSync(workbook), byKey(parseCsv(read('data/enemies.csv')), 'id'));
 const data = buildData({
   weaponsRows: gameData.weapons, enemiesRows: gameData.enemies, materialsCsv: read('data/materials.csv'),
@@ -46,6 +46,13 @@ check(data.weapons.rpg7.calibre === '40mm' && data.calibres['5.56mm'] === 270, '
 const semi = buildData({ weaponsRows: [], materialsCsv: '\uFEFFid;health;armour\r\nx;60;2,5\r\n', enemiesCsv: 'id\n', wavesCsv: 'wave\n', settings: {}, levels: {} });
 check(semi.materials.x.armour === 2.5, 'reads semicolon CSV with decimal commas (Hungarian Excel)');
 check(data.weapons.sig_p320.max_total === 102 && data.weapons.sig_p320.muzzle_velocity === 187, 'Weapons.xlsx formulas worked out (=+C4*6, =374/2)');
+
+check(gameData.enemies && data.enemies.insurgent.reaction_time === 0.9 && data.enemies.insurgent.burst_max === 5 && data.enemies.insurgent.ammo_drop_max === 30, 'Enemies tab read, including "2 / 5" style min / max cells');
+{
+  const w = fresh();
+  const allowed = data.enemies.insurgent.allowed_weapons || [];
+  check(allowed.length > 0 && w.enemies.every(e => allowed.includes(e.weapon.w)), `enemies only carry their possible weapons (${allowed.join(', ')})`);
+}
 
 // --- damage rule from DESIGN.md
 {
