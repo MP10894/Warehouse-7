@@ -20,6 +20,8 @@ editor. Explain changes in plain language.
 - The simulation reports what happened through `world.events` (see `emit` in
   `src/sim/combat.js`). Graphics, sound and HUD react to events and read state; they
   never change the world.
+- The level is a block grid (`src/sim/grid.js`) plus a ground height map. Anything that
+  moves, shoots or sees uses those two; don't add a separate collision world.
 - Never assume a single player. Use `world.players`; tag player-specific events with
   `playerId`; HUD and feedback only react to the local player (`LOCAL_ID` in main.js).
 - Balance numbers belong in `/data`, not in code. New tunable value → add a column or a

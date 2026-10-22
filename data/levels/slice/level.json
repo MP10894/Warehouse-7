@@ -1,0 +1,96 @@
+{
+  "name": "Ruined city — test slice",
+  "size": 100,
+  "max_height": 16,
+  "time_limit": 300,
+  "terrain_spacing": 4,
+  "player_spawns": [
+    { "x": 8, "z": 92, "facing": 0 },
+    { "x": 11, "z": 92, "facing": 0 }
+  ],
+  "buildings": [
+    { "file": "tower.txt", "x": 12, "z": 12 },
+    { "file": "shell.txt", "x": 8, "z": 32 },
+    { "file": "house_city.txt", "x": 28, "z": 28 },
+    { "file": "house_city.txt", "x": 26, "z": 70 },
+    { "file": "house_ruin_a.txt", "x": 60, "z": 16 },
+    { "file": "house_ruin_b.txt", "x": 80, "z": 34 },
+    { "file": "house_base.txt", "x": 67, "z": 72 }
+  ],
+  "props": [
+    { "type": "lowwall", "x": 4, "z": 60, "w": 6, "d": 1 },
+    { "type": "lowwall", "x": 34, "z": 52, "w": 1, "d": 5 },
+    { "type": "crate", "x": 20, "z": 52, "w": 2, "d": 1 },
+    { "type": "crate", "x": 21, "z": 53, "w": 1, "d": 1, "h": 2 },
+    { "type": "crate", "x": 40, "z": 84, "w": 2, "d": 2 },
+    { "type": "lowwall", "x": 16, "z": 80, "w": 5, "d": 1 },
+    { "type": "crate", "x": 54, "z": 40, "w": 1, "d": 2 },
+    { "type": "lowwall", "x": 58, "z": 30, "w": 1, "d": 4 },
+    { "type": "lowwall", "x": 61, "z": 67, "w": 4, "d": 1 },
+    { "type": "lowwall", "x": 78, "z": 67, "w": 4, "d": 1 },
+    { "type": "lowwall", "x": 61, "z": 87, "w": 3, "d": 1 },
+    { "type": "lowwall", "x": 79, "z": 87, "w": 3, "d": 1 },
+    { "type": "crate", "x": 63, "z": 76, "w": 1, "d": 2 },
+    { "type": "crate", "x": 77, "z": 80, "w": 2, "d": 1 },
+    { "type": "crate", "x": 92, "z": 60, "w": 1, "d": 3 }
+  ],
+  "base": {
+    "name": "Compound",
+    "area": { "x0": 60, "z0": 66, "x1": 83, "z1": 89 },
+    "build_spots": [
+      { "x": 72, "z": 84, "upgrade": "walls", "needs": "construction_crate" }
+    ],
+    "wall_plan": [
+      { "x": 65, "z": 67, "w": 4, "d": 1 },
+      { "x": 73, "z": 67, "w": 5, "d": 1 },
+      { "x": 64, "z": 87, "w": 5, "d": 1 },
+      { "x": 74, "z": 87, "w": 5, "d": 1 },
+      { "x": 60, "z": 69, "w": 1, "d": 6 },
+      { "x": 60, "z": 79, "w": 1, "d": 6 },
+      { "x": 82, "z": 69, "w": 1, "d": 6 },
+      { "x": 82, "z": 79, "w": 1, "d": 6 }
+    ]
+  },
+  "base_items": [
+    { "item": "construction_crate", "x": 18.5, "z": 16.5, "y": 9 }
+  ],
+  "enemy_groups": [
+    {
+      "id": "tower", "behaviour": "guard", "respawn": 60,
+      "spawns": [ { "x": 18, "z": 17, "y": 0 }, { "x": 20, "z": 15, "y": 3 }, { "x": 17, "z": 19, "y": 6 }, { "x": 21, "z": 14, "y": 9 } ],
+      "weapons": { "ak47": 2, "m4a1": 1 }, "armour_chance": 0.3, "armour": 50
+    },
+    {
+      "id": "compound", "behaviour": "guard", "respawn": 45, "holds_base": true,
+      "spawns": [ { "x": 64, "z": 70 }, { "x": 79, "z": 72 }, { "x": 70, "z": 82 }, { "x": 77, "z": 85 } ],
+      "weapons": { "ak47": 2, "sig_p320": 1, "m4a1": 1 }, "armour_chance": 0.25, "armour": 50
+    },
+    {
+      "id": "desert", "behaviour": "roam", "respawn": 45, "radius": 18,
+      "spawns": [ { "x": 74, "z": 22 }, { "x": 84, "z": 28 }, { "x": 70, "z": 40 } ],
+      "weapons": { "ak47": 2, "rpg7": 1 }, "armour_chance": 0.2, "armour": 50
+    },
+    {
+      "id": "city", "behaviour": "roam", "respawn": 50, "radius": 14,
+      "spawns": [ { "x": 28, "z": 50 }, { "x": 36, "z": 60 } ],
+      "weapons": { "sig_p320": 1, "ak47": 1 }, "armour_chance": 0, "armour": 0
+    }
+  ],
+  "wave_spawns": [
+    { "x": 50, "z": 2 }, { "x": 98, "z": 60 }, { "x": 2, "z": 48 }, { "x": 60, "z": 98 }
+  ],
+  "pickups": [
+    { "type": "armour", "amount": 50, "x": 13, "z": 86 },
+    { "type": "armour", "amount": 100, "x": 13, "z": 36 },
+    { "type": "weapon", "weapon": "ak47", "x": 31.5, "z": 31.5 },
+    { "type": "ammo", "calibre": "7.62x39mm", "amount": 60, "x": 33, "z": 33 },
+    { "type": "ammo", "calibre": "9mm", "amount": 34, "x": 30, "z": 74 },
+    { "type": "weapon", "weapon": "rpg7", "x": 84, "z": 37 },
+    { "type": "ammo", "calibre": "40mm", "amount": 3, "x": 85, "z": 37 },
+    { "type": "weapon", "weapon": "m4a1", "x": 15, "z": 15 },
+    { "type": "ammo", "calibre": "5.56mm", "amount": 60, "x": 15, "z": 16 }
+  ],
+  "weather_zones": [
+    { "type": "sandstorm", "x": 80, "z": 24, "radius": 28, "chance_per_minute": 0.8, "min_duration": 20, "max_duration": 45 }
+  ]
+}

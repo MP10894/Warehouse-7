@@ -1,8 +1,8 @@
-# Warehouse 7
+# Ruined City (working title)
 
-A small retro first-person shooter built with [Three.js](https://threejs.org), playable in a
-phone or desktop browser. It's a test bed for a larger game: clear a warehouse of ten
-hostiles, using the racks for cover and the red drums as weapons.
+A retro low-poly survival shooter built with [Three.js](https://threejs.org), playable in a
+phone or desktop browser. The current build is a test slice of Level 1: claim a base in a
+ruined desert city, fortify it, and survive escalating enemy waves. See `DESIGN.md`.
 
 ## Run it on your computer
 
@@ -30,11 +30,12 @@ Other commands:
 
 | File | What it controls |
 |---|---|
-| `data/levels/warehouse.txt` | The level layout ([symbol guide](data/levels/README.md)) |
-| `data/enemies.csv` | Enemy health, speed, accuracy, damage, reaction times |
-| `data/weapons.csv` | Damage, fire rate, spread, starting ammo |
-| `data/pickups.csv` | Medkit and ammo amounts, map symbols |
-| `data/settings.json` | Player speed, look sensitivity, field of view, explosions |
+| `data/levels/slice/` | The level: building floor plans, ground heights, where everything goes ([guide](data/levels/README.md)) |
+| `data/weapons.csv` | Every weapon attribute: damage, fire rate, recoil, bloom, muzzle velocity, calibre… |
+| `data/enemies.csv` | Enemy health, speed, sight, reaction time, accuracy |
+| `data/waves.csv` | How big and how well armed each attack wave is |
+| `data/materials.csv` | How tough each breakable wall, crate and sandbag is |
+| `data/settings.json` | Player speed, look sensitivity, field of view, recoil and bloom feel, wave timing, weather |
 
 The CSV files open in Excel. Save them as CSV; both comma and semicolon formats work.
 
@@ -42,22 +43,30 @@ The CSV files open in Excel. Save them as CSV; both comma and semicolon formats 
 
 ```
 src/
-  main.js        wires everything together; the game loop
-  data/          loads the files in /data
-  sim/           the game rules: no graphics, no input, no sound
-    world.js       the game state (one plain object)
-    step.js        one tick of the rules
-    map.js         level grid, heights, line of sight
-    physics.js     collisions and bullet ray tests
-    navigation.js  enemy path-finding
-    enemies.js     enemy behaviour
-    combat.js      shooting, damage, explosions
-    rng.js         seeded random numbers
-  render/        everything you see (Three.js)
-  input/         touch, mouse, keyboard
-  audio/         sound effects
-  ui/            menus and the HUD text
-tests/           rule checks that run without a browser
+  main.js          wires everything together; the game loop
+  data/            loads the files in /data
+  sim/             the game rules: no graphics, no input, no sound
+    world.js         creates the game state (one plain object)
+    step.js          one tick of the rules
+    level.js         builds the block world from the level files
+    grid.js          the 1 m block grid
+    terrain.js       ground heights and surfaces
+    body.js          walking, stairs, falling
+    ballistics.js    bullet paths, hits, line of sight
+    weapons.js       firing, recoil, bloom, reload, swap, projectiles
+    damage.js        armour/health damage, deaths, drops, explosions, breaking walls
+    players.js       player actions, pick-ups, the context button, revive
+    enemies.js       enemy behaviour and respawning
+    nav.js           3D path-finding over floors and stairs
+    base.js          claiming the base, carrying crates, building walls
+    waves.js         attack waves
+    weather.js       sandstorms
+    rng.js           seeded random numbers
+  render/          everything you see (Three.js)
+  input/           touch, mouse, keyboard
+  audio/           sound effects
+  ui/              menus and the HUD text
+tests/             rule checks that run without a browser
 ```
 
 The key rule: **`src/sim` never imports Three.js or touches the page.** Input becomes a

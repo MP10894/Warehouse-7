@@ -1,23 +1,30 @@
 // Synthesised sound effects (no audio files yet), played in response to world events.
-export function createAudio() {
-  let ctx = null, master = null, noiseBuf = null;
+const SHOT = {
+  sig_p320: { freq: 4200, dur: 0.12, vol: 0.55, thump: 170 },
+  m4a1: { freq: 3600, dur: 0.15, vol: 0.7, thump: 130 },
+  ak47: { freq: 2600, dur: 0.18, vol: 0.8, thump: 105 },
+  rpg7: { freq: 900, dur: 0.6, vol: 0.9, thump: 60 }
+};
 
-  function noise(dur, freq, vol) {
-    if (!ctx) return;
-    const t = ctx.currentTime, s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
-    s.buffer = noiseBuf; f.type = 'lowpass'; f.frequency.value = freq;
-    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + dur);
+export function createAudio() {
+  let ctx = null, master = null, noiseBuf = null, wind = null;
+
+  function noise(dur, freq, vol, delay = 0, type = 'lowpass') {
+    if (!ctx || vol <= 0.001) return;
+    const t = ctx.currentTime + delay, s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    s.buffer = noiseBuf; f.type = type; f.frequency.value = freq;
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
     s.connect(f); f.connect(g); g.connect(master);
-    s.start(t, Math.random() * .5); s.stop(t + dur + .05);
+    s.start(t, Math.random() * 0.5); s.stop(t + dur + 0.05);
   }
   function tone(type, f0, f1, dur, vol, delay = 0) {
-    if (!ctx) return;
+    if (!ctx || vol <= 0.001) return;
     const t = ctx.currentTime + delay, o = ctx.createOscillator(), g = ctx.createGain();
     o.type = type; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + dur);
-    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + dur);
-    o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + .05);
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.05);
   }
-  const byDistance = (d, near, minVol) => Math.max(minVol, near - d * .02);
+  const fade = d => Math.max(0, 1 - d / 70);
 
   return {
     /** Must be called from a tap or click (browsers only allow sound after interaction). */
@@ -25,27 +32,54 @@ export function createAudio() {
       if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
       try {
         ctx = new (window.AudioContext || window.webkitAudioContext)();
-        master = ctx.createGain(); master.gain.value = .45; master.connect(ctx.destination);
-        noiseBuf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+        master = ctx.createGain(); master.gain.value = 0.45; master.connect(ctx.destination);
+        noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
         const d = noiseBuf.getChannelData(0);
         for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+        // looping wind for sandstorms
+        const src = ctx.createBufferSource(); src.buffer = noiseBuf; src.loop = true;
+        const f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 500; f.Q.value = 0.6;
+        const g = ctx.createGain(); g.gain.value = 0;
+        src.connect(f); f.connect(g); g.connect(master); src.start();
+        wind = { g, f };
       } catch (e) { ctx = null; }
+    },
+
+    setStorm(level) {
+      if (!wind) return;
+      wind.g.gain.setTargetAtTime(level * 0.5, ctx.currentTime, 0.3);
+      wind.f.frequency.setTargetAtTime(400 + level * 500 + Math.random() * 120, ctx.currentTime, 0.4);
     },
 
     handle(ev, local) {
       if (!ctx || !local) return;
-      const dist = ev.x !== undefined ? Math.hypot(ev.x - local.x, ev.z - local.z) : 0;
+      const d = ev.x !== undefined ? Math.hypot(ev.x - local.x, ev.z - local.z) : 0;
       switch (ev.type) {
-        case 'shot':
-          if (ev.playerId === local.id) { noise(.16, 3400, .8); tone('sine', 150, 50, .12, .6); }
-          else { const v = byDistance(dist, .6, .08); noise(.16, 3000, v); }
+        case 'shot': {
+          const s = SHOT[ev.weapon] || SHOT.ak47;
+          const mine = ev.actorId === local.id;
+          const v = mine ? s.vol : s.vol * 0.7 * fade(d);
+          noise(s.dur, mine ? s.freq : s.freq * 0.6, v);
+          tone('sine', s.thump, 40, s.dur * 0.9, v * 0.8);
+          if (ev.weapon === 'rpg7') noise(0.9, 1500, v * 0.5, 0.05, 'bandpass');
           break;
-        case 'enemyShot': { const v = byDistance(dist, .55, .06); noise(.14, 1600, v); tone('sine', 120, 50, .1, v * .6); break; }
-        case 'explosion': noise(1.0, 600, 1.2); tone('sine', 80, 30, .7, 1); break;
-        case 'playerHurt': if (ev.playerId === local.id) tone('square', 240, 110, .16, .18); break;
-        case 'pickup': if (ev.playerId === local.id) { tone('square', 660, 660, .06, .12); tone('square', 990, 990, .08, .12, .07); } break;
-        case 'enemyDie': tone('sawtooth', 320, 70, .4, .14); break;
-        case 'empty': if (ev.playerId === local.id) tone('square', 1400, 1300, .03, .08); break;
+        }
+        case 'explosion': { const v = 1.3 * Math.max(0.15, fade(d)); noise(1.2, 500, v); tone('sine', 70, 25, 0.8, v); break; }
+        case 'impact': if (d < 6 && ev.kind !== 'flesh') noise(0.05, 5000, 0.12, 0, 'highpass'); break;
+        case 'hurt':
+          if (ev.targetId === local.id) tone('square', 220, 100, 0.16, 0.16);
+          else if (ev.team === 'enemy' && d < 40) tone('sawtooth', 260, 140, 0.12, 0.08 * fade(d));
+          break;
+        case 'death': if (ev.team === 'enemy') tone('sawtooth', 300, 70, 0.4, 0.12 * Math.max(0.3, fade(d))); break;
+        case 'reload': if (ev.actorId === local.id) { tone('square', 900, 700, 0.04, 0.08); tone('square', 600, 500, 0.05, 0.1, ev.time * 0.8); } break;
+        case 'swap': if (ev.actorId === local.id) tone('square', 500, 650, 0.05, 0.08); break;
+        case 'pickup': if (ev.playerId === local.id) { tone('square', 660, 660, 0.06, 0.1); tone('square', 990, 990, 0.08, 0.1, 0.07); } break;
+        case 'empty': if (ev.playerId === local.id) tone('square', 1400, 1300, 0.03, 0.08); break;
+        case 'wave': tone('sawtooth', 300, 300, 0.5, 0.14); tone('sawtooth', 240, 240, 0.6, 0.14, 0.5); break;
+        case 'baseClaimed': [523, 659, 784, 1046].forEach((f, i) => tone('square', f, f, 0.14, 0.1, i * 0.12)); break;
+        case 'built': [392, 523, 659].forEach((f, i) => tone('triangle', f, f, 0.18, 0.14, i * 0.1)); break;
+        case 'blocks': if (ev.cells && ev.cells.length) noise(0.7, 300, 0.6 * Math.max(0.2, fade(d))); break;
+        case 'downed': case 'revived': tone('triangle', 440, ev.type === 'downed' ? 220 : 880, 0.3, 0.12); break;
       }
     }
   };

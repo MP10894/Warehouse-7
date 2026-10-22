@@ -106,9 +106,8 @@ well-defended base-building items:
 ## Ballistics
 
 - No hit-scan. Bullets are physical objects that travel and drop.
-- The weapon sheet holds real muzzle velocities. A global "bullet speed" factor in
-  settings scales them down so drop is noticeable in play; it starts at **50%** and is
-  tuned in the game.
+- A global "bullet speed" factor in settings scales the sheet's muzzle velocities.
+  The sheet already uses roughly half of real speeds, so the factor is **100%**.
 
 ## Destruction
 
@@ -179,13 +178,39 @@ well-defended base-building items:
 6. To design in from the start: the "downed" state and revive, shared base ownership,
    and carried items belonging to a specific player.
 
-## Prototype: Warehouse 7 (v0.1)
+## Current build: test slice (v0.2)
 
-The current playable build is a technical test, not the game: one flat indoor level
-(`data/levels/warehouse.txt`), one enemy type, one weapon (hit-scan), medkits, ammo and
-explosive drums, with sideways phone controls. Its structure (game rules, data files,
-controls, sideways view) carries over; its level engine, which is flat and single-floor
-like Doom, does not.
+A 100 × 100 m piece of Level 1 (`data/levels/slice/`) with everything in the vertical
+slice: a three-storey tower with stairs and a walkable roof, a ruined concrete shell,
+city and desert houses, dunes, the compound base, all four weapons from the sheet,
+travelling bullets and rockets, armour, two weapon slots, enemies that guard, roam and
+attack in waves, the construction crate and sandbag walls, destructible walls, and a
+sandstorm zone in the north-east desert. Single player; the code is co-op ready.
+
+The earlier Warehouse 7 prototype (flat, Doom-style) is kept in git history under the
+tag `warehouse-prototype`.
+
+### Level engine (agreed)
+
+- Buildings are made of 1-metre blocks, written as one text grid per floor
+  (`data/levels/slice/buildings/*.txt`, guide in `data/levels/README.md`). Floors are 3 m.
+- The ground is a smooth height map from `terrain.txt` (digits, one point every 4 m),
+  with surface types from `ground.txt`. (Planned as an image; text turned out simpler
+  to edit and keeps everything in plain files. Can switch later.)
+- Walking, stairs, bullets, sight lines, path-finding and destruction all use the same
+  block grid. Floors, columns and stairs are unbreakable; walls, low walls, crates and
+  sandbags break into rubble.
+
+### Data files
+
+| File | Controls |
+|---|---|
+| `data/weapons.csv` | All weapon attributes (converted from `docs/Weapons.xlsx`, which it now replaces as the game's source) |
+| `data/enemies.csv` | Enemy health, speed, sight, hearing, reaction time, accuracy, burst lengths, ammo drops |
+| `data/waves.csv` | Size, armour and weapon mix of each wave |
+| `data/materials.csv` | Health and armour of each breakable material, and whether it leaves rubble |
+| `data/settings.json` | Player, controls, camera, ballistics (bullet speed factor, recoil, bloom), waves timing, base, weather |
+| `data/levels/slice/level.json` | Positions of buildings, props, base, enemies, pickups, weather zones, timer |
 
 ## Decision log
 
@@ -213,13 +238,16 @@ like Doom, does not.
 | 2026-10-22 | Bullet speed: real values in the sheet, global factor starting at 50% |
 | 2026-10-22 | Art: low-poly 3D, 300 triangles or fewer per character |
 | 2026-10-22 | Wave difficulty for now: enemy count, weapons, armour on/off |
+| 2026-10-22 | Level engine: 1 m blocks, one text grid per floor; ground from a text height map |
+| 2026-10-22 | `data/weapons.csv` is the game's weapon source (edit in Excel, save as CSV) |
+| 2026-10-22 | Bullet speed factor set to 100%: the sheet's muzzle velocities are already about half of real |
 
 ## Open questions
 
-1. **Level engine and authoring.** Proposed in chat (22 Oct): a 1-metre block grid per
-   floor for buildings, a height image for terrain. Awaiting a go-ahead.
-2. **Upgrade levels.** What each improvement level of each upgrade does, and what it costs.
-3. **Weapon list.** Which weapons are in the first version; `Weapons.xlsx` is being
-   updated with calibre, muzzle velocity, range and semi-automatic fire rate.
-4. **Enemy roster** file (later).
-5. **Name** of the game.
+1. **RPG area of effect.** The sheet says 3, which on the agreed scale (100 = 10 m) is a
+   0.3 m blast: it only damages what it hits directly. A real RPG warhead would be
+   around 30–50 (3–5 m). Kept at 3 until decided.
+2. **Upgrade levels.** Walls currently go to level 2 (2 blocks high). What each level of
+   each upgrade does, and what it costs.
+3. **Enemy roster** file (later).
+4. **Name** of the game.

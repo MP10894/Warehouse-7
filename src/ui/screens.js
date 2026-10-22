@@ -1,4 +1,4 @@
-// Start screen and after-action report.
+// Briefing screen and after-action report.
 import { fmtTime } from './dom-hud.js';
 
 export function createScreens({ view, onStart }) {
@@ -15,14 +15,19 @@ export function createScreens({ view, onStart }) {
   return {
     hide() { screen.hidden = true; },
 
-    showMenu(total) {
+    showMenu(world) {
       card.innerHTML = `
-        <div class="eyebrow"><span>Three.js test build · v0.1</span><span>Grid ref 07</span></div>
-        <h1>Warehouse 7</h1>
-        <p>Intel reports ${total} armed hostiles holding the storage halls. Clear every bay. Red drums are flammable; use them.</p>
+        <div class="eyebrow"><span>Test slice · v0.2</span><span>Working title TBD</span></div>
+        <h1>Ruined City</h1>
+        <p>Survive ${fmtTime(world.timeLeft)} in a 100 m slice of Level 1. You start with a pistol. Enemies drop their weapons.</p>
+        <ol class="steps">
+          <li>Clear the compound east of the crossroads. It becomes your base.</li>
+          <li>Fetch the construction crate from the roof of the tall building (north-west). It slows you down.</li>
+          <li>Build walls at your base, then hold out. Every build brings the next wave sooner.</li>
+        </ol>
         <div class="ctrl">
-          <div><h2>Phone</h2><ul><li>Left thumb: <kbd>move</kbd></li><li>Right thumb: <kbd>look</kbd></li><li>Hold <kbd>FIRE</kbd> to shoot</li></ul></div>
-          <div><h2>Desktop</h2><ul><li><kbd>WASD</kbd> move, <kbd>←→</kbd> turn</li><li>Click to lock the mouse</li><li>Hold click or <kbd>Space</kbd> to fire</li></ul></div>
+          <div><h2>Phone</h2><ul><li>Left thumb <kbd>move</kbd> · right thumb <kbd>look</kbd></li><li><kbd>FIRE</kbd> (drag it to aim too) · <kbd>AIM</kbd> toggles sights</li><li><kbd>RELOAD</kbd> · <kbd>SWAP</kbd> · yellow button to use</li></ul></div>
+          <div><h2>Desktop</h2><ul><li><kbd>WASD</kbd> move · click to lock the mouse</li><li>Click fire · right-click aim</li><li><kbd>R</kbd> reload · <kbd>Q</kbd> swap · <kbd>E</kbd> use</li></ul></div>
         </div>
         <span class="rot">Hold your phone sideways. If the picture is upside down, tap View to flip it.</span>
         <div class="actions"><button class="go" id="go" type="button">Start</button>${viewButton()}</div>`;
@@ -32,18 +37,19 @@ export function createScreens({ view, onStart }) {
 
     showResults(world, player) {
       const won = world.status === 'won';
-      const left = world.total - world.kills;
       const acc = player.stats.shots ? Math.round(player.stats.hits / player.stats.shots * 100) : 0;
+      const survived = world.data.levels[world.levelId].time_limit - world.timeLeft;
       card.innerHTML = `
-        <div class="eyebrow"><span>After-action report</span><span>${won ? 'Status: complete' : 'Status: failed'}</span></div>
-        <h1>${won ? 'Area secure' : 'KIA'}</h1>
-        <p>${won ? 'All hostiles neutralised. Warehouse 7 is clear.' : `You went down with ${left} hostile${left === 1 ? '' : 's'} still inside.`}</p>
+        <div class="eyebrow"><span>After-action report</span><span>${won ? 'Status: survived' : 'Status: killed in action'}</span></div>
+        <h1>${won ? 'Held out' : 'KIA'}</h1>
+        <p>${won ? `You survived until the timer ran out${world.base.claimed ? `, holding the ${world.base.name.toLowerCase()}` : ' without a base'}.` : 'Single-player death is permanent: the level is lost.'}</p>
         <div class="results">
-          <div><span>Time</span><b>${fmtTime(world.time)}</b></div>
-          <div><span>Kills</span><b>${world.kills}/${world.total}</b></div>
+          <div><span>Survived</span><b>${fmtTime(survived)}</b></div>
+          <div><span>Kills</span><b>${player.stats.kills}</b></div>
           <div><span>Accuracy</span><b>${acc}%</b></div>
+          <div><span>Waves</span><b>${world.waves.number}</b></div>
         </div>
-        <div class="actions"><button class="go" id="go" type="button">${won ? 'Run it again' : 'Retry'}</button>${viewButton()}</div>`;
+        <div class="actions"><button class="go" id="go" type="button">${won ? 'Play again' : 'Retry'}</button>${viewButton()}</div>`;
       screen.hidden = false;
       wire();
     },

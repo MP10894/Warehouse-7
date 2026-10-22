@@ -1,16 +1,25 @@
 // Loads everything in /data into one object. Vite bundles these files, and while
 // `npm run dev` is running, saving any of them reloads the game automatically.
-import enemiesCsv from '../../data/enemies.csv?raw';
 import weaponsCsv from '../../data/weapons.csv?raw';
-import pickupsCsv from '../../data/pickups.csv?raw';
+import materialsCsv from '../../data/materials.csv?raw';
+import enemiesCsv from '../../data/enemies.csv?raw';
+import wavesCsv from '../../data/waves.csv?raw';
 import settings from '../../data/settings.json';
-import warehouse from '../../data/levels/warehouse.txt?raw';
 import { buildData } from './parse.js';
 
-export const DATA = buildData({
-  enemiesCsv,
-  weaponsCsv,
-  pickupsCsv,
-  settings,
-  levels: { warehouse }
-});
+const files = import.meta.glob('../../data/levels/*/**/*.{json,txt}', { query: '?raw', import: 'default', eager: true });
+
+const levels = {};
+for (const [path, text] of Object.entries(files)) {
+  const m = path.match(/levels\/([^/]+)\/(.+)$/);
+  if (!m) continue;
+  const [, id, rest] = m;
+  const lv = levels[id] || (levels[id] = { buildings: {} });
+  if (rest === 'level.json') lv.json = text;
+  else if (rest === 'terrain.txt') lv.terrain = text;
+  else if (rest === 'ground.txt') lv.ground = text;
+  else if (rest.startsWith('buildings/')) lv.buildings[rest.slice('buildings/'.length)] = text;
+}
+for (const id of Object.keys(levels)) if (!levels[id].json) delete levels[id];
+
+export const DATA = buildData({ weaponsCsv, materialsCsv, enemiesCsv, wavesCsv, settings, levels });

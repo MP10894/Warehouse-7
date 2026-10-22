@@ -17,7 +17,7 @@ export function parseCsv(text) {
     const cells = line.split(sep);
     const row = {};
     header.forEach((key, i) => {
-      let v = (cells[i] ?? '').trim();
+      const v = (cells[i] ?? '').trim();
       const numeric = sep === ';' ? v.replace(',', '.') : v;
       row[key] = numeric !== '' && !Number.isNaN(Number(numeric)) ? Number(numeric) : v;
     });
@@ -32,15 +32,33 @@ export function byKey(rows, key) {
   return out;
 }
 
-/** Build the game's data object from raw file contents. */
-export function buildData({ enemiesCsv, weaponsCsv, pickupsCsv, settings, levels }) {
-  const pickups = byKey(parseCsv(pickupsCsv), 'id');
+/**
+ * Build the game's data object from raw file contents.
+ * levels: { [levelId]: { json, terrain, ground, buildings: { 'tower.txt': text, ... } } }
+ */
+export function buildData({ weaponsCsv, materialsCsv, enemiesCsv, wavesCsv, settings, levels }) {
+  const weapons = byKey(parseCsv(weaponsCsv), 'id');
+  // Ammunition carried per calibre: the largest (max_total − magazine) among weapons of that calibre.
+  const calibres = {};
+  for (const w of Object.values(weapons)) {
+    calibres[w.calibre] = Math.max(calibres[w.calibre] || 0, w.max_total - w.mag_size);
+  }
+  const parsedLevels = {};
+  for (const [id, lv] of Object.entries(levels)) {
+    parsedLevels[id] = {
+      ...(typeof lv.json === 'string' ? JSON.parse(lv.json) : lv.json),
+      terrainText: lv.terrain,
+      groundText: lv.ground,
+      buildingTexts: lv.buildings
+    };
+  }
   return {
+    weapons,
+    calibres,
+    materials: byKey(parseCsv(materialsCsv), 'id'),
     enemies: byKey(parseCsv(enemiesCsv), 'id'),
-    weapons: byKey(parseCsv(weaponsCsv), 'id'),
-    pickups,
-    pickupsBySymbol: byKey(Object.values(pickups), 'map_symbol'),
+    waves: parseCsv(wavesCsv),
     settings,
-    levels
+    levels: parsedLevels
   };
 }

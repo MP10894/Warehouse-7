@@ -1,11 +1,22 @@
 {
+  "level": "slice",
   "player": {
     "max_health": 100,
-    "move_speed": 4.6,
+    "max_armour": 300,
+    "walk_speed": 4.6,
+    "carry_speed_factor": 0.6,
+    "ads_speed_factor": 0.6,
     "radius": 0.3,
-    "eye_height": 1.55,
-    "keyboard_turn_speed": 2.4,
-    "start_weapon": "carbine"
+    "height": 1.8,
+    "eye_height": 1.6,
+    "step_height": 0.55,
+    "fall_gravity": 20,
+    "start_weapon": "sig_p320",
+    "swap_time": 0.4,
+    "pickup_range": 1.2,
+    "revive_window": 15,
+    "revive_range": 1.6,
+    "revive_health": 30
   },
   "controls": {
     "touch_look_x": 0.0062,
@@ -13,7 +24,8 @@
     "mouse_look_locked": 0.0024,
     "mouse_look_drag": 0.004,
     "joystick_radius_px": 46,
-    "max_pitch": 1.1
+    "max_pitch": 1.35,
+    "ads_look_factor": 0.5
   },
   "camera": {
     "target_horizontal_fov": 100,
@@ -21,21 +33,48 @@
     "max_vertical_fov": 75,
     "pixel_rows": 230
   },
+  "ballistics": {
+    "bullet_speed_factor": 1.0,
+    "gravity": 9.81,
+    "max_flight_time": 3,
+    "headshot_multiplier": 2,
+    "aoe_metres_per_point": 0.1,
+    "min_explosion_visual_radius": 1.5,
+    "recoil_kick_at_100": 0.06,
+    "recoil_side_at_100": 0.02,
+    "recoil_recovery": 0,
+    "spread_min": 0.002,
+    "bloom_max_at_100": 0.09,
+    "bloom_per_shot_at_100": 0.015,
+    "bloom_recovery_per_second": 0.15,
+    "bloom_moving_at_100": 0.03,
+    "ads_spread_factor": 0.4
+  },
   "world": {
     "fixed_step_hz": 60,
-    "fog_near": 5,
-    "fog_far": 34,
-    "end_delay": 1.4
+    "fog_near": 25,
+    "fog_far": 95,
+    "end_delay": 1.6
   },
-  "barrel": {
-    "blast_radius": 3.6,
-    "enemy_damage": 8,
-    "player_damage_max": 50,
-    "chain_radius": 3.2,
-    "chain_delay": 0.16
+  "enemy_ai": {
+    "give_up_after": 25,
+    "respawn_min_player_distance": 28
   },
-  "enemy_alerting": {
-    "hearing_range": 13,
-    "alert_radius": 9
+  "waves": {
+    "first_wave_at": 50,
+    "interval_start": 45,
+    "interval_min": 15,
+    "interval_decay": 0.9,
+    "build_interval_cut": 10,
+    "build_wave_bump": 1
+  },
+  "base": {
+    "item_respawn": 30,
+    "build_range": 2.2
+  },
+  "weather": {
+    "fade_time": 6,
+    "sight_reduction": 0.75,
+    "aim_error_factor": 2
   }
 }

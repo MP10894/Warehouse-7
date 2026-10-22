@@ -1,0 +1,17 @@
+# Damaged single-storey desert house, roof partly collapsed.
+
+floor 0
+#####..#
+#......#
+w..c...#
+#.......
+#......#
+##d#####
+
+floor 1
+....  ..
+...   ..
+....    
+........
+........
+........

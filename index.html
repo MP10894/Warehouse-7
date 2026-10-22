@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Warehouse 7</title>
+  <title>Ruined City — Test Slice</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Chakra+Petch:wght@400;600&family=VT323&display=swap">
   <link rel="stylesheet" href="./styles.css">
@@ -13,17 +13,35 @@
     <canvas id="view" class="layer"></canvas>
     <canvas id="hud" class="layer"></canvas>
     <div id="hurt"></div>
+    <div id="storm"></div>
     <div id="touch"></div>
     <div id="stick"><div id="knob"></div></div>
-    <div id="stats">
-      <div class="stat" id="stHp"><span class="k">HP</span><b id="sHp">100</b></div>
-      <div class="stat" id="stAmmo"><span class="k">AMMO</span><b id="sAmmo">90</b></div>
-      <div class="stat"><span class="k">HOSTILES</span><b id="sFoes">10</b></div>
-      <div class="stat" id="timer"><b id="sTime">0:00</b></div>
+
+    <div id="vitals">
+      <div class="bar hp"><span class="k">HEALTH</span><i><b id="hpFill"></b></i><em id="hpNum">100</em></div>
+      <div class="bar ar"><span class="k">ARMOUR</span><i><b id="arFill"></b></i><em id="arNum">0</em></div>
+    </div>
+    <div id="objective">
+      <div id="clock">5:00</div>
+      <div id="waveLine">First wave in 0:50</div>
+      <div id="goalLine">Clear the compound to claim a base</div>
+      <div id="carry" hidden>Carrying: construction crate (slow)</div>
+    </div>
+    <canvas id="minimap" width="100" height="100"></canvas>
+    <div id="weapon">
+      <div id="wName">Sig P320</div>
+      <div id="wAmmo"><b id="wMag">17</b><span id="wRes">/ 85</span></div>
+      <div id="wOther">—</div>
     </div>
     <div id="toast"></div>
-    <div id="hint">Click to lock mouse · WASD move · hold click to fire · Esc to release</div>
-    <button id="fire" type="button" aria-label="Fire">FIRE</button>
+    <div id="hint">WASD · click to lock mouse · right-click aim · R reload · Q swap · E use</div>
+
+    <button id="context" class="btn ctx" type="button" hidden>PICK UP</button>
+    <button id="swap" class="btn small" type="button">SWAP</button>
+    <button id="reload" class="btn small" type="button">RELOAD</button>
+    <button id="ads" class="btn mid" type="button">AIM</button>
+    <button id="fire" class="btn big" type="button" aria-label="Fire">FIRE</button>
+
     <section class="overlay" id="screen">
       <div class="card" id="card"></div>
     </section>

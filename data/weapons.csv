@@ -1,2 +1,5 @@
-id,name,damage,headshot_damage,fire_interval,spread,moving_spread,range,start_ammo
-carbine,Carbine,1,3,0.11,0.008,0.016,60,90
+id,name,calibre,fire_mode,mag_size,max_total,reload_time,rate_of_fire,damage_health,damage_armour,damage_environment,area_of_effect,recoil,bloom,muzzle_velocity,projectile,ads_zoom
+sig_p320,Sig P320,9mm,semi,17,102,2,180,20,20,0,0,15,15,187,bullet,0.85
+m4a1,M4A1,5.56mm,auto,30,300,3,700,35,35,0,0,25,20,455,bullet,0.6
+ak47,AK-47,7.62x39mm,auto,30,300,4,600,40,50,10,0,30,25,356,bullet,0.65
+rpg7,RPG-7,40mm,semi,1,4,5,30,80,100,100,3,30,0,115,rocket,0.7

@@ -1,0 +1,51 @@
+# Three-storey office block, partly ruined on the top floor, with a walkable roof.
+# One text grid per floor, 1 character = 1 metre. Each floor is 3 m tall.
+# Symbol guide: data/levels/README.md
+
+floor 0
+############
+#....>>>...d
+####.......#
+#..........#
+#..X....X..#
+#..........#
+d..........#
+#..X....X..#
+#..........#
+#####dd#####
+
+floor 1
+############
+#..........w
+####.......#
+w..........#
+#..X....X..#
+#..........w
+#..........#
+####....X..#
+#....>>>...#
+#####ww#####
+
+floor 2
+#####.######
+#...  .....#
+####.......
+w..........#
+#..X....X..
+#.......   #
+#...>>>....#
+####....X..#
+#..........#
+###..#ww#..#
+
+floor 3
+llllllllllll
+l..........l
+l..........l
+l....   ...l
+l..........l
+l..........l
+l..........l
+l..........l
+l..........l
+llllllllllll

@@ -1,24 +1,33 @@
 // Turns touches, mouse and keyboard into one simple per-frame sample:
-//   { moveX, moveY, lookX, lookY, turn, fire }
-// main.js turns that into a player command for the simulation.
-export function createInput({ app, touchEl, stick, knob, fireBtn, view, settings }) {
+//   { moveX, moveY, lookX, lookY, turn, fire, ads, reload, swap, interact }
+// reload / swap / interact are "pressed since last frame". main.js turns the sample into
+// a player command for the simulation.
+export function createInput({ app, touchEl, stick, knob, buttons, view, settings }) {
   const c = settings.controls;
   const keys = {};
   let enabled = false;
-  let firingKey = false, firingMouse = false, firingTouch = false, mouseDown = false;
+  let firePulse = false, fireKey = false, fireMouse = false, fireTouch = false, adsMouse = false, adsToggle = false, mouseDown = false;
   let lookX = 0, lookY = 0;
+  let pressed = { reload: false, swap: false, interact: false };
   let joy = { id: null, ox: 0, oy: 0, x: 0, y: 0 };
   let look = { id: null, lx: 0, ly: 0 };
-  let fireId = null;
   const locked = () => document.pointerLockElement === touchEl;
+  const adsActive = () => adsMouse || adsToggle;
+  const lookScale = () => (adsActive() ? c.ads_look_factor : 1);
 
   addEventListener('keydown', e => {
+    if (!enabled) return;
+    if (!keys[e.code]) {
+      if (e.code === 'KeyR') pressed.reload = true;
+      if (e.code === 'KeyQ' || e.code === 'Digit1' || e.code === 'Digit2') pressed.swap = true;
+      if (e.code === 'KeyE' || e.code === 'KeyF') pressed.interact = true;
+    }
     keys[e.code] = true;
-    if (e.code === 'Space') { firingKey = true; e.preventDefault(); }
+    if (e.code === 'Space') { fireKey = true; firePulse = true; e.preventDefault(); }
   });
   addEventListener('keyup', e => {
     keys[e.code] = false;
-    if (e.code === 'Space') firingKey = false;
+    if (e.code === 'Space') fireKey = false;
   });
   addEventListener('contextmenu', e => e.preventDefault());
 
@@ -28,13 +37,14 @@ export function createInput({ app, touchEl, stick, knob, fireBtn, view, settings
       if (!locked()) {
         try { const r = touchEl.requestPointerLock(); if (r && r.catch) r.catch(() => {}); } catch (err) { /* not allowed here */ }
       }
-      mouseDown = true; firingMouse = true;
+      if (e.button === 2) adsMouse = true;
+      else { mouseDown = true; fireMouse = true; firePulse = true; }
       return;
     }
     app.classList.add('touch');
     e.preventDefault();
     const q = view.toLocal(e);
-    if (q.x < view.localW() * .45 && joy.id === null) {
+    if (q.x < view.localW() * 0.42 && joy.id === null) {
       joy = { id: e.pointerId, ox: q.x, oy: q.y, x: 0, y: 0 };
       stick.style.display = 'block'; stick.style.left = q.x + 'px'; stick.style.top = q.y + 'px';
       knob.style.transform = '';
@@ -45,7 +55,7 @@ export function createInput({ app, touchEl, stick, knob, fireBtn, view, settings
 
   touchEl.addEventListener('pointermove', e => {
     if (e.pointerType === 'mouse') {
-      if (!locked() && mouseDown && enabled) { lookX += e.movementX * c.mouse_look_drag; lookY += e.movementY * c.mouse_look_drag; }
+      if (!locked() && mouseDown && enabled) { lookX += e.movementX * c.mouse_look_drag * lookScale(); lookY += e.movementY * c.mouse_look_drag * lookScale(); }
       return;
     }
     const q = view.toLocal(e);
@@ -56,14 +66,17 @@ export function createInput({ app, touchEl, stick, knob, fireBtn, view, settings
       joy.x = dx / m; joy.y = dy / m;
       knob.style.transform = `translate(${dx}px,${dy}px)`;
     } else if (e.pointerId === look.id) {
-      lookX += (q.x - look.lx) * c.touch_look_x;
-      lookY += (q.y - look.ly) * c.touch_look_y;
+      lookX += (q.x - look.lx) * c.touch_look_x * lookScale();
+      lookY += (q.y - look.ly) * c.touch_look_y * lookScale();
       look.lx = q.x; look.ly = q.y;
     }
   });
 
   function endPointer(e) {
-    if (e.pointerType === 'mouse') { mouseDown = false; firingMouse = false; return; }
+    if (e.pointerType === 'mouse') {
+      if (e.button === 2) adsMouse = false; else { mouseDown = false; fireMouse = false; }
+      return;
+    }
     if (e.pointerId === joy.id) { joy = { id: null, ox: 0, oy: 0, x: 0, y: 0 }; stick.style.display = 'none'; }
     if (e.pointerId === look.id) look = { id: null, lx: 0, ly: 0 };
   }
@@ -71,18 +84,34 @@ export function createInput({ app, touchEl, stick, knob, fireBtn, view, settings
   touchEl.addEventListener('pointercancel', endPointer);
 
   document.addEventListener('mousemove', e => {
-    if (locked() && enabled) { lookX += e.movementX * c.mouse_look_locked; lookY += e.movementY * c.mouse_look_locked; }
+    if (locked() && enabled) { lookX += e.movementX * c.mouse_look_locked * lookScale(); lookY += e.movementY * c.mouse_look_locked * lookScale(); }
   });
 
-  fireBtn.addEventListener('pointerdown', e => {
-    e.preventDefault();
-    app.classList.add('touch');
-    fireId = e.pointerId; firingTouch = true; fireBtn.classList.add('on');
-    try { fireBtn.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
-  });
-  const fireUp = e => { if (e.pointerId === fireId) { fireId = null; firingTouch = false; fireBtn.classList.remove('on'); } };
-  fireBtn.addEventListener('pointerup', fireUp);
-  fireBtn.addEventListener('pointercancel', fireUp);
+  // On-screen buttons. FIRE can also be dragged to aim at the same time.
+  const hold = (el, on, off) => {
+    let id = null, lx = 0, ly = 0;
+    el.addEventListener('pointerdown', e => {
+      e.preventDefault(); e.stopPropagation();
+      app.classList.add('touch');
+      id = e.pointerId; const q = view.toLocal(e); lx = q.x; ly = q.y;
+      el.classList.add('on'); on();
+      try { el.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    });
+    el.addEventListener('pointermove', e => {
+      if (e.pointerId !== id || el !== buttons.fire) return;
+      const q = view.toLocal(e);
+      lookX += (q.x - lx) * c.touch_look_x * lookScale(); lookY += (q.y - ly) * c.touch_look_y * lookScale();
+      lx = q.x; ly = q.y;
+    });
+    const up = e => { if (e.pointerId === id) { id = null; el.classList.remove('on'); off(); } };
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointercancel', up);
+  };
+  hold(buttons.fire, () => { fireTouch = true; firePulse = true; }, () => { fireTouch = false; });
+  hold(buttons.ads, () => { adsToggle = !adsToggle; buttons.ads.classList.toggle('active', adsToggle); }, () => {});
+  hold(buttons.reload, () => { pressed.reload = true; }, () => {});
+  hold(buttons.swap, () => { pressed.swap = true; }, () => {});
+  hold(buttons.context, () => { pressed.interact = true; }, () => {});
 
   if (matchMedia('(pointer:coarse)').matches) app.classList.add('touch');
 
@@ -90,9 +119,11 @@ export function createInput({ app, touchEl, stick, knob, fireBtn, view, settings
     setEnabled(on) {
       enabled = on;
       if (!on) {
-        firingKey = firingMouse = firingTouch = mouseDown = false;
+        fireKey = fireMouse = fireTouch = mouseDown = adsMouse = adsToggle = false;
+        buttons.ads.classList.remove('active');
         joy = { id: null, ox: 0, oy: 0, x: 0, y: 0 }; look = { id: null, lx: 0, ly: 0 };
-        stick.style.display = 'none'; fireBtn.classList.remove('on');
+        stick.style.display = 'none';
+        for (const b of Object.values(buttons)) b.classList.remove('on');
         if (document.exitPointerLock && locked()) document.exitPointerLock();
       }
     },
@@ -106,8 +137,14 @@ export function createInput({ app, touchEl, stick, knob, fireBtn, view, settings
       let turn = 0;
       if (keys.ArrowLeft) turn += 1;
       if (keys.ArrowRight) turn -= 1;
-      const out = { moveX, moveY, lookX, lookY, turn, fire: enabled && (firingKey || firingMouse || firingTouch) };
-      lookX = 0; lookY = 0;
+      const out = {
+        moveX, moveY, lookX, lookY, turn,
+        fire: enabled && (firePulse || fireKey || fireMouse || fireTouch),
+        ads: enabled && adsActive(),
+        ...pressed
+      };
+      lookX = 0; lookY = 0; firePulse = false;
+      pressed = { reload: false, swap: false, interact: false };
       return out;
     }
   };

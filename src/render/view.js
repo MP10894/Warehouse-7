@@ -17,23 +17,25 @@ export function createView({ app, viewCanvas, hudCanvas, settings }) {
   }
   renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
   renderer.setPixelRatio(1);
+  renderer.autoClear = false;
 
   const scene = new THREE.Scene();
-  const FOG = 0x0b0c0a;
-  scene.background = new THREE.Color(FOG);
-  scene.fog = new THREE.Fog(FOG, settings.world.fog_near, settings.world.fog_far);
-  const camera = new THREE.PerspectiveCamera(72, 1, 0.05, 80);
+  scene.fog = new THREE.Fog(0xd9c49c, settings.world.fog_near, settings.world.fog_far);
+  scene.add(new THREE.HemisphereLight(0xfff0d0, 0x6a5840, 2.2));
+  const sun = new THREE.DirectionalLight(0xfff4e0, 2.4);
+  sun.position.set(-45, 80, 35);
+  scene.add(sun);
+  const camera = new THREE.PerspectiveCamera(72, 1, 0.05, 140);
   camera.rotation.order = 'YXZ';
   const hud = hudCanvas.getContext('2d');
 
-  // Sideways play: when the browser stays in portrait (rotation lock, or an app that
-  // won't rotate), the whole game is turned 90 degrees so the phone can be held sideways.
   let viewPref = null;
   try { viewPref = localStorage.getItem(VIEW_KEY); } catch (e) { /* storage unavailable */ }
   if (!VIEW_ORDER.includes(viewPref)) viewPref = matchMedia('(pointer:coarse)').matches ? 'cw' : 'off';
   let rotMode = 'off';
+  let baseFov = 72;
 
-  const view = { renderer, scene, camera, hud, W: 320, H: 200 };
+  const view = { renderer, scene, camera, hud, W: 320, H: 200, zoom: 1 };
 
   function applyRotation() {
     const vw = innerWidth, vh = innerHeight, st = app.style;
@@ -49,6 +51,7 @@ export function createView({ app, viewCanvas, hudCanvas, settings }) {
   }
 
   view.localW = () => rotMode === 'off' ? innerWidth : innerHeight;
+  view.localH = () => rotMode === 'off' ? innerHeight : innerWidth;
   /** Convert a screen touch position into game-screen coordinates (accounts for sideways mode). */
   view.toLocal = e => {
     if (rotMode === 'cw') return { x: e.clientY, y: innerWidth - e.clientX };
@@ -58,7 +61,7 @@ export function createView({ app, viewCanvas, hudCanvas, settings }) {
 
   view.resize = () => {
     applyRotation();
-    const sw = view.localW(), sh = rotMode === 'off' ? innerHeight : innerWidth;
+    const sw = view.localW(), sh = view.localH();
     const s = Math.max(2, Math.round(sh / settings.camera.pixel_rows));
     view.W = Math.ceil(sw / s);
     view.H = Math.ceil(sh / s);
@@ -68,7 +71,8 @@ export function createView({ app, viewCanvas, hudCanvas, settings }) {
     camera.aspect = view.W / view.H;
     const c = settings.camera;
     const vfov = 2 * Math.atan(Math.tan(c.target_horizontal_fov / 2 * Math.PI / 180) / camera.aspect) * 180 / Math.PI;
-    camera.fov = Math.max(c.min_vertical_fov, Math.min(c.max_vertical_fov, vfov));
+    baseFov = Math.max(c.min_vertical_fov, Math.min(c.max_vertical_fov, vfov));
+    camera.fov = baseFov;
     camera.updateProjectionMatrix();
   };
 
@@ -80,22 +84,28 @@ export function createView({ app, viewCanvas, hudCanvas, settings }) {
     return VIEW_LABEL[viewPref];
   };
 
-  /** Put the camera at the player's eyes, with bob, recoil, shake and death fall. */
-  view.follow = (player, feedback, dt) => {
-    const f = feedback.state;
+  /** Put the camera at the player's eyes; zoom smoothly when aiming down sights. */
+  view.follow = (player, aim, zoomTarget, shake, dt) => {
     const eyeH = settings.player.eye_height;
-    const eye = player.alive
-      ? eyeH + (player.moving ? Math.sin(f.bobT * 2) * .045 : 0)
-      : Math.max(.35, camera.position.y - dt * 2.2);
-    const sh = f.shake > 0 ? f.shake * .15 : 0;
-    const j = () => (Math.random() - .5) * sh;
+    let eye;
+    if (!player.alive) eye = Math.max(player.y + 0.3, camera.position.y - dt * 2.2);
+    else if (player.downed) eye = player.y + 0.7;
+    else eye = player.y + eyeH;
+    const j = () => (Math.random() - 0.5) * shake * 0.12;
     camera.position.set(player.x + j(), eye + j(), player.z + j());
-    camera.rotation.y = player.yaw;
-    camera.rotation.x = player.pitch + f.recoil * .012;
-    camera.rotation.z = player.alive ? 0 : Math.min(.5, camera.rotation.z + dt * .6);
+    camera.rotation.y = aim.yaw;
+    camera.rotation.x = aim.pitch;
+    camera.rotation.z = player.alive ? 0 : Math.min(0.6, camera.rotation.z + dt * 0.6);
+    view.zoom += (zoomTarget - view.zoom) * Math.min(1, dt * 14);
+    const fov = baseFov * view.zoom;
+    if (Math.abs(camera.fov - fov) > 0.01) { camera.fov = fov; camera.updateProjectionMatrix(); }
   };
 
-  view.render = () => renderer.render(scene, camera);
+  view.render = fp => {
+    renderer.clear();
+    renderer.render(scene, camera);
+    if (fp) { renderer.clearDepth(); renderer.render(fp.scene, fp.camera); }
+  };
 
   addEventListener('resize', view.resize);
   addEventListener('orientationchange', () => setTimeout(view.resize, 250));

@@ -1,0 +1,9 @@
+# Single-storey desert house with a missing wall section and no roof.
+
+floor 0
+###ww###
+#......#
+#..cc..d
+#.......
+w.......
+###..###

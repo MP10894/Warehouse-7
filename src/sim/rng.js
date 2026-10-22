@@ -11,3 +11,19 @@ export function nextRandom(state) {
 
 /** Random number in [a, b) using the world's generator. */
 export const rand = (world, a = 0, b = 1) => a + nextRandom(world.rng) * (b - a);
+
+/** Pick a key from { key: weight } using the world's generator. */
+export function weightedPick(world, weights) {
+  const entries = Object.entries(weights).filter(([, w]) => w > 0);
+  const total = entries.reduce((s, [, w]) => s + w, 0);
+  if (!total) return null;
+  let r = rand(world, 0, total);
+  for (const [k, w] of entries) { if ((r -= w) < 0) return k; }
+  return entries[entries.length - 1][0];
+}
+
+/** Uniform random point in a disc of radius r (used for weapon spread). */
+export function randomInDisc(world, r) {
+  const a = rand(world, 0, Math.PI * 2), d = Math.sqrt(rand(world)) * r;
+  return [Math.cos(a) * d, Math.sin(a) * d];
+}
