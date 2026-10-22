@@ -48,7 +48,7 @@ export function rollLoadout(world, weights, armourChance, armourAmount, type = '
 function sightRange(world, e, p) {
   const def = world.data.enemies[e.type];
   const storm = Math.max(stormAt(world, e.x, e.z), stormAt(world, p.x, p.z));
-  return def.sight_range * (1 - world.data.settings.weather.sight_reduction * storm);
+  return def.sight_range * world.data.settings.difficulty.enemy_sight_factor * (1 - world.data.settings.weather.sight_reduction * storm);
 }
 
 function perceive(world, e) {
@@ -79,7 +79,7 @@ function fireAt(world, e, target, d) {
   const t = d / v;
   const dy = ty + 0.5 * s.ballistics.gravity * (wdef.projectile === 'rocket' ? 0.15 : 1) * t * t - oy;
   const dx = tx - ox, dz = tz - oz, l = Math.hypot(dx, dy, dz);
-  let err = (def.aim_error_base + def.aim_error_per_metre * d) * (target.moving ? 1.4 : 1);
+  let err = (def.aim_error_base + def.aim_error_per_metre * d) * (target.moving ? 1.4 : 1) * s.difficulty.enemy_aim_factor;
   if (Math.max(stormAt(world, e.x, e.z), stormAt(world, tx, tz)) > 0.3) err *= s.weather.aim_error_factor;
   const dir = spreadDir(world, [dx / l, dy / l, dz / l], err);
   spawnProjectile(world, e, wdef, ox + dir[0] * 0.4, oy + dir[1] * 0.4, oz + dir[2] * 0.4, dir);
@@ -120,7 +120,7 @@ export function updateEnemy(world, e, dt) {
     e.seeT = 0.25;
     const p = perceive(world, e);
     if (p) {
-      if (!e.sees) e.reactT = def.reaction_time * rand(world, 0.7, 1.3);
+      if (!e.sees) e.reactT = def.reaction_time * world.data.settings.difficulty.enemy_reaction_factor * rand(world, 0.7, 1.3);
       e.sees = true; e.targetId = p.id; e.alert = true;
       e.lastSeen = { x: p.x, y: p.y, z: p.z }; e.lostT = 0;
     } else {

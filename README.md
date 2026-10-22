@@ -37,6 +37,12 @@ Other commands:
 | `data/materials.csv` | How tough each breakable wall, crate and sandbag is |
 | `data/settings.json` | Player speed, look sensitivity, field of view, recoil and bloom feel, wave timing, weather |
 
+**While playing**, the **TUNE** button (or `T` on a keyboard) opens a tuning panel: sliders
+for look sensitivity, field of view, detail, recoil, spread, enemy difficulty and wave
+timing. The game pauses while it's open, changes apply instantly and are remembered on
+that device, and **Copy values** gives a short list to send back so the numbers can be
+written into `settings.json` for everyone. It also shows the frame rate.
+
 The CSV files open in Excel. Save them as CSV; both comma and semicolon formats work.
 
 Other files refer to a weapon by its **id**, made from its name in the workbook: lower

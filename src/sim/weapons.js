@@ -135,7 +135,8 @@ export function updateProjectiles(world, dt) {
         emit(world, { type: 'hitConfirm', playerId: owner.id, head: hit.head });
       }
       emit(world, { type: 'impact', kind: 'flesh', x: hit.x, y: hit.y, z: hit.z, nx: hit.nx, ny: hit.ny, nz: hit.nz });
-      damageActor(world, hit.actor, wdef.damage_health, wdef.damage_armour, owner, hit.head);
+      const k = pr.team === 'enemy' ? world.data.settings.difficulty.enemy_damage_factor : 1;
+      damageActor(world, hit.actor, wdef.damage_health * k, wdef.damage_armour * k, owner, hit.head);
     } else {
       const pid = hit.kind === 'block' ? world.pieceOf[hit.cell] : 0;
       const piece = pid ? world.pieces[pid - 1] : null;

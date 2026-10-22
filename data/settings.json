@@ -28,7 +28,8 @@
     "mouse_look_drag": 0.004,
     "joystick_radius_px": 46,
     "max_pitch": 1.35,
-    "ads_look_factor": 0.5
+    "ads_look_factor": 0.5,
+    "look_multiplier": 1.0
   },
   "camera": {
     "target_horizontal_fov": 100,
@@ -79,5 +80,11 @@
     "fade_time": 6,
     "sight_reduction": 0.75,
     "aim_error_factor": 2
+  },
+  "difficulty": {
+    "enemy_aim_factor": 1.0,
+    "enemy_reaction_factor": 1.0,
+    "enemy_sight_factor": 1.0,
+    "enemy_damage_factor": 1.0
   }
 }

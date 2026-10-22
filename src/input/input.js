@@ -13,7 +13,7 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
   let look = { id: null, lx: 0, ly: 0 };
   const locked = () => document.pointerLockElement === touchEl;
   const adsActive = () => adsMouse || adsToggle;
-  const lookScale = () => (adsActive() ? c.ads_look_factor : 1);
+  const lookScale = () => (c.look_multiplier ?? 1) * (adsActive() ? c.ads_look_factor : 1);
 
   addEventListener('keydown', e => {
     if (!enabled) return;

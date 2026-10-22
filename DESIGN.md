@@ -248,6 +248,7 @@ tag `warehouse-prototype`.
 | 2026-10-22 | Health regenerates to 50 over 3 s after 7 s without damage (difficulty was too high) |
 | 2026-10-22 | Workbook renamed Game Data.xlsx with a Weapons tab and an Enemies tab |
 | 2026-10-22 | Insurgents tuned on the Enemies tab: reaction 0.9 s, aim error 2° + 1.2° per 10 m, carry only AK-47 or RPG-7 |
+| 2026-10-22 | In-game tuning panel and frame-rate counter for play-testing; tuned values are sent back and written into settings.json |
 
 ## Open questions
 

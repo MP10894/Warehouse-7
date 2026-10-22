@@ -22,6 +22,7 @@ import { createInput } from './input/input.js';
 import { createAudio } from './audio/audio.js';
 import { createDomHud } from './ui/dom-hud.js';
 import { createScreens } from './ui/screens.js';
+import { createTuning } from './ui/tuning.js';
 
 const LOCAL_ID = 'p1';
 const S = DATA.settings;
@@ -37,6 +38,15 @@ const newWorld = () => createWorld({ data: DATA, levelId: S.level, seed: (Math.r
 if (!view) {
   screens.showError('No WebGL', 'This browser could not start WebGL, which the game needs.');
 } else {
+  // tuning first: values saved on this device must be in place before the world is made
+  let paused = false;
+  const tuning = createTuning({
+    settings: S,
+    onOpen: () => { paused = true; input.setEnabled(false); },
+    onClose: () => { paused = false; acc = 0; if (mode === 'playing') input.setEnabled(true); },
+    onChange: path => { if (path.startsWith('camera.')) view.resize(); }
+  });
+  view.resize();
   let world = newWorld();
   let mode = 'menu';
   const tex = makeTextures();
@@ -60,7 +70,9 @@ if (!view) {
   const buttons = { fire: $('fire'), ads: $('ads'), reload: $('reload'), swap: $('swap'), context: $('context') };
   const input = createInput({ app, touchEl: $('touch'), stick: $('stick'), knob: $('knob'), buttons, view, settings: S });
   const aim = { yaw: 0, pitch: 0 };
-  let acc = 0, shake = 0;
+  let acc = 0, shake = 0, recoilDebt = 0;
+  let fpsT = 0, fpsFrames = 0;
+  const fpsEl = $('fps');
   const local = () => world.players.find(p => p.id === LOCAL_ID);
 
   function begin() {
@@ -70,9 +82,10 @@ if (!view) {
     worldView.reset(); effects.reset();
     const p = local();
     aim.yaw = p.yaw; aim.pitch = 0;
-    acc = 0; shake = 0;
+    acc = 0; shake = 0; recoilDebt = 0;
     mode = 'playing';
     screens.hide();
+    tuning.setAvailable(true);
     input.setEnabled(true);
     domHud.toast('SURVIVE — CLAIM A BASE');
     setTimeout(() => { $('hint').hidden = true; }, 12000);
@@ -88,7 +101,7 @@ if (!view) {
     last = now;
     const p = local();
 
-    if (mode === 'playing') {
+    if (mode === 'playing' && !paused) {
       const inp = input.sample();
       aim.yaw += -inp.lookX + inp.turn * 2.4 * dt;
       aim.pitch = Math.max(-S.controls.max_pitch, Math.min(S.controls.max_pitch, aim.pitch - inp.lookY));
@@ -106,11 +119,16 @@ if (!view) {
             ev._applied = true;
             aim.pitch = Math.min(S.controls.max_pitch, aim.pitch + ev.kick);
             aim.yaw += ev.side;
+            recoilDebt += ev.kick;
           }
         }
       }
       if (steps === 5) acc = 0;
-      if (S.ballistics.recoil_recovery > 0) aim.pitch -= 0; // reserved for a tuning option
+      // optional recoil recovery: the view drifts back down by a share of the kick
+      if (S.ballistics.recoil_recovery > 0 && recoilDebt > 0) {
+        const back = recoilDebt * Math.min(1, S.ballistics.recoil_recovery * 8 * dt);
+        aim.pitch -= back; recoilDebt -= back;
+      } else recoilDebt = 0;
 
       for (const ev of world.events.splice(0)) {
         effects.handle(ev, world);
@@ -125,6 +143,7 @@ if (!view) {
         if (ev.type === 'status') {
           mode = world.status;
           input.setEnabled(false);
+          tuning.setAvailable(false);
           screens.showResults(world, p);
         }
       }
@@ -143,6 +162,15 @@ if (!view) {
     hud.draw(view.hud, view.W, view.H, mode === 'playing' ? p : null, world, dt);
     minimap.draw(world, p, now);
     domHud.frame(dt, world, p, weatherFx.level * 0.8);
+
+    fpsFrames++; fpsT += (now - (frame.prev || now)) / 1000; frame.prev = now;
+    if (fpsT >= 0.5) {
+      const fps = Math.round(fpsFrames / fpsT);
+      fpsEl.hidden = !tuning.showFps;
+      fpsEl.textContent = `${fps} fps · ${view.W}×${view.H}`;
+      fpsEl.classList.toggle('slow', fps < 40);
+      fpsT = 0; fpsFrames = 0;
+    }
   }
 
   aim.yaw = local().yaw;
