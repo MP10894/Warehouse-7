@@ -17,7 +17,7 @@ export function createPlayer(world, id, spawn) {
     slots: [{ w: w.id, mag: w.mag_size }, null], active: 0,
     reserve: { [w.calibre]: w.max_total - w.mag_size },
     reloadT: 0, swapT: 0, fireCd: 0, bloom: 0, trigger: false, ads: false, moving: false,
-    carrying: null, context: null,
+    carrying: null, context: null, lastHurtAt: 0, regenRate: 0,
     stats: { shots: 0, hits: 0, kills: 0 }
   };
 }
@@ -123,6 +123,18 @@ function doContext(world, p, ctx) {
   }
 }
 
+/**
+ * Health slowly comes back after a while without being hit, but only up to a cap
+ * (settings: regen_delay seconds without damage, then up to regen_cap health over
+ * regen_duration seconds). Armour never regenerates.
+ */
+function regenerate(world, p, dt) {
+  const s = world.data.settings.player;
+  if (p.hp >= s.regen_cap || world.time - p.lastHurtAt < s.regen_delay) { p.regenRate = 0; return; }
+  if (!p.regenRate) p.regenRate = (s.regen_cap - p.hp) / s.regen_duration;
+  p.hp = Math.min(s.regen_cap, p.hp + p.regenRate * dt);
+}
+
 /** Apply one tick of a player's command: { move: {x, y}, yaw, pitch, fire, ads, reload, swap, interact } */
 export function updatePlayer(world, p, cmd, dt) {
   const s = world.data.settings;
@@ -133,6 +145,7 @@ export function updatePlayer(world, p, cmd, dt) {
   }
   if (!p.alive) { p.moving = false; return; }
   cmd = cmd || {};
+  regenerate(world, p, dt);
   if (cmd.yaw !== undefined) p.yaw = cmd.yaw;
   if (cmd.pitch !== undefined) p.pitch = Math.max(-s.controls.max_pitch, Math.min(s.controls.max_pitch, cmd.pitch));
   p.ads = !!cmd.ads;

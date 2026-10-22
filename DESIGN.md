@@ -82,6 +82,8 @@ well-defended base-building items:
   rate. (Example: 10 armour left, bullet does 50 to armour and 40 to health → armour
   absorbs 20% of the bullet, health takes 80% of 40 = 32.)
 - **Headshots:** ×2 damage, applied to both armour damage and health damage.
+- **Health regeneration:** after **7 seconds** without taking damage, health climbs back
+  to **50** over **3 seconds** (never above 50; armour never regenerates).
 - **Death:** permanent in single player (the level is lost). In co-op a downed player can
   be revived by the other within **15 seconds**; if both are down, the level is lost.
 - **Start:** each player starts with a pistol.
@@ -241,6 +243,7 @@ tag `warehouse-prototype`.
 | 2026-10-22 | The weapons workbook is the single source: `data/Weapons.xlsx`, read directly by the game (no CSV copy) |
 | 2026-10-22 | Bullet speed factor set to 100%: the sheet's muzzle velocities are already about half of real |
 | 2026-10-22 | RPG-7 area of effect 30 (3 m blast); Sig P320 recoil lowered to 5 |
+| 2026-10-22 | Health regenerates to 50 over 3 s after 7 s without damage (difficulty was too high) |
 
 ## Open questions
 

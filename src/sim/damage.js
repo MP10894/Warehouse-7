@@ -42,6 +42,8 @@ export function damageActor(world, a, dmgHealth, dmgArmour, source, head = false
   const mult = head ? world.data.settings.ballistics.headshot_multiplier : 1;
   const before = a.hp + a.armour;
   applyHit(a, dmgHealth * mult, dmgArmour * mult);
+  a.lastHurtAt = world.time;
+  a.regenRate = 0;
   emit(world, {
     type: 'hurt', targetId: a.id, team: a.kind, amount: Math.round(before - a.hp - a.armour), head,
     fromX: source ? source.x : a.x, fromZ: source ? source.z : a.z

@@ -183,6 +183,23 @@ check(w0.players.length === 1 && w0.enemies.length >= 10, `level built: ${w0.ene
   check(w2.status === 'won', `surviving the 5-minute timer wins the level (status: ${w2.status})`);
 }
 
+// --- health regeneration: after 7 s without damage, back up to 50 over 3 s
+{
+  const w = fresh(); noEnemies(w);
+  const p = w.players[0];
+  run(w, 1, () => ({}));
+  const { damageActor } = await import('../src/sim/damage.js');
+  damageActor(w, p, 90, 0, null);
+  run(w, 6.9, () => ({}));
+  const waited = p.hp;
+  run(w, 1.6, () => ({}));
+  const half = p.hp;
+  run(w, 2, () => ({}));
+  check(waited === 10 && half > 10 && half < 50 && Math.abs(p.hp - 50) < 1e-6, `health regenerates after 7 s (10 → ${half.toFixed(0)} → ${p.hp.toFixed(0)}), capped at 50`);
+  p.hp = 80; run(w, 10, () => ({}));
+  check(p.hp === 80, 'no regeneration above 50');
+}
+
 // --- co-op ready: downed and revive
 {
   const w = fresh({ playerIds: ['p1', 'p2'] }); noEnemies(w);
