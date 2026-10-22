@@ -1,8 +1,8 @@
 // Loads everything in /data into one object. Vite bundles these files, and while
 // `npm run dev` is running, saving any of them reloads the game automatically.
-// Weapons come straight from the Excel workbook, converted when the game is built
-// (see the plugin in vite.config.js and src/data/xlsx.js).
-import weaponsRows from 'virtual:weapons';
+// Weapons (and enemies, once the workbook has an Enemies tab) come straight from the
+// Excel workbook, converted when the game is built (see vite.config.js and src/data/xlsx.js).
+import gameData from 'virtual:gamedata';
 import materialsCsv from '../../data/materials.csv?raw';
 import enemiesCsv from '../../data/enemies.csv?raw';
 import wavesCsv from '../../data/waves.csv?raw';
@@ -24,4 +24,4 @@ for (const [path, text] of Object.entries(files)) {
 }
 for (const id of Object.keys(levels)) if (!levels[id].json) delete levels[id];
 
-export const DATA = buildData({ weaponsRows, materialsCsv, enemiesCsv, wavesCsv, settings, levels });
+export const DATA = buildData({ weaponsRows: gameData.weapons, enemiesRows: gameData.enemies, materialsCsv, enemiesCsv, wavesCsv, settings, levels });

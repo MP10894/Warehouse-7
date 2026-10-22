@@ -2,7 +2,9 @@
 // Usage: npm run test:sim
 import { readFileSync, readdirSync } from 'node:fs';
 import { buildData } from '../src/data/parse.js';
-import { weaponsFromXlsx } from '../src/data/xlsx.js';
+import { existsSync } from 'node:fs';
+import { gameDataFromXlsx, readSheets } from '../src/data/xlsx.js';
+import { parseCsv, byKey } from '../src/data/parse.js';
 import { createWorld } from '../src/sim/world.js';
 import { stepWorld } from '../src/sim/step.js';
 import { groundAt } from '../src/sim/body.js';
@@ -14,8 +16,10 @@ const read = p => readFileSync(new URL('../' + p, import.meta.url), 'utf8');
 const lv = 'data/levels/slice/';
 const buildings = {};
 for (const f of readdirSync(new URL('../' + lv + 'buildings', import.meta.url))) buildings[f] = read(lv + 'buildings/' + f);
+const workbook = ['Game Data.xlsx', 'Weapons.xlsx'].map(f => new URL('../data/' + f, import.meta.url)).find(u => existsSync(u));
+const gameData = gameDataFromXlsx(readFileSync(workbook), byKey(parseCsv(read('data/enemies.csv')), 'id'));
 const data = buildData({
-  weaponsRows: weaponsFromXlsx(readFileSync(new URL('../data/Weapons.xlsx', import.meta.url))), materialsCsv: read('data/materials.csv'),
+  weaponsRows: gameData.weapons, enemiesRows: gameData.enemies, materialsCsv: read('data/materials.csv'),
   enemiesCsv: read('data/enemies.csv'), wavesCsv: read('data/waves.csv'),
   settings: JSON.parse(read('data/settings.json')),
   levels: { slice: { json: read(lv + 'level.json'), terrain: read(lv + 'terrain.txt'), ground: read(lv + 'ground.txt'), buildings } }

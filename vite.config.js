@@ -1,24 +1,31 @@
 import { defineConfig } from 'vite';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { weaponsFromXlsx } from './src/data/xlsx.js';
+import { gameDataFromXlsx } from './src/data/xlsx.js';
+import { parseCsv, byKey } from './src/data/parse.js';
 
-const WEAPONS_XLSX = fileURLToPath(new URL('./data/Weapons.xlsx', import.meta.url));
+const file = name => fileURLToPath(new URL(`./data/${name}`, import.meta.url));
+// The workbook was called Weapons.xlsx at first; Game Data.xlsx is the new name.
+const WORKBOOKS = [file('Game Data.xlsx'), file('Weapons.xlsx')];
+const ENEMIES_CSV = file('enemies.csv');
 
-// Lets the game import the weapons workbook directly: `import rows from 'virtual:weapons'`.
-// While `npm run dev` runs, saving Weapons.xlsx in Excel reloads the game.
-function weaponsWorkbook() {
-  const id = 'virtual:weapons', resolved = '\0virtual:weapons';
+// Lets the game import the Excel workbook directly: `import data from 'virtual:gamedata'`.
+// While `npm run dev` runs, saving the workbook in Excel reloads the game.
+function gameDataWorkbook() {
+  const id = 'virtual:gamedata', resolved = '\0virtual:gamedata';
   return {
-    name: 'weapons-workbook',
+    name: 'game-data-workbook',
     resolveId(src) { return src === id ? resolved : null; },
     load(src) {
       if (src !== resolved) return null;
-      this.addWatchFile(WEAPONS_XLSX);
-      return `export default ${JSON.stringify(weaponsFromXlsx(readFileSync(WEAPONS_XLSX)))};`;
+      const path = WORKBOOKS.find(existsSync);
+      if (!path) throw new Error('No game data workbook found: expected data/Game Data.xlsx');
+      for (const p of WORKBOOKS) this.addWatchFile(p);
+      const defaults = byKey(parseCsv(readFileSync(ENEMIES_CSV, 'utf8')), 'id');
+      return `export default ${JSON.stringify(gameDataFromXlsx(readFileSync(path), defaults))};`;
     },
     handleHotUpdate(ctx) {
-      if (ctx.file === WEAPONS_XLSX) {
+      if (WORKBOOKS.includes(ctx.file)) {
         const mod = ctx.server.moduleGraph.getModuleById(resolved);
         if (mod) ctx.server.moduleGraph.invalidateModule(mod);
         ctx.server.ws.send({ type: 'full-reload' });
@@ -32,6 +39,6 @@ function weaponsWorkbook() {
 // GitHub Pages, a Capacitor Android wrapper, or a plain web host.
 export default defineConfig({
   base: './',
-  plugins: [weaponsWorkbook()],
+  plugins: [gameDataWorkbook()],
   build: { target: 'es2020', chunkSizeWarningLimit: 1000 }
 });

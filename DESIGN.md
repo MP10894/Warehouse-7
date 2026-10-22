@@ -95,7 +95,7 @@ well-defended base-building items:
 - Dead enemies drop their weapon and some ammunition.
 - **Ammunition is shared by calibre** (any 5.56 mm weapon uses the same pool).
 - **Aim down sights** on every weapon.
-- Attributes per weapon (in `data/Weapons.xlsx`, which the game reads directly):
+- Attributes per weapon (Weapons tab of `data/Game Data.xlsx`, read directly by the game):
   magazine size; maximum carried ammunition (including the loaded magazine); reload time;
   damage to health; damage to armour; damage to environment; area of effect (0–100,
   where **100 = 10 m radius**); fire mode (semi or automatic); rate of fire; recoil (0–100);
@@ -206,8 +206,8 @@ tag `warehouse-prototype`.
 
 | File | Controls |
 |---|---|
-| `data/Weapons.xlsx` | All weapon attributes; the game reads the workbook directly |
-| `data/enemies.csv` | Enemy health, speed, sight, hearing, reaction time, accuracy, burst lengths, ammo drops |
+| `data/Game Data.xlsx` | Weapons tab and Enemies tab, read directly by the game (`Weapons.xlsx` still works until renamed) |
+| `data/enemies.csv` | Fallback for any enemy value the Enemies tab leaves out |
 | `data/waves.csv` | Size, armour and weapon mix of each wave |
 | `data/materials.csv` | Health and armour of each breakable material, and whether it leaves rubble |
 | `data/settings.json` | Player, controls, camera, ballistics (bullet speed factor, recoil, bloom), waves timing, base, weather |
@@ -244,6 +244,7 @@ tag `warehouse-prototype`.
 | 2026-10-22 | Bullet speed factor set to 100%: the sheet's muzzle velocities are already about half of real |
 | 2026-10-22 | RPG-7 area of effect 30 (3 m blast); Sig P320 recoil lowered to 5 |
 | 2026-10-22 | Health regenerates to 50 over 3 s after 7 s without damage (difficulty was too high) |
+| 2026-10-22 | Workbook renamed Game Data.xlsx with a Weapons tab and an Enemies tab |
 
 ## Open questions
 

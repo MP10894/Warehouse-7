@@ -1,6 +1,7 @@
-// Reads data/Weapons.xlsx so Martial can keep editing his formatted Excel workbook.
-// Runs at build time (Vite plugin) and in the tests, never in the browser.
-// An .xlsx file is a zip of XML files; this reads the first sheet's values. Cells with
+// Reads the game-data workbook (data/Game Data.xlsx, or the older data/Weapons.xlsx) so
+// Martial can keep editing his formatted Excel file. Runs at build time (Vite plugin)
+// and in the tests, never in the browser.
+// An .xlsx file is a zip of XML files; this reads the values of each tab. Cells with
 // simple formulas (e.g. =374/2 or =+C4*6) are worked out here if Excel didn't store
 // the result.
 import { unzipSync, strFromU8 } from 'fflate';
@@ -38,20 +39,7 @@ function evalFormula(f, getCell, where) {
   return v;
 }
 
-/** Returns the first sheet as a map { 'B3': value, ... } */
-export function readFirstSheet(buffer) {
-  const files = unzipSync(new Uint8Array(buffer));
-  const text = name => (files[name] ? strFromU8(files[name]) : '');
-  const shared = [];
-  for (const si of text('xl/sharedStrings.xml').match(/<si>[\s\S]*?<\/si>/g) || []) {
-    shared.push(decode((si.match(/<t[^>]*>([\s\S]*?)<\/t>/g) || []).map(t => t.replace(/<[^>]+>/g, '')).join('')));
-  }
-  // first sheet in workbook order
-  const wb = text('xl/workbook.xml'), rels = text('xl/_rels/workbook.xml.rels');
-  const rid = (wb.match(/<sheet [^>]*r:id="([^"]+)"/) || [])[1];
-  let target = rid && (rels.match(new RegExp(`Id="${rid}"[^>]*Target="([^"]+)"`)) || rels.match(new RegExp(`Target="([^"]+)"[^>]*Id="${rid}"`)) || [])[1];
-  target = target ? 'xl/' + target.replace(/^\/?xl\//, '') : 'xl/worksheets/sheet1.xml';
-  const sheet = text(target);
+function parseSheet(sheet, shared, name) {
   const raw = {};
   for (const m of sheet.matchAll(/<c r="([A-Z]+\d+)"([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g)) {
     const [, ref, attrs, inner = ''] = m;
@@ -68,11 +56,58 @@ export function readFirstSheet(buffer) {
   }
   const get = ref => {
     const v = raw[ref];
-    if (v && typeof v === 'object') { raw[ref] = evalFormula(v.formula, get, ref); return raw[ref]; }
+    if (v && typeof v === 'object') { raw[ref] = evalFormula(v.formula, get, `${name}!${ref}`); return raw[ref]; }
     return v;
   };
   for (const ref of Object.keys(raw)) get(ref);
   return raw;
+}
+
+/** Every tab of the workbook, in order: [{ name, cells: { 'B3': value, ... } }] */
+export function readSheets(buffer) {
+  const files = unzipSync(new Uint8Array(buffer));
+  const text = name => (files[name] ? strFromU8(files[name]) : '');
+  const shared = [];
+  for (const si of text('xl/sharedStrings.xml').match(/<si>[\s\S]*?<\/si>/g) || []) {
+    shared.push(decode((si.match(/<t[^>]*>([\s\S]*?)<\/t>/g) || []).map(t => t.replace(/<[^>]+>/g, '')).join('')));
+  }
+  const wb = text('xl/workbook.xml'), rels = text('xl/_rels/workbook.xml.rels');
+  const out = [];
+  for (const m of wb.matchAll(/<sheet [^>]*?\/>/g)) {
+    const tag = m[0];
+    const name = decode((tag.match(/name="([^"]*)"/) || [])[1] || `Sheet${out.length + 1}`);
+    const rid = (tag.match(/r:id="([^"]+)"/) || [])[1];
+    let target = rid && (rels.match(new RegExp(`Id="${rid}"[^>]*Target="([^"]+)"`)) || rels.match(new RegExp(`Target="([^"]+)"[^>]*Id="${rid}"`)) || [])[1];
+    target = target ? 'xl/' + target.replace(/^\/?xl\//, '') : `xl/worksheets/sheet${out.length + 1}.xml`;
+    out.push({ name, cells: parseSheet(text(target), shared, name) });
+  }
+  return out;
+}
+
+const cellPos = r => { const m = r.match(/^([A-Z]+)(\d+)$/); return { r, col: colIndex(m[1]), row: Number(m[2]) }; };
+const letter = c => { let s = ''; c++; while (c) { const m = (c - 1) % 26; s = String.fromCharCode(65 + m) + s; c = Math.floor((c - 1) / 26); } return s; };
+
+/** Find the header row (the row holding one of `titles`) and map columns to fields. */
+function readTable(cells, titles, columns, required, label) {
+  const refs = Object.keys(cells).map(cellPos);
+  const head = refs.find(x => titles.includes(String(cells[x.r]).trim().toLowerCase()));
+  if (!head) throw new Error(`${label}: no header cell called "${titles[0]}" found`);
+  const map = {};
+  for (const x of refs.filter(x => x.row === head.row).sort((a, b) => a.col - b.col)) {
+    const h = String(cells[x.r]).trim().toLowerCase();
+    const hit = columns.find(([key, test]) => !(key in map) && test(h));
+    if (hit) map[hit[0]] = x.col;
+  }
+  const missing = required.filter(k => !(k in map));
+  if (missing.length) throw new Error(`${label}: can't find columns for ${missing.join(', ')}`);
+  const rows = [];
+  for (let row = head.row + 1; ; row++) {
+    const name = cells[letter(map.name) + row];
+    if (name === undefined || name === '') break;
+    const v = k => (k in map ? cells[letter(map[k]) + row] : undefined);
+    rows.push({ name: String(name), v, num: (k, d) => { const x = v(k); return typeof x === 'number' ? x : d; } });
+  }
+  return rows;
 }
 
 // Which column means what. Matched on the header text, so columns can be reordered
@@ -100,31 +135,13 @@ const REQUIRED = ['name', 'mag_size', 'max_total', 'reload_time', 'damage_health
 /** Weapon id used in other files: lower case, spaces become _, hyphens dropped ('RPG-7' → rpg7, 'Sig P320' → sig_p320). */
 export const weaponId = name => String(name).toLowerCase().replace(/-/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
 
-/** Turn the weapons sheet into the rows the game uses. */
-export function weaponsFromXlsx(buffer) {
-  const cells = readFirstSheet(buffer);
-  const refs = Object.keys(cells).map(r => { const m = r.match(/^([A-Z]+)(\d+)$/); return { r, col: colIndex(m[1]), row: Number(m[2]) }; });
-  const head = refs.find(x => String(cells[x.r]).trim().toLowerCase() === 'weapon');
-  if (!head) throw new Error('Weapons.xlsx: no header cell called "Weapon" found');
-  const map = {};
-  for (const x of refs.filter(x => x.row === head.row)) {
-    const h = String(cells[x.r]).trim().toLowerCase();
-    const hit = COLUMNS.find(([key, test]) => !(key in map) && test(h));
-    if (hit) map[hit[0]] = x.col;
-  }
-  const missing = REQUIRED.filter(k => !(k in map));
-  if (missing.length) throw new Error(`Weapons.xlsx: can't find columns for ${missing.join(', ')}`);
-  const letter = c => { let s = ''; c++; while (c) { const m = (c - 1) % 26; s = String.fromCharCode(65 + m) + s; c = Math.floor((c - 1) / 26); } return s; };
-  const rows = [];
-  for (let row = head.row + 1; ; row++) {
-    const name = cells[letter(map.name) + row];
-    if (name === undefined || name === '') break;
-    const v = k => (k in map ? cells[letter(map[k]) + row] : undefined);
-    const num = (k, dflt) => { const x = v(k); return typeof x === 'number' ? x : dflt; };
+/** Turn the Weapons tab into the rows the game uses. */
+export function weaponsFromSheet(cells, label = 'Weapons tab') {
+  return readTable(cells, ['weapon'], COLUMNS, REQUIRED, label).map(({ name, v, num }) => {
     const mode = String(v('fire_mode') || 'semi').toLowerCase();
-    rows.push({
+    return {
       id: weaponId(name),
-      name: String(name),
+      name,
       calibre: String(v('calibre')),
       fire_mode: mode.startsWith('auto') ? 'auto' : 'semi',
       mag_size: num('mag_size', 1),
@@ -140,7 +157,70 @@ export function weaponsFromXlsx(buffer) {
       muzzle_velocity: num('muzzle_velocity', 300),
       projectile: String(v('projectile') || 'bullet').toLowerCase().includes('rocket') ? 'rocket' : 'bullet',
       ads_zoom: num('ads_zoom', 0.7)
-    });
-  }
-  return rows;
+    };
+  });
 }
+
+// Enemies tab. Any column left out keeps the value from data/enemies.csv, so the tab can
+// start small. Aim error is written in degrees in Excel (easier to picture) and
+// converted here.
+const ENEMY_COLUMNS = [
+  ['name', h => h === 'enemy' || h === 'name' || h === 'enemy type'],
+  ['health', h => h.includes('health')],
+  ['move_speed', h => h.includes('speed')],
+  ['sight_range', h => h.includes('sight') || h.includes('vision')],
+  ['hearing_range', h => h.includes('hearing')],
+  ['reaction_time', h => h.includes('reaction')],
+  ['aim_error_per_10m_deg', h => h.includes('aim') && (h.includes('per') || h.includes('distance'))],
+  ['aim_error_deg', h => h.includes('aim') || h.includes('accuracy')],
+  ['burst_min', h => h.includes('burst') && !h.includes('pause') && h.includes('min')],
+  ['burst_max', h => h.includes('burst') && !h.includes('pause') && h.includes('max')],
+  ['burst_pause_min', h => h.includes('pause') && h.includes('min')],
+  ['burst_pause_max', h => h.includes('pause') && h.includes('max')],
+  ['preferred_range', h => h.includes('preferred') || h.includes('fighting distance')],
+  ['ammo_drop_min', h => h.includes('ammo') && h.includes('min')],
+  ['ammo_drop_max', h => h.includes('ammo') && h.includes('max')]
+];
+const DEG = Math.PI / 180;
+
+export function enemiesFromSheet(cells, defaults = {}, label = 'Enemies tab') {
+  return readTable(cells, ['enemy', 'name', 'enemy type'], ENEMY_COLUMNS, ['name'], label).map(({ name, num }) => {
+    const id = weaponId(name);
+    const base = defaults[id] || Object.values(defaults)[0] || {};
+    return {
+      ...base,
+      id, name,
+      health: num('health', base.health ?? 100),
+      move_speed: num('move_speed', base.move_speed ?? 3.2),
+      sight_range: num('sight_range', base.sight_range ?? 45),
+      hearing_range: num('hearing_range', base.hearing_range ?? 30),
+      reaction_time: num('reaction_time', base.reaction_time ?? 0.6),
+      aim_error_base: typeof num('aim_error_deg') === 'number' ? num('aim_error_deg') * DEG : base.aim_error_base ?? 0.02,
+      aim_error_per_metre: typeof num('aim_error_per_10m_deg') === 'number' ? num('aim_error_per_10m_deg') * DEG / 10 : base.aim_error_per_metre ?? 0.0012,
+      burst_min: num('burst_min', base.burst_min ?? 2),
+      burst_max: num('burst_max', base.burst_max ?? 5),
+      burst_pause_min: num('burst_pause_min', base.burst_pause_min ?? 0.6),
+      burst_pause_max: num('burst_pause_max', base.burst_pause_max ?? 1.6),
+      preferred_range: num('preferred_range', base.preferred_range ?? 18),
+      ammo_drop_min: num('ammo_drop_min', base.ammo_drop_min ?? 10),
+      ammo_drop_max: num('ammo_drop_max', base.ammo_drop_max ?? 30)
+    };
+  });
+}
+
+/**
+ * Read the whole game-data workbook: the Weapons tab (or the first tab) and, if there is
+ * one, the Enemies tab. Returns { weapons, enemies } (enemies is null without a tab).
+ */
+export function gameDataFromXlsx(buffer, enemyDefaults = {}) {
+  const sheets = readSheets(buffer);
+  const weaponsTab = sheets.find(s => /weapon/i.test(s.name)) || sheets[0];
+  const enemiesTab = sheets.find(s => /enem/i.test(s.name));
+  return {
+    weapons: weaponsFromSheet(weaponsTab.cells, `Tab "${weaponsTab.name}"`),
+    enemies: enemiesTab ? enemiesFromSheet(enemiesTab.cells, enemyDefaults, `Tab "${enemiesTab.name}"`) : null
+  };
+}
+
+/** Older name kept for the tests: weapons only. */
+export const weaponsFromXlsx = buffer => gameDataFromXlsx(buffer).weapons;
