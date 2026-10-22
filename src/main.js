@@ -16,6 +16,7 @@ import { walkPlayer } from './sim/players.js';
 import { createView } from './render/view.js';
 import { makeTextures } from './render/textures.js';
 import { loadArt } from './render/assets.js';
+import { createRecoil } from './input/recoil.js';
 import { buildTerrain } from './render/terrain-mesh.js';
 import { createBlockMeshes } from './render/blocks-mesh.js';
 import { createWorldView } from './render/world-view.js';
@@ -90,7 +91,15 @@ if (!view) {
   const buttons = { fire: $('fire'), ads: $('ads'), reload: $('reload'), swap: $('swap'), context: $('context') };
   const input = createInput({ app, touchEl: $('touch'), stick: $('stick'), knob: $('knob'), buttons, view, settings: S });
   const aim = { yaw: 0, pitch: 0 };
-  let acc = 0, shake = 0, recoilDebt = 0;
+  let acc = 0, shake = 0;
+  const recoil = createRecoil();
+  // a shot's kick moves the aim now; recoil.update brings it back afterwards
+  const applyKick = ev => {
+    const before = aim.pitch;
+    aim.pitch = Math.min(S.controls.max_pitch, aim.pitch + ev.kick);
+    aim.yaw += ev.side;
+    recoil.kick(aim.pitch - before, ev.side, S.ballistics.recoil_return ?? 1);
+  };
   let fpsT = 0, fpsFrames = 0, prevFrame = 0;
   const fpsEl = $('fps'), partnerEl = $('partner'), tagEl = $('partnerTag'), tagText = tagEl.querySelector('span');
   const tagPos = new THREE.Vector3();
@@ -114,7 +123,7 @@ if (!view) {
     worldView.setLocal(localId);
     const p = local();
     aim.yaw = p.yaw; aim.pitch = 0;
-    acc = 0; shake = 0; recoilDebt = 0;
+    acc = 0; shake = 0; recoil.reset();
     mode = 'playing';
     screens.hide();
     input.setEnabled(true);
@@ -211,11 +220,7 @@ if (!view) {
 
   function handleEvents(p) {
     for (const ev of world.events.splice(0)) {
-      if (ev.type === 'shot' && ev.actorId === localId && role === 'guest') {
-        aim.pitch = Math.min(S.controls.max_pitch, aim.pitch + ev.kick);
-        aim.yaw += ev.side;
-        recoilDebt += ev.kick;
-      }
+      if (ev.type === 'shot' && ev.actorId === localId && role === 'guest') applyKick(ev);
       effects.handle(ev, world);
       worldView.handle(ev);
       fp.handle(ev, localId);
@@ -289,9 +294,7 @@ if (!view) {
           for (const ev of world.events) {
             if (ev.type === 'shot' && ev.actorId === localId && !ev._applied) {
               ev._applied = true;
-              aim.pitch = Math.min(S.controls.max_pitch, aim.pitch + ev.kick);
-              aim.yaw += ev.side;
-              recoilDebt += ev.kick;
+              applyKick(ev);
             }
           }
         }
@@ -325,13 +328,9 @@ if (!view) {
         });
       }
 
-      // optional recoil recovery: the view drifts back down by a share of the kick
-      if (S.ballistics.recoil_recovery > 0 && recoilDebt > 0) {
-        const back = recoilDebt * Math.min(1, S.ballistics.recoil_recovery * 8 * dt);
-        aim.pitch -= back; recoilDebt -= back;
-      } else recoilDebt = 0;
-
       handleEvents(p);
+      // the view comes back down to where you were aiming once you stop firing
+      recoil.update(aim, dt, S.ballistics);
     } else if (mode === 'playing' && role === 'host' && net.session) {
       // host's tuning panel is open: the game keeps running for the guest
       acc += dt;

@@ -11,6 +11,7 @@ import { groundAt } from '../src/sim/body.js';
 import { applyHit } from '../src/sim/damage.js';
 import { getV, V } from '../src/sim/grid.js';
 import { buildNav, nodeAt, flowField } from '../src/sim/nav.js';
+import { createRecoil } from '../src/input/recoil.js';
 
 const read = p => readFileSync(new URL('../' + p, import.meta.url), 'utf8');
 const lv = 'data/levels/slice/';
@@ -271,6 +272,30 @@ check(w0.players.length === 1 && w0.enemies.length >= 10, `level built: ${w0.ene
   run(a, 10, cmd); run(b, 10, cmd);
   const snap = w => JSON.stringify({ p: w.players, e: w.enemies, t: w.tick, r: w.rng, pr: w.projectiles });
   check(snap(a) === snap(b), 'simulation is deterministic');
+}
+
+// --- recoil comes back to where you were aiming (play-test feedback, 2026-10-22)
+{
+  const b = data.settings.ballistics, frame = 1 / 60;
+  const shoot = (r, aim, k) => { aim.pitch += k; aim.yaw += k / 3; r.kick(k, k / 3, b.recoil_return); };
+  const settle = (r, aim, s) => { for (let t = 0; t < s; t += frame) r.update(aim, frame, b); };
+  let r = createRecoil(), aim = { pitch: 0.1, yaw: 1 };
+  r.update(aim, frame, b);
+  for (let i = 0; i < 3; i++) { shoot(r, aim, 0.03); settle(r, aim, 0.12); }
+  const peak = aim.pitch;
+  settle(r, aim, 1);
+  check(peak > 0.13 && Math.abs(aim.pitch - 0.1) < 0.002 && Math.abs(aim.yaw - 1) < 0.002, `after a burst the aim climbs (${peak.toFixed(3)}) then returns to where it was (${aim.pitch.toFixed(3)})`);
+  r = createRecoil(); aim = { pitch: 0.1, yaw: 1 };
+  r.update(aim, frame, b);
+  shoot(r, aim, 0.03); settle(r, aim, 0.6); shoot(r, aim, 0.03);
+  const before = aim.pitch - 0.03; settle(r, aim, 0.6);
+  check(Math.abs(before - 0.1) < 0.002 && Math.abs(aim.pitch - 0.1) < 0.002, 'well-timed single shots keep the point of aim');
+  r = createRecoil(); aim = { pitch: 0.1, yaw: 1 };
+  r.update(aim, frame, b);
+  shoot(r, aim, 0.06); r.update(aim, frame, b);
+  aim.pitch -= 0.05; // the player pulls down while it's kicked up
+  settle(r, aim, 1);
+  check(Math.abs(aim.pitch - 0.1) < 0.002, `pulling down yourself doesn't make it overshoot below the target (${aim.pitch.toFixed(3)})`);
 }
 
 console.log(failures ? `\n${failures} check(s) failed` : '\nAll checks passed');

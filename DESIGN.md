@@ -257,7 +257,7 @@ tag `warehouse-prototype`.
 | 2026-10-22 | Health 100; armour up to 300 absorbs all damage first, covers the head; headshots ×2 |
 | 2026-10-22 | Two weapon slots, start with a pistol, ammunition shared by calibre, aim down sights on all weapons |
 | 2026-10-22 | Area of effect scale: 100 = 10 m radius |
-| 2026-10-22 | Physical bullets with drop at reduced speeds; recoil kicks the camera; bloom grows with sustained fire and movement |
+| 2026-10-22 | Physical bullets with drop at reduced speeds; recoil kicks the camera (and comes back, see below); bloom grows with sustained fire and movement |
 | 2026-10-22 | Destruction mainly from explosives and large calibres; rubble is walkable; destruction never blocks routes |
 | 2026-10-22 | No crouch, jump or prone. Friendly NPCs out of the first version |
 | 2026-10-22 | Win by surviving a level timer; 5 minutes for the test level |
@@ -282,6 +282,7 @@ tag `warehouse-prototype`.
 | 2026-10-22 | Najaf: permanent smoke at the flare stack; 15-minute time limit; map edges are collapsed buildings, a refinery fence, high dunes and cliffs |
 | 2026-10-22 | Art spec agreed: Blockbench, 32 px per metre (terrain 16), shared 65-colour palette, budgets weapons 300 / crates and pickups 60 / upgrades 150 / hands 100, gloved first-person hands |
 | 2026-10-22 | Art workflow: reference picture → Claude drafts the Blockbench model → Martial refines → Claude checks |
+| 2026-10-22 | Recoil returns: after you stop firing the view comes back to where you were aiming (sustained fire still climbs; bloom still spreads shots). Pulling down yourself counts towards the return |
 
 ## Open questions
 
