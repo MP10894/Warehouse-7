@@ -68,13 +68,74 @@ function size(root) {
   return b.getSize(new THREE.Vector3());
 }
 
+// Art arrives as data URLs packed into the game. They are decoded by hand rather than
+// fetched: the play link runs under strict page security rules that can block fetching
+// data and blob addresses, which is how a 3D loader normally reads embedded files.
+function bytesOf(dataUrl) {
+  const bin = atob(dataUrl.slice(dataUrl.indexOf(',') + 1));
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
+async function imageFromBytes(bytes, type = 'image/png') {
+  if (typeof createImageBitmap === 'function') {
+    try { return await createImageBitmap(new Blob([bytes], { type }), { imageOrientation: 'none' }); } catch (e) { /* fall back */ }
+  }
+  let s = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return new Promise((ok, fail) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => fail(new Error('image')); im.src = `data:${type};base64,${btoa(s)}`; });
+}
+
+/** Take the embedded texture out of a .glb, so the 3D loader only reads shapes. */
+function splitGlb(bytes) {
+  const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  if (dv.getUint32(0, true) !== 0x46546C67) throw new Error('not a .glb file');
+  const jsonLen = dv.getUint32(12, true);
+  const json = JSON.parse(new TextDecoder().decode(bytes.subarray(20, 20 + jsonLen)));
+  const binStart = 20 + jsonLen + 8;
+  const bin = bytes.subarray(binStart, binStart + (bytes.length > binStart ? dv.getUint32(20 + jsonLen, true) : 0));
+  let png = null;
+  const im = json.images && json.images[0];
+  if (im) {
+    if (im.bufferView !== undefined) {
+      const v = json.bufferViews[im.bufferView];
+      png = { bytes: bin.slice(v.byteOffset || 0, (v.byteOffset || 0) + v.byteLength), type: im.mimeType || 'image/png' };
+    } else if (im.uri && im.uri.startsWith('data:')) {
+      png = { bytes: bytesOf(im.uri), type: im.uri.slice(5, im.uri.indexOf(';')) };
+    }
+  }
+  delete json.images; delete json.textures; delete json.samplers;
+  for (const m of json.materials || []) {
+    const pbr = m.pbrMetallicRoughness;
+    if (pbr) delete pbr.baseColorTexture;
+    delete m.normalTexture; delete m.occlusionTexture; delete m.emissiveTexture;
+  }
+  const enc = new TextEncoder().encode(JSON.stringify(json));
+  const pad = (4 - (enc.length % 4)) % 4;
+  const out = new Uint8Array(12 + 8 + enc.length + pad + bytes.length - (20 + jsonLen));
+  const o = new DataView(out.buffer);
+  o.setUint32(0, 0x46546C67, true); o.setUint32(4, 2, true); o.setUint32(8, out.length, true);
+  o.setUint32(12, enc.length + pad, true); o.setUint32(16, 0x4E4F534A, true);
+  out.set(enc, 20); out.fill(0x20, 20 + enc.length, 20 + enc.length + pad);
+  out.set(bytes.subarray(20 + jsonLen), 20 + enc.length + pad);
+  return { glb: out.buffer, png };
+}
+
 async function loadModel(url) {
-  const buf = await (await fetch(url)).arrayBuffer();
-  return new Promise((ok, fail) => new GLTFLoader().parse(buf, '', g => ok(g.scene), fail));
+  const { glb, png } = splitGlb(bytesOf(url));
+  const scene = await new Promise((ok, fail) => new GLTFLoader().parse(glb, '', g => ok(g.scene), fail));
+  if (png) {
+    const tex = new THREE.Texture(await imageFromBytes(png.bytes, png.type));
+    tex.flipY = false; // glTF textures are stored top row first
+    tex.needsUpdate = true;
+    scene.traverse(o => { if (o.isMesh) o.material.map = tex; });
+  }
+  return scene;
 }
 
 function loadImage(url) {
-  return new Promise((ok, fail) => { const i = new Image(); i.onload = () => ok(i); i.onerror = fail; i.src = url; });
+  return imageFromBytes(bytesOf(url));
 }
 
 /** Load and check every art file. `tex` is the placeholder texture set from textures.js. */
@@ -92,7 +153,14 @@ export async function loadArt(tex) {
         const img = await loadImage(url);
         if (img.width !== want[1] || img.height !== want[1]) { skip(path, `is ${img.width} × ${img.height} px, should be ${want[1]} × ${want[1]}`); continue; }
         const t = tex[want[0]];
-        t.image = img; t.needsUpdate = true;
+        // draw into the placeholder's own canvas, so the texture keeps all its settings
+        const c = t.image;
+        c.width = img.width; c.height = img.height;
+        const g = c.getContext('2d');
+        g.imageSmoothingEnabled = false;
+        g.clearRect(0, 0, c.width, c.height);
+        g.drawImage(img, 0, 0);
+        t.needsUpdate = true;
         ok(path, `${img.width} × ${img.height} px`);
         continue;
       }
