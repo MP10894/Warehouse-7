@@ -24,7 +24,8 @@ rnd = random.Random(47)
 # Measured from the muzzle (d, metres, increasing towards the butt) and from the bore line
 # (y, metres, up). The grip, where the right hand holds, becomes the model's origin.
 GRIP_D, GRIP_Y = 0.605, -0.095
-# name, d from/to, y from/to, half width, material, rotation about x (degrees), pivot (d, y)
+# name, d from/to, y from/to, half width (or (x from, x to) for an off-centre part), material,
+# rotation about x (degrees), pivot (d, y)
 PARTS = [
     ('muzzle_brake',  0.000, 0.030, -0.012, 0.012, 0.013, 'steel', 0, None),
     ('barrel',        0.030, 0.270, -0.009, 0.009, 0.009, 'steel', 0, None),
@@ -37,6 +38,7 @@ PARTS = [
     ('rear_sight',    0.410, 0.470, 0.010, 0.045, 0.016, 'steel', 0, None),  # just below the sight line, so the front post shows over it
     ('receiver',      0.430, 0.670, -0.060, 0.012, 0.022, 'steel', 0, None),
     ('dust_cover',    0.470, 0.670, 0.012, 0.034, 0.019, 'steel_light', 0, None),
+    ('charging_lever', 0.520, 0.545, -0.004, 0.012, (0.020, 0.046), 'steel', 0, None),  # right side, pulled back on an empty reload
     ('magazine_top',  0.462, 0.532, -0.135, -0.055, 0.014, 'magazine', 0, None),
     ('magazine_mid',  0.462, 0.532, -0.210, -0.130, 0.014, 'magazine', 16, (0.497, -0.133)),
     ('magazine_low',  0.462, 0.534, -0.265, -0.205, 0.014, 'magazine', 34, (0.497, -0.133)),
@@ -56,6 +58,12 @@ POINTS = {
     # where your eye sits when aiming: cheek on the stock, face just behind the top cover,
     # looking along it over the rear sight to the front post
     'eye': (0, to_y(0.050), to_z(0.700)),
+}
+# parts the game moves on its own (reload animation), each a group turning about its pivot (d, y):
+# the magazine rocks out forward about its front lug (top front of the magazine), as on a real AK
+GROUPS = {
+    'magazine': (('magazine_top', 'magazine_mid', 'magazine_low'), (0.462, -0.055)),
+    'charging_handle': (('charging_lever',), (0.532, 0.004)),
 }
 
 
@@ -96,8 +104,9 @@ FACE_UV = {
 def build():
     cubes = []
     for name, d0, d1, y0, y1, half, mat, rot, pivot in PARTS:
-        lo = [-half * UNITS, to_y(y0) * UNITS, to_z(d0) * UNITS]
-        hi = [half * UNITS, to_y(y1) * UNITS, to_z(d1) * UNITS]
+        x0, x1 = half if isinstance(half, tuple) else (-half, half)
+        lo = [x0 * UNITS, to_y(y0) * UNITS, to_z(d0) * UNITS]
+        hi = [x1 * UNITS, to_y(y1) * UNITS, to_z(d1) * UNITS]
         origin = [0, to_y(pivot[1]) * UNITS, to_z(pivot[0]) * UNITS] if pivot else [0, 0, 0]
         cubes.append({'name': name, 'mat': mat, 'rot': rot, 'origin': origin, 'from': lo, 'to': hi})
     faces = []
@@ -142,7 +151,13 @@ def write():
         elements.append(e)
     group = lambda name, origin: {'name': name, 'origin': r3([v * UNITS for v in origin]), 'color': 0, 'uuid': uid(),
                                   'export': True, 'isOpen': True, 'locked': False, 'visibility': True, 'autouv': 0, 'children': []}
-    outliner = [e['uuid'] for e in elements] + [group(n, p) for n, p in POINTS.items()]
+    grouped = {part: g for g, (parts, _) in GROUPS.items() for part in parts}
+    outliner = [e['uuid'] for e in elements if e['name'] not in grouped]
+    for gname, (parts, (pd, py)) in GROUPS.items():
+        grp = group(gname, (0, to_y(py), to_z(pd)))
+        grp['children'] = [e['uuid'] for e in elements if e['name'] in parts]
+        outliner.append(grp)
+    outliner += [group(n, p) for n, p in POINTS.items()]
     buf = io.BytesIO(); img.save(buf, 'PNG')
     project = {'meta': {'format_version': '4.5', 'model_format': 'free', 'box_uv': False},
                'name': 'ak47', 'model_identifier': '', 'visible_box': [1, 1, 0],

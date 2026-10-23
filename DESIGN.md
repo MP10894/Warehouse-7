@@ -345,6 +345,8 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Fuel tanks: a rocket hit blows up the whole tank; the blast reaches 12 m from the tank wall, as strong as four rocket hits at the wall and nothing at the edge; no chain reactions (settings.json → hazards) |
 | 2026-10-23 | Waves now come in from the two map-edge entry points nearest your base that are at least 60 m from any player (on the full map the furthest points meant a long walk) |
 | 2026-10-23 | Co-op: the host only sends enemies within 90 m of a player (plus all attackers), so 60+ enemies fit in a message; builds and broken base pieces are sent as an ordered list so both phones stay identical |
+| 2026-10-23 | Reload, swap and use buttons register on the first tap (taps waiting for the next game step instead of being dropped on fast screens) |
+| 2026-10-23 | AK-47 reload shows the magazine change: rifle cants over, left hand rocks the magazine out forward and lets it fall out of view, fetches a fresh one from below, hooks it in and rocks it home; the right hand pulls the charging handle only when the gun was empty. Same reload time as before. Other weapons keep the simple dip until their models have a `magazine` part |
 
 ## Open questions
 

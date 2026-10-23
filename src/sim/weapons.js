@@ -40,7 +40,7 @@ export function startReload(world, p) {
   const def = world.data.weapons[slot.w];
   if (slot.mag >= def.mag_size || (p.reserve[def.calibre] || 0) <= 0) return;
   p.reloadT = def.reload_time;
-  emit(world, { type: 'reload', actorId: p.id, weapon: slot.w, time: def.reload_time });
+  emit(world, { type: 'reload', actorId: p.id, weapon: slot.w, time: def.reload_time, empty: slot.mag === 0 });
 }
 
 export function swapWeapon(world, p) {

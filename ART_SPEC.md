@@ -143,6 +143,11 @@ would be only 6 pixels long. At 256 it is about 50 units (and pixels) long, a ri
     the pistol). Without it the game uses a default.
   - `warhead` (RPG-7 only, a group with the warhead boxes): the game uses it as the flying
     rocket.
+  - `magazine` (optional, a group with the magazine's boxes): with it, the reload shows the
+    left hand taking the magazine out and putting a fresh one in. Put the group's pivot
+    where the magazine rocks about: the front lug (top front) for an AK-pattern magazine.
+  - `charging_handle` (optional, a group): slides back 9 cm when an empty gun is reloaded;
+    the right hand pulls it. Put it on the right side.
 - The same model is used in first person (seen close) and on soldiers (seen small), so the
   side facing the player's eye (top and right side) matters most.
 

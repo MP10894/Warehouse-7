@@ -11,6 +11,11 @@ const HIP = new THREE.Vector3(0.2, -0.21, -0.5);
 const SIGHT_DISTANCE = 0.4;
 const HOLDER_SCALE = 0.85;
 const GLOVE = 0x4d4a35, GLOVE_DARK = 0x2f3022, SLEEVE = 0x46586a;
+const ease = t => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
+// 0 → 1 between a and b (fractions of the reload), eased
+const span = (u, a, b) => ease((u - a) / (b - a));
+const lerp3 = (out, a, b, k) => out.set(a.x + (b.x - a.x) * k, a.y + (b.y - a.y) * k, a.z + (b.z - a.z) * k);
+
 const ADS = { sig_p320: new THREE.Vector3(0, -0.085, -0.36), m4a1: new THREE.Vector3(0, -0.135, -0.3), ak47: new THREE.Vector3(0, -0.105, -0.3), rpg7: new THREE.Vector3(-0.09, -0.12, -0.25) };
 
 export function createFpWeapon() {
@@ -78,7 +83,90 @@ export function createFpWeapon() {
   flash.visible = false;
   holder.add(flash);
 
-  const st = { ads: 0, kick: 0, flashT: 0, reload: 0, reloadDur: 1, swap: 0, bob: 0 };
+  const st = { ads: 0, kick: 0, flashT: 0, reload: 0, reloadDur: 1, reloadEmpty: false, swap: 0, bob: 0 };
+
+  // ---- magazine reload (weapons whose model has a `magazine` part, e.g. the AK-47) ----
+  // Fractions of the reload time: tilt the rifle, left hand takes the magazine and rocks it
+  // out forward, lets it fall, fetches a fresh one from below, hooks it in and rocks it back
+  // until it clicks; if the gun was empty the right hand then pulls the charging handle.
+  const R = {
+    mag: null, ch: null, magPos: new THREE.Vector3(), magRot: new THREE.Euler(), chPos: new THREE.Vector3(),
+    handL: new THREE.Vector3(), handR: new THREE.Vector3(),
+    grab: new THREE.Vector3(),            // where the left hand holds the magazine, from its pivot
+    pouch: new THREE.Vector3(-0.16, -0.5, 0.12),
+    v: new THREE.Vector3(), w: new THREE.Vector3(), q: new THREE.Quaternion(), e: new THREE.Euler()
+  };
+  const OUT_ANGLE = 0.65;   // how far the magazine rocks forward (radians)
+  function setupMagReload() {
+    R.mag = gun && gun.getObjectByName('magazine');
+    R.ch = gun && gun.getObjectByName('charging_handle');
+    if (!R.mag) return;
+    R.magPos.copy(R.mag.position); R.magRot.copy(R.mag.rotation);
+    if (R.ch) R.chPos.copy(R.ch.position);
+    R.handL.copy(hands.L.position); R.handR.copy(hands.R.position);
+    // the left hand cups the bottom of the magazine (so you still see the magazine itself)
+    R.grab.set(-0.015, -0.17, 0.045);
+  }
+  function restMag() {
+    if (!R.mag) return;
+    R.mag.position.copy(R.magPos); R.mag.rotation.copy(R.magRot); R.mag.visible = true;
+    if (R.ch) R.ch.position.copy(R.chPos);
+    hands.L.position.copy(R.handL); hands.R.position.copy(R.handR);
+  }
+  /** Pose everything for reload progress u (0–1). */
+  function magReload(u, empty) {
+    const v = R.v, w = R.w;
+    // the rifle cants over and drops a little, so you look at the magazine well
+    const tilt = span(u, 0, 0.12) * (1 - span(u, 0.86, 1));
+    // (top rolls to the right, muzzle swings a little left: the left side and the well face you)
+    holder.rotation.z -= tilt * 0.85; holder.rotation.y += tilt * 0.4; holder.rotation.x += tilt * 0.4;
+    holder.position.y += tilt * 0.07; holder.position.x -= tilt * 0.1; holder.position.z -= tilt * 0.04;
+    // magazine: angle forward, and where its pivot is
+    let ang = 0, attached = false, visible = true;
+    v.copy(R.magPos);
+    if (u < 0.16) { ang = 0; }
+    else if (u < 0.24) { ang = OUT_ANGLE * span(u, 0.16, 0.24); v.y -= 0.02 * span(u, 0.2, 0.24); attached = true; }
+    else if (u < 0.4) {
+      // let go: it drops away out of view, still turning
+      const t = (u - 0.24) * st.reloadDur;
+      ang = OUT_ANGLE + t * 2.5; v.y -= 0.02 + 4.9 * t * t; v.z -= t * 0.15; v.x -= t * 0.05;
+      visible = u < 0.36;
+    } else if (u < 0.46) { visible = false; }
+    else if (u < 0.58) {
+      // a fresh one comes up from the vest, already angled to hook in
+      ang = OUT_ANGLE; attached = true;
+      lerp3(v, w.copy(R.pouch).sub(R.grab), R.v.set(R.magPos.x, R.magPos.y - 0.012, R.magPos.z), span(u, 0.46, 0.58));
+    } else if (u < 0.68) { ang = OUT_ANGLE * (1 - span(u, 0.58, 0.68)); v.y -= 0.012 * (1 - span(u, 0.58, 0.66)); attached = true; }
+    R.mag.visible = visible;
+    R.mag.position.copy(v);
+    R.mag.rotation.set(R.magRot.x + ang, R.magRot.y, R.magRot.z);
+    // the click: a small jolt when it seats
+    if (u > 0.66 && u < 0.72) holder.position.y += Math.sin((u - 0.66) / 0.06 * Math.PI) * 0.012;
+
+    // left hand: handguard → magazine (moving with it) → vest → back with the new one → handguard
+    const L = hands.L.position;
+    const onMag = out => { R.q.setFromEuler(R.mag.rotation); return out.copy(R.grab).applyQuaternion(R.q).add(R.mag.position); };
+    if (u < 0.16) lerp3(L, R.handL, onMag(w), span(u, 0.06, 0.16));
+    else if (attached) onMag(L);
+    else if (u < 0.46) { onMag(w); lerp3(L, w.set(R.magPos.x + R.grab.x, R.magPos.y + R.grab.y - 0.04, R.magPos.z + R.grab.z), R.pouch, span(u, 0.25, 0.42)); }
+    else lerp3(L, onMag(w), R.handL, span(u, 0.68, 0.8));
+
+    // empty gun: right hand pulls the charging handle back and lets it fly forward
+    hands.R.position.copy(R.handR);
+    if (R.ch) R.ch.position.copy(R.chPos);
+    if (empty && R.ch) {
+      const at = w.set(R.chPos.x + 0.05, R.chPos.y, R.chPos.z + 0.01);
+      const pull = span(u, 0.74, 0.8) * (u < 0.81 ? 1 : 0);
+      const pulled = v.copy(at); pulled.z += 0.09;
+      if (u > 0.68 && u < 0.92) {
+        if (u < 0.74) lerp3(hands.R.position, R.handR, at, span(u, 0.68, 0.74));
+        else if (u < 0.83) lerp3(hands.R.position, at, pulled, span(u, 0.74, 0.8));
+        else lerp3(hands.R.position, pulled, R.handR, span(u, 0.83, 0.92));
+      }
+      R.ch.position.z = R.chPos.z + 0.09 * pull;
+      if (u > 0.7 && u < 0.92) holder.rotation.z -= 0.12 * Math.sin(span(u, 0.7, 0.92) * Math.PI);
+    }
+  }
 
   function setWeapon(id) {
     if (id === gunId) return;
@@ -86,6 +174,7 @@ export function createFpWeapon() {
     gunId = id;
     gun = id ? weaponModel(id) : null;
     if (gun) holder.add(gun);
+    R.mag = null; R.ch = null;
     const m = muzzleOf(id);
     flash.position.set(m[0], m[1], m[2] - 0.05);
     hands.R.visible = hands.L.visible = arms.R.visible = arms.L.visible = !!gun;
@@ -104,16 +193,19 @@ export function createFpWeapon() {
     // a shouldered weapon with an `eye` point: put your eye exactly there (stock at the
     // shoulder, face behind the top cover); the stock then runs back below the view
     if (eye) adsTarget = new THREE.Vector3(-eye[0] * HOLDER_SCALE, -eye[1] * HOLDER_SCALE, -eye[2] * HOLDER_SCALE);
+    setupMagReload();
   }
 
   return {
     scene, camera,
     /** Drawn art finished loading: rebuild the weapon and hands from it. */
     refresh() { buildHands(); const id = gunId; gunId = undefined; setWeapon(id); },
+    /** For automated checks: hold the reload animation at progress u (0–1). */
+    holdReload(u, empty = false) { st.reloadDur = 1e5; st.reload = (1 - u) * 1e5; st.reloadEmpty = empty; },
     handle(ev, localId) {
       if (ev.actorId !== localId) return;
       if (ev.type === 'shot') { st.kick = 1; st.flashT = 0.05; }
-      else if (ev.type === 'reload') { st.reload = ev.time; st.reloadDur = ev.time; }
+      else if (ev.type === 'reload') { st.reload = ev.time; st.reloadDur = ev.time; st.reloadEmpty = !!ev.empty; }
       else if (ev.type === 'swap') { st.swap = 0.4; st.reload = 0; }
     },
     update(dt, player, aspect) {
@@ -132,7 +224,10 @@ export function createFpWeapon() {
       holder.position.y += -Math.abs(Math.cos(st.bob * 0.5)) * 0.012 * sway;
       holder.position.z += st.kick * 0.05;
       holder.rotation.set(st.kick * 0.12, 0, 0);
-      if (st.reload > 0) {
+      if (R.mag) {
+        restMag();
+        if (st.reload > 0) magReload(1 - st.reload / st.reloadDur, st.reloadEmpty);
+      } else if (st.reload > 0) {
         const k = Math.sin(Math.PI * (1 - st.reload / st.reloadDur));
         holder.position.y -= k * 0.12; holder.rotation.x -= k * 0.5; holder.rotation.z = k * 0.4;
       }

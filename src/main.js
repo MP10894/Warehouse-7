@@ -393,7 +393,7 @@ if (!view) {
 
   aim.yaw = local().yaw;
   // handle for automated browser tests
-  window.__game = { get world() { return world; }, aim, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
+  window.__game = { get world() { return world; }, aim, fp, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
   screens.showMenu(world);
   requestAnimationFrame(frame);
 }
