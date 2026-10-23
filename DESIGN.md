@@ -300,6 +300,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Subtle aim assist while aiming down sights: within 5° of a visible enemy (60 m) the crosshair is drawn onto their chest and follows them a little. Strength and reach on the tuning panel |
 | 2026-10-23 | Wave rhythm: beat a wave, 20 s break, next wave (replaces shrinking timed gaps); at most 20 attackers alive at once, the rest wait at the map edge |
 | 2026-10-23 | Aiming a rifle: stock at the shoulder, eye just behind the top cover looking along it (weapons get an optional `eye` point); pistols stay at arm's length |
+| 2026-10-23 | RPK drawn: real proportions (1.04 m, 75-round drum, club-foot stock, bipod folded), look from the OpenArt sheet |
 
 ## Open questions
 

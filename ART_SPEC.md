@@ -267,7 +267,8 @@ Drafts so far: `assets/blocks/wall.png`, `assets/sources/enemy_insurgent.bbmodel
 (→ `assets/characters/enemy_insurgent.glb`), `assets/sources/sig_p320.bbmodel`
 (→ `assets/weapons/sig_p320.glb`), `assets/sources/player_hands.bbmodel` (→ `assets/items/player_hands.glb`),
 `assets/sources/ak47.bbmodel` (→ `assets/weapons/ak47.glb`; shape from the real rifle's
-proportions because its reference sheet had no usable side view), all with OpenArt
+proportions because its reference sheet had no usable side view), `assets/sources/rpk.bbmodel`
+(→ `assets/weapons/rpk.glb`; real proportions, look from its sheet), all with OpenArt
 references in `assets/sources/reference/`.
 
 ## Decisions (2026-10-22)
