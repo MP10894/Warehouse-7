@@ -20,6 +20,7 @@ import { createRecoil } from './input/recoil.js';
 import { createAimAssist } from './input/aim-assist.js';
 import { buildTerrain } from './render/terrain-mesh.js';
 import { createBlockMeshes } from './render/blocks-mesh.js';
+import { createDecor } from './render/decor.js';
 import { createWorldView } from './render/world-view.js';
 import { createEffects } from './render/effects.js';
 import { createFpWeapon } from './render/fp-weapon.js';
@@ -52,7 +53,7 @@ if (!view) {
     settings: S,
     onOpen: () => { if (role === 'solo') paused = true; input.setEnabled(false); },
     onClose: () => { paused = false; acc = 0; if (mode === 'playing') input.setEnabled(true); },
-    onChange: path => { if (path.startsWith('camera.')) view.resize(); }
+    onChange: path => { if (path.startsWith('camera.')) view.resize(); if (path.startsWith('decor.') && scenery.decor) scenery.decor.rebuild(); }
   });
   view.resize();
 
@@ -67,13 +68,14 @@ if (!view) {
   let world = newWorld((Math.random() * 1e9) | 0, ['p1']);
 
   const tex = makeTextures();
-  const scenery = { terrain: null, blocks: null };
+  const scenery = { terrain: null, blocks: null, decor: null };
   function buildScenery() {
     // the ground and buildings are rebuilt for each new run (walls may have been destroyed)
     if (scenery.terrain) view.scene.remove(scenery.terrain);
     view.scene.children.filter(c => c.userData.blocks).forEach(c => view.scene.remove(c));
     scenery.terrain = buildTerrain(view.scene, world, tex);
     scenery.blocks = createBlockMeshes(view.scene, world, tex);
+    scenery.decor = createDecor(view.scene, world, S);
   }
   buildScenery();
   const worldView = createWorldView(view.scene, tex, localId);
@@ -239,7 +241,7 @@ if (!view) {
       hud.handle(ev, p);
       audio.handle(ev, p);
       domHud.handle(ev, localId);
-      if (ev.type === 'blocks') scenery.blocks.update(ev.cells || [], !!ev.rebuild);
+      if (ev.type === 'blocks') { scenery.blocks.update(ev.cells || [], !!ev.rebuild); scenery.decor.update(ev.cells || []); }
       if (ev.type === 'explosion') shake = Math.max(shake, Math.max(0, 1 - Math.hypot(ev.x - p.x, ev.z - p.z) / 25));
       if (ev.type === 'hurt' && ev.targetId === localId) shake = Math.max(shake, 0.25);
       if (ev.type === 'status' && mode === 'playing') {
@@ -413,7 +415,7 @@ if (!view) {
 
   aim.yaw = local().yaw;
   // handle for automated browser tests
-  window.__game = { get world() { return world; }, aim, fp, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
+  window.__game = { get world() { return world; }, aim, fp, view, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
   screens.showMenu(world);
   requestAnimationFrame(frame);
 }

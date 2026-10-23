@@ -27,6 +27,30 @@ const LOOK = {
 };
 const SUN_H = new THREE.Vector2(SUN.x, SUN.z).normalize();
 
+// Painted plaster: each building gets its own colour (multiplied onto the wall texture), a
+// darker band along the bottom of its ground floor, and a little grime under the roof line.
+const PLASTER = [[1.08, 1.02, 0.9], [1.08, 0.9, 0.68], [1.0, 0.92, 0.78], [0.86, 0.95, 1.04], [0.9, 1.0, 0.84],
+  [1.18, 1.15, 1.08], [1.08, 0.9, 0.84], [0.96, 0.95, 0.93], [1.12, 1.05, 0.95]];
+const BAND = [[0.62, 0.6, 0.56], [0.55, 0.62, 0.72], [0.78, 0.55, 0.42], [0.58, 0.68, 0.54], [0.7, 0.66, 0.6]];
+const SPECIAL = [
+  [/^police/, [1.18, 1.16, 1.12], [0.42, 0.56, 0.86]],     // police station: white with a blue band
+  [/^clinic/, [1.18, 1.17, 1.12], [0.48, 0.74, 0.56]],     // clinic: white with a green band
+  [/^refinery/, [0.98, 0.98, 0.96], [0.5, 0.5, 0.48]]      // refinery buildings: plain grey
+];
+const hash = n => { n = (n ^ 61) ^ (n >>> 16); n = Math.imul(n, 9); n ^= n >>> 4; n = Math.imul(n, 0x27d4eb2d); return (n ^ (n >>> 15)) >>> 0; };
+
+/** Colours for every building, and which building owns each column of the map. */
+export function buildingLooks(world) {
+  const g = world.grid, owner = new Int16Array(g.w * g.d).fill(-1);
+  const looks = (world.level.buildings || []).map((b, i) => {
+    const h = hash(i * 7919 + b.x * 31 + b.z);
+    const sp = SPECIAL.find(([re]) => re.test(b.file || ''));
+    for (let z = b.z; z < b.z + b.d; z++) for (let x = b.x; x < b.x + b.w; x++) if (x >= 0 && z >= 0 && x < g.w && z < g.d) owner[x + z * g.w] = i;
+    return { ...b, tint: sp ? sp[1] : PLASTER[h % PLASTER.length], band: sp ? sp[2] : BAND[(h >>> 8) % BAND.length], seed: h };
+  });
+  return { owner, looks };
+}
+
 export function createBlockMeshes(scene, world, tex) {
   const g = world.grid;
   const cw = Math.ceil(g.w / CHUNK), cd = Math.ceil(g.d / CHUNK);
@@ -48,6 +72,17 @@ export function createBlockMeshes(scene, world, tex) {
     return false;
   };
   const sideShade = (nx, nz) => 0.66 + 0.3 * Math.max(0, nx * SUN_H.x + nz * SUN_H.y);
+  const { owner, looks } = buildingLooks(world);
+  const WHITE = [1, 1, 1];
+  /** Colour to multiply onto a wall cell's faces. */
+  function wallTint(x, y, z) {
+    const o = owner[x + z * g.w];
+    if (o < 0) return WHITE;
+    const b = looks[o];
+    if (y === b.base) return b.band;                                         // the band along the bottom
+    if (b.roofed && y === b.base + b.top * 3 - 2) return [b.tint[0] * 0.86, b.tint[1] * 0.85, b.tint[2] * 0.84];  // grime under the roof
+    return b.tint;
+  }
 
   function buildChunk(ci, cj) {
     const key = ci + cj * cw;
@@ -55,9 +90,10 @@ export function createBlockMeshes(scene, world, tex) {
     if (old) { for (const m of old) { scene.remove(m); m.geometry.dispose(); } }
     const B = {};
     const buf = k => B[k] || (B[k] = { p: [], u: [], c: [] });
+    let tint = WHITE;
     const quad = (k, v, uv, shade) => {
       const b = buf(k);
-      for (const i of [0, 1, 2, 0, 2, 3]) { b.p.push(...v[i]); b.u.push(...uv[i]); b.c.push(shade * 1.0, shade * 0.97, shade * 0.9); }
+      for (const i of [0, 1, 2, 0, 2, 3]) { b.p.push(...v[i]); b.u.push(...uv[i]); b.c.push(shade * tint[0], shade * 0.97 * tint[1], shade * 0.9 * tint[2]); }
     };
     const tri = (k, v, uv, shade) => {
       const b = buf(k);
@@ -77,6 +113,7 @@ export function createBlockMeshes(scene, world, tex) {
             else quad(k, [[x + 0.5, y, z], [x + 0.5, y, z + 1], [x + 0.5, y + 1, z + 1], [x + 0.5, y + 1, z]], [[z, y], [z + 1, y], [z + 1, y + 1], [z, y + 1]], 0.9);
           } else if (isFull(t)) {
             const covers = hides;
+            tint = t === V.WALL ? wallTint(x, y, z) : WHITE;
             // +x / −x / +z / −z / top / bottom
             if (!covers(cell(x + 1, y, z))) quad(k, [[x + 1, y, z + 1], [x + 1, y, z], [x + 1, y + 1, z], [x + 1, y + 1, z + 1]], [[z * s, y * s], [(z + 1) * s, y * s], [(z + 1) * s, (y + 1) * s], [z * s, (y + 1) * s]], sideShade(1, 0) * (roofed(x + 1, y + 1, z) ? 0.62 : 1));
             if (!covers(cell(x - 1, y, z))) quad(k, [[x, y, z], [x, y, z + 1], [x, y + 1, z + 1], [x, y + 1, z]], [[z * s, y * s], [(z + 1) * s, y * s], [(z + 1) * s, (y + 1) * s], [z * s, (y + 1) * s]], sideShade(-1, 0) * (roofed(x - 1, y + 1, z) ? 0.62 : 1));
@@ -84,6 +121,7 @@ export function createBlockMeshes(scene, world, tex) {
             if (!covers(cell(x, y, z - 1))) quad(k, [[x + 1, y, z], [x, y, z], [x, y + 1, z], [x + 1, y + 1, z]], [[x * s, y * s], [(x + 1) * s, y * s], [(x + 1) * s, (y + 1) * s], [x * s, (y + 1) * s]], sideShade(0, -1) * (roofed(x, y + 1, z - 1) ? 0.62 : 1));
             if (!covers(cell(x, y + 1, z))) quad(k, [[x, y + 1, z], [x, y + 1, z + 1], [x + 1, y + 1, z + 1], [x + 1, y + 1, z]], [[x * s, z * s], [x * s, (z + 1) * s], [(x + 1) * s, (z + 1) * s], [(x + 1) * s, z * s]], roofed(x, y + 2, z) ? 0.66 : 1.05);
             if (!covers(cell(x, y - 1, z)) && y > 0) quad(k, [[x, y, z], [x + 1, y, z], [x + 1, y, z + 1], [x, y, z + 1]], [[x * s, z * s], [(x + 1) * s, z * s], [(x + 1) * s, (z + 1) * s], [x * s, (z + 1) * s]], 0.42);
+            tint = WHITE;
           } else if (t === V.RUBBLE) {
             const h = 0.22, sh = roofed(x, y + 1, z) ? 0.62 : 1; // low: people walk through it
             quad(k, [[x, y + h, z], [x, y + h, z + 1], [x + 1, y + h, z + 1], [x + 1, y + h, z]], [[0, 0], [0, 1], [1, 1], [1, 0]], 0.95 * sh);

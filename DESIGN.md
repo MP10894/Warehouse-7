@@ -190,6 +190,15 @@ Starting values, to be tuned after play-testing:
   so placeholder models can be made in code and swapped for drawn art later.
 - File rules for art (sizes, names, pivots, budgets, palette): [ART_SPEC.md](ART_SPEC.md). Art goes in
   `assets/`; missing files keep the code-drawn placeholders.
+- **Lived-in streets (decoration):** every building gets its own painted plaster colour and
+  a darker band along the bottom (police station white and blue, clinic white and green);
+  ground floors facing a street get rolled-down shop shutters and striped awnings; windows
+  get frames and wooden shutters; air-conditioning boxes, grime under the roof line, water
+  tanks, satellite dishes, aerials and washing lines on roofs, and sagging wires across the
+  streets; on the ground oil stains, cracks, scorch marks, tyre tracks and sand blown
+  against walls. All of it is decoration only (like rubble: no collision, no effect on
+  bullets or path-finding), placed by rules the same way every run, and it disappears with
+  the wall it hangs on. Amount: settings.json → decor.amount, also on the tuning panel.
 
 ## Controls (phone, held sideways)
 
@@ -378,6 +387,8 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Mk14 EBR gets a 4× scope: full-screen scope view when aiming, slower look, slight drift. Weapons tab has a new *Scope magnification* column (empty = iron sights) |
 | 2026-10-23 | Carrying a crate no longer slows you down (it slowed the game too much) |
 | 2026-10-23 | Mk14 EBR drawn from the side view of its OpenArt sheet: black chassis, railed handguard, 4× scope on rings, folded bipod, 20-round magazine (rocks in and out on a reload, like the AK), operating rod handle pulled on an empty reload |
+| 2026-10-23 | Lived-in streets, first part: building colours, shop fronts, windows, rooftops, wires and ground marks (decoration only). Street clutter and movement (smoke, washing swaying, birds, ambient sound) next |
+| 2026-10-23 | Wrecked cars and trucks will be solid cover, not decoration |
 
 ## Open questions
 

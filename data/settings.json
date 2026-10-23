@@ -96,6 +96,9 @@
     "drop_chance": { "insurgent": 0.2, "heavy_insurgent": 0.3 },
     "bomber_beep_range": 25
   },
+  "decor": {
+    "amount": 1
+  },
   "hazards": {
     "tank_blast_radius": 12,
     "tank_blast_damage_factor": 4

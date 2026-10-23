@@ -11,6 +11,7 @@ const SLIDERS = [
   ['Controls', 'Look speed when aiming', 'controls.ads_look_factor', 0.2, 1, 0.05],
   ['Controls', 'Field of view (°)', 'camera.target_horizontal_fov', 70, 120, 1],
   ['Controls', 'Pixel rows (detail; lower = faster)', 'camera.pixel_rows', 150, 400, 10],
+  ['Controls', 'Decoration amount (lower = faster)', 'decor.amount', 0, 1, 0.1],
   ['Controls', 'Aim assist when aiming (0 = off)', 'controls.aim_assist', 0, 1, 0.05],
   ['Controls', 'Aim assist reach (°)', 'controls.aim_assist_angle_deg', 1, 12, 0.5],
   ['Controls', 'Look speed through a scope', 'controls.scope_look_factor', 0.1, 1, 0.05],

@@ -70,7 +70,7 @@ export function orientFloors(floors, turn = 0, mirror = false) {
   return out.map(f => ({ floor: f.floor, rows: f.grid.map(r => r.join('')) }));
 }
 
-function stampBuilding(world, text, ox, oz, turn = 0, mirror = false) {
+function stampBuilding(world, text, ox, oz, turn = 0, mirror = false, file = '') {
   let floors = parseBuilding(text);
   if (floors.length && (turn || mirror)) floors = orientFloors(floors, turn, mirror);
   if (!floors.length) return;
@@ -83,6 +83,11 @@ function stampBuilding(world, text, ox, oz, turn = 0, mirror = false) {
   const samples = [[ox, oz], [ox + w, oz], [ox, oz + d], [ox + w, oz + d], [ox + w / 2, oz + d / 2]];
   const base = Math.round(samples.reduce((s, [x, z]) => s + terrainHeight(t, x, z), 0) / samples.length);
   flattenTerrain(t, ox - 1, oz - 1, ox + w + 1, oz + d + 1, base);
+  // what the graphics need to dress the building (colours, shop fronts, roof clutter)
+  const top = Math.max(...floors.map(f => f.floor));
+  const walled = floors.some(f => f.rows.some(r => /[#wd]/.test(r)));
+  const roofed = floors.some(f => f.floor === top && f.rows.some(r => r.includes('l')));
+  world.level.buildings.push({ file, x: ox, z: oz, w, d, base, top, walled, roofed });
 
   const ramps = [], rubble = [];
   for (const f of floors) {
@@ -185,11 +190,11 @@ export function buildLevel(world, level) {
   world.pieces = [];
   world.terrain = parseTerrain(level.terrainText, level.terrain_spacing || 4);
   world.ground = parseGround(level.groundText || '');
-  world.level = { name: level.name, size, decals: [] };
+  world.level = { name: level.name, size, decals: [], buildings: [] };
   for (const b of level.buildings || []) {
     const text = level.buildingTexts[b.file];
     if (!text) throw new Error(`Building file not found: ${b.file}`);
-    stampBuilding(world, text, b.x, b.z, b.turn || 0, !!b.mirror);
+    stampBuilding(world, text, b.x, b.z, b.turn || 0, !!b.mirror, b.file);
   }
   for (const p of level.props || []) stampProp(world, p);
   world.voxelVersion = 1;
