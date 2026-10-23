@@ -47,6 +47,7 @@ PARTS = [
     ('drum_wide',     0.598, 0.698, DRUM_Y - 0.044, DRUM_Y + 0.044, 0.075, 'drum', 0, None),
     ('drum_tall',     0.598, 0.698, DRUM_Y - 0.075, DRUM_Y + 0.075, 0.044, 'drum', 0, None),
     ('drum_core',     0.594, 0.702, DRUM_Y - 0.064, DRUM_Y + 0.064, 0.064, 'drum', 0, None),
+    ('charging_lever', 0.690, 0.715, -0.004, 0.012, (0.020, 0.046), 'steel', 0, None),  # right side, pulled back on an empty reload
     ('trigger_guard', 0.705, 0.770, -0.100, -0.088, 0.008, 'steel', 0, None),
     ('trigger',       0.726, 0.736, -0.088, -0.060, 0.004, 'steel', 0, None),
     ('pistol_grip',   0.755, 0.800, -0.165, -0.058, 0.016, 'wood', -18, (0.777, -0.060)),
@@ -62,6 +63,12 @@ POINTS = {
     'hand_left': (-0.012, to_y(-0.020), to_z(0.515)),  # middle of the lower handguard
     # where your eye sits when aiming: stock at the shoulder, face just behind the top cover
     'eye': (0, to_y(0.050), to_z(0.870)),
+}
+# parts the game moves on its own (reload): the drum rocks out forward about its front lug,
+# like an AK magazine; the charging handle is pulled back on an empty reload
+GROUPS = {
+    'magazine': (('drum_wide', 'drum_tall', 'drum_core'), (0.598, -0.060)),
+    'charging_handle': (('charging_lever',), (0.702, 0.004)),
 }
 
 
@@ -116,8 +123,9 @@ def build():
     cubes = []
     for name, d0, d1, y0, y1, half, mat, rot, pivot in PARTS:
         xo = {'bipod_leg_L': -0.011, 'bipod_leg_R': 0.011}.get(name, 0)  # the two folded legs side by side
-        lo = [(xo - half) * UNITS, to_y(y0) * UNITS, to_z(d0) * UNITS]
-        hi = [(xo + half) * UNITS, to_y(y1) * UNITS, to_z(d1) * UNITS]
+        x0, x1 = half if isinstance(half, tuple) else (xo - half, xo + half)
+        lo = [x0 * UNITS, to_y(y0) * UNITS, to_z(d0) * UNITS]
+        hi = [x1 * UNITS, to_y(y1) * UNITS, to_z(d1) * UNITS]
         origin = [0, to_y(pivot[1]) * UNITS, to_z(pivot[0]) * UNITS] if pivot else [0, 0, 0]
         cubes.append({'name': name, 'mat': mat, 'rot': rot, 'origin': origin, 'from': lo, 'to': hi})
     faces = []
@@ -162,7 +170,13 @@ def write():
         elements.append(e)
     group = lambda name, origin: {'name': name, 'origin': r3([v * UNITS for v in origin]), 'color': 0, 'uuid': uid(),
                                   'export': True, 'isOpen': True, 'locked': False, 'visibility': True, 'autouv': 0, 'children': []}
-    outliner = [e['uuid'] for e in elements] + [group(n, p) for n, p in POINTS.items()]
+    grouped = {part: g for g, (parts, _) in GROUPS.items() for part in parts}
+    outliner = [e['uuid'] for e in elements if e['name'] not in grouped]
+    for gname, (parts, (pd, py)) in GROUPS.items():
+        grp = group(gname, (0, to_y(py), to_z(pd)))
+        grp['children'] = [e['uuid'] for e in elements if e['name'] in parts]
+        outliner.append(grp)
+    outliner += [group(n, p) for n, p in POINTS.items()]
     buf = io.BytesIO(); img.save(buf, 'PNG')
     project = {'meta': {'format_version': '4.5', 'model_format': 'free', 'box_uv': False},
                'name': 'rpk', 'model_identifier': '', 'visible_box': [1, 1, 0],

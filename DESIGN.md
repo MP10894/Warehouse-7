@@ -369,6 +369,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Suicide bomber: runs at players and blows up within 1 m (RGD-5 blast); his vest also goes off if he is shot dead; beeps as he closes in; in attack waves from wave 2 and placed in each Najaf district. Placeholder look: militia clothes with a tan explosive vest and a blinking light |
 | 2026-10-23 | Co-op messages: when many enemies are around both players, the furthest are left out first |
 | 2026-10-23 | Suicide bomber has his own model from an OpenArt sheet: red face scarf, maroon track jacket, tan explosive charges on a black harness and a belt of charges, detonator in his right hand, blinking red light on his chest |
+| 2026-10-23 | Reload animations for the RPK (drum rocks out and in like the AK's magazine; charging handle only when empty) and the P320 (magazine slides out of the grip and falls, fresh one pushed home; when empty the slide stays locked back until the slide catch drops it at the end) |
 
 ## Open questions
 

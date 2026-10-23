@@ -85,7 +85,7 @@ def side_box(name, x0, x1, y0, y1, half, ramp, shade, group=None, rot=None, orig
             'group': group, 'rot': rot, 'origin': origin, 'xoff': xoff, 'quad': quad}
 
 BOXES = [
-    side_box('slide', 125, 1140, 205, 350, 4.0, 'Gun metal', 2),
+    side_box('slide_body', 125, 1140, 205, 350, 4.0, 'Gun metal', 2),
     side_box('dust_cover', 150, 470, 350, 445, 3.5, 'Gun metal', 1),
     side_box('frame', 470, 1180, 350, 470, 3.5, 'Gun metal', 1),
     side_box('guard_front', 480, 525, 470, 625, 2.0, 'Gun metal', 1),
@@ -93,6 +93,8 @@ BOXES = [
     side_box('trigger', 640, 700, 480, 590, 1.0, 'Gun metal', 1),
     side_box('grip', 812, 1122, 470, 925, 3.6, 'Gun metal', 1, rot=-GRIP_DEG, lean=GRIP_LEAN),
     side_box('base_plate', 800, 1080, 925, 980, 4.0, 'Gun metal', 3, rot=-GRIP_DEG),
+    # the magazine inside the grip: hidden until it slides out on a reload
+    side_box('mag_body', 850, 1085, 500, 925, 3.0, 'Gun metal', 1, rot=-GRIP_DEG, lean=GRIP_LEAN),
     side_box('front_sight', 150, 205, 172, 205, 1.0, 'Gun metal', 1),
     side_box('rear_sight_L', 985, 1075, 168, 205, 1.3, 'Gun metal', 1, xoff=-2.4),
     side_box('rear_sight_R', 985, 1075, 168, 205, 1.3, 'Gun metal', 1, xoff=2.4),
@@ -100,6 +102,9 @@ BOXES = [
     side_box('slide_catch', 815, 905, 355, 400, 0.5, 'Gun metal', 3, xoff=-4.0),
 ]
 GRIP_PIVOT = (967, 470)  # the grip and magazine lean back around the middle of the grip's top
+# parts the game moves on its own (reload): the magazine slides out of the grip; the slide
+# locks back when the pistol is empty and snaps forward when it is reloaded
+GROUPS = {'magazine': ('base_plate', 'mag_body'), 'slide': ('slide_body', 'front_sight', 'rear_sight_L', 'rear_sight_R')}
 
 # points (Blockbench units from the origin): where bullets start, where the eye looks
 # through, where the left hand goes
@@ -176,7 +181,12 @@ def write():
         elements.append(e)
     group = lambda name, origin, kids: {'name': name, 'origin': r3(origin), 'color': 0, 'uuid': uid(), 'export': True,
                                         'isOpen': True, 'locked': False, 'visibility': True, 'autouv': 0, 'children': kids}
-    outliner = [e['uuid'] for e in elements] + [group(n, p, []) for n, p in POINTS.items()]
+    grouped = {part: g for g, parts in GROUPS.items() for part in parts}
+    outliner = [e['uuid'] for e in elements if e['name'] not in grouped]
+    pivots = {'magazine': [0, gpy, gpz], 'slide': [0, to_y(205), to_z(1140)]}
+    for g, parts in GROUPS.items():
+        outliner.append(group(g, pivots[g], [e['uuid'] for e in elements if e['name'] in parts]))
+    outliner += [group(n, p, []) for n, p in POINTS.items()]
     buf = io.BytesIO(); tex.save(buf, 'PNG')
     project = {'meta': {'format_version': '4.5', 'model_format': 'free', 'box_uv': False},
                'name': 'sig_p320', 'model_identifier': '', 'visible_box': [1, 1, 0],

@@ -147,9 +147,14 @@ would be only 6 pixels long. At 256 it is about 50 units (and pixels) long, a ri
     rocket.
   - `magazine` (optional, a group with the magazine's boxes): with it, the reload shows the
     left hand taking the magazine out and putting a fresh one in. Put the group's pivot
-    where the magazine rocks about: the front lug (top front) for an AK-pattern magazine.
+    where the magazine rocks about: the front lug (top front) for an AK-pattern magazine or
+    the RPK's drum. (Pistols drop theirs straight out of the grip instead.)
   - `charging_handle` (optional, a group): slides back 9 cm when an empty gun is reloaded;
     the right hand pulls it. Put it on the right side.
+  - `slide` (optional, pistols, a group with the slide and its sights): sits locked back
+    while the pistol is empty and slams forward at the end of an empty reload. A pistol's
+    `magazine` group should include the part hidden inside the grip, since it slides out
+    along the grip.
 - The same model is used in first person (seen close) and on soldiers (seen small), so the
   side facing the player's eye (top and right side) matters most.
 
