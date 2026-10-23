@@ -122,7 +122,7 @@ One `.glb` per weapon, named with the weapon id from the Weapons tab
 (lowercase, spaces become `_`, hyphens dropped): `sig_p320.glb`, `m4a1.glb`, `ak47.glb`,
 `rpg7.glb`.
 
-**Budget: 300 triangles** (weapons are on screen all the time).
+**Budget: 400 triangles** (weapons are on screen all the time; raised from 300 on 2026-10-23 so round sights and other details read properly).
 
 **Scale: 1 Blockbench unit = 1 texture pixel = 1/256 m (256 px per metre).** A weapon in
 your hands is seen far closer than any wall, so at the world's 32 px per metre a pistol
@@ -319,14 +319,14 @@ Drafts so far: `assets/blocks/wall.png`, `assets/sources/enemy_insurgent.bbmodel
 (→ `assets/weapons/sig_p320.glb`), `assets/sources/player_hands.bbmodel` (→ `assets/items/player_hands.glb`),
 `assets/sources/ak47.bbmodel` (→ `assets/weapons/ak47.glb`; shape from the real rifle's
 proportions because its reference sheet had no usable side view), `assets/sources/rpk.bbmodel`
-(→ `assets/weapons/rpk.glb`; real proportions, look from its sheet), `assets/sources/mk14ebr.bbmodel` (→ `assets/weapons/mk14ebr.glb`; from the sheet's side view only, since its front and back views were wrong; 300 triangles, the full budget), `assets/sources/mp5.bbmodel` (→ `assets/weapons/mp5.glb`; from the sheet's side view, without the stray prong under the handguard; sights split into posts so you can aim through them; 300 triangles), all with OpenArt
+(→ `assets/weapons/rpk.glb`; real proportions, look from its sheet), `assets/sources/mk14ebr.bbmodel` (→ `assets/weapons/mk14ebr.glb`; from the sheet's side view only, since its front and back views were wrong; 300 triangles, the full budget), `assets/sources/mp5.bbmodel` (→ `assets/weapons/mp5.glb`; from the sheet's side view, without the stray prong under the handguard; short grip, a round front sight hood (a ring of 8 turned boxes) and a drum rear sight with a peep hole you aim through; 396 triangles), all with OpenArt
 references in `assets/sources/reference/`.
 
 ## Decisions (2026-10-22)
 
 1. Pixel density **32 px per metre**; terrain 16.
 2. Tool: **Blockbench**.
-3. Triangle budgets: characters **300**, weapons **300**, carried crates and pickups **60**,
+3. Triangle budgets: characters **300**, weapons **400** (300 until 2026-10-23), carried crates and pickups **60**,
    base upgrades **150**, first-person hands and forearms **300** (raised from 100 on 2026-10-22
    so the hands read as hands).
 4. **Simple gloved hands** in first person.

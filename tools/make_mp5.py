@@ -83,30 +83,24 @@ def part(name, x0, x1, y0, y1, half, shade=1, xoff=0.0, lean=0, group=None):
     return {'name': name, 'img': (x0, y0, x1, y1), 'half': half, 'shade': shade, 'xoff': xoff, 'lean': lean, 'group': group}
 
 PARTS = [
-    part('muzzle', 57, 97, 445, 476, 2.6, 1),
-    part('barrel_lugs', 97, 130, 440, 481, 3.4, 1),
-    # sights: split so you can look through them when aiming (a solid box would block the view)
-    part('front_sight_base', 128, 168, 400, 486, 3.2, 1),
-    part('front_hood_left', 128, 168, 332, 400, 0.8, 1, xoff=-2.4),
-    part('front_hood_right', 128, 168, 332, 400, 0.8, 1, xoff=2.4),
-    part('front_post', 140, 156, 360, 400, 0.5, 2),
+    part('muzzle', 57, 130, 443, 478, 2.8, 1),    # barrel and three-lug muzzle in one piece (saves triangles for the sights)
+    # front sight: a post inside a round hood (the hood is built in extra() below)
+    part('front_sight_base', 128, 168, 391, 486, 3.2, 1),
+    part('front_post', 141, 155, 361, 391, 0.5, 2),
     part('cocking_tube', 160, 452, 388, 421, 3.6, 1),
     part('handguard', 165, 452, 419, 516, 7.0, 0),
     part('receiver', 450, 800, 384, 492, 6.4, 1),
     part('receiver_cap', 795, 905, 376, 538, 6.0, 1),
-    part('rear_sight_base', 714, 782, 372, 390, 3.2, 1),
-    part('rear_drum_left', 726, 770, 343, 372, 0.8, 1, xoff=-2.6),
-    part('rear_drum_right', 726, 770, 343, 372, 0.8, 1, xoff=2.6),
+    part('rear_sight_base', 724, 772, 386, 394, 2.6, 1),   # the drum itself is built in extra() below
     part('trigger_housing', 470, 800, 490, 576, 5.4, 0),
     part('mag_well', 452, 526, 490, 562, 4.6, 1),
     part('trigger_guard', 552, 682, 628, 646, 1.4, 1),      # just the bottom bar: a box can't show the opening
     part('guard_front', 552, 570, 574, 646, 1.4, 1),
     part('trigger', 598, 616, 576, 612, 0.8, 1),
-    part('pistol_grip', 718, 790, 570, 842, 4.4, 0, lean=40),
+    part('pistol_grip', 718, 790, 570, 760, 4.4, 0, lean=28),   # real length: ends just under the fist
     part('magazine', 453, 520, 560, 836, 3.2, 0, lean=-72, group='magazine'),
-    part('stock_front', 903, 1000, 437, 562, 5.6, 0),
-    part('stock_mid', 1000, 1120, 437, 600, 5.6, 0),
-    part('stock_rear', 1120, 1250, 437, 652, 5.6, 0),
+    part('stock_front', 903, 1060, 437, 580, 5.6, 0),
+    part('stock_rear', 1060, 1250, 437, 652, 5.6, 0),
     part('butt_plate', 1248, 1278, 437, 652, 6.0, 0),
     part('charging_handle', 255, 290, 378, 402, 1.6, 2, xoff=-5.4, group='charging_handle'),
 ]
@@ -122,6 +116,37 @@ POINTS = {
     'eye': (0, to_y(361), to_z(1010)),              # cheek on the stock, eye a hand's width behind the drum
     'hand_left': (-2.0, to_y(512), to_z(300)),      # under the handguard
 }
+
+
+import math
+SIGHT_Y = 361   # the line of sight on the side view: through the drum's peep hole to the post tip
+
+
+def extra():
+    """Round parts made of turned boxes (the side view alone can't describe them):
+    the front sight's round hood and the rear sight's drum with its peep hole."""
+    out = []
+    yc = to_y(SIGHT_Y)
+    # front hood: a ring of 8 short boxes round the barrel axis
+    z0, z1 = sorted((to_z(128), to_z(168)))
+    R, t = 4.3, 0.9
+    hw = R * math.tan(math.pi / 8) + 0.05
+    for k in range(8):
+        out.append({'name': f'front_hood_{k}', 'from': [-hw, yc + R - t, z0], 'to': [hw, yc + R, z1],
+                    'rotv': [0, 0, k * 45], 'origin': [0, yc, (z0 + z1) / 2], 'plain': 1})
+    # rear drum: an eight-sided drum lying across the gun, with a square peep hole through it
+    # front to back on the line of sight
+    zc, a, W, h = to_z(748), 4.0, 3.4, 3.0   # the hole is wide enough to show the front hood's ring round the post
+    for side, (xa, xb) in (('left', (-W, -h / 2)), ('right', (h / 2, W))):
+        for turn in (0, 45):
+            out.append({'name': f'rear_drum_{side}{"_45" if turn else ""}', 'from': [xa, yc - a, zc - a], 'to': [xb, yc + a, zc + a],
+                        'rotv': [turn, 0, 0], 'origin': [0, yc, zc], 'img': (714, 332, 782, 390)})
+    for name, ya, yb in (('rear_drum_top', h / 2, a), ('rear_drum_bottom', -a, -h / 2)):
+        out.append({'name': name, 'from': [-h / 2, yc + ya, zc - a * 0.55], 'to': [h / 2, yc + yb, zc + a * 0.55],
+                    'origin': [0, yc, zc], 'plain': 1})
+    for c in out:
+        c.setdefault('shade', 1); c.setdefault('group', None); c.setdefault('lean', 0); c.setdefault('img', None)
+    return out
 
 
 def build():
@@ -140,13 +165,16 @@ def build():
             c['rot'] = -ang; c['origin'] = [0, to_y(y0), to_z((x0 + x1) / 2)]
             c['quad'] = [(x0, y0), (x0 + b['lean'], y1), (x1 + b['lean'], y1), (x1, y0)]
         cubes.append(c)
+    cubes += extra()
     faces = []
     for c in cubes:
         w, hgt, d = (max(1, round(t - f)) for f, t in zip(c['from'], c['to']))
         q = c.get('quad')
         faces += [
-            (c, 'west', d, hgt, lambda w_, h_, c=c, q=q: sample(c['img'], w_, h_, quad=q)),
-            (c, 'east', d, hgt, lambda w_, h_, c=c, q=q: sample(c['img'], w_, h_, mirror=True, quad=q)),
+            (c, 'west', d, hgt, (lambda w_, h_, c=c: flat('Gun metal', c['shade'], w_, h_, len(c['name']) + 5)) if c.get('plain') or not c['img']
+                else (lambda w_, h_, c=c, q=q: sample(c['img'], w_, h_, quad=q))),
+            (c, 'east', d, hgt, (lambda w_, h_, c=c: flat('Gun metal', c['shade'], w_, h_, len(c['name']) + 6)) if c.get('plain') or not c['img']
+                else (lambda w_, h_, c=c, q=q: sample(c['img'], w_, h_, mirror=True, quad=q))),
             (c, 'north', w, hgt, lambda w_, h_, c=c: flat('Gun metal', c['shade'], w_, h_, len(c['name']))),
             (c, 'south', w, hgt, lambda w_, h_, c=c: flat('Gun metal', c['shade'], w_, h_, len(c['name']) + 2)),
             (c, 'up', w, d, lambda w_, h_, c=c: flat('Gun metal', min(4, c['shade'] + 1), w_, h_, len(c['name']) + 3)),
@@ -185,6 +213,8 @@ def write():
              'origin': r3(c.get('origin', [0, 0, 0])), 'faces': c['faces']}
         if c.get('rot'):
             e['rotation'] = [round(c['rot'], 2), 0, 0]
+        elif c.get('rotv') and any(c['rotv']):
+            e['rotation'] = [round(v, 2) for v in c['rotv']]
         elements.append(e)
     group = lambda name, origin, kids: {'name': name, 'origin': r3(origin), 'color': 0, 'uuid': uid(), 'export': True,
                                         'isOpen': True, 'locked': False, 'visibility': True, 'autouv': 0, 'children': kids}
