@@ -6,17 +6,18 @@ import { levelBases, crateWanted, spotUseful } from '../sim/base.js';
 
 export function createHud() {
   const st = { hitT: 0, headHit: false, hurt: [] };
-  return {
+  const api = {
     handle(ev, player) {
       if (!player) return;
       if (ev.type === 'hitConfirm' && ev.playerId === player.id) { st.hitT = 0.15; st.headHit = ev.head; }
       if (ev.type === 'hurt' && ev.targetId === player.id) st.hurt.push({ ang: Math.atan2(ev.fromX - player.x, ev.fromZ - player.z), t: 1 });
     },
-    draw(ctx, W, H, player, world, dt) {
+    draw(ctx, W, H, player, world, dt, scope = 0) {
       ctx.clearRect(0, 0, W, H);
       st.hitT -= dt;
       if (!player || !player.alive || player.downed) return;
       const cx = W >> 1, cy = H >> 1;
+      if (scope > 0.01) { drawScope(ctx, W, H, scope); if (scope > 0.6) { drawHits(ctx, W, H, player, dt); return; } }
       const slot = player.slots[player.active];
       const def = slot ? world.data.weapons[slot.w] : null;
       const b = world.data.settings.ballistics;
@@ -31,6 +32,11 @@ export function createHud() {
         ctx.fillStyle = 'rgba(255,60,40,0.95)';
         ctx.fillRect(cx, cy, 1, 1);
       }
+      drawHits(ctx, W, H, player, dt);
+    }
+  };
+  function drawHits(ctx, W, H, player, dt) {
+      const cx = W >> 1, cy = H >> 1;
       if (st.hitT > 0) {
         ctx.fillStyle = st.headHit ? '#ff4030' : '#ffffff';
         for (let i = 3; i < 7; i++) { ctx.fillRect(cx - i, cy - i, 1, 1); ctx.fillRect(cx + i, cy - i, 1, 1); ctx.fillRect(cx - i, cy + i, 1, 1); ctx.fillRect(cx + i, cy + i, 1, 1); }
@@ -45,8 +51,39 @@ export function createHud() {
         ctx.fillStyle = `rgba(220,40,30,${h.t})`;
         ctx.fillRect(Math.round(x) - 3, Math.round(y) - 3, 6, 6);
       }
-    }
-  };
+  }
+  return api;
+}
+
+/** The view through a telescopic sight: black all round a round lens, a thin crosshair. */
+function drawScope(ctx, W, H, k) {
+  const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.47;
+  ctx.save();
+  ctx.globalAlpha = Math.min(1, k * 1.6);
+  ctx.fillStyle = '#050505';
+  ctx.beginPath();
+  ctx.rect(0, 0, W, H);
+  ctx.arc(cx, cy, R, 0, Math.PI * 2, true);
+  ctx.fill('evenodd');
+  // a darker rim inside the lens
+  const g = ctx.createRadialGradient(cx, cy, R * 0.75, cx, cy, R);
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.55)');
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+  // reticle: thin lines with thicker posts at the edges, a gap at the centre
+  ctx.fillStyle = 'rgba(10,10,10,0.95)';
+  const gap = Math.max(2, Math.round(R * 0.05));
+  ctx.fillRect(Math.round(cx - R), Math.round(cy), Math.round(R - gap), 1);
+  ctx.fillRect(Math.round(cx + gap), Math.round(cy), Math.round(R - gap), 1);
+  ctx.fillRect(Math.round(cx), Math.round(cy + gap), 1, Math.round(R - gap));
+  ctx.fillRect(Math.round(cx), Math.round(cy - R), 1, Math.round(R - gap));
+  const post = Math.round(R * 0.55);
+  ctx.fillRect(Math.round(cx - R), Math.round(cy) - 1, Math.round(R - post), 3);
+  ctx.fillRect(Math.round(cx + post), Math.round(cy) - 1, Math.round(R - post), 3);
+  ctx.fillRect(Math.round(cx) - 1, Math.round(cy + post), 3, Math.round(R - post));
+  ctx.fillStyle = 'rgba(220,40,30,0.95)';
+  ctx.fillRect(Math.round(cx), Math.round(cy), 1, 1);
+  ctx.restore();
 }
 
 /** Top-down map of the level, redrawn when blocks change. */

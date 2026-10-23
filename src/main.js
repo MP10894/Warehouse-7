@@ -95,6 +95,9 @@ if (!view) {
   const input = createInput({ app, touchEl: $('touch'), stick: $('stick'), knob: $('knob'), buttons, view, settings: S });
   const aim = { yaw: 0, pitch: 0 };
   let acc = 0, shake = 0;
+  // telescopic sights: how far into the scope view we are (0–1), and the reticle's drift
+  let scopeK = 0, swayT = 0;
+  const aimOut = { yaw: 0, pitch: 0 };
   // taps on RELOAD, SWAP and the use button wait here until a game step takes them: on a
   // fast screen many frames have no game step, and a tap read on such a frame was lost
   const taps = { reload: false, swap: false, interact: false, grenade: false };
@@ -286,6 +289,12 @@ if (!view) {
       const inp = input.sample();
       aim.yaw += -inp.lookX + inp.turn * 2.4 * dt;
       aim.pitch = Math.max(-S.controls.max_pitch, Math.min(S.controls.max_pitch, aim.pitch - inp.lookY));
+      // through a scope the aim drifts a little (more while walking): it moves where you shoot too
+      swayT += dt;
+      const lp = local();
+      const sw = scopeK * (S.controls.scope_sway ?? 0.003) * (lp.moving ? (S.controls.scope_sway_moving ?? 3) : 1);
+      aimOut.yaw = aim.yaw + Math.sin(swayT * 0.9) * sw;
+      aimOut.pitch = aim.pitch + Math.sin(swayT * 1.7) * sw * 0.6;
 
       if (role !== 'guest') {
         const base = { move: { x: inp.moveX, y: inp.moveY }, fire: inp.fire, ads: inp.ads };
@@ -293,7 +302,7 @@ if (!view) {
         acc += dt;
         let steps = 0, first = true;
         while (acc >= STEP && steps < 5) {
-          const cmd = { ...base, yaw: aim.yaw, pitch: aim.pitch };
+          const cmd = { ...base, yaw: aimOut.yaw, pitch: aimOut.pitch };
           if (first) { cmd.reload = taps.reload; cmd.swap = taps.swap; cmd.interact = taps.interact; cmd.grenade = taps.grenade; taps.reload = taps.swap = taps.interact = taps.grenade = false; }
           const cmds = { [localId]: cmd };
           if (role === 'host') cmds.p2 = guestCommand(first);
@@ -321,7 +330,7 @@ if (!view) {
         }
         p = local();
         if (p.alive && !p.downed) {
-          p.yaw = aim.yaw; p.pitch = aim.pitch; p.ads = inp.ads;
+          p.yaw = aimOut.yaw; p.pitch = aimOut.pitch; p.ads = inp.ads;
           walkPlayer(world, p, { x: inp.moveX, y: inp.moveY }, dt);
         }
         if (inp.fire && !net.prevFire) net.edges.fire++;
@@ -333,7 +342,7 @@ if (!view) {
         const e = net.edges;
         net.session.set({
           run: net.run,
-          c: [Math.round(inp.moveX * 100), Math.round(inp.moveY * 100), Math.round(aim.yaw * 1000), Math.round(aim.pitch * 1000),
+          c: [Math.round(inp.moveX * 100), Math.round(inp.moveY * 100), Math.round(aimOut.yaw * 1000), Math.round(aimOut.pitch * 1000),
             (inp.fire ? 1 : 0) | (inp.ads ? 2 : 0) | (p.moving ? 4 : 0), e.fire, e.reload, e.swap, e.interact, e.grenade],
           pos: [Math.round(p.x * 100), Math.round(p.y * 100), Math.round(p.z * 100)]
         });
@@ -355,16 +364,25 @@ if (!view) {
 
     shake = Math.max(0, shake - dt * 2);
     const slot = p.slots[p.active];
-    const zoom = p.ads && slot ? DATA.weapons[slot.w].ads_zoom : 1;
-    view.follow(p, aim, zoom, shake, dt);
+    const wdef = slot ? DATA.weapons[slot.w] : null;
+    const scope = wdef && wdef.scope > 1 ? wdef.scope : 0;
+    input.setScoped(!!scope);
+    const scopedNow = !!scope && p.ads && p.alive && !p.downed && mode === 'playing';
+    scopeK += ((scopedNow ? 1 : 0) - scopeK) * Math.min(1, dt * 12);
+    if (!scopedNow && scopeK < 0.02) scopeK = 0;
+    // a scope magnifies (4 = 4×); iron sights use the workbook's zoom
+    const zoom = p.ads && wdef ? (scope ? 1 / scope : wdef.ads_zoom) : 1;
+    if (mode !== 'playing') { aimOut.yaw = aim.yaw; aimOut.pitch = aim.pitch; }
+    view.follow(p, scopeK > 0 ? aimOut : aim, zoom, shake, dt);
     worldView.sync(world, dt);
     effects.update(dt);
     weatherFx.update(dt, world, view.camera);
     markers.update(world, mode === 'playing' ? p : null, dt);
     audio.setStorm(weatherFx.level);
     fp.update(dt, p, view.W / view.H);
-    view.render(mode === 'playing' ? fp : null);
-    hud.draw(view.hud, view.W, view.H, mode === 'playing' ? p : null, world, dt);
+    // looking through the scope: the gun is out of sight, the scope picture covers the view
+    view.render(mode === 'playing' && scopeK < 0.6 ? fp : null);
+    hud.draw(view.hud, view.W, view.H, mode === 'playing' ? p : null, world, dt, scopeK);
     minimap.draw(world, p, now);
     domHud.frame(dt, world, p, weatherFx.level * 0.8);
 

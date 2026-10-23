@@ -54,7 +54,8 @@ Layout plan (agreed): [docs/NAJAF_PLAN.md](docs/NAJAF_PLAN.md) (map in
 - Enemies no longer respawn inside a cleared base area.
 - A base can't be lost, but enemies can destroy everything built in it.
 - Base-building items are scattered around the level. Picking one up puts it in your
-  inventory and **slows you down**. You can carry **one at a time**.
+  inventory. You can carry **one at a time**. (It used to slow you down; removed on
+  2026-10-23 because it slowed the game too much. `carry_speed_factor` in settings.json.)
 - Building is contextual: a Build button appears when you're in the right spot with the
   right item.
 - Upgrades can be built and then **improved** (levels to be defined):
@@ -140,7 +141,11 @@ Starting values, to be tuned after play-testing:
   magazine size; maximum carried ammunition (including the loaded magazine); reload time;
   damage to health; damage to armour; damage to environment; area of effect (0–100,
   where **100 = 10 m radius**); fire mode (semi or automatic); rate of fire; recoil (0–100);
-  bloom (0–100); muzzle velocity; calibre; projectile (bullet, rocket or grenade); aim-down-sights zoom.
+  bloom (0–100); muzzle velocity; calibre; projectile (bullet, rocket or grenade); aim-down-sights zoom;
+  scope magnification (empty = iron sights).
+- **Scopes** (the Mk14 EBR, 4×): aiming down sights looks through the scope: a black ring
+  round the lens, a thin crosshair, the gun out of sight. Look speed drops (0.3 of normal),
+  and the aim drifts slightly, three times as much while walking. All on the tuning panel.
 - **Grenades (RGD-5)** are a quick-use item, not a weapon slot. While you have any, a
   grenade button with the count shows under the map (desktop: G). A toss takes 0.7 s: the
   rifle dips, the left hand throws, and you can't fire, reload or swap meanwhile. The
@@ -370,6 +375,8 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Co-op messages: when many enemies are around both players, the furthest are left out first |
 | 2026-10-23 | Suicide bomber has his own model from an OpenArt sheet: red face scarf, maroon track jacket, tan explosive charges on a black harness and a belt of charges, detonator in his right hand, blinking red light on his chest |
 | 2026-10-23 | Reload animations for the RPK (drum rocks out and in like the AK's magazine; charging handle only when empty) and the P320 (magazine slides out of the grip and falls, fresh one pushed home; when empty the slide stays locked back until the slide catch drops it at the end) |
+| 2026-10-23 | Mk14 EBR gets a 4× scope: full-screen scope view when aiming, slower look, slight drift. Weapons tab has a new *Scope magnification* column (empty = iron sights) |
+| 2026-10-23 | Carrying a crate no longer slows you down (it slowed the game too much) |
 
 ## Open questions
 

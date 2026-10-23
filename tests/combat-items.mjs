@@ -39,6 +39,15 @@ const fresh = seed => {
 };
 
 check(G && G.projectile === 'grenade' && G.max_total === 5, 'the RGD-5 is read from the workbook as a thrown weapon (carry up to 5)');
+check(data.weapons.mk14ebr.scope === 4 && data.weapons.ak47.scope === 0, 'the Mk14 EBR has a 4× scope (Scope magnification column); other guns use iron sights');
+{
+  // carrying a crate no longer slows you down
+  const w = fresh(9), p = w.players[0];
+  const x0 = p.z; step(w, { move: { x: 0, y: -1 }, yaw: 0 }, 30); const free = x0 - p.z;
+  p.carrying = { item: 'construction_crate', origin: { x: 0, y: 0, z: 0 } };
+  const x1 = p.z; step(w, { move: { x: 0, y: -1 }, yaw: 0 }, 30); const loaded = x1 - p.z;
+  check(Math.abs(free - loaded) < 0.01, `carrying a crate doesn't slow you down (${free.toFixed(2)} m vs ${loaded.toFixed(2)} m in half a second)`);
+}
 check(JSON.stringify(data.enemies.heavy_insurgent.drops) === JSON.stringify([{ type: 'armour', amount: 15 }]), 'heavy insurgents drop a 15-point armour plate (Item drop column)');
 
 // armour plate

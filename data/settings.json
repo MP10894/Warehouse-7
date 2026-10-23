@@ -4,7 +4,7 @@
     "max_health": 100,
     "max_armour": 300,
     "walk_speed": 4.6,
-    "carry_speed_factor": 0.6,
+    "carry_speed_factor": 1,
     "ads_speed_factor": 0.6,
     "radius": 0.3,
     "height": 1.8,
@@ -32,7 +32,10 @@
     "look_multiplier": 1.0,
     "aim_assist": 0.5,
     "aim_assist_angle_deg": 5,
-    "aim_assist_range": 60
+    "aim_assist_range": 60,
+    "scope_look_factor": 0.3,
+    "scope_sway": 0.003,
+    "scope_sway_moving": 3
   },
   "camera": {
     "target_horizontal_fov": 100,

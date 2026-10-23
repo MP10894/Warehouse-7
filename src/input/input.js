@@ -13,7 +13,8 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
   let look = { id: null, lx: 0, ly: 0 };
   const locked = () => document.pointerLockElement === touchEl;
   const adsActive = () => adsMouse || adsToggle;
-  const lookScale = () => (c.look_multiplier ?? 1) * (adsActive() ? c.ads_look_factor : 1);
+  let scoped = false;   // aiming through a telescopic sight: slower look (settings → controls)
+  const lookScale = () => (c.look_multiplier ?? 1) * (adsActive() ? (scoped ? c.scope_look_factor ?? 0.3 : c.ads_look_factor) : 1);
 
   addEventListener('keydown', e => {
     if (!enabled) return;
@@ -127,6 +128,8 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
   if (matchMedia('(pointer:coarse)').matches) app.classList.add('touch');
 
   return {
+    /** The weapon in hand has a scope (so aiming down sights looks through it). */
+    setScoped(on) { scoped = !!on; },
     setEnabled(on) {
       enabled = on;
       if (!on) {
