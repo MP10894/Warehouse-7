@@ -124,6 +124,17 @@ check(bad.length === 0, `the roof of every building with stairs can be reached${
   check(b2.y < 0.1 && b2.x < gx, 'you can\'t step onto rubble where your head would hit the floor above');
 }
 
+// the building-site crate sits beside a stairwell: walking past its edge must not trap you
+{
+  const w = createWorld({ data, levelId: 'najaf', seed: 3 }); w.enemies = []; w.groups = [];
+  const pl = w.players[0], crate = w.pickups.find(k => k.type === 'item');
+  Object.assign(pl, { x: crate.x + 0.3, z: crate.z + 0.3, y: crate.y });
+  const go = (x, y, s) => { const x0 = pl.x, z0 = pl.z; for (let i = 0; i < s * 60; i++) { stepWorld(w, { p1: { move: { x, y }, yaw: pl.yaw } }, 1 / 60); w.events.length = 0; } return Math.hypot(pl.x - x0, pl.z - z0); };
+  go(0, 0, 0.3);
+  const moves = [go(0, -1, 0.5), go(0, 1, 0.5), go(1, 0, 0.5), go(-1, 0, 0.5)];
+  check(pl.carrying && moves.every(m => m > 0.4), `after picking up the site's crate you can walk in every direction (${moves.map(m => m.toFixed(1)).join(', ')} m)`);
+}
+
 // claiming the police station and building walls there
 {
   const w = createWorld({ data, levelId: 'najaf', seed: 5 });

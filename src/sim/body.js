@@ -50,6 +50,9 @@ export function blocked(world, x, z, y, r, height, step) {
 export function moveBody(world, body, dx, dz, dt) {
   const s = world.data.settings.player;
   const r = s.radius, h = s.height, step = s.step_height;
+  // safety net: if the body somehow overlaps a block (it shouldn't), push it out to the
+  // nearest free spot rather than leaving it stuck
+  if (blocked(world, body.x, body.z, body.y, r, h, step)) unstick(world, body, r, h, step);
   const n = Math.max(1, Math.ceil(Math.max(Math.abs(dx), Math.abs(dz)) / 0.2));
   let movedX = 0, movedZ = 0;
   for (let k = 0; k < n; k++) {
@@ -58,7 +61,10 @@ export function moveBody(world, body, dx, dz, dt) {
     const nz = body.z + dz / n;
     if (!blocked(world, body.x, nz, body.y, r, h, step)) { movedZ += nz - body.z; body.z = nz; }
   }
-  const ground = groundAt(world, body.x, body.z, body.y + step);
+  let ground = groundAt(world, body.x, body.z, body.y + step);
+  // don't drop into a gap the body doesn't fit (e.g. over the edge of a stairwell while
+  // still overlapping the floor beside it): stay on the edge until clear of it
+  if (ground < body.y - 0.02 && blocked(world, body.x, body.z, ground, r, h, step)) ground = body.y;
   if (ground >= body.y - 0.02 || (body.onGround && body.y - ground <= step)) {
     body.y = ground; body.vy = 0; body.onGround = true;
   } else {
@@ -67,4 +73,18 @@ export function moveBody(world, body, dx, dz, dt) {
     if (body.y <= ground) { body.y = ground; body.vy = 0; body.onGround = true; } else body.onGround = false;
   }
   return Math.hypot(movedX, movedZ);
+}
+
+/** Move an overlapping body to the nearest spot (within half a metre) where it fits. */
+function unstick(world, body, r, h, step) {
+  for (let d = 0.05; d <= 0.5; d += 0.05) {
+    for (let k = 0; k < 16; k++) {
+      const a = k * Math.PI / 8;
+      const x = body.x + Math.cos(a) * d, z = body.z + Math.sin(a) * d;
+      for (const y of [body.y, groundAt(world, x, z, body.y + step)]) {
+        if (!blocked(world, x, z, y, r, h, step)) { body.x = x; body.z = z; body.y = Math.max(y, groundAt(world, x, z, y + step)); return true; }
+      }
+    }
+  }
+  return false;
 }

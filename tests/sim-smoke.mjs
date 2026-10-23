@@ -113,6 +113,37 @@ check(w0.players.length === 1 && w0.enemies.length >= 10, `level built: ${w0.ene
   check(p.carrying && p.carrying.item === 'construction_crate', 'picked up the construction crate on the roof');
 }
 
+// --- and back down again, carrying the crate (play-test bug 2026-10-23: stuck by a stairwell)
+{
+  const w = fresh(); noEnemies(w);
+  const p = w.players[0];
+  p.x = 18.5; p.z = 16.5; p.y = 9;
+  p.carrying = { item: 'construction_crate', origin: { x: 18.5, y: 9, z: 16.5 } };
+  const nav = buildNav(w);
+  const field = flowField(nav, [nodeAt(nav, 17.5, groundAt(w, 17.5, 19.5, 1), 19.5)]);
+  let minY = 99;
+  for (let i = 0; i < 60 * 90; i++) {
+    const n = nodeAt(nav, p.x, p.y, p.z);
+    if (n < 0 || field[n] === 0) break;
+    let best = -1, bd = field[n];
+    for (let d = 0; d < 8; d++) { const m = nav.links[n * 8 + d]; if (m >= 0 && field[m] >= 0 && field[m] < bd) { bd = field[m]; best = m; } }
+    if (best < 0) break;
+    p.yaw = Math.atan2(-(nav.x[best] + 0.5 - p.x), -(nav.z[best] + 0.5 - p.z));
+    stepWorld(w, { p1: { move: { x: 0, y: -1 }, yaw: p.yaw, pitch: 0 } }, dt);
+    w.events.length = 0;
+    minY = Math.min(minY, p.y);
+  }
+  check(minY < 0.6, `carried the crate back down all three flights (got down to ${minY.toFixed(2)} m)`);
+  // a body overlapping a wall gets pushed free instead of being stuck
+  const q = fresh(); noEnemies(q);
+  const b = { x: 12.15, y: 0, z: 14.5, vy: 0, onGround: true };  // half inside the tower's west wall
+  b.y = groundAt(q, b.x, b.z, 1);
+  const { moveBody } = await import('../src/sim/body.js');
+  let moved = 0;
+  for (let i = 0; i < 30; i++) moved += moveBody(q, b, 0, 2 / 60, 1 / 60);
+  check(moved > 0.5, `someone overlapping a wall is pushed free and can walk again (moved ${moved.toFixed(2)} m)`);
+}
+
 // --- shooting: bullets travel and drop
 {
   const w = fresh(); noEnemies(w);
