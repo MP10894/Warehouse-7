@@ -400,6 +400,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Lived-in streets, first part: building colours, shop fronts, windows, rooftops, wires and ground marks (decoration only). Street clutter and movement (smoke, washing swaying, birds, ambient sound) next |
 | 2026-10-23 | Wrecked cars and trucks will be solid cover, not decoration |
 | 2026-10-23 | Street clutter added (decoration only), plus 22 wrecked vehicles as solid, unbreakable cover. Next: movement (smoke, swaying washing, birds, ambient sound) |
+| 2026-10-23 | Sound design (ambient sound and the rest) is parked until gameplay, mechanics and graphics are settled |
 
 ## Open questions
 
