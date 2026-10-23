@@ -281,6 +281,25 @@ black, white, muzzle-flash yellow, flame orange, sky). Picture: `docs/palette.pn
 3. **Refine**: Martial opens the `.bbmodel` in Blockbench and makes it look right.
 4. **Check**: Claude checks the saved file (`tools/bbmodel.py`) and converts or commits it.
 
+**Weapon reference prompt (OpenArt).** Keep the style wording the same for every gun so the
+sheets match; change only the name and the "Gun details" line:
+
+```
+Low poly PS1 style 3D model of a <GUN NAME>, weapon reference sheet showing a side view, a
+front view and a back view. Retro 1990s PlayStation 1 game asset: chunky low polygon shapes
+with hard edges, small pixelated low-resolution textures, slightly worn metal, flat lighting.
+Plain white background, no text, no labels, no watermark.
+
+Layout: a large left side view across the top (muzzle pointing left, perfectly flat side-on,
+no perspective), with a smaller front view (looking down the barrel) and back view (looking at
+the butt plate) underneath. All views the same scale, not overlapping.
+
+Gun details: <the parts that make this gun recognisable, and its colours>. No hands, no
+scope (unless it has one), no sling.
+```
+
+The side view matters most: models can be built from it alone (the Mk14 was).
+
 Drafts so far: `assets/blocks/wall.png`, `assets/sources/enemy_insurgent.bbmodel`
 (→ `assets/characters/enemy_insurgent.glb`, rebuilt from its OpenArt sheet),
 `assets/sources/enemy_heavy_insurgent.bbmodel` (→ `assets/characters/enemy_heavy_insurgent.glb`), `assets/sources/enemy_militia.bbmodel` (→ `assets/characters/enemy_militia.glb`; the palette has no maroon, so the jacket uses the dark reds), `assets/sources/enemy_suicide_bomber.bbmodel` (→ `assets/characters/enemy_suicide_bomber.glb`; charges and charge belt painted as tan blocks with black tape so they read at a distance), `assets/sources/sig_p320.bbmodel`
