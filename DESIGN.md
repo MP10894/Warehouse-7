@@ -77,6 +77,11 @@ Starting values, to be tuned after play-testing:
   (refills a share of every gun you carry: 30 / 40 / 50 %), a first aid kit (+25 / 40 / 60
   health, up to full) or armour (+25 / 50 / 75). The next one appears 45 / 35 / 25 s
   after the last was taken (armour: 60 / 45 / 30 s).
+- **Armoury:** at a built ammunition supply the use button says ARMOURY and opens a small
+  panel of weapons to swap for: the MP5 at level 1, the M4A1 at level 2, the Mk14-EBR at
+  level 3 (upgrades.csv → `unlocks`). The new weapon comes fully loaded and goes into an
+  empty slot, or replaces the one in your hands, which is left on the ground a few steps
+  from the locker so you can take it back. On a computer: 1–3 to pick, E or Esc to close.
 - A locker can be destroyed (150 health, 60 armour). Its upgrade goes back to nothing and
   its crate starts coming back again.
 - A crate is only picked up while its upgrade is below the top level, so you can't get
@@ -86,6 +91,9 @@ Starting values, to be tuned after play-testing:
   walls go. The markings are faint, pulse while you carry the matching crate, and
   disappear once that upgrade is at its top level (wall lines come back where walls are
   blown away). Built lockers show their icon and level above them.
+- **Crates in every district:** each district (city, refinery, outskirts) has its own
+  construction, ammunition, medical and armour crate, 40–80 m from its base, plus a couple
+  of spares further out. A used crate comes back where it was found.
 
 ## Enemies and waves
 
@@ -205,6 +213,9 @@ Starting values, to be tuned after play-testing:
   loose paper and broken concrete in the streets, dry shrubs out in the open, razor wire
   along some low walls and sandbags. Market stalls (over the market crates), carpets and
   date palms are placed by hand in level.json → `decor`. All decoration only, like the rest.
+- **Things that move:** washing on the rooftop lines swings in the wind; thin smoke rises
+  from some burnt-out wrecks and a few smouldering rubbish heaps in the city (never in a
+  base) and drifts the same way as the refinery flare's smoke. No birds.
 - **Wrecked vehicles are solid cover:** burnt-out or abandoned cars, pickups and lorries
   (prop type `wreck`) block movement and bullets like steel and never break. The block grid
   holds them as plain solid blocks; the graphics draw the vehicle over them. 14 in the city
@@ -283,8 +294,8 @@ around the crossroads where you start:
   towers, the flare stack with its permanent smoke, the loading bay, the security post
   (armour crate), and **base C, the control building**.
 - **Outskirts** (south and west): dunes, the dry riverbed, rock outcrops, single-storey
-  houses, the gas station, the army checkpoint (ammunition crate behind sandbags), the
-  quarry (second construction crate), the wrecked convoy, sandstorm zones, high dunes
+  houses, the gas station, the army checkpoint (spare ammunition crate behind sandbags), the
+  quarry (construction crate), the wrecked convoy (armour crate), sandstorm zones, high dunes
   along the map edge, and **base B, the truck stop**.
 
 65 enemies in 22 groups. The refinery and outskirts were drafted by
@@ -401,6 +412,9 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Wrecked cars and trucks will be solid cover, not decoration |
 | 2026-10-23 | Street clutter added (decoration only), plus 22 wrecked vehicles as solid, unbreakable cover. Next: movement (smoke, swaying washing, birds, ambient sound) |
 | 2026-10-23 | Sound design (ambient sound and the rest) is parked until gameplay, mechanics and graphics are settled |
+| 2026-10-23 | Every district has a full set of upgrade crates 40–80 m from its base; a crate returns to where it was found |
+| 2026-10-23 | The ammunition supply doubles as an armoury: MP5 (level 1), M4A1 (level 2), Mk14-EBR (level 3), full load; the old weapon is dropped beside the locker |
+| 2026-10-23 | Drifting smoke (some burnt wrecks, a few rubbish fires in the city) and swaying washing; no birds over the city |
 
 ## Open questions
 

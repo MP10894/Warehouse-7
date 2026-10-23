@@ -280,8 +280,9 @@ export function planDecor(world, amount = 1) {
     if (b.roofed && b.w >= 5 && b.d >= 5) {
       const ry = b.base + b.top * 3;
       const onRoof = (x, z) => cell(x, ry - 1, z) === V.SLAB && cell(x, ry, z) === V.AIR;
-      const corners = [[b.x + 1, b.z + 1], [b.x + b.w - 2, b.z + 1], [b.x + 1, b.z + b.d - 2], [b.x + b.w - 2, b.z + b.d - 2]]
-        .sort(() => r() - 0.5);
+      const corners = [[b.x + 1, b.z + 1], [b.x + b.w - 2, b.z + 1], [b.x + 1, b.z + b.d - 2], [b.x + b.w - 2, b.z + b.d - 2]];
+      // shuffle (Fisher–Yates: a sort with a random comparison gives different results in different browsers)
+      for (let i = corners.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [corners[i], corners[j]] = [corners[j], corners[i]]; }
       let used = 0;
       if (r() < (industrial ? 0.3 : 0.75) * amount) {
         const tanks = 1 + (r() < 0.4 ? 1 : 0);
@@ -387,8 +388,21 @@ export function planDecor(world, amount = 1) {
 
   // ---- wrecked vehicles (solid cover in the simulation; this draws the vehicle over its blocks)
   (world.level.wrecks || []).forEach((w, i) => {
-    add({ kind: 'wreck', ...w, seed: 1000 + i * 7919, anchors: [] }, w.x + w.w / 2, w.z + w.d / 2);
+    const seed = 1000 + i * 7919, q = rng(seed);
+    q();   // (flip: the same draws as drawWreck)
+    const burnt = (q() < 0.45 && !w.colour) || !!w.burnt;
+    const r2 = rng(seed + 1); r2();
+    const smoke = burnt && r2() < 0.45 * amount;
+    add({ kind: 'wreck', ...w, burnt, smoke, seed, anchors: [] }, w.x + w.w / 2, w.z + w.d / 2);
   });
+
+  // a few rubbish heaps in the city smoulder
+  {
+    const r = rng(9091);
+    const bases = (world.data.levels[world.levelId]?.bases || []).map(b => b.area).filter(Boolean);
+    const inBase = it => bases.some(a => it.x >= a.x0 - 3 && it.x <= a.x1 + 3 && it.z >= a.z0 - 3 && it.z <= a.z1 + 3);
+    for (const it of items) if (it.kind === 'trash' && it.x < 136 && it.z < 136 && r() < 0.12 * amount && !inBase(it)) it.fire = true;
+  }
 
   // ---- hand-placed decoration from the level file: market stalls, carpets, palms ...
   (world.level.decor || []).forEach((d, i) => {
@@ -683,13 +697,7 @@ export function createDecor(scene, world, settings) {
           boxAt(x0, it.y, z0, 0.05, H, 0.05, [0.35, 0.33, 0.3]);
           boxAt(x1, it.y, z1, 0.05, H, 0.05, [0.35, 0.33, 0.3]);
           L.push(x0, it.y + H, z0, x1, it.y + H, z1);
-          const dx = x1 - x0, dz = z1 - z0, len = Math.hypot(dx, dz), tx = dx / len, tz = dz / len;
-          for (const c of it.clothes) {
-            const sag = 0.12 * Math.sin(Math.PI * c.t);
-            const cx = x0 + dx * c.t, cz = z0 + dz * c.t, top = it.y + H - sag;
-            quad([[cx - tx * c.w / 2, top, cz - tz * c.w / 2], [cx + tx * c.w / 2, top, cz + tz * c.w / 2],
-              [cx + tx * c.w / 2, top - c.h, cz + tz * c.w / 2], [cx - tx * c.w / 2, top - c.h, cz - tz * c.w / 2]], 'cloth', c.colour, 1);
-          }
+          // (the clothes themselves sway in the wind: see createMoving)
           break;
         }
         case 'wire': {
@@ -727,6 +735,11 @@ export function createDecor(scene, world, settings) {
             boxAt(it.x + (q() - 0.5) * 0.8, it.y, it.z + (q() - 0.5) * 0.8, sz, sz * (0.7 + q() * 0.4), sz * (0.8 + q() * 0.4), BAGS[Math.floor(q() * BAGS.length)]);
           }
           for (let k = 0; k < 2; k++) flat(it.x + (q() - 0.5) * 1.4, it.y, it.z + (q() - 0.5) * 1.4, 0.25, 0.2, q() * 3, 'paper', [1, 1, 1]);
+          if (it.fire) {   // a burnt patch with glowing embers in the middle
+            flat(it.x, it.y + 0.005, it.z, 1.8, 1.8, 0.4, 'scorch', [1, 1, 1]);
+            boxAt(it.x, it.y, it.z, 0.5, 0.12, 0.5, [1, 0.45, 0.12]);
+            boxAt(it.x + 0.1, it.y + 0.1, it.z - 0.05, 0.25, 0.1, 0.3, [1, 0.7, 0.2]);
+          }
           break;
         }
         case 'tyrestack': {
@@ -857,8 +870,11 @@ export function createDecor(scene, world, settings) {
 
   replan();
   for (const k of byRegion.keys()) buildRegion(k);
+  let moving = createMoving(scene, world, plan.items, mat);
 
   return {
+    /** Every frame: the washing sways and the smoke drifts. */
+    tick(dt, camera) { moving.tick(dt, camera); },
     /** Blocks changed (something broke or was built): redraw decoration hanging on them. */
     update(cells) {
       const dirty = new Set();
@@ -871,7 +887,135 @@ export function createDecor(scene, world, settings) {
       regions.clear();
       replan();
       for (const k of byRegion.keys()) buildRegion(k);
+      moving.dispose();
+      moving = createMoving(scene, world, plan.items, mat);
     },
-    get count() { return plan.items.length; }
+    get count() { return plan.items.length; },
+    get plan() { return plan; }
+  };
+}
+
+// ---------------------------------------------------------------- things that move
+// Washing on the lines swings in the wind, and smoke rises from burnt-out wrecks and
+// smouldering rubbish and drifts with the wind (the same way as the refinery flare's smoke).
+// One mesh each, rewritten every frame on the CPU: a few hundred quads, so it stays cheap.
+const WIND = [0.82, 0.57];   // drift direction (matches the flare's plume)
+
+function smokeTex() {
+  return pixelTexture(makeCanvas(32, 32, g => {
+    let s = 3;
+    const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+    for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) {
+      const d = Math.hypot(x - 15.5, y - 15.5) / 16;
+      if (d >= 1 || rnd() < d * d * 0.8) continue;
+      const v = 215 + rnd() * 40;
+      g.fillStyle = `rgba(${v},${v},${v},${(1 - d * d) * 0.9})`; g.fillRect(x, y, 1, 1);
+    }
+  }), false);
+}
+
+function createMoving(scene, world, items, decorMat) {
+  const meshes = [];
+  // ---- washing
+  const cloth = [];
+  for (const it of items) {
+    if (it.kind !== 'washing') continue;
+    const [x0, z0] = it.p0, [x1, z1] = it.p1, H = 1.6;
+    const dx = x1 - x0, dz = z1 - z0, len = Math.hypot(dx, dz), tx = dx / len, tz = dz / len;
+    for (const c of it.clothes) {
+      const sag = 0.12 * Math.sin(Math.PI * c.t);
+      cloth.push({ cx: x0 + dx * c.t, cz: z0 + dz * c.t, top: it.y + H - sag, tx, tz, w: c.w, h: c.h, colour: c.colour,
+        phase: (c.t * 13 + x0 * 0.7 + z0 * 0.3) % 6.28 });
+    }
+  }
+  let washGeo = null;
+  if (cloth.length) {
+    const [u0, v0, u1, v1] = uv(A.cloth);
+    const n = cloth.length * 6, P = new Float32Array(n * 3), U = [], C = [];
+    for (const c of cloth) for (const i of [0, 1, 2, 0, 2, 3]) {
+      U.push(...[[u0, v1], [u1, v1], [u1, v0], [u0, v0]][i]); C.push(...c.colour);
+    }
+    washGeo = new THREE.BufferGeometry();
+    washGeo.setAttribute('position', new THREE.BufferAttribute(P, 3));
+    washGeo.setAttribute('uv', new THREE.Float32BufferAttribute(U, 2));
+    washGeo.setAttribute('color', new THREE.Float32BufferAttribute(C, 3));
+    const m = new THREE.Mesh(washGeo, decorMat);
+    m.frustumCulled = false; m.userData.blocks = true;
+    scene.add(m); meshes.push(m);
+  }
+
+  // ---- smoke
+  const sources = [];
+  for (const it of items) {
+    if (it.kind === 'wreck' && it.smoke) sources.push({ x: it.x + it.w / 2, y: it.y + it.h * 0.9, z: it.z + it.d / 2, size: it.model === 'truck' ? 1.4 : 1, dark: 0.32, rate: 0.11 });
+    if (it.kind === 'trash' && it.fire) sources.push({ x: it.x, y: it.y + 0.2, z: it.z, size: 0.6, dark: 0.55, rate: 0.14 });
+  }
+  const PER = 14, smokeQuads = sources.length * PER;
+  let smokeGeo = null, smokeMesh = null;
+  if (smokeQuads) {
+    smokeGeo = new THREE.BufferGeometry();
+    smokeGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(smokeQuads * 18), 3));
+    const U = [];
+    for (let q = 0; q < smokeQuads; q++) for (const i of [0, 1, 2, 0, 2, 3]) U.push(...[[0, 1], [1, 1], [1, 0], [0, 0]][i]);
+    smokeGeo.setAttribute('uv', new THREE.Float32BufferAttribute(U, 2));
+    smokeGeo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(smokeQuads * 24), 4));
+    const smat = new THREE.MeshBasicMaterial({ map: smokeTex(), vertexColors: true, transparent: true, depthWrite: false, side: THREE.DoubleSide });
+    smokeMesh = new THREE.Mesh(smokeGeo, smat);
+    smokeMesh.frustumCulled = false; smokeMesh.userData.blocks = true; smokeMesh.renderOrder = 2;
+    scene.add(smokeMesh); meshes.push(smokeMesh);
+    sources.forEach((s, i) => { s.t0 = (i * 0.37) % 1; });
+  }
+
+  let t = 0;
+  const right = new THREE.Vector3(), up = new THREE.Vector3();
+  return {
+    tick(dt, camera) {
+      t += dt;
+      if (washGeo) {
+        const P = washGeo.attributes.position.array;
+        let k = 0;
+        for (const c of cloth) {
+          // the cloth swings out from the line, round its top edge
+          const nx = -c.tz, nz = c.tx;
+          const swing = Math.sin(t * 1.9 + c.phase) * 0.35 + Math.sin(t * 3.7 + c.phase * 2) * 0.12 + 0.15;
+          const ox = nx * swing * c.h, oz = nz * swing * c.h, lift = Math.abs(swing) * c.h * 0.25;
+          const hw = c.w / 2, flap = Math.sin(t * 5.3 + c.phase) * 0.04;
+          const v = [
+            [c.cx - c.tx * hw, c.top, c.cz - c.tz * hw], [c.cx + c.tx * hw, c.top, c.cz + c.tz * hw],
+            [c.cx + c.tx * hw + ox, c.top - c.h + lift + flap, c.cz + c.tz * hw + oz], [c.cx - c.tx * hw + ox, c.top - c.h + lift - flap, c.cz - c.tz * hw + oz]
+          ];
+          for (const i of [0, 1, 2, 0, 2, 3]) { P[k++] = v[i][0]; P[k++] = v[i][1]; P[k++] = v[i][2]; }
+        }
+        washGeo.attributes.position.needsUpdate = true;
+      }
+      if (smokeGeo) {
+        const P = smokeGeo.attributes.position.array, C = smokeGeo.attributes.color.array;
+        camera.matrixWorld.extractBasis(right, up, new THREE.Vector3());
+        const cx = camera.position.x, cz = camera.position.z;
+        let k = 0, c = 0;
+        for (const s of sources) {
+          const far = Math.hypot(s.x - cx, s.z - cz) > 110;
+          for (let j = 0; j < PER; j++) {
+            const life = ((t * s.rate + s.t0 + j / PER) % 1);
+            const rise = life * 9 * s.size, drift = life * life * 7 * s.size;
+            const wob = Math.sin(t * 0.8 + j * 2.1) * 0.4 * life;
+            const px = s.x + WIND[0] * drift + wob, py = s.y + rise, pz = s.z + WIND[1] * drift - wob * 0.5;
+            const half = (0.35 + life * 1.8) * s.size;
+            const a = far ? 0 : Math.min(1, life * 6) * (1 - life) * 0.55;
+            const rx = right.x * half, ry = right.y * half, rz = right.z * half, ux = up.x * half, uy = up.y * half, uz = up.z * half;
+            const v = [[px - rx + ux, py - ry + uy, pz - rz + uz], [px + rx + ux, py + ry + uy, pz + rz + uz],
+              [px + rx - ux, py + ry - uy, pz + rz - uz], [px - rx - ux, py - ry - uy, pz - rz - uz]];
+            const g = s.dark + life * 0.3;
+            for (const i of [0, 1, 2, 0, 2, 3]) {
+              P[k++] = v[i][0]; P[k++] = v[i][1]; P[k++] = v[i][2];
+              C[c++] = g; C[c++] = g * 0.97; C[c++] = g * 0.94; C[c++] = a;
+            }
+          }
+        }
+        smokeGeo.attributes.position.needsUpdate = true;
+        smokeGeo.attributes.color.needsUpdate = true;
+      }
+    },
+    dispose() { for (const m of meshes) { scene.remove(m); m.geometry.dispose(); } }
   };
 }

@@ -414,6 +414,18 @@ for x, z in PALMS:
 
 # the city's medical crate, on the clinic roof (city entries are otherwise left alone)
 items.append(TAG('city-crates', {'item': 'medical_crate', 'x': 18.5, 'z': 15.5, 'y': 9}))
+# a full set of upgrade crates in every district, 40-80 m from its base, so whichever base you
+# take you don't have to cross the map. The checkpoint's ammunition and the security post's
+# armour are spares further out. (The city's construction crate is on the building site.)
+items += [TAG('city-crates', {'item': 'ammo_crate', 'x': 94.5, 'z': 26.5, 'y': 0}),          # by the minaret
+          TAG('city-crates', {'item': 'armour_crate', 'x': 30.5, 'z': 68.5, 'y': 0}),        # west side street
+          TAG(O, {'item': 'ammo_crate', 'x': 104.5, 'z': 219.5, 'y': 2}),                   # by the farm house
+          TAG(O, {'item': 'medical_crate', 'x': 28.5, 'z': 191.5, 'y': 2}),                 # behind the houses west of the truck stop
+          TAG(O, {'item': 'armour_crate', 'x': 126.5, 'z': 236.5, 'y': 2}),                 # in the wrecked convoy
+          TAG(R, {'item': 'construction_crate', 'x': 190.5, 'z': 140.5, 'y': 0}),
+          TAG(R, {'item': 'ammo_crate', 'x': 176.5, 'z': 70.5, 'y': 0}),
+          TAG(R, {'item': 'medical_crate', 'x': 240.5, 'z': 60.5, 'y': 0}),
+          TAG(R, {'item': 'armour_crate', 'x': 250.5, 'z': 140.5, 'y': 0})]
 
 # city edge: collapsed concrete along the map edge north and west of the city
 WAVE_IN = [(98, 3), (3, 108)]       # wave entry points on the city's edges: leave those open
@@ -543,7 +555,7 @@ level['summary'] = 'Three districts around a crossroads: a ruined city, an oil r
 level['briefing'] = [
     'You start at the crossroads. Pick a base: the police station (city, north-west), the truck stop (outskirts, south-west) or the control building (refinery, east).',
     'Clear its defenders and step inside. It becomes your base and the clock starts.',
-    'Fetch crates and build upgrades at the marked spots: construction crates (walls) at the building site and the quarry, medical on the clinic roof, ammunition at the army checkpoint, armour at the refinery security post.',
+    'Fetch crates and build upgrades at the marked spots. Every district has its own construction (walls), ammunition, medical and armour crate, not far from its base.',
     'Fuel tanks explode when a rocket hits them. Keep your distance.'
 ]
 level['goals'] = {

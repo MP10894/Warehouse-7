@@ -30,6 +30,7 @@ import { createHud, createMinimap } from './render/hud.js';
 import { createInput } from './input/input.js';
 import { createAudio } from './audio/audio.js';
 import { createDomHud } from './ui/dom-hud.js';
+import { createArmoury } from './ui/armoury.js';
 import { createScreens } from './ui/screens.js';
 import { createTuning } from './ui/tuning.js';
 import { getTransport } from './net/transport.js';
@@ -102,7 +103,11 @@ if (!view) {
   const aimOut = { yaw: 0, pitch: 0 };
   // taps on RELOAD, SWAP and the use button wait here until a game step takes them: on a
   // fast screen many frames have no game step, and a tap read on such a frame was lost
-  const taps = { reload: false, swap: false, interact: false, grenade: false };
+  const taps = { reload: false, swap: false, interact: false, grenade: false, armoury: null };
+  // the armoury panel at a built ammunition supply: picking a weapon becomes a command
+  const armoury = createArmoury({ root: app, onPick: w => {
+    if (role === 'guest') { net.armouryN++; net.armouryW = w; } else taps.armoury = w;
+  } });
   const recoil = createRecoil();
   const assist = createAimAssist();
   // a shot's kick moves the aim now; recoil.update brings it back afterwards
@@ -123,7 +128,7 @@ if (!view) {
     encoder: createHostEncoder(DATA), decoder: createGuestDecoder(DATA),
     edges: { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0 }, // guest: press counters it sends
     seen: { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0 },  // host: last counters it acted on
-    prevFire: false, lostAt: 0
+    prevFire: false, lostAt: 0, armouryN: 0, armouryW: '', seenArmoury: 0
   };
 
   function enterPlay(seed, ids, level) {
@@ -136,7 +141,8 @@ if (!view) {
     const p = local();
     aim.yaw = p.yaw; aim.pitch = 0;
     acc = 0; shake = 0; recoil.reset(); assist.reset();
-    taps.reload = taps.swap = taps.interact = taps.grenade = false;
+    taps.reload = taps.swap = taps.interact = taps.grenade = false; taps.armoury = null;
+    armoury.close();
     mode = 'playing';
     screens.hide();
     input.setEnabled(true);
@@ -156,6 +162,7 @@ if (!view) {
     const partner = net.session.partner();
     const c = partner && partner.state && partner.state.c;
     net.seen = c ? { fire: c[5], reload: c[6], swap: c[7], interact: c[8], grenade: c[9] || 0 } : { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0 };
+    net.seenArmoury = partner && partner.state && partner.state.a ? partner.state.a[0] : 0;
     const seed = (Math.random() * 1e9) | 0;
     enterPlay(seed, ['p1', 'p2']);
     net.session.set({ role: 'host', run: net.run, seed, level: levelId, started: 1 });
@@ -228,6 +235,7 @@ if (!view) {
       if (swapN > net.seen.swap) { cmd.swap = true; net.seen.swap = swapN; }
       if (interactN > net.seen.interact) { cmd.interact = true; net.seen.interact = interactN; }
       if (grenadeN > net.seen.grenade) { cmd.grenade = true; net.seen.grenade = grenadeN; }
+      if (st.a && st.a[0] > net.seenArmoury) { cmd.armoury = st.a[1]; net.seenArmoury = st.a[0]; }
     }
     return cmd;
   }
@@ -294,6 +302,9 @@ if (!view) {
       // through a scope the aim drifts a little (more while walking): it moves where you shoot too
       swayT += dt;
       const lp = local();
+      // the use button at the ammunition supply opens the armoury instead of acting in the game
+      if (inp.interact && lp.context && lp.context.kind === 'armoury') { armoury.toggle(world, lp); inp.interact = false; }
+      armoury.update(world, lp);
       const sw = scopeK * (S.controls.scope_sway ?? 0.003) * (lp.moving ? (S.controls.scope_sway_moving ?? 3) : 1);
       aimOut.yaw = aim.yaw + Math.sin(swayT * 0.9) * sw;
       aimOut.pitch = aim.pitch + Math.sin(swayT * 1.7) * sw * 0.6;
@@ -305,7 +316,7 @@ if (!view) {
         let steps = 0, first = true;
         while (acc >= STEP && steps < 5) {
           const cmd = { ...base, yaw: aimOut.yaw, pitch: aimOut.pitch };
-          if (first) { cmd.reload = taps.reload; cmd.swap = taps.swap; cmd.interact = taps.interact; cmd.grenade = taps.grenade; taps.reload = taps.swap = taps.interact = taps.grenade = false; }
+          if (first) { cmd.reload = taps.reload; cmd.swap = taps.swap; cmd.interact = taps.interact; cmd.grenade = taps.grenade; cmd.armoury = taps.armoury; taps.reload = taps.swap = taps.interact = taps.grenade = false; taps.armoury = null; }
           const cmds = { [localId]: cmd };
           if (role === 'host') cmds.p2 = guestCommand(first);
           first = false;
@@ -346,7 +357,8 @@ if (!view) {
           run: net.run,
           c: [Math.round(inp.moveX * 100), Math.round(inp.moveY * 100), Math.round(aimOut.yaw * 1000), Math.round(aimOut.pitch * 1000),
             (inp.fire ? 1 : 0) | (inp.ads ? 2 : 0) | (p.moving ? 4 : 0), e.fire, e.reload, e.swap, e.interact, e.grenade],
-          pos: [Math.round(p.x * 100), Math.round(p.y * 100), Math.round(p.z * 100)]
+          pos: [Math.round(p.x * 100), Math.round(p.y * 100), Math.round(p.z * 100)],
+          a: [net.armouryN, net.armouryW]
         });
       }
 
@@ -379,6 +391,7 @@ if (!view) {
     worldView.sync(world, dt);
     effects.update(dt);
     weatherFx.update(dt, world, view.camera);
+    if (scenery.decor) scenery.decor.tick(dt, view.camera);
     markers.update(world, mode === 'playing' ? p : null, dt);
     audio.setStorm(weatherFx.level);
     fp.update(dt, p, view.W / view.H);
@@ -415,7 +428,7 @@ if (!view) {
 
   aim.yaw = local().yaw;
   // handle for automated browser tests
-  window.__game = { get world() { return world; }, aim, fp, view, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
+  window.__game = { get world() { return world; }, get scenery() { return scenery; }, aim, fp, view, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
   screens.showMenu(world);
   requestAnimationFrame(frame);
 }
