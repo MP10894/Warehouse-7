@@ -96,16 +96,10 @@ check(bad.length === 0, `the roof of every building with stairs can be reached${
     `early waves bring militia, late waves heavy insurgents (wave 1: ${first.join(', ')}; wave 6: ${[...new Set(sixth)].join(', ')})`);
 }
 
-// rubble never leaves people stuck under a floor (play-test bug, 2026-10-22)
+// rubble is decoration only: it never blocks or traps anyone (play-test bugs, 2026-10-22/23)
 {
   const w = createWorld({ data, levelId: 'najaf', seed: 9 });
   const g = w.grid;
-  let trapped = 0;
-  for (let i = 0; i < g.cells.length; i++) if (g.cells[i] === V.RUBBLE) {
-    const x = i % g.w, z = ((i / g.w) | 0) % g.d, y = (i / (g.w * g.d)) | 0;
-    if (getV(g, x, y + 1, z) !== V.AIR || getV(g, x, y + 2, z) !== V.AIR) trapped++;
-  }
-  check(trapped === 0, `no rubble placed under a floor (${trapped})`);
   // blow out a ground-floor wall that has a floor above it, then walk through the gap
   const pc = w.pieces.find(p => p.alive && p.material === 'wall' && p.cells.length === 2 && p.cells.every(i => {
     const x = i % g.w, z = ((i / g.w) | 0) % g.d;
@@ -113,17 +107,18 @@ check(bad.length === 0, `the roof of every building with stairs can be reached${
   }));
   const i0 = pc.cells[0], gx = i0 % g.w, gz = ((i0 / g.w) | 0) % g.d;
   destroyPiece(w, pc);
-  check(getV(g, gx, 0, gz) === V.AIR, 'a wall broken under a floor leaves an opening, not rubble');
+  check(g.cells[i0] === V.RUBBLE, 'a broken wall leaves rubble, even under a floor');
   const body = { x: gx - 1.5, y: 0, z: gz + 0.5, vy: 0, onGround: true };
-  for (let k = 0; k < 120; k++) moveBody(w, body, 3 / 60, 0, 1 / 60);
-  check(body.x > gx + 1.2, `walked through the hole in the wall (x ${body.x.toFixed(1)}, gap at ${gx})`);
-  // and if rubble were under a low ceiling, you couldn't climb into it and get stuck
-  setV(g, gx, 0, gz, V.RUBBLE);
-  const b2 = { x: gx - 1.5, y: 0, z: gz + 0.5, vy: 0, onGround: true };
-  for (let k = 0; k < 120; k++) moveBody(w, b2, 3 / 60, 0, 1 / 60);
-  check(b2.y < 0.1 && b2.x < gx, 'you can\'t step onto rubble where your head would hit the floor above');
+  let maxY = 0;
+  for (let k = 0; k < 120; k++) { moveBody(w, body, 3 / 60, 0, 1 / 60); maxY = Math.max(maxY, body.y); }
+  check(body.x > gx + 1.2 && maxY < 0.01, `walked straight through the rubble and the hole in the wall (x ${body.x.toFixed(1)}, never climbed: ${maxY.toFixed(2)} m)`);
+  // fall through a hole onto a rubble-covered floor: still free to walk out
+  setV(g, gx + 3, 0, gz, V.RUBBLE); setV(g, gx + 4, 0, gz, V.RUBBLE);
+  const b2 = { x: gx + 3.5, y: 0, z: gz + 0.5, vy: 0, onGround: true };
+  let moved = 0;
+  for (let k = 0; k < 60; k++) moved += moveBody(w, b2, -3 / 60, 0, 1 / 60);
+  check(moved > 2, `standing in rubble you can walk away freely (moved ${moved.toFixed(1)} m)`);
 }
-
 // the building-site crate sits beside a stairwell: walking past its edge must not trap you
 {
   const w = createWorld({ data, levelId: 'najaf', seed: 3 }); w.enemies = []; w.groups = [];

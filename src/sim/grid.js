@@ -7,7 +7,7 @@ export const V = {
   SLAB: 1,      // floor/ceiling slab, indestructible
   COLUMN: 2,    // structural column, indestructible
   WALL: 3,      // building wall, destructible
-  RUBBLE: 4,    // walkable debris, 0.4 m high
+  RUBBLE: 4,    // debris: decoration only, you walk through it
   CRATE: 5,     // wooden crate, destructible
   LOWWALL: 6,   // 1 m stone wall, destructible
   SANDBAG: 7,   // player-built base wall, destructible
@@ -41,7 +41,15 @@ export function createGrid(w, h, d) {
 
 export const gidx = (g, x, y, z) => x + z * g.w + y * g.w * g.d;
 export const inGrid = (g, x, y, z) => x >= 0 && y >= 0 && z >= 0 && x < g.w && y < g.h && z < g.d;
-export const getV = (g, x, y, z) => inGrid(g, x, y, z) ? g.cells[gidx(g, x, y, z)] : V.AIR;
+// What the game rules see in a cell. Rubble is decoration only (drawn, but nothing stands
+// on it, bumps into it or is stopped by it), so to the rules it is air.
+export const getV = (g, x, y, z) => {
+  if (!inGrid(g, x, y, z)) return V.AIR;
+  const t = g.cells[gidx(g, x, y, z)];
+  return t === V.RUBBLE ? V.AIR : t;
+};
+/** What is drawn in a cell, rubble included. */
+export const getDrawn = (g, x, y, z) => inGrid(g, x, y, z) ? g.cells[gidx(g, x, y, z)] : V.AIR;
 export function setV(g, x, y, z, t) { if (inGrid(g, x, y, z)) g.cells[gidx(g, x, y, z)] = t; }
 export function cellXYZ(g, i) {
   const y = Math.floor(i / (g.w * g.d)), r = i - y * g.w * g.d;

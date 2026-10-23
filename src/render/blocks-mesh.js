@@ -71,7 +71,7 @@ export function createBlockMeshes(scene, world, tex) {
             if (!isFull(cell(x, y + 1, z))) quad(k, [[x, y + 1, z], [x, y + 1, z + 1], [x + 1, y + 1, z + 1], [x + 1, y + 1, z]], [[x * s, z * s], [x * s, (z + 1) * s], [(x + 1) * s, (z + 1) * s], [(x + 1) * s, z * s]], roofed(x, y + 2, z) ? 0.66 : 1.05);
             if (!isFull(cell(x, y - 1, z)) && y > 0) quad(k, [[x, y, z], [x + 1, y, z], [x + 1, y, z + 1], [x, y, z + 1]], [[x * s, z * s], [(x + 1) * s, z * s], [(x + 1) * s, (z + 1) * s], [x * s, (z + 1) * s]], 0.42);
           } else if (t === V.RUBBLE) {
-            const h = 0.4, sh = roofed(x, y + 1, z) ? 0.62 : 1;
+            const h = 0.22, sh = roofed(x, y + 1, z) ? 0.62 : 1; // low: people walk through it
             quad(k, [[x, y + h, z], [x, y + h, z + 1], [x + 1, y + h, z + 1], [x + 1, y + h, z]], [[0, 0], [0, 1], [1, 1], [1, 0]], 0.95 * sh);
             if (!isFull(cell(x + 1, y, z))) quad(k, [[x + 1, y, z + 1], [x + 1, y, z], [x + 1, y + h, z], [x + 1, y + h, z + 1]], [[0, 0], [1, 0], [1, h], [0, h]], 0.7 * sh);
             if (!isFull(cell(x - 1, y, z))) quad(k, [[x, y, z], [x, y, z + 1], [x, y + h, z + 1], [x, y + h, z]], [[0, 0], [1, 0], [1, h], [0, h]], 0.7 * sh);

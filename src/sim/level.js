@@ -117,9 +117,9 @@ function stampBuilding(world, text, ox, oz, turn = 0, mirror = false) {
       }
     });
   }
-  // Rubble only where there's standing room above it (not under a floor).
+  // Rubble is decoration only: it goes on any empty floor cell.
   for (const [x, y, z] of rubble) {
-    if (getV(g, x, y, z) === V.AIR && getV(g, x, y + 1, z) === V.AIR && getV(g, x, y + 2, z) === V.AIR) setV(g, x, y, z, V.RUBBLE);
+    if (getV(g, x, y, z) === V.AIR) setV(g, x, y, z, V.RUBBLE);
   }
   // Stairs last, so they cut through the floors above them.
   for (const r of ramps) {

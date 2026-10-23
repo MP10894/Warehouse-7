@@ -127,7 +127,8 @@ Layout plan (agreed): [docs/NAJAF_PLAN.md](docs/NAJAF_PLAN.md) (map in
 - Destructible pieces use the same damage model as characters (health, then armour on
   top), without the 100/300 caps, so armoured doors or reinforced walls can be very tough.
 - Destruction comes mainly from explosives and large-calibre weapons.
-- Destroyed walls leave **rubble you can walk over**. Destruction only ever opens space;
+- Destroyed walls leave **rubble that is decoration only**: drawn on the floor, but you walk
+  straight through it, and so do enemies and bullets. Destruction only ever opens space;
   it never seals a route, so a level can't become impossible.
 
 ## Weather
@@ -302,6 +303,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Aiming a rifle: stock at the shoulder, eye just behind the top cover looking along it (weapons get an optional `eye` point); pistols stay at arm's length |
 | 2026-10-23 | RPK drawn: real proportions (1.04 m, 75-round drum, club-foot stock, bipod folded), look from the OpenArt sheet |
 | 2026-10-23 | Insurgent redrawn from an OpenArt sheet: sand head wrap and scarf, khaki tunic, olive chest rig (the armour part), olive trousers, dark boots, rolled sleeves |
+| 2026-10-23 | Rubble is decoration only (no collision, nothing stands on it, bullets pass): fixes getting stuck in rubble after falling through a hole; broken walls leave rubble everywhere again |
 
 ## Open questions
 

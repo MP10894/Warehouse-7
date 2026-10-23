@@ -31,7 +31,7 @@ corner, and the ground under it is levelled automatically.
 | `d` | Doorway (open, wall above head height) |
 | `l` | Low wall, 1 m high (cover you can shoot over), destructible |
 | `c` | Wooden crate, 1 m high, destructible |
-| `,` | Rubble (walkable) |
+| `,` | Rubble (decoration only: you walk straight through it) |
 | `>` `<` `^` `v` | Stairs going **up** towards east, west, north or south |
 
 Stairs: write three stair symbols in a row (`>>>`). Each one is 1 m higher than the
