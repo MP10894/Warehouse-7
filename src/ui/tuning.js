@@ -11,6 +11,8 @@ const SLIDERS = [
   ['Controls', 'Look speed when aiming', 'controls.ads_look_factor', 0.2, 1, 0.05],
   ['Controls', 'Field of view (°)', 'camera.target_horizontal_fov', 70, 120, 1],
   ['Controls', 'Pixel rows (detail; lower = faster)', 'camera.pixel_rows', 150, 400, 10],
+  ['Controls', 'Aim assist when aiming (0 = off)', 'controls.aim_assist', 0, 1, 0.05],
+  ['Controls', 'Aim assist reach (°)', 'controls.aim_assist_angle_deg', 1, 12, 0.5],
   ['Player', 'Walk speed (m/s)', 'player.walk_speed', 2.5, 8, 0.1],
   ['Recoil', 'Recoil kick', 'ballistics.recoil_kick_at_100', 0, 0.15, 0.005],
   ['Recoil', 'Recoil sideways', 'ballistics.recoil_side_at_100', 0, 0.06, 0.002],

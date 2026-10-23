@@ -29,7 +29,10 @@
     "joystick_radius_px": 46,
     "max_pitch": 1.35,
     "ads_look_factor": 0.5,
-    "look_multiplier": 1.0
+    "look_multiplier": 1.0,
+    "aim_assist": 0.5,
+    "aim_assist_angle_deg": 5,
+    "aim_assist_range": 60
   },
   "camera": {
     "target_horizontal_fov": 100,

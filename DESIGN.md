@@ -292,6 +292,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | The clock and the attack waves start only when a base is secured; before that the game has no time limit. Win = secure a base and hold it until the clock runs out |
 | 2026-10-23 | Game Data workbook: MP5, Mk14 EBR and RPK added; Militia and Heavy Insurgent enemy types; Armour column on the Enemies tab is each type's minimum armour |
 | 2026-10-23 | New enemies placed: Militia rove Najaf's streets (market, west, avenue); Heavy Insurgents guard the clinic and the building site; waves start with Militia and bring Heavy Insurgents later. MP5 placed in the street by the market, Mk14 EBR on the clinic roof |
+| 2026-10-23 | Subtle aim assist while aiming down sights: within 5° of a visible enemy (60 m) the crosshair is drawn onto their chest and follows them a little. Strength and reach on the tuning panel |
 
 ## Open questions
 

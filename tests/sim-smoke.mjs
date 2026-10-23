@@ -12,6 +12,8 @@ import { applyHit } from '../src/sim/damage.js';
 import { getV, V } from '../src/sim/grid.js';
 import { buildNav, nodeAt, flowField } from '../src/sim/nav.js';
 import { createRecoil } from '../src/input/recoil.js';
+import { createAimAssist, anglesTo } from '../src/input/aim-assist.js';
+import { setV } from '../src/sim/grid.js';
 
 const read = p => readFileSync(new URL('../' + p, import.meta.url), 'utf8');
 const lv = 'data/levels/slice/';
@@ -40,6 +42,7 @@ const run = (world, seconds, cmdFor) => {
   return events;
 };
 const fresh = (opts = {}) => createWorld({ data, levelId: 'slice', ...opts });
+const spawnEnemyAt = (w, x, z) => { w.enemies.push({ id: 9000 + w.enemies.length, kind: 'enemy', type: 'insurgent', alive: true, x, z, y: groundAt(w, x, z, 5), hp: 100, armour: 0 }); };
 const noEnemies = w => { w.enemies = []; w.groups = []; w.waves.nextT = 1e9; };
 
 // --- data
@@ -318,6 +321,32 @@ check(w0.players.length === 1 && w0.enemies.length >= 10, `level built: ${w0.ene
   aim.pitch -= 0.05; // the player pulls down while it's kicked up
   settle(r, aim, 1);
   check(Math.abs(aim.pitch - 0.1) < 0.002, `pulling down yourself doesn't make it overshoot below the target (${aim.pitch.toFixed(3)})`);
+}
+
+// --- aim assist when aiming down sights (play-test feedback, 2026-10-23)
+{
+  const setup = () => {
+    const w = fresh(); noEnemies(w);
+    const p = w.players[0];
+    Object.assign(p, { x: 10.5, z: 92.5, y: groundAt(w, 10.5, 92.5, 5) });
+    spawnEnemyAt(w, 10.5, 74.5);
+    const e = w.enemies[0];
+    const t = anglesTo(p.x, p.y + 1.6, p.z, e.x, e.y + 1.25, e.z);
+    return { w, p, e, t, aim: { yaw: t.yaw + 0.05, pitch: t.pitch + 0.02 } };  // about 3° off
+  };
+  const err = (a, t) => Math.hypot(a.yaw - t.yaw, a.pitch - t.pitch);
+  const settle = (w, p, aim, s) => { const a = createAimAssist(); for (let i = 0; i < s * 60; i++) a.update(aim, 1 / 60, w, p, w.data.settings); };
+  let { w, p, t, aim } = setup();
+  p.ads = true; settle(w, p, aim, 0.6);
+  check(err(aim, t) < 0.01, `aiming down sights near an enemy draws the crosshair onto them (${(err(aim, t) * 57.3).toFixed(2)}° off, from 3°)`);
+  ({ w, p, t, aim } = setup()); p.ads = false; settle(w, p, aim, 0.6);
+  check(Math.abs(err(aim, t) - Math.hypot(0.05, 0.02)) < 1e-9, 'no aim assist from the hip');
+  ({ w, p, t, aim } = setup()); p.ads = true;
+  for (let y = 0; y < 4; y++) setV(w.grid, 10, Math.floor(p.y) + y, 84, V.WALL);
+  settle(w, p, aim, 0.6);
+  check(Math.abs(err(aim, t) - Math.hypot(0.05, 0.02)) < 1e-9, 'no aim assist onto an enemy behind a wall');
+  ({ w, p, t, aim } = setup()); p.ads = true; aim.yaw += 0.2; settle(w, p, aim, 0.6);
+  check(Math.abs(aim.yaw - t.yaw - 0.25) < 1e-9, 'enemies far from the crosshair are left alone');
 }
 
 console.log(failures ? `\n${failures} check(s) failed` : '\nAll checks passed');

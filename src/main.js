@@ -17,6 +17,7 @@ import { createView } from './render/view.js';
 import { makeTextures } from './render/textures.js';
 import { loadArt } from './render/assets.js';
 import { createRecoil } from './input/recoil.js';
+import { createAimAssist } from './input/aim-assist.js';
 import { buildTerrain } from './render/terrain-mesh.js';
 import { createBlockMeshes } from './render/blocks-mesh.js';
 import { createWorldView } from './render/world-view.js';
@@ -93,6 +94,7 @@ if (!view) {
   const aim = { yaw: 0, pitch: 0 };
   let acc = 0, shake = 0;
   const recoil = createRecoil();
+  const assist = createAimAssist();
   // a shot's kick moves the aim now; recoil.update brings it back afterwards
   const applyKick = ev => {
     const before = aim.pitch;
@@ -123,7 +125,7 @@ if (!view) {
     worldView.setLocal(localId);
     const p = local();
     aim.yaw = p.yaw; aim.pitch = 0;
-    acc = 0; shake = 0; recoil.reset();
+    acc = 0; shake = 0; recoil.reset(); assist.reset();
     mode = 'playing';
     screens.hide();
     input.setEnabled(true);
@@ -331,6 +333,8 @@ if (!view) {
       handleEvents(p);
       // the view comes back down to where you were aiming once you stop firing
       recoil.update(aim, dt, S.ballistics);
+      // while aiming down sights, help settle the crosshair on a nearby visible enemy
+      assist.update(aim, dt, world, local(), S);
     } else if (mode === 'playing' && role === 'host' && net.session) {
       // host's tuning panel is open: the game keeps running for the guest
       acc += dt;
