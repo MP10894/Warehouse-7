@@ -1,6 +1,6 @@
 // Attack waves: they come at shrinking intervals, get bigger and better armed, and
 // building upgrades makes them come sooner and harder. Composition is in waves.csv.
-import { rand } from './rng.js';
+import { rand, weightedPick } from './rng.js';
 import { spawnEnemy, pickEnemyWeapon } from './enemies.js';
 import { emit } from './damage.js';
 
@@ -19,9 +19,12 @@ function waveRow(world, index) {
   const rows = world.data.waves;
   const row = rows[Math.min(index, rows.length) - 1];
   const extra = Math.max(0, index - rows.length) * 2;
-  const weights = {};
-  for (const [k, v] of Object.entries(row)) if (k.startsWith('weight_')) weights[k.slice(7)] = v;
-  return { count: row.enemy_count + extra, armourChance: row.armour_chance, armour: row.armour_amount, weights };
+  const weights = {}, types = {};
+  for (const [k, v] of Object.entries(row)) {
+    if (k.startsWith('weight_')) weights[k.slice(7)] = v;
+    if (k.startsWith('type_')) types[k.slice(5)] = v;   // mix of enemy types (Enemies tab)
+  }
+  return { count: row.enemy_count + extra, armourChance: row.armour_chance, armour: row.armour_amount, weights, types };
 }
 
 export function spawnWave(world) {
@@ -39,9 +42,10 @@ export function spawnWave(world) {
   }).slice(0, 2);
   for (let i = 0; i < row.count; i++) {
     const sp = pts[i % pts.length];
-    const weapon = pickEnemyWeapon(world, row.weights);
+    const type = weightedPick(world, row.types) || 'insurgent';
+    const weapon = pickEnemyWeapon(world, row.weights, type);
     const armour = rand(world) < row.armourChance ? row.armour : 0;
-    spawnEnemy(world, { x: sp.x + rand(world, -3, 3), z: sp.z + rand(world, -3, 3), weapon, armour, wave: true, behaviour: 'assault' });
+    spawnEnemy(world, { x: sp.x + rand(world, -3, 3), z: sp.z + rand(world, -3, 3), weapon, armour, wave: true, behaviour: 'assault', type });
   }
   w.interval = Math.max(s.interval_min, w.interval * s.interval_decay);
   w.nextT = world.time + w.interval;

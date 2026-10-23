@@ -236,7 +236,7 @@ tag `warehouse-prototype`.
 |---|---|
 | `data/Game Data.xlsx` | Weapons tab and Enemies tab, read directly by the game |
 | `data/enemies.csv` | Fallback for any enemy value the Enemies tab leaves out |
-| `data/waves.csv` | Size, armour and weapon mix of each wave |
+| `data/waves.csv` | Size, armour, enemy-type mix and weapon mix of each wave |
 | `data/materials.csv` | Health and armour of each breakable material, and whether it leaves rubble |
 | `data/settings.json` | Player, controls, camera, ballistics (bullet speed factor, recoil, bloom), waves timing, base, weather |
 | `data/levels/slice/level.json` | Positions of buildings, props, base, enemies, pickups, weather zones, timer |
@@ -291,6 +291,7 @@ tag `warehouse-prototype`.
 | 2026-10-22 | AK-47 drawn: real proportions, look from the OpenArt sheet; when aiming a rifle the view keeps its stock in front of the eye |
 | 2026-10-23 | The clock and the attack waves start only when a base is secured; before that the game has no time limit. Win = secure a base and hold it until the clock runs out |
 | 2026-10-23 | Game Data workbook: MP5, Mk14 EBR and RPK added; Militia and Heavy Insurgent enemy types; Armour column on the Enemies tab is each type's minimum armour |
+| 2026-10-23 | New enemies placed: Militia rove Najaf's streets (market, west, avenue); Heavy Insurgents guard the clinic and the building site; waves start with Militia and bring Heavy Insurgents later. MP5 placed in the street by the market, Mk14 EBR on the clinic roof |
 
 ## Open questions
 

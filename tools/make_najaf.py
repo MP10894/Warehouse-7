@@ -1,4 +1,6 @@
 """First draft of the Najaf level files (city district).
+NOTE: data/levels/najaf has been edited by hand since (enemy types, new weapon pickups);
+re-running this would undo that.
 
 This was run once to write data/levels/najaf/. From now on the text files and level.json
 are the source: edit those directly. Re-running this script overwrites them.

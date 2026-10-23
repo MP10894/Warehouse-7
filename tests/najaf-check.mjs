@@ -78,6 +78,24 @@ check(bad.length === 0, `the roof of every building with stairs can be reached${
   check(tPart < tNav / 2, `partial update is quick (${tPart.toFixed(0)} ms vs ${tNav.toFixed(0)} ms for everything)`);
 }
 
+// enemy types and the new weapons are placed
+{
+  const types = new Set(world.enemies.map(e => e.type));
+  const heavy = world.enemies.filter(e => e.type === 'heavy_insurgent');
+  const weaponsHere = new Set(world.pickups.filter(k => k.type === 'weapon').map(k => k.weapon));
+  check(types.has('militia') && heavy.length > 0 && heavy.every(e => e.armour >= 50) && weaponsHere.has('mk14ebr') && weaponsHere.has('mp5'),
+    `Najaf has militia and armoured heavy insurgents, and MP5 and Mk14 pickups (${[...types].join(', ')})`);
+  const { spawnWave } = await import('../src/sim/waves.js');
+  const w = createWorld({ data, levelId: 'najaf', seed: 11 });
+  w.enemies = [];
+  w.waves.index = 0; spawnWave(w);
+  const first = w.enemies.map(e => e.type);
+  w.enemies = []; w.waves.index = 5; spawnWave(w);
+  const sixth = w.enemies.map(e => e.type);
+  check(first.includes('militia') && !first.includes('heavy_insurgent') && sixth.includes('heavy_insurgent') && !sixth.includes('militia'),
+    `early waves bring militia, late waves heavy insurgents (wave 1: ${first.join(', ')}; wave 6: ${[...new Set(sixth)].join(', ')})`);
+}
+
 // rubble never leaves people stuck under a floor (play-test bug, 2026-10-22)
 {
   const w = createWorld({ data, levelId: 'najaf', seed: 9 });

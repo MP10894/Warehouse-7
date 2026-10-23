@@ -570,6 +570,7 @@
  "enemy_groups": [
   {
    "id": "clinic",
+   "type": "heavy_insurgent",
    "behaviour": "guard",
    "respawn": 60,
    "spawns": [
@@ -595,8 +596,8 @@
     }
    ],
    "weapons": {
-    "ak47": 3,
-    "rpg7": 1
+    "ak47": 2,
+    "rpk": 1
    },
    "armour_chance": 0.3,
    "armour": 50
@@ -637,6 +638,7 @@
   },
   {
    "id": "site",
+   "type": "heavy_insurgent",
    "behaviour": "guard",
    "respawn": 50,
    "spawns": [
@@ -662,14 +664,15 @@
     }
    ],
    "weapons": {
-    "ak47": 3,
-    "rpg7": 1
+    "ak47": 2,
+    "rpk": 1
    },
    "armour_chance": 0.25,
    "armour": 50
   },
   {
    "id": "market",
+   "type": "militia",
    "behaviour": "roam",
    "respawn": 50,
    "radius": 14,
@@ -688,8 +691,7 @@
     }
    ],
    "weapons": {
-    "ak47": 3,
-    "rpg7": 1
+    "ak47": 1
    },
    "armour_chance": 0.15,
    "armour": 50
@@ -743,6 +745,7 @@
   },
   {
    "id": "avenue",
+   "type": "militia",
    "behaviour": "roam",
    "respawn": 55,
    "radius": 20,
@@ -757,14 +760,14 @@
     }
    ],
    "weapons": {
-    "ak47": 2,
-    "rpg7": 1
+    "ak47": 1
    },
    "armour_chance": 0.1,
    "armour": 50
   },
   {
    "id": "west",
+   "type": "militia",
    "behaviour": "roam",
    "respawn": 55,
    "radius": 18,
@@ -903,6 +906,34 @@
    "amount": 60,
    "x": 92,
    "z": 80
+  },
+  {
+   "type": "weapon",
+   "weapon": "mk14ebr",
+   "x": 8.5,
+   "z": 12.5,
+   "y": 9
+  },
+  {
+   "type": "ammo",
+   "calibre": "7.62x51mm",
+   "amount": 30,
+   "x": 9.5,
+   "z": 12.5,
+   "y": 9
+  },
+  {
+   "type": "weapon",
+   "weapon": "mp5",
+   "x": 54.5,
+   "z": 100.5
+  },
+  {
+   "type": "ammo",
+   "calibre": "9mm",
+   "amount": 60,
+   "x": 55.5,
+   "z": 101.5
   }
  ],
  "weather_zones": [
