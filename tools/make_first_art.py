@@ -237,4 +237,4 @@ def make_insurgent():
 
 
 make_wall()
-make_insurgent()
+# the insurgent is now made by tools/make_insurgent.py (from its OpenArt reference)

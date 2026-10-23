@@ -301,6 +301,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Wave rhythm: beat a wave, 20 s break, next wave (replaces shrinking timed gaps); at most 20 attackers alive at once, the rest wait at the map edge |
 | 2026-10-23 | Aiming a rifle: stock at the shoulder, eye just behind the top cover looking along it (weapons get an optional `eye` point); pistols stay at arm's length |
 | 2026-10-23 | RPK drawn: real proportions (1.04 m, 75-round drum, club-foot stock, bipod folded), look from the OpenArt sheet |
+| 2026-10-23 | Insurgent redrawn from an OpenArt sheet: sand head wrap and scarf, khaki tunic, olive chest rig (the armour part), olive trousers, dark boots, rolled sleeves |
 
 ## Open questions
 
