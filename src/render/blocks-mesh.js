@@ -58,7 +58,7 @@ export function createBlockMeshes(scene, world, tex) {
   const mats = {};
   const mat = k => mats[k] || (mats[k] = new THREE.MeshBasicMaterial({ map: tex[k], vertexColors: true, side: THREE.DoubleSide, ...(k === 'fence' ? { alphaTest: 0.5 } : {}) }));
   // see-through blocks (fences) don't hide the faces of what is next to them
-  const hides = t => isFull(t) && t !== V.FENCE;
+  const hides = t => isFull(t) && t !== V.FENCE && t !== V.WRECK;
   const decalsByChunk = new Map();
   for (const [x, y, z] of world.level.decals) {
     const key = Math.floor(x / CHUNK) + Math.floor(z / CHUNK) * cw;
@@ -104,7 +104,7 @@ export function createBlockMeshes(scene, world, tex) {
       for (let x = ci * CHUNK; x < Math.min(g.w, (ci + 1) * CHUNK); x++) {
         for (let y = 0; y < g.h; y++) {
           const t = cell(x, y, z);
-          if (t === V.AIR) continue;
+          if (t === V.AIR || t === V.WRECK) continue;   // wrecks are drawn as vehicle models (decor.js)
           const L = LOOK[t], k = L.tex, s = L.scale;
           if (t === V.FENCE) {
             // one chain-link panel down the middle of the cell, along the fence line

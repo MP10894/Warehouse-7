@@ -2615,12 +2615,13 @@
    "district": "outskirts"
   },
   {
-   "type": "metal",
+   "type": "wreck",
+   "model": "car",
    "x": 157,
    "z": 184,
    "w": 2,
-   "d": 5,
-   "h": 2,
+   "d": 4,
+   "h": 1,
    "district": "outskirts"
   },
   {
@@ -2678,11 +2679,13 @@
    "district": "outskirts"
   },
   {
-   "type": "metal",
+   "type": "wreck",
+   "model": "truck",
+   "colour": "army",
    "x": 164,
    "z": 222,
    "w": 3,
-   "d": 6,
+   "d": 7,
    "h": 2,
    "district": "outskirts"
   },
@@ -2758,38 +2761,46 @@
    "district": "outskirts"
   },
   {
-   "type": "metal",
+   "type": "wreck",
+   "model": "truck",
+   "burnt": true,
    "x": 124,
    "z": 228,
    "w": 3,
-   "d": 6,
+   "d": 7,
    "h": 2,
    "district": "outskirts"
   },
   {
-   "type": "metal",
+   "type": "wreck",
+   "model": "truck",
+   "burnt": true,
    "x": 131,
    "z": 236,
    "w": 3,
-   "d": 6,
+   "d": 7,
    "h": 2,
    "district": "outskirts"
   },
   {
-   "type": "metal",
+   "type": "wreck",
+   "model": "truck",
+   "burnt": true,
    "x": 126,
    "z": 244,
    "w": 3,
-   "d": 6,
+   "d": 7,
    "h": 2,
    "district": "outskirts"
   },
   {
-   "type": "metal",
+   "type": "wreck",
+   "model": "car",
+   "burnt": true,
    "x": 134,
-   "z": 226,
+   "z": 225,
    "w": 2,
-   "d": 2,
+   "d": 4,
    "h": 1,
    "district": "outskirts"
   },
@@ -3006,6 +3017,172 @@
    "z": 201,
    "w": 2,
    "d": 3,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "car",
+   "x": 78,
+   "z": 109,
+   "w": 4,
+   "d": 2,
+   "h": 1,
+   "burnt": true,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "car",
+   "x": 97,
+   "z": 79,
+   "w": 4,
+   "d": 2,
+   "h": 1,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "pickup",
+   "x": 42,
+   "z": 105,
+   "w": 5,
+   "d": 2,
+   "h": 1,
+   "burnt": true,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "car",
+   "x": 73,
+   "z": 50,
+   "w": 4,
+   "d": 2,
+   "h": 1,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "car",
+   "x": 24,
+   "z": 76,
+   "w": 4,
+   "d": 2,
+   "h": 1,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "pickup",
+   "x": 24,
+   "z": 86,
+   "w": 2,
+   "d": 5,
+   "h": 1,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "car",
+   "x": 111,
+   "z": 128,
+   "w": 4,
+   "d": 2,
+   "h": 1,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "car",
+   "x": 51,
+   "z": 46,
+   "w": 2,
+   "d": 4,
+   "h": 1,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "pickup",
+   "x": 68,
+   "z": 79,
+   "w": 5,
+   "d": 2,
+   "h": 1,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "pickup",
+   "x": 28,
+   "z": 105,
+   "w": 5,
+   "d": 2,
+   "h": 1,
+   "burnt": true,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "car",
+   "x": 65,
+   "z": 107,
+   "w": 4,
+   "d": 2,
+   "h": 1,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "car",
+   "x": 52,
+   "z": 10,
+   "w": 2,
+   "d": 4,
+   "h": 1,
+   "burnt": true,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "car",
+   "x": 81,
+   "z": 29,
+   "w": 2,
+   "d": 4,
+   "h": 1,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "car",
+   "x": 118,
+   "z": 52,
+   "w": 4,
+   "d": 2,
+   "h": 1,
+   "burnt": true,
+   "district": "city-wrecks"
+  },
+  {
+   "type": "wreck",
+   "model": "car",
+   "burnt": true,
+   "x": 123,
+   "z": 166,
+   "w": 2,
+   "d": 4,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "pickup",
+   "x": 157,
+   "z": 141,
+   "w": 5,
+   "d": 2,
    "h": 1,
    "district": "outskirts"
   },
@@ -4964,6 +5141,174 @@
      "d": 7
     }
    ]
+  }
+ ],
+ "decor": [
+  {
+   "type": "stall",
+   "x": 36,
+   "z": 88.1,
+   "turn": 2,
+   "counter": true,
+   "district": "city-extra"
+  },
+  {
+   "type": "stall",
+   "x": 36,
+   "z": 97.9,
+   "turn": 0,
+   "counter": true,
+   "district": "city-extra"
+  },
+  {
+   "type": "stall",
+   "x": 42,
+   "z": 88.1,
+   "turn": 2,
+   "counter": true,
+   "district": "city-extra"
+  },
+  {
+   "type": "stall",
+   "x": 42,
+   "z": 97.9,
+   "turn": 0,
+   "counter": true,
+   "district": "city-extra"
+  },
+  {
+   "type": "stall",
+   "x": 48,
+   "z": 88.1,
+   "turn": 2,
+   "counter": true,
+   "district": "city-extra"
+  },
+  {
+   "type": "stall",
+   "x": 48,
+   "z": 97.9,
+   "turn": 0,
+   "counter": true,
+   "district": "city-extra"
+  },
+  {
+   "type": "carpet",
+   "x": 39.5,
+   "z": 92,
+   "turn": 1,
+   "district": "city-extra"
+  },
+  {
+   "type": "carpet",
+   "x": 45.5,
+   "z": 91.5,
+   "turn": 0,
+   "district": "city-extra"
+  },
+  {
+   "type": "carpet",
+   "x": 51.5,
+   "z": 92.5,
+   "turn": 1,
+   "hang": true,
+   "district": "city-extra"
+  },
+  {
+   "type": "palm",
+   "x": 124.5,
+   "z": 141.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 134.5,
+   "z": 145.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 122.5,
+   "z": 157.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 50.5,
+   "z": 185.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 81.5,
+   "z": 195.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 80.5,
+   "z": 207.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 138.5,
+   "z": 171.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 161.5,
+   "z": 174.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 159.5,
+   "z": 165.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 18.5,
+   "z": 179.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 97.5,
+   "z": 212.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 194.5,
+   "z": 235.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 60.5,
+   "z": 171.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 108.5,
+   "z": 182.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 150.5,
+   "z": 209.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "palm",
+   "x": 30.5,
+   "z": 160.5,
+   "district": "outskirts"
   }
  ]
 }

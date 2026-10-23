@@ -129,7 +129,7 @@ FILES = {
     'outskirts_gas_canopy.txt': canopy(12, 8, 'Gas station canopy over the pumps'),
 }
 
-buildings, props, groups, pickups, items = [], [], [], [], []
+buildings, props, groups, pickups, items, decor = [], [], [], [], [], []
 TAG = lambda d, e: {**e, 'district': d}
 
 
@@ -308,7 +308,7 @@ building(O, 'outskirts_gas_canopy.txt', 141, 177)
 building(O, 'outskirts_gas_kiosk.txt', 145, 168)
 for x in (144, 148, 152):
     prop(O, type='metal', x=x, z=180, w=1, d=1, h=2)          # pumps
-prop(O, type='metal', x=157, z=184, w=2, d=5, h=2)            # abandoned car
+prop(O, type='wreck', model='car', x=157, z=184, w=2, d=4, h=1)   # abandoned car
 
 # army checkpoint: a ring of sandbags with a gap facing the road, and a guard post
 CP = (172, 218, 190, 232)
@@ -316,7 +316,7 @@ for x0, z0, w, d in [(172, 218, 19, 1), (172, 232, 19, 1), (190, 219, 1, 13), (1
     prop(O, type='sandbag', x=x0, z=z0, w=w, d=d, h=1)
 building(O, 'outskirts_checkpoint.txt', 178, 222)
 prop(O, type='sandbag', x=183, z=229, w=3, d=1, h=1)
-prop(O, type='metal', x=164, z=222, w=3, d=6, h=2)            # army truck by the gap
+prop(O, type='wreck', model='truck', colour='army', x=164, z=222, w=3, d=7, h=2)  # army truck by the gap
 
 # quarry: a pit with rocks around the rim
 QUARRY = (29, 240, 15, 12)
@@ -327,8 +327,8 @@ prop(O, type='metal', x=21, z=242, w=2, d=4, h=2)             # broken excavator
 
 # wrecked convoy
 for x, z in [(124, 228), (131, 236), (126, 244)]:
-    prop(O, type='metal', x=x, z=z, w=3, d=6, h=2)
-prop(O, type='metal', x=134, z=226, w=2, d=2, h=1)
+    prop(O, type='wreck', model='truck', burnt=True, x=x, z=z, w=3, d=7, h=2)
+prop(O, type='wreck', model='car', burnt=True, x=134, z=225, w=2, d=4, h=1)
 
 # rock outcrops: boulders on top of the rocky mounds
 for cx, cz, r in [(20, 140, 7), (95, 155, 6), (150, 238, 8), (205, 180, 6), (60, 238, 6), (245, 190, 5), (8, 222, 6), (178, 200, 5)]:
@@ -385,6 +385,32 @@ groups += [
     TAG(O, {'id': 'bombers_outskirts', **BOMBER, 'spawns': [{'x': 40, 'z': 192}, {'x': 118, 'z': 222}]}),
     TAG(R, {'id': 'bombers_refinery', **BOMBER, 'spawns': [{'x': 176, 'z': 90, 'y': 0}]}),
 ]
+
+# ================================================================ STREET LIFE (decoration and wrecks)
+# wrecked cars and pickups in the city streets: solid cover. Spots found by a search for free
+# road with room to pass on one side, away from spawns, pickups and the bases.
+CITY_WRECKS = [('car', 78, 109, 4, 2, True), ('car', 97, 79, 4, 2, False), ('pickup', 42, 105, 5, 2, True), ('car', 73, 50, 4, 2, False),
+               ('car', 24, 76, 4, 2, False), ('pickup', 24, 86, 2, 5, False), ('car', 111, 128, 4, 2, False), ('car', 51, 46, 2, 4, False),
+               ('pickup', 68, 79, 5, 2, False), ('pickup', 28, 105, 5, 2, True), ('car', 65, 107, 4, 2, False), ('car', 52, 10, 2, 4, True),
+               ('car', 81, 29, 2, 4, False), ('car', 118, 52, 4, 2, True)]
+for model, x, z, w, d, burnt in CITY_WRECKS:
+    prop('city-wrecks', type='wreck', model=model, x=x, z=z, w=w, d=d, h=1, **({'burnt': True} if burnt else {}))
+# beside the roads out of town
+prop(O, type='wreck', model='car', burnt=True, x=123, z=166, w=2, d=4, h=1)
+prop(O, type='wreck', model='pickup', x=157, z=141, w=5, d=2, h=1)
+
+# the market: a stall over each crate (the crate is the counter), carpets on the ground
+for i in range(3):
+    for j, (turn, dz) in enumerate([(2, -0.4), (0, 0.4)]):
+        x, z = 35 + i * 6, 88 + j * 9
+        decor.append(TAG('city-extra', {'type': 'stall', 'x': x + 1, 'z': z + 0.5 + dz, 'turn': turn, 'counter': True}))
+decor += [TAG('city-extra', {'type': 'carpet', 'x': 39.5, 'z': 92, 'turn': 1}), TAG('city-extra', {'type': 'carpet', 'x': 45.5, 'z': 91.5, 'turn': 0}),
+          TAG('city-extra', {'type': 'carpet', 'x': 51.5, 'z': 92.5, 'turn': 1, 'hang': True})]
+# date palms: at the crossroads, the truck stop, the gas station, by houses and along the wadi
+PALMS = [(124, 141), (134, 145), (122, 157), (50, 185), (81, 195), (80, 207), (138, 171), (161, 174), (159, 165),
+         (18, 179), (97, 212), (194, 235), (60, 171), (108, 182), (150, 209), (30, 160)]
+for x, z in PALMS:
+    decor.append(TAG(O, {'type': 'palm', 'x': x + 0.5, 'z': z + 0.5}))
 
 # the city's medical crate, on the clinic roof (city entries are otherwise left alone)
 items.append(TAG('city-crates', {'item': 'medical_crate', 'x': 18.5, 'z': 15.5, 'y': 9}))
@@ -498,11 +524,12 @@ for j in range(SIZE // 4):
 
 # ================================================================ write
 level = json.load(open(os.path.join(OUT, 'level.json')))
-ours = lambda e: isinstance(e, dict) and e.get('district') in ('refinery', 'outskirts', 'city-crates', 'city-edge', 'city-extra')
-for key in ('buildings', 'props', 'enemy_groups', 'pickups', 'base_items', 'bases', 'weather_zones'):
+ours = lambda e: isinstance(e, dict) and e.get('district') in ('refinery', 'outskirts', 'city-crates', 'city-edge', 'city-extra', 'city-wrecks')
+for key in ('buildings', 'props', 'enemy_groups', 'pickups', 'base_items', 'bases', 'weather_zones', 'decor'):
     level[key] = [e for e in level.get(key, []) if not ours(e)]
 level['buildings'] += buildings
 level['props'] += props
+level['decor'] += decor
 level['enemy_groups'] += groups
 level['pickups'] += pickups
 level['base_items'] += items

@@ -199,6 +199,16 @@ Starting values, to be tuned after play-testing:
   against walls. All of it is decoration only (like rubble: no collision, no effect on
   bullets or path-finding), placed by rules the same way every run, and it disappears with
   the wall it hangs on. Amount: settings.json → decor.amount, also on the tuning panel.
+- **Street clutter (decoration):** bullet holes (many on damaged and ruined buildings),
+  scorch on walls and torn posters (pictures only, no writing); rubbish bags, tyre stacks,
+  gas bottles, plastic chairs, potted plants by doors and produce crates in front of shops;
+  loose paper and broken concrete in the streets, dry shrubs out in the open, razor wire
+  along some low walls and sandbags. Market stalls (over the market crates), carpets and
+  date palms are placed by hand in level.json → `decor`. All decoration only, like the rest.
+- **Wrecked vehicles are solid cover:** burnt-out or abandoned cars, pickups and lorries
+  (prop type `wreck`) block movement and bullets like steel and never break. The block grid
+  holds them as plain solid blocks; the graphics draw the vehicle over them. 14 in the city
+  streets (always with room to pass), a convoy, an army truck and a few by the roads outside.
 
 ## Controls (phone, held sideways)
 
@@ -389,6 +399,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Mk14 EBR drawn from the side view of its OpenArt sheet: black chassis, railed handguard, 4× scope on rings, folded bipod, 20-round magazine (rocks in and out on a reload, like the AK), operating rod handle pulled on an empty reload |
 | 2026-10-23 | Lived-in streets, first part: building colours, shop fronts, windows, rooftops, wires and ground marks (decoration only). Street clutter and movement (smoke, washing swaying, birds, ambient sound) next |
 | 2026-10-23 | Wrecked cars and trucks will be solid cover, not decoration |
+| 2026-10-23 | Street clutter added (decoration only), plus 22 wrecked vehicles as solid, unbreakable cover. Next: movement (smoke, swaying washing, birds, ambient sound) |
 
 ## Open questions
 

@@ -105,7 +105,7 @@ export function createMinimap(canvas) {
       const h = terrainHeight(world.terrain, x + 0.5, z + 0.5);
       c = c.map(v => v + h * 6);
       if (top >= 0) c = top === V.TANK ? [170, 174, 172] : top === V.FENCE ? [110, 110, 104] : top === V.PIPE ? [70, 92, 106]
-        : top === V.ROCK ? [120, 104, 86] : isFull(top) ? (top === V.SLAB ? [96, 92, 86] : [52, 50, 46]) : [120, 112, 100];
+        : top === V.ROCK ? [120, 104, 86] : top === V.WRECK ? [74, 60, 50] : isFull(top) ? (top === V.SLAB ? [96, 92, 86] : [52, 50, 46]) : [120, 112, 100];
       const i = (x + z * size) * 4;
       img.data[i] = c[0]; img.data[i + 1] = c[1]; img.data[i + 2] = c[2]; img.data[i + 3] = 255;
     }

@@ -1,5 +1,6 @@
-// Checks the decoration plan (shop fronts, rooftops, wires, ground marks): it is the same every
-// run, every piece hangs on a real wall, and none of it changes the game rules.
+// Checks the decoration plan (shop fronts, rooftops, wires, ground marks, street clutter): it is
+// the same every run, every piece hangs on a real wall, and none of it changes the game rules.
+// Also checks the wrecked vehicles, which are NOT decoration: they are solid, unbreakable cover.
 // Usage: node tests/decor-check.mjs
 import { readFileSync, readdirSync } from 'node:fs';
 import { buildData, parseCsv, byKey } from '../src/data/parse.js';
@@ -29,11 +30,23 @@ const a = planDecor(w, 1), b = planDecor(createWorld({ data, levelId: 'najaf', s
 const count = {};
 for (const it of a.items) count[it.kind] = (count[it.kind] || 0) + 1;
 check(JSON.stringify(a.items) === JSON.stringify(b.items), `the same decoration every run (${a.items.length} pieces)`);
-const kinds = ['shutter', 'awning', 'frame', 'shutters', 'ac', 'streak', 'wire', 'tank', 'dish', 'aerial', 'washing', 'drift', 'mark'];
+const kinds = ['shutter', 'awning', 'frame', 'shutters', 'ac', 'streak', 'wire', 'tank', 'dish', 'aerial', 'washing', 'drift', 'mark',
+  'holes', 'poster', 'wallscorch', 'trash', 'tyrestack', 'gas', 'chair', 'pot', 'produce', 'paper', 'chunks', 'shrub', 'coil',
+  'stall', 'carpet', 'palm', 'wreck'];
 check(kinds.every(k => count[k] > 0), `every kind is used: ${kinds.map(k => `${k} ${count[k] || 0}`).join(', ')}`);
-const bad = a.items.filter(it => it.anchors.some(i => w.grid.cells[i] !== V.WALL));
-check(bad.length === 0, `every piece hangs on a wall block${bad.length ? ': ' + bad.slice(0, 3).map(i => i.kind).join(', ') : ''}`);
+const holds = it => it.kind === 'coil' ? [V.LOWWALL, V.SANDBAG] : [V.WALL];
+const bad = a.items.filter(it => it.anchors.some(i => !holds(it).includes(w.grid.cells[i])));
+check(bad.length === 0, `every piece hangs on a wall block (razor wire on a low wall or sandbags)${bad.length ? ': ' + bad.slice(0, 3).map(i => i.kind).join(', ') : ''}`);
 check(w.grid.cells.every((c, i) => c === before[i]), 'placing decoration changes nothing in the game world');
+// wrecks: every block placed, solid, and they never break
+const wrecks = w.level.wrecks;
+let cells = 0;
+w.grid.cells.forEach((c, i) => { if (c === V.WRECK) { cells++; } });
+const wanted = wrecks.reduce((s, k) => s + k.w * k.d * k.h, 0);
+check(wrecks.length >= 15 && cells === wanted, `${wrecks.length} wrecked vehicles, every block of them in place (${cells})`);
+let breakable = 0;
+w.grid.cells.forEach((c, i) => { if (c === V.WRECK && w.pieceOf[i]) breakable++; });
+check(breakable === 0, 'wrecks are unbreakable cover');
 const half = planDecor(w, 0.5).items.length;
 check(half < a.items.length * 0.75 && half > a.items.length * 0.25, `the decoration amount setting scales it (${half} at half)`);
 process.exit(failures ? 1 : 0);
