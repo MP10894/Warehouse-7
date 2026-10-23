@@ -79,6 +79,46 @@ for (const item of ['construction_crate', 'ammo_crate', 'medical_crate', 'armour
   }
 }
 
+// once a base is cleared (even before anyone walks in) or claimed, nobody spawns in it or right
+// next to it; its defenders don't come back
+{
+  const M = S.enemy_ai.base_spawn_margin ?? 8;
+  const near = (a, e) => e.x >= a.x0 - M && e.x <= a.x1 + M && e.z >= a.z0 - M && e.z <= a.z1 + M;
+  // police station: kill its defenders, stay away, let three minutes pass
+  const w = createWorld({ data, levelId: 'najaf', seed: 41 });
+  w.waves.nextT = 1e9;
+  const police = bases.find(b => b.id === 'police_station');
+  const holders = level.enemy_groups.filter(g => g.holds_base === police.id).map(g => g.id);
+  for (const e of w.enemies) if (holders.includes(e.group) || near(police.area, e)) e.alive = false;
+  const p = w.players[0];
+  Object.assign(p, { x: 126, z: 150 }); p.y = groundAt(w, p.x, p.z, 30);
+  let inside = 0;
+  for (let i = 0; i < 180 * 60; i++) {
+    stepWorld(w, { p1: {} }, 1 / 60); w.events.length = 0;
+    if (i % 60 === 0) inside = Math.max(inside, w.enemies.filter(e => e.alive && !e.wave && near(police.area, e)).length);
+  }
+  check(inside === 0 && (w.base.cleared || []).includes('police_station'),
+    `a cleared base stays empty: no enemy spawned in or within ${M} m of the police station in 3 minutes, though nobody walked in`);
+  // control building: claimed; one refinery group has a spawn point 2 m from its wall
+  const w2 = createWorld({ data, levelId: 'najaf', seed: 42 });
+  w2.waves.nextT = 1e9;
+  const cb = bases.findIndex(b => b.id === 'control_building'), ctrl = bases[cb];
+  const { claimBase } = await import('../src/sim/base.js');
+  for (const e of w2.enemies) if (near(ctrl.area, e)) e.alive = false;
+  claimBase(w2, cb, true); w2.waves.nextT = 1e9;
+  const p2 = w2.players[0];
+  Object.assign(p2, { x: 126, z: 150 }); p2.y = groundAt(w2, p2.x, p2.z, 30);
+  let inside2 = 0, spawned = 0;
+  const groupsNear = level.enemy_groups.filter(g => g.spawns.some(sp => near(ctrl.area, sp)) && !g.holds_base).map(g => g.id);
+  for (let i = 0; i < 240 * 60; i++) {
+    stepWorld(w2, { p1: {} }, 1 / 60);
+    spawned += w2.events.filter(ev => ev.type === 'spawn' && groupsNear.includes(ev.group)).length;
+    w2.events.length = 0;
+    if (i % 60 === 0) inside2 = Math.max(inside2, w2.enemies.filter(e => e.alive && !e.wave && near(ctrl.area, e) && e.hp === e.maxHp && Math.hypot(e.x - e.home.x, e.z - e.home.z) < 1).length);
+  }
+  check(inside2 === 0, `a claimed base: groups with a spawn point next to it (${groupsNear.join(', ')}) only come back at their other spawn points`);
+}
+
 // each base can be claimed by clearing its defenders and walking in; the others stay enemy territory
 for (const [i, b] of bases.entries()) {
   const w = createWorld({ data, levelId: 'najaf', seed: 4 + i });

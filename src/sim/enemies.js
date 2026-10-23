@@ -7,7 +7,7 @@ import { flowNext, nodeAt } from './nav.js';
 import { aimVector, spreadDir, spawnProjectile } from './weapons.js';
 import { emit, explode, killActor } from './damage.js';
 import { stormAt } from './weather.js';
-import { holdsBase, levelBases } from './base.js';
+import { holdsBase, levelBases, noSpawnAreas, inArea } from './base.js';
 
 const EYE = 1.55;
 
@@ -238,22 +238,30 @@ function updateBomber(world, e, def, wdef, dt) {
   if (e.moving) e.animT += dt * 1.4;
 }
 
-/** Keep each enemy group topped up (except inside a claimed base). */
+/**
+ * Keep each enemy group topped up. Once a base has been cleared (or claimed), its defenders
+ * stop coming back and nobody spawns in it or right next to it (enemy_ai.base_spawn_margin);
+ * bases nobody has cleared stay enemy territory.
+ */
 export function updateGroups(world, dt) {
   const s = world.data.settings.enemy_ai;
   const level = world.data.levels[world.levelId];
+  const bases = levelBases(level);
+  const cleared = new Set(world.base.cleared || []);
+  if (world.base.claimed) cleared.add(world.base.id);
+  const blocked = noSpawnAreas(world);
   for (const gstate of world.groups) {
     const gdef = level.enemy_groups.find(g => g.id === gstate.id);
     const alive = world.enemies.filter(e => e.alive && e.group === gstate.id).length;
     if (alive >= gdef.spawns.length || !gdef.respawn) continue;
-    // defenders of the claimed base stop coming back; other bases stay enemy territory
-    if (world.base.claimed && holdsBase(gdef, { id: world.base.id, index: world.base.index }, levelBases(level).length)) continue;
+    if (bases.some((d, i) => cleared.has(d.id) && holdsBase(gdef, { id: d.id, index: i }, bases.length))) continue;
     gstate.respawnT -= dt;
     if (gstate.respawnT > 0) continue;
     gstate.respawnT = gdef.respawn;
-    const sp = gdef.spawns[Math.floor(rand(world, 0, gdef.spawns.length))];
-    const a = world.base.area;
-    if (world.base.claimed && sp.x >= a.x0 && sp.x <= a.x1 && sp.z >= a.z0 && sp.z <= a.z1) continue;
+    // only spawn points well clear of cleared bases
+    const allowed = gdef.spawns.filter(p => !blocked.some(a => inArea(a, p.x, p.z)));
+    if (!allowed.length) continue;
+    const sp = allowed[Math.floor(rand(world, 0, allowed.length))];
     if (world.players.some(p => p.alive && Math.hypot(p.x - sp.x, p.z - sp.z) < s.respawn_min_player_distance)) continue;
     const lo = rollLoadout(world, gdef.weapons, gdef.armour_chance || 0, gdef.armour || 0, gdef.type);
     spawnEnemy(world, { x: sp.x + 0.5, y: sp.y, z: sp.z + 0.5, weapon: lo.weapon, armour: lo.armour, group: gstate.id, behaviour: gdef.behaviour, radius: gdef.radius, type: gdef.type });

@@ -37,7 +37,7 @@ function fill(state, def, index, upgrades) {
 
 export function createBase(level, upgrades = {}) {
   const bases = levelBases(level);
-  const state = { claimed: false, index: -1, id: null, name: '', area: null, buildSpots: [], wallPlan: [], buildCount: 0, upgrades: {}, log: [] };
+  const state = { claimed: false, index: -1, id: null, name: '', area: null, buildSpots: [], wallPlan: [], buildCount: 0, upgrades: {}, log: [], cleared: [] };
   // only one base area: everything is known from the start (the tests rely on this too)
   if (bases.length === 1) fill(state, bases[0], 0, upgrades);
   return state;
@@ -54,6 +54,24 @@ export function holdsBase(group, def, baseCount) {
 }
 
 /** Make base `index` the player base. silent: copy only (a co-op guest mirroring the host). */
+function markCleared(b, id) {
+  if (!b.cleared) b.cleared = [];
+  if (!b.cleared.includes(id)) b.cleared.push(id);
+}
+
+/**
+ * Base areas enemies must not spawn in: the claimed base and every base that has been cleared,
+ * each grown by settings enemy_ai.base_spawn_margin metres so nobody appears right at the walls.
+ */
+export function noSpawnAreas(world) {
+  const level = world.data.levels[world.levelId];
+  const m = world.data.settings.enemy_ai?.base_spawn_margin ?? 8;
+  const ids = new Set(world.base.cleared || []);
+  if (world.base.claimed) ids.add(world.base.id);
+  return levelBases(level).filter(d => ids.has(d.id) && d.area)
+    .map(d => ({ x0: d.area.x0 - m, z0: d.area.z0 - m, x1: d.area.x1 + m, z1: d.area.z1 + m }));
+}
+
 export function claimBase(world, index, silent = false) {
   const level = world.data.levels[world.levelId];
   const def = levelBases(level)[index];
@@ -62,6 +80,7 @@ export function claimBase(world, index, silent = false) {
   fill(world.base, def, index, world.data.upgrades);
   world.base.log = keepLog;
   world.base.claimed = true;
+  markCleared(world.base, def.id);
   world.cache.baseField = null;
   if (silent) return;
   emit(world, { type: 'baseClaimed', base: def.id });
@@ -79,6 +98,8 @@ export function updateBase(world) {
       if (b.claimed) return;
       const holders = level.enemy_groups.filter(g => holdsBase(g, { ...def, index }, bases.length)).map(g => g.id);
       const defendersLeft = world.enemies.some(e => e.alive && !e.wave && (holders.includes(e.group) || inArea(def.area, e.x, e.z)));
+      // a base whose defenders are all dead stays cleared: nobody spawns in it again
+      if (!defendersLeft) markCleared(b, def.id);
       const playerInside = world.players.some(p => p.alive && !p.downed && inArea(def.area, p.x, p.z));
       if (!defendersLeft && playerInside) claimBase(world, index);
     });

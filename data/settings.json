@@ -70,7 +70,8 @@
   },
   "enemy_ai": {
     "give_up_after": 25,
-    "respawn_min_player_distance": 28
+    "respawn_min_player_distance": 28,
+    "base_spawn_margin": 8
   },
   "waves": {
     "first_wave_at": 50,
