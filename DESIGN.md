@@ -305,6 +305,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Insurgent redrawn from an OpenArt sheet: sand head wrap and scarf, khaki tunic, olive chest rig (the armour part), olive trousers, dark boots, rolled sleeves |
 | 2026-10-23 | Rubble is decoration only (no collision, nothing stands on it, bullets pass): fixes getting stuck in rubble after falling through a hole; broken walls leave rubble everywhere again |
 | 2026-10-23 | Heavy Insurgent has its own model: black helmet, face scarf, bulky black vest with shoulder pads, black gloves and knee pads. Each enemy type can have its own model (`enemy_<type>.glb`) |
+| 2026-10-23 | Militia has its own model: green face scarf, dark red track jacket with pushed-up sleeves, grey t-shirt, bandolier and hip pouch, grey cargo trousers, brown trainers, bare forearms; no armour |
 
 ## Open questions
 
