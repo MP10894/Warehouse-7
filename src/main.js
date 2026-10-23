@@ -95,6 +95,9 @@ if (!view) {
   const input = createInput({ app, touchEl: $('touch'), stick: $('stick'), knob: $('knob'), buttons, view, settings: S });
   const aim = { yaw: 0, pitch: 0 };
   let acc = 0, shake = 0;
+  // taps on RELOAD, SWAP and the use button wait here until a game step takes them: on a
+  // fast screen many frames have no game step, and a tap read on such a frame was lost
+  const taps = { reload: false, swap: false, interact: false };
   const recoil = createRecoil();
   const assist = createAimAssist();
   // a shot's kick moves the aim now; recoil.update brings it back afterwards
@@ -128,6 +131,7 @@ if (!view) {
     const p = local();
     aim.yaw = p.yaw; aim.pitch = 0;
     acc = 0; shake = 0; recoil.reset(); assist.reset();
+    taps.reload = taps.swap = taps.interact = false;
     mode = 'playing';
     screens.hide();
     input.setEnabled(true);
@@ -284,11 +288,12 @@ if (!view) {
 
       if (role !== 'guest') {
         const base = { move: { x: inp.moveX, y: inp.moveY }, fire: inp.fire, ads: inp.ads };
+        taps.reload ||= inp.reload; taps.swap ||= inp.swap; taps.interact ||= inp.interact;
         acc += dt;
         let steps = 0, first = true;
         while (acc >= STEP && steps < 5) {
           const cmd = { ...base, yaw: aim.yaw, pitch: aim.pitch };
-          if (first) { cmd.reload = inp.reload; cmd.swap = inp.swap; cmd.interact = inp.interact; }
+          if (first) { cmd.reload = taps.reload; cmd.swap = taps.swap; cmd.interact = taps.interact; taps.reload = taps.swap = taps.interact = false; }
           const cmds = { [localId]: cmd };
           if (role === 'host') cmds.p2 = guestCommand(first);
           first = false;
