@@ -151,7 +151,8 @@ function soldierFromArt(art) {
 export function soldierModel(kind = 'enemy', type = 'insurgent') {
   const m = soldierBase(kind, type);
   // suicide bombers: a militia-style civilian look with an explosive vest (until they get art)
-  if (type === 'suicide_bomber' && m.torso) m.bombVest = bomberVest(m.torso);
+  // (with drawn art the vest is part of the model; its `bomb_light` still blinks)
+  if (type === 'suicide_bomber' && m.torso) m.bombVest = ART.characters.enemy_suicide_bomber ? m.root : bomberVest(m.torso);
   return m;
 }
 

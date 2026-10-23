@@ -368,6 +368,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | RGD-5 grenade as a quick-use item: grenade button with count under the map, 0.7 s toss with no firing meanwhile, timed 3.5 s fuse with bounces; from map pickups, insurgent and heavy insurgent drops, and the ammunition supply; none at the start; carry up to 5 |
 | 2026-10-23 | Suicide bomber: runs at players and blows up within 1 m (RGD-5 blast); his vest also goes off if he is shot dead; beeps as he closes in; in attack waves from wave 2 and placed in each Najaf district. Placeholder look: militia clothes with a tan explosive vest and a blinking light |
 | 2026-10-23 | Co-op messages: when many enemies are around both players, the furthest are left out first |
+| 2026-10-23 | Suicide bomber has his own model from an OpenArt sheet: red face scarf, maroon track jacket, tan explosive charges on a black harness and a belt of charges, detonator in his right hand, blinking red light on his chest |
 
 ## Open questions
 

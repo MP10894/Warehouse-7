@@ -105,8 +105,8 @@ north/−Z).
 - Pose: standing, **arms hanging down**. The game raises the arms to aim.
 - Files: `enemy_insurgent.glb`, `player.glb`, and one per enemy type: `enemy_<type>.glb` with the
   type name from the Enemies tab (e.g. `enemy_heavy_insurgent.glb`, `enemy_militia.glb`,
-  `enemy_suicide_bomber.glb`, which should show a clearly readable explosive vest; until it
-  exists the bomber uses the militia model with a code-drawn vest). A type
+  `enemy_suicide_bomber.glb`, which must show a clearly readable explosive vest *outside* the
+  `vest` group (that group only shows on armoured enemies); a part named `bomb_light` blinks). A type
   without its own file uses the insurgent's.
 - **Colour variants** (several insurgent outfits, partner colours in co-op) will be
   separate textures for the same model: `enemy_insurgent_2.png`, `player_p2.png`, and so on.
@@ -278,7 +278,7 @@ black, white, muzzle-flash yellow, flame orange, sky). Picture: `docs/palette.pn
 
 Drafts so far: `assets/blocks/wall.png`, `assets/sources/enemy_insurgent.bbmodel`
 (→ `assets/characters/enemy_insurgent.glb`, rebuilt from its OpenArt sheet),
-`assets/sources/enemy_heavy_insurgent.bbmodel` (→ `assets/characters/enemy_heavy_insurgent.glb`), `assets/sources/enemy_militia.bbmodel` (→ `assets/characters/enemy_militia.glb`; the palette has no maroon, so the jacket uses the dark reds), `assets/sources/sig_p320.bbmodel`
+`assets/sources/enemy_heavy_insurgent.bbmodel` (→ `assets/characters/enemy_heavy_insurgent.glb`), `assets/sources/enemy_militia.bbmodel` (→ `assets/characters/enemy_militia.glb`; the palette has no maroon, so the jacket uses the dark reds), `assets/sources/enemy_suicide_bomber.bbmodel` (→ `assets/characters/enemy_suicide_bomber.glb`; charges and charge belt painted as tan blocks with black tape so they read at a distance), `assets/sources/sig_p320.bbmodel`
 (→ `assets/weapons/sig_p320.glb`), `assets/sources/player_hands.bbmodel` (→ `assets/items/player_hands.glb`),
 `assets/sources/ak47.bbmodel` (→ `assets/weapons/ak47.glb`; shape from the real rifle's
 proportions because its reference sheet had no usable side view), `assets/sources/rpk.bbmodel`
