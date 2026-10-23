@@ -7,3 +7,6 @@ desktop.ini
 
 # Office temporary/lock files (created while a document is open)
 ~$*
+
+# Python helper caches
+__pycache__/
