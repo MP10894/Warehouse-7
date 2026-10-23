@@ -71,9 +71,8 @@
   },
   "waves": {
     "first_wave_at": 50,
-    "interval_start": 45,
-    "interval_min": 15,
-    "interval_decay": 0.9,
+    "break_after_wave": 20,
+    "max_attackers_alive": 20,
     "build_interval_cut": 10,
     "build_wave_bump": 1
   },

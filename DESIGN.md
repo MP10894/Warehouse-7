@@ -72,6 +72,11 @@ Layout plan (agreed): [docs/NAJAF_PLAN.md](docs/NAJAF_PLAN.md) (map in
   They respawn periodically, except in a cleared base.
 - Once a base is secured, waves of attackers keep coming and attack the base. Before
   that there are no waves.
+- Rhythm: the first wave comes 50 s after the base is secured. Each wave must be beaten
+  (every attacker killed) before a **20-second break**, then the next, bigger wave comes.
+  Building something during a break brings the next wave sooner.
+- At most **20 attackers** are on the map at once; the rest of a big wave wait at the edge
+  and come in as others fall. (Both numbers are in settings.json and on the tuning panel.)
 - Waves get harder over time, and **build progress speeds up the escalation**.
 - For now, difficulty varies only by **number of enemies, their weapons, and whether
   they wear armour**. A full enemy roster will come later (Enemies tab of the workbook).
@@ -238,7 +243,7 @@ tag `warehouse-prototype`.
 | `data/enemies.csv` | Fallback for any enemy value the Enemies tab leaves out |
 | `data/waves.csv` | Size, armour, enemy-type mix and weapon mix of each wave |
 | `data/materials.csv` | Health and armour of each breakable material, and whether it leaves rubble |
-| `data/settings.json` | Player, controls, camera, ballistics (bullet speed factor, recoil, bloom), waves timing, base, weather |
+| `data/settings.json` | Player, controls (incl. aim assist), camera, ballistics (bullet speed factor, recoil, bloom), waves (first wave, break, attacker cap), base, weather |
 | `data/levels/slice/level.json` | Positions of buildings, props, base, enemies, pickups, weather zones, timer |
 
 ## Decision log
@@ -293,6 +298,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Game Data workbook: MP5, Mk14 EBR and RPK added; Militia and Heavy Insurgent enemy types; Armour column on the Enemies tab is each type's minimum armour |
 | 2026-10-23 | New enemies placed: Militia rove Najaf's streets (market, west, avenue); Heavy Insurgents guard the clinic and the building site; waves start with Militia and bring Heavy Insurgents later. MP5 placed in the street by the market, Mk14 EBR on the clinic roof |
 | 2026-10-23 | Subtle aim assist while aiming down sights: within 5° of a visible enemy (60 m) the crosshair is drawn onto their chest and follows them a little. Strength and reach on the tuning panel |
+| 2026-10-23 | Wave rhythm: beat a wave, 20 s break, next wave (replaces shrinking timed gaps); at most 20 attackers alive at once, the rest wait at the map edge |
 
 ## Open questions
 

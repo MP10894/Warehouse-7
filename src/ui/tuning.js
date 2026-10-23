@@ -31,9 +31,8 @@ const SLIDERS = [
   ['Player', 'Health regen up to', 'player.regen_cap', 0, 100, 5],
   ['Player', 'Regen starts after (s)', 'player.regen_delay', 1, 15, 0.5],
   ['Waves', 'First wave at (s) — next run', 'waves.first_wave_at', 10, 180, 5],
-  ['Waves', 'First gap between waves (s) — next run', 'waves.interval_start', 15, 120, 5],
-  ['Waves', 'Shortest gap between waves (s)', 'waves.interval_min', 5, 60, 1],
-  ['Waves', 'Each gap shrinks to (×)', 'waves.interval_decay', 0.6, 1, 0.01],
+  ['Waves', 'Break after each wave (s)', 'waves.break_after_wave', 0, 90, 5],
+  ['Waves', 'Most attackers on the map at once', 'waves.max_attackers_alive', 4, 40, 1],
   ['Waves', 'Building brings next wave sooner by (s)', 'waves.build_interval_cut', 0, 40, 1]
 ];
 const TABS = ['Controls', 'Player', 'Recoil', 'Spread', 'Enemies', 'Waves', 'Art'];

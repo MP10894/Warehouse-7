@@ -47,7 +47,8 @@ export function createHostEncoder(data) {
       const patch = {};
       const g = [cm(world.time), cm(world.timeLeft), STATUS.indexOf(world.status), world.kills,
         world.waves.number, world.waves.nextT === null ? -1 : Math.round(world.waves.nextT * 10), world.base.claimed ? 1 : 0, world.base.upgrades.walls.level,
-        world.weather.map(z => (z.active ? Math.round(z.intensity * 100) : -1)), world.outcome ? STATUS.indexOf(world.outcome) : 0];
+        world.weather.map(z => (z.active ? Math.round(z.intensity * 100) : -1)), world.outcome ? STATUS.indexOf(world.outcome) : 0,
+        world.waves.queue.length];
       patch.t = world.tick;
       patch.g = g;
       patch.p = world.players.map(p => [
@@ -112,13 +113,14 @@ export function createGuestDecoder(data) {
       const replay = [];
       if (!snap || typeof snap.t !== 'number' || snap.t <= lastTick) return replay;
       lastTick = snap.t;
-      const [time, timeLeft, status, kills, waveNo, nextT, claimed, walls, weather, outcome] = snap.g;
+      const [time, timeLeft, status, kills, waveNo, nextT, claimed, walls, weather, outcome, queued] = snap.g;
       world.tick = snap.t;
       world.time = time / 100;
       world.timeLeft = timeLeft / 100;
       world.kills = kills;
       world.waves.number = waveNo;
       world.waves.nextT = nextT < 0 ? null : nextT / 10;
+      world.waves.queued = queued || 0;   // attackers waiting to come in (host only knows who)
       world.outcome = outcome ? STATUS[outcome] : null;
       if (claimed && !world.base.claimed) world.base.claimed = true;
       for (let lv = world.base.upgrades.walls.level + 1; lv <= walls; lv++) placeWalls(world, lv);

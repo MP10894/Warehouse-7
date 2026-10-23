@@ -220,6 +220,30 @@ check(w0.players.length === 1 && w0.enemies.length >= 10, `level built: ${w0.ene
   check(w2.status === 'won', `holding the base until the timer ends wins the level (status: ${w2.status})`);
 }
 
+// --- wave rhythm: beat a wave, short break, next wave; never too many attackers at once
+{
+  const { spawnWave, attackersAlive, attackersLeft } = await import('../src/sim/waves.js');
+  const w = fresh(); noEnemies(w);
+  w.players[0].hp = 1e9; w.base.claimed = true; w.waves.started = true; w.waves.nextT = null;
+  const S = w.data.settings.waves;
+  spawnWave(w);
+  run(w, 60, () => ({}));
+  const stillFighting = w.waves.number === 1 && w.waves.nextT === null;
+  for (const e of w.enemies) if (e.wave) e.alive = false;
+  run(w, 1, () => ({}));
+  const breakSet = w.waves.nextT !== null && Math.abs(w.waves.nextT - w.time - (S.break_after_wave - 1)) < 1.05;
+  run(w, S.break_after_wave + 1, () => ({}));
+  check(stillFighting && breakSet && w.waves.number === 2, `the next wave waits until the last one is beaten, then comes after a ${S.break_after_wave} s break`);
+
+  const big = fresh(); noEnemies(big); big.players[0].hp = 1e9; big.base.claimed = true; big.waves.started = true;
+  big.waves.index = 29; spawnWave(big);   // a 30th wave: far more attackers than the cap
+  const total = attackersLeft(big), onMap = attackersAlive(big);
+  for (const e of big.enemies.filter(e => e.wave).slice(0, 5)) e.alive = false;
+  run(big, 5, () => ({}));
+  check(total > S.max_attackers_alive && onMap === S.max_attackers_alive && attackersAlive(big) === S.max_attackers_alive && attackersLeft(big) === total - 5 && big.waves.nextT === null,
+    `at most ${S.max_attackers_alive} attackers on the map at once; the rest of a ${total}-strong wave come in as others fall`);
+}
+
 // --- health regeneration: after 7 s without damage, back up to 50 over 3 s
 {
   const w = fresh(); noEnemies(w);

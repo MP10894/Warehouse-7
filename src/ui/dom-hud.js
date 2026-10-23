@@ -41,9 +41,10 @@ export function createDomHud() {
       set('clock', el.clock, 'textContent', fmtTime(world.timeLeft));
       el.clock.classList.toggle('urgent', running && world.timeLeft < 30);
       el.clock.classList.toggle('waiting', !running);
-      const attackers = world.enemies.filter(e => e.alive && e.wave).length;
-      set('wave', el.waveLine, 'textContent', !running || w.nextT === null ? 'Clock starts when you secure a base'
-        : attackers > 0 ? `Wave ${w.number}: ${attackers} attacker${attackers === 1 ? '' : 's'} left` : `Wave ${w.number + 1} in ${fmtTime(w.nextT - world.time)}`);
+      const attackers = world.enemies.filter(e => e.alive && e.wave).length + (w.queued ?? w.queue.length);
+      set('wave', el.waveLine, 'textContent', !running ? 'Clock starts when you secure a base'
+        : w.nextT !== null ? `Wave ${w.number + 1} in ${fmtTime(Math.max(0, w.nextT - world.time))}`
+        : `Wave ${w.number}: ${attackers} attacker${attackers === 1 ? '' : 's'} left`);
       set('goal', el.goalLine, 'textContent', p.downed ? 'You are down — your partner can revive you' : goal(world, p));
       el.carry.hidden = !p.carrying;
 

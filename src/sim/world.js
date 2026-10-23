@@ -25,7 +25,7 @@ export function createWorld({ data, levelId, seed = 7, playerIds = ['p1'] }) {
   };
   buildLevel(world, level);
   world.base = createBase(level);
-  world.waves = createWaves(data.settings);
+  world.waves = createWaves();
   world.weather = createWeather(level);
 
   world.players = playerIds.map((id, i) => createPlayer(world, id, level.player_spawns[i] || level.player_spawns[0]));
