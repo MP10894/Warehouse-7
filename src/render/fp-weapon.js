@@ -96,11 +96,14 @@ export function createFpWeapon() {
     // drawn hands are fists round an upright grip: on a rifle the left hand turns to clamp
     // the handguard from the side, back of the hand (and its knuckle plate) facing you
     hands.L.rotation.set(ART.hands && !LEFT_HAND_UPRIGHT.has(id) ? Math.PI / 2 : 0, 0, 0);
-    const sight = sightOf(id);
+    const sight = sightOf(id), eye = ART.weapons[id] && ART.weapons[id].eye;
     // a rifle's stock reaches back past the sights: keep its butt a little in front of your eye
     const back = ART.weapons[id] ? (ART.weapons[id].back - (sight ? sight[2] : 0)) * HOLDER_SCALE : 0;
     const dist = Math.max(SIGHT_DISTANCE, back + 0.16);
     adsTarget = sight ? new THREE.Vector3(-sight[0] * HOLDER_SCALE, -sight[1] * HOLDER_SCALE, -dist - sight[2] * HOLDER_SCALE) : null;
+    // a shouldered weapon with an `eye` point: put your eye exactly there (stock at the
+    // shoulder, face behind the top cover); the stock then runs back below the view
+    if (eye) adsTarget = new THREE.Vector3(-eye[0] * HOLDER_SCALE, -eye[1] * HOLDER_SCALE, -eye[2] * HOLDER_SCALE);
   }
 
   return {

@@ -29,12 +29,12 @@ PARTS = [
     ('muzzle_brake',  0.000, 0.030, -0.012, 0.012, 0.013, 'steel', 0, None),
     ('barrel',        0.030, 0.270, -0.009, 0.009, 0.009, 'steel', 0, None),
     ('front_sight',   0.040, 0.080, -0.016, 0.024, 0.014, 'steel', 0, None),
-    ('front_post',    0.052, 0.068, 0.024, 0.058, 0.010, 'steel', 0, None),
+    ('front_post',    0.052, 0.068, 0.024, 0.050, 0.010, 'steel', 0, None),  # top level with the rear notch
     ('gas_block',     0.180, 0.215, -0.014, 0.040, 0.014, 'steel', 0, None),
     ('gas_tube',      0.215, 0.270, 0.016, 0.036, 0.010, 'steel', 0, None),
     ('upper_guard',   0.270, 0.410, 0.010, 0.044, 0.018, 'wood_upper', 0, None),
     ('lower_guard',   0.260, 0.430, -0.048, 0.010, 0.024, 'wood', 0, None),
-    ('rear_sight',    0.410, 0.470, 0.010, 0.050, 0.016, 'steel', 0, None),
+    ('rear_sight',    0.410, 0.470, 0.010, 0.045, 0.016, 'steel', 0, None),  # just below the sight line, so the front post shows over it
     ('receiver',      0.430, 0.670, -0.060, 0.012, 0.022, 'steel', 0, None),
     ('dust_cover',    0.470, 0.670, 0.012, 0.034, 0.019, 'steel_light', 0, None),
     ('magazine_top',  0.462, 0.532, -0.135, -0.055, 0.014, 'magazine', 0, None),
@@ -53,6 +53,9 @@ POINTS = {
     'muzzle': (0, to_y(0.0), to_z(-0.005)),
     'sight': (0, to_y(0.050), to_z(0.455)),        # the rear sight notch; the front post lines up with it
     'hand_left': (-0.012, to_y(-0.018), to_z(0.345)),  # middle of the lower handguard
+    # where your eye sits when aiming: cheek on the stock, face just behind the top cover,
+    # looking along it over the rear sight to the front post
+    'eye': (0, to_y(0.050), to_z(0.700)),
 }
 
 
@@ -76,7 +79,7 @@ def colour(mat, d, y, x, face, part):
     if mat == 'steel_light':
         if face in ('east', 'west') and abs(y - 0.023) < 0.002:
             return C['Gun metal'][1]  # seam of the dust cover
-        return C['Gun metal'][3] if face == 'up' else C['Gun metal'][2]
+        return C['Gun metal'][2] if face == 'up' else C['Gun metal'][1]
     # steel
     if part == 'receiver' and face == 'west' and 0.480 < d < 0.520 and abs(y + 0.010) < 0.006:
         return C['Gun metal'][3]  # rivets / selector area on the side you see

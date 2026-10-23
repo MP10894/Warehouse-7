@@ -133,6 +133,11 @@ would be only 6 pixels long. At 256 it is about 50 units (and pixels) long, a ri
   - `muzzle` (required): the end of the barrel. Bullets, flashes and smoke start here.
   - `sight` (required): the point your eye looks through when aiming down sights. The
     game puts it at the centre of the screen.
+  - `eye` (optional, for shouldered weapons): where the shooter's eye sits when aiming,
+    with the stock against the shoulder: just behind the top cover, on the sight line. The
+    game puts your eye exactly there. Without it the game holds the weapon out at arm's
+    length, which suits pistols. Sight line = `sight` to the top of the front sight: keep it
+    level with `eye`.
   - `hand_left` (optional): where the left hand holds it (foregrip, or the grip itself for
     the pistol). Without it the game uses a default.
   - `warhead` (RPG-7 only, a group with the warhead boxes): the game uses it as the flying
