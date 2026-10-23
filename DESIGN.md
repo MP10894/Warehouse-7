@@ -417,6 +417,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Drifting smoke (some burnt wrecks, a few rubbish fires in the city) and swaying washing; no birds over the city |
 | 2026-10-23 | MP5 drawn (MP5A2, fixed stock) from the side view of its OpenArt sheet; the stray prong under the handguard left out; open sights you aim through; magazine tips out and back in on a reload, charging handle pulled on an empty one |
 | 2026-10-23 | Weapon triangle budget raised from 300 to 400 for every gun. MP5 reworked: grip at its real length, round front sight hood, drum rear sight you look through (the post sits in the hood's ring) |
+| 2026-10-23 | M4A1 drawn from its OpenArt sheet: flat-top with a railed handguard and a flip-up rear aperture (as the sheet drew it, not the carry handle), A-frame front sight, tan barrel, half-extended stock. Every gun now has drawn art |
 
 ## Open questions
 

@@ -319,7 +319,7 @@ Drafts so far: `assets/blocks/wall.png`, `assets/sources/enemy_insurgent.bbmodel
 (→ `assets/weapons/sig_p320.glb`), `assets/sources/player_hands.bbmodel` (→ `assets/items/player_hands.glb`),
 `assets/sources/ak47.bbmodel` (→ `assets/weapons/ak47.glb`; shape from the real rifle's
 proportions because its reference sheet had no usable side view), `assets/sources/rpk.bbmodel`
-(→ `assets/weapons/rpk.glb`; real proportions, look from its sheet), `assets/sources/mk14ebr.bbmodel` (→ `assets/weapons/mk14ebr.glb`; from the sheet's side view only, since its front and back views were wrong; 300 triangles, the full budget), `assets/sources/mp5.bbmodel` (→ `assets/weapons/mp5.glb`; from the sheet's side view, without the stray prong under the handguard; short grip, a round front sight hood (a ring of 8 turned boxes) and a drum rear sight with a peep hole you aim through; 396 triangles), all with OpenArt
+(→ `assets/weapons/rpk.glb`; real proportions, look from its sheet), `assets/sources/mk14ebr.bbmodel` (→ `assets/weapons/mk14ebr.glb`; from the sheet's side view only, since its front and back views were wrong; 300 triangles, the full budget), `assets/sources/mp5.bbmodel` (→ `assets/weapons/mp5.glb`; from the sheet's side view, without the stray prong under the handguard; short grip, a round front sight hood (a ring of 8 turned boxes) and a drum rear sight with a peep hole you aim through; 396 triangles), `assets/sources/m4a1.bbmodel` (→ `assets/weapons/m4a1.glb`; from the lower right side view of its sheet, which drew a flat-top with a railed handguard and a flip-up rear sight; you aim through the rear aperture at the front post between its ears; 360 triangles), all with OpenArt
 references in `assets/sources/reference/`.
 
 ## Decisions (2026-10-22)
