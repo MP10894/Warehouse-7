@@ -66,6 +66,26 @@ Layout plan (agreed): [docs/NAJAF_PLAN.md](docs/NAJAF_PLAN.md) (map in
 | Armour locker | Armour crate | Spawns armour periodically |
 | Walls | Construction crate (respawns, since walls get destroyed) | Destructible cover around the base |
 
+What each level does is in `data/upgrades.csv` (one row per level; editable in Excel).
+Starting values, to be tuned after play-testing:
+
+- **Walls:** 2 levels (1 then 2 sandbags high). At the top level a construction crate
+  repairs blown-up sections.
+- **Ammunition supply, first aid locker, armour locker:** 3 levels each. The locker is one
+  block at its build spot and keeps one pickup waiting on top of it: an ammunition box
+  (refills a share of every gun you carry: 30 / 40 / 50 %), a first aid kit (+25 / 40 / 60
+  health, up to full) or armour (+25 / 50 / 75). The next one appears 45 / 35 / 25 s
+  after the last was taken (armour: 60 / 45 / 30 s).
+- A locker can be destroyed (150 health, 60 armour). Its upgrade goes back to nothing and
+  its crate starts coming back again.
+- A crate is only picked up while its upgrade is below the top level, so you can't get
+  stuck carrying one you can't use.
+- In the base, each build spot is marked on the ground: a dashed yellow-and-black hazard
+  square with an icon (sandbags, cartridges, cross, shield), and dashed lines where the
+  walls go. The markings are faint, pulse while you carry the matching crate, and
+  disappear once that upgrade is at its top level (wall lines come back where walls are
+  blown away). Built lockers show their icon and level above them.
+
 ## Enemies and waves
 
 - Enemies roam the level: some stay near their spawn zones, some range further.
@@ -211,12 +231,24 @@ travelling bullets and rockets, armour, two weapon slots, enemies that guard, ro
 attack in waves, the construction crate and sandbag walls, destructible walls, and a
 sandstorm zone in the north-east desert. Single player, plus a two-player co-op test (Co-op test button).
 
-**Najaf, city district (v0.3, frame-rate test).** The full 256 × 256 m Najaf map with
-only the city district built (`data/levels/najaf/`): 55 buildings of 1–3 floors (intact,
-damaged or ruined), the clinic, the minaret, the market square, the building site with
-the construction crate, and the police station as the base. 27 enemies in 9 groups.
-The outskirts and the refinery are open sand with dunes for now. Pick the level on the
-start screen; the choice is remembered, and in co-op the host's choice is used.
+**Najaf, complete (v0.4).** The full 256 × 256 m map (`data/levels/najaf/`), three districts
+around the crossroads where you start:
+
+- **City** (north-west): 55 buildings of 1–3 floors (intact, damaged or ruined), the
+  clinic (medical crate on its roof), the minaret, the market square, the building site
+  (construction crate), and **base A, the police station**.
+- **Refinery** (east): a fenced concrete pad with eight fuel tanks that blow up when a
+  rocket hits them, pipe racks you can walk under, low pipe runs as cover, two cracking
+  towers, the flare stack with its permanent smoke, the loading bay, the security post
+  (armour crate), and **base C, the control building**.
+- **Outskirts** (south and west): dunes, the dry riverbed, rock outcrops, single-storey
+  houses, the gas station, the army checkpoint (ammunition crate behind sandbags), the
+  quarry (second construction crate), the wrecked convoy, sandstorm zones, high dunes
+  along the map edge, and **base B, the truck stop**.
+
+65 enemies in 22 groups. The refinery and outskirts were drafted by
+`tools/make_najaf_districts.py`. Pick the level on the start screen; the choice is
+remembered, and in co-op the host's choice is used.
 
 The earlier Warehouse 7 prototype (flat, Doom-style) is kept in git history under the
 tag `warehouse-prototype`.
@@ -244,7 +276,8 @@ tag `warehouse-prototype`.
 | `data/enemies.csv` | Fallback for any enemy value the Enemies tab leaves out |
 | `data/waves.csv` | Size, armour, enemy-type mix and weapon mix of each wave |
 | `data/materials.csv` | Health and armour of each breakable material, and whether it leaves rubble |
-| `data/settings.json` | Player, controls (incl. aim assist), camera, ballistics (bullet speed factor, recoil, bloom), waves (first wave, break, attacker cap), base, weather |
+| `data/upgrades.csv` | Each upgrade's levels: crate needed, wall height, what a locker hands out, how often, how much |
+| `data/settings.json` | Player, controls (incl. aim assist), camera, ballistics (bullet speed factor, recoil, bloom), waves (first wave, break, attacker cap, how far from you waves start), base, hazards (fuel-tank blast), markers (base markings), weather |
 | `data/levels/slice/level.json` | Positions of buildings, props, base, enemies, pickups, weather zones, timer |
 
 ## Decision log
@@ -306,10 +339,16 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Rubble is decoration only (no collision, nothing stands on it, bullets pass): fixes getting stuck in rubble after falling through a hole; broken walls leave rubble everywhere again |
 | 2026-10-23 | Heavy Insurgent has its own model: black helmet, face scarf, bulky black vest with shoulder pads, black gloves and knee pads. Each enemy type can have its own model (`enemy_<type>.glb`) |
 | 2026-10-23 | Militia has its own model: green face scarf, dark red track jacket with pushed-up sleeves, grey t-shirt, bandolier and hip pouch, grey cargo trousers, brown trainers, bare forearms; no armour |
+| 2026-10-23 | Base markings: each build spot is a dashed yellow-and-black hazard square with an upgrade icon; dashed lines show where walls go. Faint until you carry the matching crate (then they pulse); gone once the upgrade is at its top level |
+| 2026-10-23 | Najaf completed: refinery and outskirts districts built to the agreed layout; three base areas (police station, truck stop, control building), the first one cleared becomes yours and the others stay enemy territory; 65 enemies in 22 groups |
+| 2026-10-23 | Upgrade effects (starting values, in `data/upgrades.csv`): ammunition supply, first aid locker and armour locker each have 3 levels and keep one pickup waiting on top of the locker; walls keep 2 levels. A destroyed locker loses its upgrade |
+| 2026-10-23 | Fuel tanks: a rocket hit blows up the whole tank; the blast reaches 12 m from the tank wall, as strong as four rocket hits at the wall and nothing at the edge; no chain reactions (settings.json → hazards) |
+| 2026-10-23 | Waves now come in from the two map-edge entry points nearest your base that are at least 60 m from any player (on the full map the furthest points meant a long walk) |
+| 2026-10-23 | Co-op: the host only sends enemies within 90 m of a player (plus all attackers), so 60+ enemies fit in a message; builds and broken base pieces are sent as an ordered list so both phones stay identical |
 
 ## Open questions
 
-1. **Upgrade levels.** 3 levels, one crate each (agreed). Still to define: what each level
-   of each upgrade does (spawn rate, amount). Walls currently go to level 2 (2 blocks high).
+1. **Upgrade numbers.** Starting values are in `data/upgrades.csv`; tune after
+   play-testing. Walls have 2 levels (a third could be a tougher or taller wall).
 2. **Enemy roster** file (later).
 3. **Name** of the game.

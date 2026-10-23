@@ -1,0 +1,19 @@
+# Army checkpoint guard post
+# 6 x 6 m, 1 floor + roof, intact.
+# Symbol guide: data/levels/README.md
+
+floor 0
+Xw##wX
+w.>>>w
+#....#
+d....d
+w....w
+Xw#dwX
+
+floor 1
+llllll
+l.....
+l....l
+l....l
+l....l
+llllll

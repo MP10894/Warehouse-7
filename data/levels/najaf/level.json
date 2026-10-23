@@ -1,16 +1,17 @@
 {
  "name": "Najaf",
  "title": "Najaf",
- "subtitle": "Level 1 \u00b7 city district only",
- "summary": "The outskirts and the refinery are open sand for now.",
+ "subtitle": "Level 1",
+ "summary": "Three districts around a crossroads: a ruined city, an oil refinery and the desert outskirts. Each has a place you can take as your base.",
  "briefing": [
-  "Head north-west from the crossroads into the city.",
-  "Clear the police station courtyard. It becomes your base.",
-  "Fetch the construction crate from the building site (east of the market), build walls, then hold out."
+  "You start at the crossroads. Pick a base: the police station (city, north-west), the truck stop (outskirts, south-west) or the control building (refinery, east).",
+  "Clear its defenders and step inside. It becomes your base and the clock starts.",
+  "Fetch crates and build upgrades at the marked spots: construction crates (walls) at the building site and the quarry, medical on the clinic roof, ammunition at the army checkpoint, armour at the refinery security post.",
+  "Fuel tanks explode when a rocket hits them. Keep your distance."
  ],
  "goals": {
-  "claim": "Clear the police station (in the city, north-west) to claim a base",
-  "fetch": "Fetch the construction crate from the building site (east of the market)"
+  "claim": "Clear a base: police station (city), truck stop (outskirts) or control building (refinery)",
+  "fetch": "Fetch a crate and build an upgrade at a marked spot in your base"
  },
  "size": 256,
  "max_height": 16,
@@ -341,6 +342,117 @@
    "x": 114,
    "z": 112,
    "turn": 180
+  },
+  {
+   "file": "refinery_security_post.txt",
+   "x": 226,
+   "z": 5,
+   "district": "refinery"
+  },
+  {
+   "file": "refinery_shed.txt",
+   "x": 156,
+   "z": 20,
+   "district": "refinery"
+  },
+  {
+   "file": "refinery_shed.txt",
+   "x": 180,
+   "z": 123,
+   "district": "refinery"
+  },
+  {
+   "file": "refinery_control.txt",
+   "x": 206,
+   "z": 94,
+   "district": "refinery"
+  },
+  {
+   "file": "outskirts_diner.txt",
+   "x": 56,
+   "z": 190,
+   "district": "outskirts"
+  },
+  {
+   "file": "outskirts_garage.txt",
+   "x": 56,
+   "z": 202,
+   "district": "outskirts"
+  },
+  {
+   "file": "outskirts_house.txt",
+   "x": 20,
+   "z": 182,
+   "district": "outskirts"
+  },
+  {
+   "file": "outskirts_house_damaged.txt",
+   "x": 32,
+   "z": 196,
+   "turn": 90,
+   "district": "outskirts"
+  },
+  {
+   "file": "outskirts_house.txt",
+   "x": 100,
+   "z": 215,
+   "district": "outskirts"
+  },
+  {
+   "file": "outskirts_house_ruined.txt",
+   "x": 112,
+   "z": 236,
+   "district": "outskirts"
+  },
+  {
+   "file": "outskirts_house.txt",
+   "x": 196,
+   "z": 238,
+   "turn": 180,
+   "district": "outskirts"
+  },
+  {
+   "file": "outskirts_house_damaged.txt",
+   "x": 230,
+   "z": 220,
+   "district": "outskirts"
+  },
+  {
+   "file": "outskirts_house_ruined.txt",
+   "x": 24,
+   "z": 218,
+   "district": "outskirts"
+  },
+  {
+   "file": "outskirts_house.txt",
+   "x": 88,
+   "z": 240,
+   "turn": 90,
+   "district": "outskirts"
+  },
+  {
+   "file": "outskirts_house_ruined.txt",
+   "x": 236,
+   "z": 176,
+   "district": "outskirts"
+  },
+  {
+   "file": "outskirts_gas_canopy.txt",
+   "x": 141,
+   "z": 177,
+   "district": "outskirts"
+  },
+  {
+   "file": "outskirts_gas_kiosk.txt",
+   "x": 145,
+   "z": 168,
+   "district": "outskirts"
+  },
+  {
+   "file": "outskirts_checkpoint.txt",
+   "x": 178,
+   "z": 222,
+   "district": "outskirts"
   }
  ],
  "props": [
@@ -514,57 +626,3135 @@
    "z": 107,
    "w": 2,
    "d": 2
+  },
+  {
+   "type": "fence",
+   "x": 148,
+   "z": 0,
+   "w": 1,
+   "d": 55,
+   "h": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "fence",
+   "x": 148,
+   "z": 63,
+   "w": 1,
+   "d": 71,
+   "h": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "fence",
+   "x": 148,
+   "z": 147,
+   "w": 1,
+   "d": 20,
+   "h": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "fence",
+   "x": 149,
+   "z": 166,
+   "w": 47,
+   "d": 1,
+   "h": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "fence",
+   "x": 205,
+   "z": 166,
+   "w": 51,
+   "d": 1,
+   "h": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "fence",
+   "x": 149,
+   "z": 0,
+   "w": 107,
+   "d": 1,
+   "h": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "fence",
+   "x": 255,
+   "z": 1,
+   "w": 1,
+   "d": 165,
+   "h": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 152,
+   "z": 59,
+   "w": 101,
+   "d": 2,
+   "h": 1,
+   "y": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 152,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 152,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 158,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 158,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 164,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 164,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 176,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 176,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 182,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 182,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 188,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 188,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 194,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 194,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 200,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 200,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 206,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 206,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 212,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 212,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 218,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 218,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 224,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 224,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 230,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 230,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 236,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 236,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 242,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 242,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 248,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 248,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 169,
+   "z": 4,
+   "w": 2,
+   "d": 159,
+   "h": 1,
+   "y": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 4,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 4,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 10,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 10,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 16,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 16,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 22,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 22,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 28,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 28,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 76,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 76,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 82,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 82,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 88,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 88,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 94,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 94,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 100,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 100,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 106,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 106,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 112,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 112,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 118,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 118,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 124,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 124,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 130,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 130,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 136,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 136,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 142,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 142,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 148,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 148,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 154,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 154,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 169,
+   "z": 160,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 170,
+   "z": 160,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 171,
+   "z": 119,
+   "w": 82,
+   "d": 2,
+   "h": 1,
+   "y": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 171,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 171,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 177,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 177,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 183,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 183,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 189,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 189,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 195,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 195,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 201,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 201,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 207,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 207,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 213,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 213,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 219,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 219,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 225,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 225,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 237,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 237,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 243,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 243,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 249,
+   "z": 119,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 249,
+   "z": 120,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 231,
+   "z": 61,
+   "w": 2,
+   "d": 102,
+   "h": 1,
+   "y": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 85,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 85,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 91,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 91,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 97,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 97,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 103,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 103,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 109,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 109,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 115,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 115,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 121,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 121,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 127,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 127,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 133,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 133,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 139,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 139,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 145,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 145,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 151,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 151,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 231,
+   "z": 157,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 157,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 172,
+   "z": 30,
+   "w": 6,
+   "d": 1,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 180,
+   "z": 30,
+   "w": 6,
+   "d": 1,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 188,
+   "z": 30,
+   "w": 6,
+   "d": 1,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 196,
+   "z": 30,
+   "w": 6,
+   "d": 1,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 204,
+   "z": 30,
+   "w": 6,
+   "d": 1,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 190,
+   "z": 128,
+   "w": 6,
+   "d": 1,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 198,
+   "z": 128,
+   "w": 6,
+   "d": 1,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 218,
+   "z": 128,
+   "w": 5,
+   "d": 1,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 225,
+   "z": 128,
+   "w": 5,
+   "d": 1,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 160,
+   "z": 70,
+   "w": 1,
+   "d": 6,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 160,
+   "z": 79,
+   "w": 1,
+   "d": 6,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 160,
+   "z": 88,
+   "w": 1,
+   "d": 6,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 160,
+   "z": 97,
+   "w": 1,
+   "d": 6,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "pipe",
+   "x": 160,
+   "z": 106,
+   "w": 1,
+   "d": 6,
+   "h": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "tank",
+   "x": 188,
+   "z": 78,
+   "r": 9,
+   "h": 8,
+   "district": "refinery"
+  },
+  {
+   "type": "lowwall",
+   "x": 187,
+   "z": 89,
+   "w": 3,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "tank",
+   "x": 212,
+   "z": 78,
+   "r": 9,
+   "h": 8,
+   "district": "refinery"
+  },
+  {
+   "type": "lowwall",
+   "x": 211,
+   "z": 89,
+   "w": 3,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "tank",
+   "x": 188,
+   "z": 100,
+   "r": 7,
+   "h": 7,
+   "district": "refinery"
+  },
+  {
+   "type": "lowwall",
+   "x": 187,
+   "z": 109,
+   "w": 3,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "tank",
+   "x": 245,
+   "z": 82,
+   "r": 6,
+   "h": 7,
+   "district": "refinery"
+  },
+  {
+   "type": "lowwall",
+   "x": 244,
+   "z": 90,
+   "w": 3,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "tank",
+   "x": 245,
+   "z": 100,
+   "r": 6,
+   "h": 7,
+   "district": "refinery"
+  },
+  {
+   "type": "lowwall",
+   "x": 244,
+   "z": 108,
+   "w": 3,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "tank",
+   "x": 200,
+   "z": 150,
+   "r": 8,
+   "h": 8,
+   "district": "refinery"
+  },
+  {
+   "type": "lowwall",
+   "x": 199,
+   "z": 160,
+   "w": 3,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "tank",
+   "x": 220,
+   "z": 150,
+   "r": 6,
+   "h": 7,
+   "district": "refinery"
+  },
+  {
+   "type": "lowwall",
+   "x": 219,
+   "z": 158,
+   "w": 3,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "tank",
+   "x": 184,
+   "z": 148,
+   "r": 5,
+   "h": 6,
+   "district": "refinery"
+  },
+  {
+   "type": "lowwall",
+   "x": 183,
+   "z": 155,
+   "w": 3,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "shape": "cylinder",
+   "x": 190,
+   "z": 40,
+   "r": 3.5,
+   "h": 14,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "shape": "cylinder",
+   "x": 198,
+   "z": 46,
+   "r": 3.5,
+   "h": 14,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 178,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 6,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 209,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 6,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 178,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 6,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 209,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 6,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "shape": "cylinder",
+   "x": 239.5,
+   "z": 25.5,
+   "r": 1.6,
+   "h": 15,
+   "district": "refinery"
+  },
+  {
+   "type": "lowwall",
+   "x": 236,
+   "z": 29,
+   "w": 7,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 241,
+   "z": 128,
+   "w": 6,
+   "d": 3,
+   "h": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 248,
+   "z": 128,
+   "w": 6,
+   "d": 3,
+   "h": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 241,
+   "z": 140,
+   "w": 3,
+   "d": 6,
+   "h": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 241,
+   "z": 154,
+   "w": 6,
+   "d": 3,
+   "h": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 248,
+   "z": 144,
+   "w": 6,
+   "d": 3,
+   "h": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 249,
+   "z": 144,
+   "w": 4,
+   "d": 3,
+   "h": 1,
+   "y": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "crate",
+   "x": 246,
+   "z": 136,
+   "w": 2,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "crate",
+   "x": 250,
+   "z": 136,
+   "w": 2,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "crate",
+   "x": 246,
+   "z": 150,
+   "w": 2,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "crate",
+   "x": 251,
+   "z": 151,
+   "w": 2,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 236,
+   "z": 150,
+   "w": 3,
+   "d": 9,
+   "h": 3,
+   "district": "refinery"
+  },
+  {
+   "type": "crate",
+   "x": 204,
+   "z": 106,
+   "w": 1,
+   "d": 2,
+   "district": "refinery"
+  },
+  {
+   "type": "lowwall",
+   "x": 219,
+   "z": 93,
+   "w": 3,
+   "d": 1,
+   "district": "refinery"
+  },
+  {
+   "type": "metal",
+   "x": 66,
+   "z": 203,
+   "w": 2,
+   "d": 6,
+   "h": 3,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 66,
+   "z": 209,
+   "w": 2,
+   "d": 2,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 70,
+   "z": 203,
+   "w": 2,
+   "d": 6,
+   "h": 3,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 70,
+   "z": 209,
+   "w": 2,
+   "d": 2,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 74,
+   "z": 203,
+   "w": 2,
+   "d": 6,
+   "h": 3,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 74,
+   "z": 209,
+   "w": 2,
+   "d": 2,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "crate",
+   "x": 62,
+   "z": 199,
+   "w": 1,
+   "d": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "lowwall",
+   "x": 71,
+   "z": 198,
+   "w": 3,
+   "d": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 144,
+   "z": 180,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 148,
+   "z": 180,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 152,
+   "z": 180,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 157,
+   "z": 184,
+   "w": 2,
+   "d": 5,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "sandbag",
+   "x": 172,
+   "z": 218,
+   "w": 19,
+   "d": 1,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "sandbag",
+   "x": 172,
+   "z": 232,
+   "w": 19,
+   "d": 1,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "sandbag",
+   "x": 190,
+   "z": 219,
+   "w": 1,
+   "d": 13,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "sandbag",
+   "x": 172,
+   "z": 219,
+   "w": 1,
+   "d": 5,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "sandbag",
+   "x": 172,
+   "z": 228,
+   "w": 1,
+   "d": 4,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "sandbag",
+   "x": 183,
+   "z": 229,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 164,
+   "z": 222,
+   "w": 3,
+   "d": 6,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 12,
+   "z": 232,
+   "w": 3,
+   "d": 2,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 16,
+   "z": 247,
+   "w": 2,
+   "d": 3,
+   "h": 3,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 40,
+   "z": 230,
+   "w": 3,
+   "d": 2,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 44,
+   "z": 246,
+   "w": 2,
+   "d": 2,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 26,
+   "z": 228,
+   "w": 4,
+   "d": 1,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 33,
+   "z": 252,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "crate",
+   "x": 30,
+   "z": 238,
+   "w": 2,
+   "d": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 21,
+   "z": 242,
+   "w": 2,
+   "d": 4,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 124,
+   "z": 228,
+   "w": 3,
+   "d": 6,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 131,
+   "z": 236,
+   "w": 3,
+   "d": 6,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 126,
+   "z": 244,
+   "w": 3,
+   "d": 6,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "metal",
+   "x": 134,
+   "z": 226,
+   "w": 2,
+   "d": 2,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 20,
+   "z": 137,
+   "w": 2,
+   "d": 1,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 20,
+   "z": 142,
+   "w": 1,
+   "d": 2,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 22,
+   "z": 139,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 92,
+   "z": 154,
+   "w": 3,
+   "d": 3,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 96,
+   "z": 153,
+   "w": 1,
+   "d": 2,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 95,
+   "z": 152,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 151,
+   "z": 240,
+   "w": 2,
+   "d": 1,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 146,
+   "z": 236,
+   "w": 2,
+   "d": 3,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 241,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 206,
+   "z": 178,
+   "w": 3,
+   "d": 3,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 203,
+   "z": 178,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 206,
+   "z": 177,
+   "w": 3,
+   "d": 3,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 59,
+   "z": 235,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 57,
+   "z": 238,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 59,
+   "z": 240,
+   "w": 3,
+   "d": 3,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 191,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 245,
+   "z": 188,
+   "w": 3,
+   "d": 3,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 245,
+   "z": 191,
+   "w": 2,
+   "d": 2,
+   "h": 3,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 9,
+   "z": 223,
+   "w": 2,
+   "d": 1,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 10,
+   "z": 222,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 6,
+   "z": 223,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 179,
+   "z": 199,
+   "w": 3,
+   "d": 3,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 179,
+   "z": 200,
+   "w": 2,
+   "d": 3,
+   "h": 3,
+   "district": "outskirts"
+  },
+  {
+   "type": "rock",
+   "x": 179,
+   "z": 201,
+   "w": 2,
+   "d": 3,
+   "h": 1,
+   "district": "outskirts"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 3,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 6,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 9,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 12,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 15,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 18,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 21,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 24,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 27,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 30,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 33,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 36,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 39,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 42,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 45,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 48,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 51,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 54,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 57,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 60,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 63,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 66,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 69,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 72,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 75,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 78,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 81,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 84,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 87,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 108,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 111,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 114,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 117,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 120,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 123,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 126,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 129,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 132,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 135,
+   "z": 0,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 1,
+   "w": 1,
+   "d": 3,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 4,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 7,
+   "w": 1,
+   "d": 3,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 10,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 13,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 16,
+   "w": 1,
+   "d": 3,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 19,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 22,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 25,
+   "w": 1,
+   "d": 3,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 28,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 31,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 34,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 37,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 40,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 43,
+   "w": 1,
+   "d": 3,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 46,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 49,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 52,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 55,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 58,
+   "w": 1,
+   "d": 3,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 61,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 64,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 67,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 70,
+   "w": 1,
+   "d": 3,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 73,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 76,
+   "w": 1,
+   "d": 3,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 79,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 82,
+   "w": 1,
+   "d": 3,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 85,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 88,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 91,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 94,
+   "w": 1,
+   "d": 3,
+   "h": 1,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 97,
+   "w": 1,
+   "d": 3,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 118,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 121,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 124,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 127,
+   "w": 1,
+   "d": 3,
+   "h": 2,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 130,
+   "w": 1,
+   "d": 3,
+   "h": 3,
+   "district": "city-edge"
+  },
+  {
+   "type": "slab",
+   "x": 0,
+   "z": 133,
+   "w": 1,
+   "d": 3,
+   "h": 3,
+   "district": "city-edge"
   }
  ],
- "base": {
-  "name": "Police station",
-  "area": {
-   "x0": 60,
-   "z0": 56,
-   "x1": 80,
-   "z1": 76
-  },
-  "build_spots": [
-   {
-    "x": 73,
-    "z": 68,
-    "upgrade": "walls",
-    "needs": "construction_crate"
-   }
-  ],
-  "wall_plan": [
-   {
-    "x": 67,
-    "z": 74,
-    "w": 5,
-    "d": 1
-   },
-   {
-    "x": 74,
-    "z": 74,
-    "w": 5,
-    "d": 1
-   },
-   {
-    "x": 78,
-    "z": 64,
-    "w": 1,
-    "d": 4
-   },
-   {
-    "x": 78,
-    "z": 70,
-    "w": 1,
-    "d": 3
-   }
-  ]
- },
  "base_items": [
   {
    "item": "construction_crate",
    "x": 110.5,
    "z": 88.5,
    "y": 3
+  },
+  {
+   "item": "armour_crate",
+   "x": 236.5,
+   "z": 10.5,
+   "y": 0,
+   "district": "refinery"
+  },
+  {
+   "item": "ammo_crate",
+   "x": 175.5,
+   "z": 225.5,
+   "y": 0,
+   "district": "outskirts"
+  },
+  {
+   "item": "construction_crate",
+   "x": 30.5,
+   "z": 241.5,
+   "y": 0,
+   "district": "outskirts"
+  },
+  {
+   "item": "medical_crate",
+   "x": 18.5,
+   "z": 15.5,
+   "y": 9,
+   "district": "city-crates"
   }
  ],
  "enemy_groups": [
@@ -606,7 +3796,7 @@
    "id": "police",
    "behaviour": "guard",
    "respawn": 45,
-   "holds_base": true,
+   "holds_base": "police_station",
    "spawns": [
     {
      "x": 64,
@@ -812,6 +4002,375 @@
    },
    "armour_chance": 0.2,
    "armour": 50
+  },
+  {
+   "id": "security",
+   "type": "heavy_insurgent",
+   "behaviour": "guard",
+   "respawn": 60,
+   "spawns": [
+    {
+     "x": 229,
+     "z": 8,
+     "y": 0
+    },
+    {
+     "x": 245,
+     "z": 8,
+     "y": 0
+    },
+    {
+     "x": 232,
+     "z": 14,
+     "y": 0
+    },
+    {
+     "x": 238,
+     "z": 19,
+     "y": 0
+    }
+   ],
+   "weapons": {
+    "ak47": 2,
+    "rpk": 2
+   },
+   "armour_chance": 0.4,
+   "armour": 50,
+   "district": "refinery"
+  },
+  {
+   "id": "control",
+   "behaviour": "guard",
+   "respawn": 45,
+   "holds_base": "control_building",
+   "spawns": [
+    {
+     "x": 204,
+     "z": 92,
+     "y": 0
+    },
+    {
+     "x": 222,
+     "z": 92,
+     "y": 0
+    },
+    {
+     "x": 212,
+     "z": 110,
+     "y": 0
+    },
+    {
+     "x": 210,
+     "z": 97,
+     "y": 3
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.25,
+   "armour": 50,
+   "district": "refinery"
+  },
+  {
+   "id": "towers",
+   "behaviour": "roam",
+   "respawn": 55,
+   "radius": 14,
+   "spawns": [
+    {
+     "x": 184,
+     "z": 26
+    },
+    {
+     "x": 204,
+     "z": 55
+    },
+    {
+     "x": 214,
+     "z": 40
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.2,
+   "armour": 50,
+   "district": "refinery"
+  },
+  {
+   "id": "tankfarm",
+   "behaviour": "roam",
+   "respawn": 55,
+   "radius": 14,
+   "spawns": [
+    {
+     "x": 200,
+     "z": 66
+    },
+    {
+     "x": 228,
+     "z": 90
+    },
+    {
+     "x": 178,
+     "z": 112
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.2,
+   "armour": 50,
+   "district": "refinery"
+  },
+  {
+   "id": "loading",
+   "type": "heavy_insurgent",
+   "behaviour": "guard",
+   "respawn": 60,
+   "spawns": [
+    {
+     "x": 246,
+     "z": 133,
+     "y": 0
+    },
+    {
+     "x": 252,
+     "z": 141,
+     "y": 0
+    },
+    {
+     "x": 245,
+     "z": 160,
+     "y": 0
+    }
+   ],
+   "weapons": {
+    "ak47": 2,
+    "rpk": 1
+   },
+   "armour_chance": 0.3,
+   "armour": 50,
+   "district": "refinery"
+  },
+  {
+   "id": "pipes",
+   "type": "heavy_insurgent",
+   "behaviour": "roam",
+   "respawn": 60,
+   "radius": 12,
+   "spawns": [
+    {
+     "x": 176,
+     "z": 136
+    },
+    {
+     "x": 214,
+     "z": 138
+    }
+   ],
+   "weapons": {
+    "ak47": 2,
+    "rpk": 1
+   },
+   "armour_chance": 0.3,
+   "armour": 50,
+   "district": "refinery"
+  },
+  {
+   "id": "truckstop",
+   "behaviour": "guard",
+   "respawn": 45,
+   "holds_base": "truck_stop",
+   "spawns": [
+    {
+     "x": 60,
+     "z": 200,
+     "y": 1.5
+    },
+    {
+     "x": 70,
+     "z": 199,
+     "y": 1.5
+    },
+    {
+     "x": 64,
+     "z": 193,
+     "y": 1.5
+    },
+    {
+     "x": 76,
+     "z": 206,
+     "y": 1.5
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.2,
+   "armour": 50,
+   "district": "outskirts"
+  },
+  {
+   "id": "checkpoint",
+   "behaviour": "guard",
+   "respawn": 55,
+   "spawns": [
+    {
+     "x": 175,
+     "z": 221,
+     "y": 2
+    },
+    {
+     "x": 187,
+     "z": 221,
+     "y": 2
+    },
+    {
+     "x": 175,
+     "z": 230,
+     "y": 2
+    },
+    {
+     "x": 187,
+     "z": 230,
+     "y": 2
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.35,
+   "armour": 50,
+   "district": "outskirts"
+  },
+  {
+   "id": "quarry",
+   "type": "militia",
+   "behaviour": "guard",
+   "respawn": 55,
+   "spawns": [
+    {
+     "x": 24,
+     "z": 236,
+     "y": 0
+    },
+    {
+     "x": 34,
+     "z": 244,
+     "y": 0
+    },
+    {
+     "x": 30,
+     "z": 234,
+     "y": 0
+    }
+   ],
+   "weapons": {
+    "ak47": 1
+   },
+   "armour_chance": 0,
+   "armour": 0,
+   "district": "outskirts"
+  },
+  {
+   "id": "convoy",
+   "type": "militia",
+   "behaviour": "roam",
+   "respawn": 55,
+   "radius": 12,
+   "spawns": [
+    {
+     "x": 120,
+     "z": 233
+    },
+    {
+     "x": 137,
+     "z": 242
+    }
+   ],
+   "weapons": {
+    "ak47": 1
+   },
+   "armour_chance": 0,
+   "armour": 0,
+   "district": "outskirts"
+  },
+  {
+   "id": "gas",
+   "type": "militia",
+   "behaviour": "guard",
+   "respawn": 55,
+   "spawns": [
+    {
+     "x": 143,
+     "z": 182,
+     "y": 1.5
+    },
+    {
+     "x": 155,
+     "z": 179,
+     "y": 1.5
+    }
+   ],
+   "weapons": {
+    "ak47": 1
+   },
+   "armour_chance": 0,
+   "armour": 0,
+   "district": "outskirts"
+  },
+  {
+   "id": "dunes",
+   "behaviour": "roam",
+   "respawn": 60,
+   "radius": 18,
+   "spawns": [
+    {
+     "x": 226,
+     "z": 198
+    },
+    {
+     "x": 214,
+     "z": 236
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.15,
+   "armour": 50,
+   "district": "outskirts"
+  },
+  {
+   "id": "wadi",
+   "type": "militia",
+   "behaviour": "roam",
+   "respawn": 60,
+   "radius": 18,
+   "spawns": [
+    {
+     "x": 36,
+     "z": 160
+    },
+    {
+     "x": 90,
+     "z": 168
+    }
+   ],
+   "weapons": {
+    "ak47": 1
+   },
+   "armour_chance": 0,
+   "armour": 0,
+   "district": "outskirts"
   }
  ],
  "wave_spawns": [
@@ -821,11 +4380,11 @@
   },
   {
    "x": 3,
-   "z": 112
+   "z": 108
   },
   {
-   "x": 252,
-   "z": 6
+   "x": 250,
+   "z": 45
   },
   {
    "x": 252,
@@ -934,6 +4493,97 @@
    "amount": 60,
    "x": 55.5,
    "z": 101.5
+  },
+  {
+   "type": "weapon",
+   "weapon": "rpg7",
+   "x": 246.5,
+   "z": 146.5,
+   "district": "refinery"
+  },
+  {
+   "type": "ammo",
+   "calibre": "40mm",
+   "amount": 3,
+   "x": 247.5,
+   "z": 146.5,
+   "district": "refinery"
+  },
+  {
+   "type": "weapon",
+   "weapon": "rpk",
+   "x": 242.5,
+   "z": 12.5,
+   "y": 0,
+   "district": "refinery"
+  },
+  {
+   "type": "ammo",
+   "calibre": "7.62x39mm",
+   "amount": 75,
+   "x": 243.5,
+   "z": 12.5,
+   "y": 0,
+   "district": "refinery"
+  },
+  {
+   "type": "armour",
+   "amount": 50,
+   "x": 160,
+   "z": 24,
+   "y": 0,
+   "district": "refinery"
+  },
+  {
+   "type": "armour",
+   "amount": 50,
+   "x": 148.5,
+   "z": 171.5,
+   "y": 0,
+   "district": "outskirts"
+  },
+  {
+   "type": "ammo",
+   "calibre": "7.62x39mm",
+   "amount": 60,
+   "x": 122,
+   "z": 238,
+   "district": "outskirts"
+  },
+  {
+   "type": "ammo",
+   "calibre": "7.62x51mm",
+   "amount": 20,
+   "x": 181.5,
+   "z": 230.5,
+   "y": 0,
+   "district": "outskirts"
+  },
+  {
+   "type": "ammo",
+   "calibre": "9mm",
+   "amount": 60,
+   "x": 58.5,
+   "z": 205.5,
+   "y": 0,
+   "district": "outskirts"
+  },
+  {
+   "type": "weapon",
+   "weapon": "m4a1",
+   "x": 99.5,
+   "z": 218.5,
+   "y": 0,
+   "district": "outskirts"
+  },
+  {
+   "type": "ammo",
+   "calibre": "5.56mm",
+   "amount": 60,
+   "x": 100.5,
+   "z": 218.5,
+   "y": 0,
+   "district": "outskirts"
   }
  ],
  "weather_zones": [
@@ -954,6 +4604,256 @@
    "chance_per_minute": 0.5,
    "min_duration": 30,
    "max_duration": 60
+  },
+  {
+   "type": "smoke",
+   "district": "refinery",
+   "x": 228,
+   "z": 42,
+   "radius": 16,
+   "source": {
+    "x": 239.5,
+    "y": 15.5,
+    "z": 25.5
+   }
+  }
+ ],
+ "bases": [
+  {
+   "id": "police_station",
+   "name": "Police station",
+   "area": {
+    "x0": 60,
+    "z0": 56,
+    "x1": 80,
+    "z1": 76
+   },
+   "build_spots": [
+    {
+     "x": 73,
+     "z": 68,
+     "upgrade": "walls",
+     "needs": "construction_crate"
+    },
+    {
+     "x": 68,
+     "z": 65,
+     "upgrade": "ammo",
+     "needs": "ammo_crate"
+    },
+    {
+     "x": 77,
+     "z": 67,
+     "upgrade": "medical",
+     "needs": "medical_crate"
+    },
+    {
+     "x": 68,
+     "z": 70,
+     "upgrade": "armour",
+     "needs": "armour_crate"
+    }
+   ],
+   "wall_plan": [
+    {
+     "x": 67,
+     "z": 74,
+     "w": 5,
+     "d": 1
+    },
+    {
+     "x": 74,
+     "z": 74,
+     "w": 5,
+     "d": 1
+    },
+    {
+     "x": 78,
+     "z": 64,
+     "w": 1,
+     "d": 4
+    },
+    {
+     "x": 78,
+     "z": 70,
+     "w": 1,
+     "d": 3
+    }
+   ]
+  },
+  {
+   "id": "truck_stop",
+   "name": "Truck stop",
+   "district": "outskirts",
+   "area": {
+    "x0": 52,
+    "z0": 186,
+    "x1": 78,
+    "z1": 212
+   },
+   "build_spots": [
+    {
+     "x": 65,
+     "z": 200,
+     "upgrade": "walls",
+     "needs": "construction_crate"
+    },
+    {
+     "x": 54,
+     "z": 199,
+     "upgrade": "ammo",
+     "needs": "ammo_crate"
+    },
+    {
+     "x": 75,
+     "z": 194,
+     "upgrade": "medical",
+     "needs": "medical_crate"
+    },
+    {
+     "x": 72,
+     "z": 189,
+     "upgrade": "armour",
+     "needs": "armour_crate"
+    }
+   ],
+   "wall_plan": [
+    {
+     "x": 54,
+     "z": 187,
+     "w": 9,
+     "d": 1
+    },
+    {
+     "x": 67,
+     "z": 187,
+     "w": 10,
+     "d": 1
+    },
+    {
+     "x": 54,
+     "z": 211,
+     "w": 9,
+     "d": 1
+    },
+    {
+     "x": 67,
+     "z": 211,
+     "w": 10,
+     "d": 1
+    },
+    {
+     "x": 53,
+     "z": 188,
+     "w": 1,
+     "d": 9
+    },
+    {
+     "x": 53,
+     "z": 202,
+     "w": 1,
+     "d": 9
+    },
+    {
+     "x": 77,
+     "z": 188,
+     "w": 1,
+     "d": 9
+    },
+    {
+     "x": 77,
+     "z": 202,
+     "w": 1,
+     "d": 9
+    }
+   ]
+  },
+  {
+   "id": "control_building",
+   "name": "Control building",
+   "district": "refinery",
+   "area": {
+    "x0": 200,
+    "z0": 88,
+    "x1": 226,
+    "z1": 114
+   },
+   "build_spots": [
+    {
+     "x": 211,
+     "z": 108,
+     "upgrade": "walls",
+     "needs": "construction_crate"
+    },
+    {
+     "x": 203,
+     "z": 98,
+     "upgrade": "ammo",
+     "needs": "ammo_crate"
+    },
+    {
+     "x": 222,
+     "z": 98,
+     "upgrade": "medical",
+     "needs": "medical_crate"
+    },
+    {
+     "x": 216,
+     "z": 108,
+     "upgrade": "armour",
+     "needs": "armour_crate"
+    }
+   ],
+   "wall_plan": [
+    {
+     "x": 203,
+     "z": 90,
+     "w": 8,
+     "d": 1
+    },
+    {
+     "x": 216,
+     "z": 90,
+     "w": 8,
+     "d": 1
+    },
+    {
+     "x": 203,
+     "z": 112,
+     "w": 8,
+     "d": 1
+    },
+    {
+     "x": 216,
+     "z": 112,
+     "w": 8,
+     "d": 1
+    },
+    {
+     "x": 201,
+     "z": 92,
+     "w": 1,
+     "d": 7
+    },
+    {
+     "x": 201,
+     "z": 104,
+     "w": 1,
+     "d": 7
+    },
+    {
+     "x": 224,
+     "z": 92,
+     "w": 1,
+     "d": 7
+    },
+    {
+     "x": 224,
+     "z": 104,
+     "w": 1,
+     "d": 7
+    }
+   ]
   }
  ]
 }

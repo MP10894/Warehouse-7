@@ -1,0 +1,21 @@
+# Single-storey house, damaged
+# 9 x 7 m, 1 floor + roof, damaged.
+# Symbol guide: data/levels/README.md
+
+floor 0
+Xw##w##wX
+w.>>>...w
+#.......#
+d.......d
+w.,,,...w
+#.,,,...#
+Xw##d##wX
+
+floor 1
+lllllllll
+l.......l
+l.......l
+l.......l
+l.   ...l
+l.   ...l
+lllllllll

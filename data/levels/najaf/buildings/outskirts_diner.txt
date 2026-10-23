@@ -1,0 +1,23 @@
+# Truck stop diner (base B)
+# 14 x 8 m, 1 floor + roof, intact.
+# Symbol guide: data/levels/README.md
+
+floor 0
+Xw##w##d##w##X
+w.>>>........w
+#......#.....#
+#......#.....#
+w......d.....w
+#......#.....#
+#............#
+Xw##w##d##w##X
+
+floor 1
+llllllllllllll
+l............l
+l............l
+l............l
+l............l
+l............l
+l............l
+llllllllllllll

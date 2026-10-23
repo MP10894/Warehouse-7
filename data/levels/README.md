@@ -4,16 +4,18 @@ Each level is a folder in `data/levels/` with:
 
 | File | What it is |
 |---|---|
-| `level.json` | Where everything goes: buildings, props, base, enemies, pickups, weather, timer |
+| `level.json` | Where everything goes: buildings, props, bases, enemies, pickups, crates, weather, timer |
 | `terrain.txt` | Ground height. One digit per point, points 4 m apart. Height = digit × 0.5 m (0–9 → 0–4.5 m) |
-| `ground.txt` | Ground surface per 4 × 4 m square: `s` sand, `r` road, `p` paving, `g` gravel |
+| `ground.txt` | Ground surface per 4 × 4 m square: `s` sand, `r` road, `p` paving, `g` gravel, `c` concrete, `d` dirt track |
 | `buildings/*.txt` | Building floor plans, one text grid per floor |
 
 Coordinates are in metres: **x** runs west → east (left → right in the text files),
 **z** runs north → south (top → bottom). Najaf is 256 × 256 m; the test slice is 100 × 100 m.
 
-Najaf's files were first drafted by `tools/make_najaf.py`. Edit the files here directly
-from now on (running the script again would overwrite your edits).
+Najaf's city was first drafted by `tools/make_najaf.py`, the refinery and outskirts by
+`tools/make_najaf_districts.py`. Edit the files here directly from now on. (Running
+`make_najaf.py` again would overwrite everything; `make_najaf_districts.py` only replaces
+the entries tagged `"district": "refinery"` or `"outskirts"` and the ground outside the city.)
 
 ## Building files
 
@@ -58,8 +60,49 @@ Najaf's city buildings are named by size, floors and state: `s` 8 × 7 m, `m` 10
 
 ## Props in level.json
 
-Simple obstacles outside buildings: `{ "type": "lowwall" | "crate", "x", "z", "w", "d", "h" }`
-fills a `w` × `d` rectangle, `h` blocks high (default 1).
+Simple shapes outside buildings. `{ "type", "x", "z", "w", "d", "h", "y" }` fills a
+`w` × `d` rectangle, `h` blocks high (default 1), starting `y` metres above the ground
+(default 0; the pipe racks use `"y": 2` so you can walk under them).
+
+| `type` | What it is |
+|---|---|
+| `lowwall`, `crate`, `sandbag` | Breakable cover |
+| `metal` | Steel: containers, trucks, towers, supports. Unbreakable |
+| `pipe` | Refinery pipework. Unbreakable |
+| `rock` | Boulders. Unbreakable |
+| `slab`, `column` | Concrete. Unbreakable |
+| `fence` | Chain-link: nobody can walk through it, but you can see and shoot through it |
+| `tank` | A fuel tank (always round): it blows up when a rocket hits it |
+
+Round shapes: add `"shape": "cylinder"` and give `"r"` (radius) instead of `w` and `d`; `x`
+and `z` are then the centre. Fuel tanks are always round: `{ "type": "tank", "x", "z", "r", "h" }`.
+
+## Bases in level.json
+
+`bases` lists the places that can become the player's base; the first one a player clears
+and walks into is theirs for the rest of the run. Each has an `id`, a `name`, an `area`
+(`x0`, `z0`, `x1`, `z1`), `build_spots` and a `wall_plan`:
+
+- A build spot `{ "x", "z", "upgrade", "needs" }` is one 1 × 1 m square on the ground.
+  `upgrade` is a row id in `data/upgrades.csv` (`walls`, `ammo`, `medical`, `armour`) and
+  `needs` the crate it takes. Lockers are put on the spot itself, so leave room around it.
+- `wall_plan` is a list of rectangles where sandbag walls go.
+
+An enemy group with `"holds_base": "<base id>"` defends that base: it must be cleared to
+claim it, and stops coming back once that base is yours. (A level with only one base may
+use `"base": { … }` and `"holds_base": true` instead.)
+
+`base_items` places the crates: `{ "item": "construction_crate" | "ammo_crate" |
+"medical_crate" | "armour_crate", "x", "z", "y" }`. Used crates come back at the same spot.
+
+## Weather zones in level.json
+
+`{ "type": "sandstorm", "x", "z", "radius", "chance_per_minute", "min_duration", "max_duration" }`
+starts at random. `{ "type": "smoke", "x", "z", "radius", "source": { "x", "y", "z" } }` is
+always there (the flare stack's smoke); `source` is where the plume and flame are drawn.
+
+`wave_spawns` are the map-edge points attack waves come in from: the two nearest your base
+that are at least 60 m from any player are used.
 
 ## Enemy groups in level.json
 

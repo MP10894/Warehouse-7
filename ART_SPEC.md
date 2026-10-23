@@ -187,14 +187,15 @@ upgrades 150.**
 |---|---|---|
 | `pickup_ammo.glb` | ammunition box | 0.30 × 0.16 × 0.20 |
 | `pickup_armour.glb` | armour plate | 0.42 × 0.42 × 0.12 |
-| `pickup_health.glb` | health pack (new) | 0.30 × 0.18 × 0.20 |
+| `pickup_health.glb` | first aid kit (from the first aid locker) | 0.34 × 0.22 × 0.24 |
+| `pickup_resupply.glb` | ammunition box from the ammunition supply (refills every gun) | 0.42 × 0.24 × 0.26 |
 | `crate_construction.glb` | construction crate (carried) | 0.80 × 0.55 × 0.55 |
 | `crate_ammo.glb` | closed ammunition crate (carried) | 0.80 × 0.55 × 0.55 |
 | `crate_medical.glb` | medical crate (carried) | 0.80 × 0.55 × 0.55 |
 | `crate_armour.glb` | armour crate (carried) | 0.80 × 0.55 × 0.55 |
 | `upgrade_ammo_1.glb` … `_3` | open ammunition crate, levels 1 to 3 | fits in 1 × 1 × 1 m |
-| `upgrade_medical_1.glb` … `_3` | first aid locker, levels 1 to 3 | fits in 1 × 2 × 1 m |
-| `upgrade_armour_1.glb` … `_3` | armour locker, levels 1 to 3 | fits in 1 × 2 × 1 m |
+| `upgrade_medical_1.glb` … `_3` | first aid locker, levels 1 to 3 | fits in 1 × 1 × 1 m |
+| `upgrade_armour_1.glb` … `_3` | armour locker, levels 1 to 3 | fits in 1 × 1 × 1 m |
 
 - The four carried crates have the **same shape** and differ by colour band and symbol,
   readable at 20 m: yellow band for construction, olive with a bullet for ammunition,
@@ -202,8 +203,11 @@ upgrades 150.**
 - Each upgrade level should look visibly better than the last (more stock on shelves,
   reinforced doors), because players check their base at a glance.
 - Upgrades sit on 1 m block spots, so they must not stick out of their footprint.
-- The upgrades and the health pack are not in the game yet; their files will be read once
-  they are.
+- In the game each upgrade is one 1 × 1 × 1 m block (it can be shot to pieces), and its
+  pickup waits on top of it, so the models must fit that cube and have a flat top. Until
+  art exists the block is drawn with a plain olive locker texture and a floating icon.
+  (Changed from 1 × 2 × 1 m for the lockers on 2026-10-23, when the upgrades were built.)
+- The `upgrade_*` files are not read yet; the pickups and crates are.
 
 ## 7. Destructible look
 

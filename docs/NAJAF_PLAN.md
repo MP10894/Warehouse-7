@@ -1,10 +1,11 @@
 # Najaf (Level 1): layout plan
 
-Status: **layout agreed 2026-10-22.** City district built (v0.3) for a frame-rate check; outskirts and refinery next.
+Status: **layout agreed 2026-10-22. Built 2026-10-23**: city (v0.3), then refinery and outskirts (v0.4). Small differences from the drawing: the police station sits at x 60–80, z 56–76; two wave entry points moved into open ground (west street at z 108, refinery east edge at z 45).
 
-Map: [`najaf_layout.png`](najaf_layout.png). Grid squares are 32 m and labelled A–H
+Map as built, seen from above: [`najaf_built.png`](najaf_built.png) (red dots enemies, yellow crates, blue pickups, blue boxes the three bases).
+
+Plan: [`najaf_layout.png`](najaf_layout.png). Grid squares are 32 m and labelled A–H
 across and 1–8 down, so notes can say things like "move the clinic to B2".
-Nothing here is built yet.
 
 ## Size
 
