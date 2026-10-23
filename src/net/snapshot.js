@@ -7,13 +7,14 @@ import { claimBase, applyUpgrade } from '../sim/base.js';
 
 const STATES = ['idle', 'chase', 'aim', 'fire', 'pain', 'dead'];
 const STATUS = ['playing', 'won', 'lost'];
-const PICKUP_TYPES = ['weapon', 'ammo', 'armour', 'item', 'health', 'resupply'];
+const PICKUP_TYPES = ['weapon', 'ammo', 'armour', 'item', 'health', 'resupply', 'grenade'];
+const PROJ = ['bullet', 'rocket', 'grenade'];
 // enemies further than this from both players are not sent (the guest can't see that far)
 const SEND_RANGE = 90;
 // events the guest needs to replay for sound, effects and HUD (broken walls are rebuilt
 // from the piece list instead, so 'blocks' is not forwarded)
 const FORWARD = new Set(['shot', 'impact', 'explosion', 'hurt', 'death', 'downed', 'revived', 'pickup', 'message',
-  'wave', 'baseClaimed', 'built', 'weather', 'hitConfirm', 'reload', 'swap', 'empty', 'status']);
+  'wave', 'baseClaimed', 'built', 'weather', 'hitConfirm', 'reload', 'swap', 'empty', 'status', 'throw', 'beep', 'bounce']);
 const EVENT_WINDOW = 45; // ticks of recent events repeated in every snapshot (drops are common)
 const MAX_EVENTS = 22;
 
@@ -64,16 +65,23 @@ export function createHostEncoder(data) {
         p.carrying ? p.carrying.item : '',
         p.context ? `${p.context.kind}|${p.context.label}` : '',
         Math.round(p.bloom * 1000),
-        `${p.stats.shots}|${p.stats.hits}|${p.stats.kills}`
+        `${p.stats.shots}|${p.stats.hits}|${p.stats.kills}`,
+        p.grenades || 0, Math.round((p.throwT || 0) * 100)
       ]);
       const near = (e, r) => world.players.some(p => Math.abs(p.x - e.x) < r && Math.abs(p.z - e.z) < r);
-      patch.n = world.enemies.filter(e => (e.alive && (e.wave || near(e, SEND_RANGE))) || (!e.alive && e.deadT < 12 && near(e, 60))).map(e => [
+      const sent = world.enemies.filter(e => (e.alive && (e.wave || near(e, SEND_RANGE))) || (!e.alive && e.deadT < 12 && near(e, 60)));
+      const away = e => Math.min(...world.players.map(p => Math.hypot(p.x - e.x, p.z - e.z)));
+      // nearest first, so the furthest can be left out if the message gets too big
+      sent.sort((a, b) => away(a) - away(b));
+      patch.n = sent.map(e => [
         e.id, cm(e.x), cm(e.y), cm(e.z), mr(e.yaw), mr(e.pitch || 0), Math.ceil(e.armour), STATES.indexOf(e.state), wIdx(e.weapon.w),
         (e.alive ? 1 : 0) | (e.moving ? 2 : 0) | (e.aiming ? 4 : 0) | (e.wave ? 8 : 0),
         Math.round(e.animT * 10), Math.round(e.deadT * 10), enemyIds.indexOf(e.type)
       ]);
-      patch.b = world.projectiles.slice(-14).map(pr => [pr.id, cm(pr.x), cm(pr.y), cm(pr.z), Math.round(pr.vx), Math.round(pr.vy), Math.round(pr.vz),
-        pr.team === 'enemy' ? 1 : 0, pr.kind === 'rocket' ? 1 : 0]);
+      // bullets first (they are trimmed first when the message is too big), then rockets and grenades
+      const shown = [...world.projectiles.filter(pr => pr.kind === 'bullet').slice(-12), ...world.projectiles.filter(pr => pr.kind !== 'bullet').slice(-8)];
+      patch.b = shown.map(pr => [pr.id, cm(pr.x), cm(pr.y), cm(pr.z), Math.round(pr.vx), Math.round(pr.vy), Math.round(pr.vz),
+        pr.team === 'enemy' ? 1 : 0, Math.max(0, PROJ.indexOf(pr.kind))]);
       patch.e = ring.slice(-MAX_EVENTS);
 
       const pk = JSON.stringify(world.pickups.map(k => [k.id, PICKUP_TYPES.indexOf(k.type), cm(k.x), cm(k.y), cm(k.z),
@@ -101,6 +109,8 @@ export function createHostEncoder(data) {
       while (size() > LIMIT && patch.e.length > 8) patch.e.shift();
       while (size() > LIMIT && patch.n.some(n => !(n[9] & 1))) patch.n.splice(patch.n.findIndex(n => !(n[9] & 1)), 1);
       while (size() > LIMIT && patch.e.length > 1) patch.e.shift();
+      // still too big (many enemies around both players): leave out the furthest ones
+      for (let i = patch.n.length - 1; i >= 0 && size() > LIMIT; i--) if (!(patch.n[i][9] & 8)) patch.n.splice(i, 1);
       return patch;
     },
 
@@ -151,7 +161,7 @@ export function createGuestDecoder(data) {
       });
 
       for (const row of snap.p || []) {
-        const [id, x, y, z, yaw, pitch, hp, armour, flags, downT, active, slots, reserve, reloadT, swapT, carrying, ctx, bloom, stats] = row;
+        const [id, x, y, z, yaw, pitch, hp, armour, flags, downT, active, slots, reserve, reloadT, swapT, carrying, ctx, bloom, stats, grenades, throwT] = row;
         const p = world.players.find(q => q.id === id);
         if (!p) continue;
         const mine = id === localId;
@@ -174,6 +184,7 @@ export function createGuestDecoder(data) {
         p.bloom = bloom / 1000;
         const [shots, hits, k] = stats.split('|').map(Number);
         p.stats = { shots, hits, kills: k };
+        p.grenades = grenades || 0; p.throwT = (throwT || 0) / 100;
       }
 
       const byId = new Map(world.enemies.map(e => [e.id, e]));
@@ -190,7 +201,7 @@ export function createGuestDecoder(data) {
       });
 
       world.projectiles = (snap.b || []).map(([id, x, y, z, vx, vy, vz, team, kind]) => ({
-        id, x: x / 100, y: y / 100, z: z / 100, vx, vy, vz, team: team ? 'enemy' : 'player', kind: kind ? 'rocket' : 'bullet'
+        id, x: x / 100, y: y / 100, z: z / 100, vx, vy, vz, team: team ? 'enemy' : 'player', kind: PROJ[kind] || 'bullet'
       }));
 
       if (snap.k) {

@@ -135,6 +135,30 @@ const REQUIRED = ['name', 'mag_size', 'max_total', 'reload_time', 'damage_health
 /** Weapon id used in other files: lower case, spaces become _, hyphens dropped ('RPG-7' → rpg7, 'Sig P320' → sig_p320). */
 export const weaponId = name => String(name).toLowerCase().replace(/-/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
 
+const projectileKind = x => {
+  const t = String(x || 'bullet').toLowerCase();
+  return t.includes('rocket') ? 'rocket' : t.includes('grenade') ? 'grenade' : 'bullet';
+};
+
+/**
+ * "Item drop" cell → pickups dropped on death, e.g. "Armour plate (15)" → [{ type: 'armour',
+ * amount: 15 }]. Several can be listed with commas. "Grenade (1)" drops grenades.
+ * "n/a" or empty: nothing.
+ */
+export function parseItemDrops(cell) {
+  const out = [];
+  for (const part of String(cell ?? '').split(/[,;\n]+/)) {
+    const t = part.trim().toLowerCase();
+    if (!t || t === 'n/a' || t === 'none') continue;
+    const m = t.match(/\(?\s*(\d+(?:\.\d+)?)\s*\)?\s*$/);
+    const amount = m ? Number(m[1]) : 1;
+    const type = t.includes('armour') || t.includes('armor') ? 'armour' : t.includes('grenade') ? 'grenade'
+      : t.includes('health') || t.includes('medic') ? 'health' : null;
+    if (type) out.push({ type, amount });
+  }
+  return out;
+}
+
 /** Turn the Weapons tab into the rows the game uses. */
 export function weaponsFromSheet(cells, label = 'Weapons tab') {
   return readTable(cells, ['weapon'], COLUMNS, REQUIRED, label).map(({ name, v, num }) => {
@@ -155,7 +179,7 @@ export function weaponsFromSheet(cells, label = 'Weapons tab') {
       recoil: num('recoil', 0),
       bloom: num('bloom', 0),
       muzzle_velocity: num('muzzle_velocity', 300),
-      projectile: String(v('projectile') || 'bullet').toLowerCase().includes('rocket') ? 'rocket' : 'bullet',
+      projectile: projectileKind(v('projectile')),
       ads_zoom: num('ads_zoom', 0.7)
     };
   });
@@ -167,6 +191,7 @@ export function weaponsFromSheet(cells, label = 'Weapons tab') {
 const both = h => h.includes('min') && h.includes('max');
 const ENEMY_COLUMNS = [
   ['name', h => h === 'enemy' || h === 'name' || h === 'enemy type'],
+  ['item_drop', h => h.includes('item') && h.includes('drop')],
   ['weapons', h => h.includes('weapon')],
   // one cell holding "min / max", e.g. "2 / 5"
   ['burst_pair', h => h.includes('burst') && !h.includes('pause') && both(h)],
@@ -214,6 +239,7 @@ export function enemiesFromSheet(cells, defaults = {}, label = 'Enemies tab') {
       ...base,
       id, name,
       allowed_weapons: allowed && allowed.length ? allowed : null,
+      drops: parseItemDrops(v('item_drop')),
       health: num('health', base.health ?? 100),
       armour: num('armour', base.armour ?? 0),
       move_speed: num('move_speed', base.move_speed ?? 3.2),

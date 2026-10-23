@@ -104,7 +104,9 @@ north/−Z).
   usually means the export scale was wrong). Heads must line up with headshot zones.
 - Pose: standing, **arms hanging down**. The game raises the arms to aim.
 - Files: `enemy_insurgent.glb`, `player.glb`, and one per enemy type: `enemy_<type>.glb` with the
-  type name from the Enemies tab (e.g. `enemy_heavy_insurgent.glb`, `enemy_militia.glb`). A type
+  type name from the Enemies tab (e.g. `enemy_heavy_insurgent.glb`, `enemy_militia.glb`,
+  `enemy_suicide_bomber.glb`, which should show a clearly readable explosive vest; until it
+  exists the bomber uses the militia model with a code-drawn vest). A type
   without its own file uses the insurgent's.
 - **Colour variants** (several insurgent outfits, partner colours in co-op) will be
   separate textures for the same model: `enemy_insurgent_2.png`, `player_p2.png`, and so on.
@@ -192,6 +194,7 @@ upgrades 150.**
 |---|---|---|
 | `pickup_ammo.glb` | ammunition box | 0.30 × 0.16 × 0.20 |
 | `pickup_armour.glb` | armour plate | 0.42 × 0.42 × 0.12 |
+| `pickup_grenade.glb` | RGD-5 grenade lying on the ground (also used for thrown ones later) | 0.08 × 0.11 × 0.08 |
 | `pickup_health.glb` | first aid kit (from the first aid locker) | 0.34 × 0.22 × 0.24 |
 | `pickup_resupply.glb` | ammunition box from the ammunition supply (refills every gun) | 0.42 × 0.24 × 0.26 |
 | `crate_construction.glb` | construction crate (carried) | 0.80 × 0.55 × 0.55 |

@@ -5,7 +5,7 @@ import { moveBody, groundAt } from './body.js';
 import { lineOfSight } from './ballistics.js';
 import { flowNext, nodeAt } from './nav.js';
 import { aimVector, spreadDir, spawnProjectile } from './weapons.js';
-import { emit } from './damage.js';
+import { emit, explode, killActor } from './damage.js';
 import { stormAt } from './weather.js';
 import { holdsBase, levelBases } from './base.js';
 
@@ -134,6 +134,7 @@ export function updateEnemy(world, e, dt) {
     }
   }
   if (!e.sees) e.lostT += dt;
+  if (wdef.projectile === 'grenade') { updateBomber(world, e, def, wdef, dt); return; }
   const target = e.sees ? world.players.find(p => p.id === e.targetId) : null;
   e.aiming = !!(target && target.alive && !target.downed);
 
@@ -194,6 +195,47 @@ export function updateEnemy(world, e, dt) {
     if (sd > 0 && sd < 0.7 && Math.abs(o.y - e.y) < 1) moveBody(world, e, sx / sd * (0.7 - sd) * 0.5, sz / sd * (0.7 - sd) * 0.5, 0);
   }
   if (nav && nodeAt(nav, e.x, e.y, e.z) < 0 && e.y < -1) e.alive = false;
+}
+
+/**
+ * Suicide bomber: never shoots. Once he has noticed you he runs straight at the nearest
+ * player at full speed (attack waves head for the base until a player is close). Within his
+ * "preferred fighting distance" (1 m) of a player he blows himself up: the blast is the
+ * thrown weapon's (RGD-5). While running at someone he beeps, so you can hear him coming.
+ */
+function updateBomber(world, e, def, wdef, dt) {
+  const nav = world.cache.nav;
+  let near = null, nd = Infinity;
+  for (const p of world.players) {
+    if (!p.alive || p.downed) continue;
+    const d = Math.hypot(p.x - e.x, p.y - e.y, p.z - e.z);
+    if (d < nd) { nd = d; near = p; }
+  }
+  if (near && nd <= Math.max(0.5, def.preferred_range || 1) + 0.3) {
+    e.exploded = true;
+    explode(world, e.x, e.y + 1, e.z, wdef, e);
+    killActor(world, e, null);
+    return;
+  }
+  e.aiming = false;
+  if (e.sees) e.alert = true;
+  if (e.alert && nav) {
+    const field = e.sees ? world.cache.playerField : goalField(world, e);
+    const nxt = field ? flowNext(nav, field, e.x, e.y, e.z) : null;
+    if (nxt) e.moving = walkTowards(world, e, nxt[0], nxt[2], def.move_speed, dt) > 0;
+    else if (near) e.moving = walkTowards(world, e, near.x, near.z, def.move_speed, dt) > 0;
+    // the beeping gets faster as he closes in
+    const range = world.data.settings.grenades?.bomber_beep_range ?? 25;
+    e.beepT = (e.beepT ?? 0) - dt;
+    if (near && nd < range && e.beepT <= 0) {
+      e.beepT = 0.15 + 0.6 * (nd / range);
+      emit(world, { type: 'beep', x: e.x, y: e.y + 1.2, z: e.z });
+    }
+    if (!e.wave && e.lostT > world.data.settings.enemy_ai.give_up_after) { e.alert = false; e.lastSeen = null; }
+  } else if (Math.hypot(e.home.x - e.x, e.home.z - e.z) > 1) {
+    e.moving = walkTowards(world, e, e.home.x, e.home.z, def.move_speed * 0.4, dt) > 0;
+  }
+  if (e.moving) e.animT += dt * 1.4;
 }
 
 /** Keep each enemy group topped up (except inside a claimed base). */

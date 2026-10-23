@@ -8,7 +8,7 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
   let enabled = false;
   let firePulse = false, fireKey = false, fireMouse = false, fireTouch = false, adsMouse = false, adsToggle = false, mouseDown = false;
   let lookX = 0, lookY = 0;
-  let pressed = { reload: false, swap: false, interact: false };
+  let pressed = { reload: false, swap: false, interact: false, grenade: false };
   let joy = { id: null, ox: 0, oy: 0, x: 0, y: 0 };
   let look = { id: null, lx: 0, ly: 0 };
   const locked = () => document.pointerLockElement === touchEl;
@@ -21,6 +21,7 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
       if (e.code === 'KeyR') pressed.reload = true;
       if (e.code === 'KeyQ' || e.code === 'Digit1' || e.code === 'Digit2') pressed.swap = true;
       if (e.code === 'KeyE' || e.code === 'KeyF') pressed.interact = true;
+      if (e.code === 'KeyG') pressed.grenade = true;
     }
     keys[e.code] = true;
     if (e.code === 'Space') { fireKey = true; firePulse = true; e.preventDefault(); }
@@ -112,6 +113,16 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
   hold(buttons.reload, () => { pressed.reload = true; }, () => {});
   hold(buttons.swap, () => { pressed.swap = true; }, () => {});
   hold(buttons.context, () => { pressed.interact = true; }, () => {});
+  // the grenade button shows on desktop too (click it, or press G), so it doesn't switch to the phone layout
+  if (buttons.grenade) {
+    const g = buttons.grenade;
+    g.addEventListener('pointerdown', e => {
+      e.preventDefault(); e.stopPropagation();
+      if (!enabled) return;
+      pressed.grenade = true;
+      g.classList.add('on'); setTimeout(() => g.classList.remove('on'), 150);
+    });
+  }
 
   if (matchMedia('(pointer:coarse)').matches) app.classList.add('touch');
 
@@ -144,7 +155,7 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
         ...pressed
       };
       lookX = 0; lookY = 0; firePulse = false;
-      pressed = { reload: false, swap: false, interact: false };
+      pressed = { reload: false, swap: false, interact: false, grenade: false };
       return out;
     }
   };

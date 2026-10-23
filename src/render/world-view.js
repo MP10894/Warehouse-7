@@ -3,7 +3,7 @@
 // world, so this works the same whether the world was simulated here or received
 // from a co-op host.
 import * as THREE from 'three';
-import { soldierModel, setSoldierWeapon, poseSoldier, pickupModel, rocketModel } from './models.js';
+import { soldierModel, setSoldierWeapon, poseSoldier, pickupModel, rocketModel, grenadeModel } from './models.js';
 
 const MAX_TRACERS = 256;
 
@@ -53,7 +53,10 @@ export function createWorldView(scene, tex, initialLocalId) {
         const v = actorView(a);
         const m = v.model;
         const gun = a.kind === 'enemy' ? a.weapon.w : (a.slots[a.active] && a.slots[a.active].w);
-        if (gun) setSoldierWeapon(m, gun);
+        // a suicide bomber carries no gun (his "weapon" is the vest)
+        const thrown = gun && world.data.weapons[gun] && world.data.weapons[gun].projectile === 'grenade';
+        if (gun && !thrown) setSoldierWeapon(m, gun);
+        if (m.bombVest) { const l = m.bombVest.getObjectByName('bomb_light'); if (l) l.visible = a.alive && Math.floor(world.time * (a.moving ? 6 : 2)) % 2 === 0; }
         if (m.gun) m.gun.visible = a.alive && !(a.kind === 'enemy' && !a.alive);
         m.root.position.set(a.x, a.y, a.z);
         m.root.rotation.y = a.yaw;
@@ -79,6 +82,15 @@ export function createWorldView(scene, tex, initialLocalId) {
       let n = 0;
       const seenR = new Set();
       for (const pr of world.projectiles) {
+        if (pr.kind === 'grenade') {
+          seenR.add(pr.id);
+          let r = rockets.get(pr.id);
+          if (!r) { r = grenadeModel(); scene.add(r); rockets.set(pr.id, r); }
+          r.position.set(pr.x, pr.y + 0.04, pr.z);
+          const sp = Math.hypot(pr.vx, pr.vy, pr.vz);
+          r.rotation.x += sp * dt * 0.8; r.rotation.z += sp * dt * 0.5;   // tumbling in flight
+          continue;
+        }
         if (pr.kind === 'rocket') {
           seenR.add(pr.id);
           let r = rockets.get(pr.id);

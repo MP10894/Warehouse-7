@@ -370,6 +370,22 @@ pickups += [
     TAG(O, {'type': 'weapon', 'weapon': 'm4a1', 'x': 99.5, 'z': 218.5, 'y': 0}),
     TAG(O, {'type': 'ammo', 'calibre': '5.56mm', 'amount': 60, 'x': 100.5, 'z': 218.5, 'y': 0}),
 ]
+# grenades lying around (2 each) and suicide bombers waiting in each district
+pickups += [
+    TAG(R, {'type': 'grenade', 'amount': 2, 'x': 249.5, 'z': 133.5, 'y': 0}),
+    TAG(R, {'type': 'grenade', 'amount': 2, 'x': 200.5, 'z': 34.5, 'y': 0}),
+    TAG(O, {'type': 'grenade', 'amount': 2, 'x': 184.5, 'z': 230.5, 'y': 2}),
+    TAG(O, {'type': 'grenade', 'amount': 2, 'x': 129.5, 'z': 232.5}),
+    TAG('city-extra', {'type': 'grenade', 'amount': 2, 'x': 40.5, 'z': 92.5}),
+    TAG('city-extra', {'type': 'grenade', 'amount': 2, 'x': 86.5, 'z': 44.5}),
+]
+BOMBER = {'type': 'suicide_bomber', 'behaviour': 'guard', 'respawn': 120, 'weapons': {'rgd5': 1}, 'armour_chance': 0, 'armour': 0}
+groups += [
+    TAG('city-extra', {'id': 'bombers_city', **BOMBER, 'spawns': [{'x': 46, 'z': 72, 'y': 0}, {'x': 92, 'z': 112, 'y': 0}]}),
+    TAG(O, {'id': 'bombers_outskirts', **BOMBER, 'spawns': [{'x': 40, 'z': 192}, {'x': 118, 'z': 222}]}),
+    TAG(R, {'id': 'bombers_refinery', **BOMBER, 'spawns': [{'x': 176, 'z': 90, 'y': 0}]}),
+]
+
 # the city's medical crate, on the clinic roof (city entries are otherwise left alone)
 items.append(TAG('city-crates', {'item': 'medical_crate', 'x': 18.5, 'z': 15.5, 'y': 9}))
 
@@ -482,7 +498,7 @@ for j in range(SIZE // 4):
 
 # ================================================================ write
 level = json.load(open(os.path.join(OUT, 'level.json')))
-ours = lambda e: isinstance(e, dict) and e.get('district') in ('refinery', 'outskirts', 'city-crates', 'city-edge')
+ours = lambda e: isinstance(e, dict) and e.get('district') in ('refinery', 'outskirts', 'city-crates', 'city-edge', 'city-extra')
 for key in ('buildings', 'props', 'enemy_groups', 'pickups', 'base_items', 'bases', 'weather_zones'):
     level[key] = [e for e in level.get(key, []) if not ours(e)]
 level['buildings'] += buildings

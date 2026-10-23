@@ -40,7 +40,7 @@ also work. Details in `DESIGN.md` → "How co-op works".
 | `data/levels/najaf/` | Najaf (Level 1): building floor plans, ground heights, where everything goes ([guide](data/levels/README.md)) |
 | `data/levels/slice/` | The small test slice, same format |
 | `assets/` | Art files that replace the placeholders: rules in [ART_SPEC.md](ART_SPEC.md); Blockbench palette in `assets/palette/`; working `.bbmodel` files in `assets/sources/` |
-| `data/Game Data.xlsx` | The game-data workbook. **Weapons** tab: every weapon attribute. **Enemies** tab: health, speed, sight, reaction time, aim error in degrees, bursts, ammo drops, and which weapons each enemy type can carry. Edit in Excel as normal; formulas and "2 / 5" style min / max cells are fine |
+| `data/Game Data.xlsx` | The game-data workbook. **Weapons** tab: every weapon attribute (a projectile of "grenade" makes a thrown, quick-use item). **Enemies** tab: health, speed, sight, reaction time, aim error in degrees, bursts, ammo drops, item drops (e.g. "Armour plate (15)", "Grenade (1)"), and which weapons each enemy type can carry. Edit in Excel as normal; formulas and "2 / 5" style min / max cells are fine |
 | `data/enemies.csv` | Fallback enemy values, used for anything the Enemies tab leaves out |
 | `data/waves.csv` | How big and how well armed each attack wave is. `type_<enemy>` columns set the mix of enemy types (e.g. `type_militia`), `weight_<weapon>` columns the weapons |
 | `data/upgrades.csv` | Base upgrades, one row per level: the crate it takes, wall height, and what a locker hands out (`resupply`, `health` or `armour`), how often (`every`, seconds after the last was taken) and how much (`amount`: % of each gun's ammunition, or health / armour points) |

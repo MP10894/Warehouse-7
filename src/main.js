@@ -91,13 +91,13 @@ if (!view) {
   const minimap = createMinimap($('minimap'));
   const audio = createAudio();
   const domHud = createDomHud();
-  const buttons = { fire: $('fire'), ads: $('ads'), reload: $('reload'), swap: $('swap'), context: $('context') };
+  const buttons = { fire: $('fire'), ads: $('ads'), reload: $('reload'), swap: $('swap'), context: $('context'), grenade: $('grenade') };
   const input = createInput({ app, touchEl: $('touch'), stick: $('stick'), knob: $('knob'), buttons, view, settings: S });
   const aim = { yaw: 0, pitch: 0 };
   let acc = 0, shake = 0;
   // taps on RELOAD, SWAP and the use button wait here until a game step takes them: on a
   // fast screen many frames have no game step, and a tap read on such a frame was lost
-  const taps = { reload: false, swap: false, interact: false };
+  const taps = { reload: false, swap: false, interact: false, grenade: false };
   const recoil = createRecoil();
   const assist = createAimAssist();
   // a shot's kick moves the aim now; recoil.update brings it back afterwards
@@ -116,8 +116,8 @@ if (!view) {
   const net = {
     transport: null, session: null, code: '', run: 0,
     encoder: createHostEncoder(DATA), decoder: createGuestDecoder(DATA),
-    edges: { fire: 0, reload: 0, swap: 0, interact: 0 }, // guest: press counters it sends
-    seen: { fire: 0, reload: 0, swap: 0, interact: 0 },  // host: last counters it acted on
+    edges: { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0 }, // guest: press counters it sends
+    seen: { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0 },  // host: last counters it acted on
     prevFire: false, lostAt: 0
   };
 
@@ -131,7 +131,7 @@ if (!view) {
     const p = local();
     aim.yaw = p.yaw; aim.pitch = 0;
     acc = 0; shake = 0; recoil.reset(); assist.reset();
-    taps.reload = taps.swap = taps.interact = false;
+    taps.reload = taps.swap = taps.interact = taps.grenade = false;
     mode = 'playing';
     screens.hide();
     input.setEnabled(true);
@@ -150,7 +150,7 @@ if (!view) {
     // the guest's counters keep counting across runs; act only on presses from now on
     const partner = net.session.partner();
     const c = partner && partner.state && partner.state.c;
-    net.seen = c ? { fire: c[5], reload: c[6], swap: c[7], interact: c[8] } : { fire: 0, reload: 0, swap: 0, interact: 0 };
+    net.seen = c ? { fire: c[5], reload: c[6], swap: c[7], interact: c[8], grenade: c[9] || 0 } : { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0 };
     const seed = (Math.random() * 1e9) | 0;
     enterPlay(seed, ['p1', 'p2']);
     net.session.set({ role: 'host', run: net.run, seed, level: levelId, started: 1 });
@@ -202,7 +202,7 @@ if (!view) {
         role = 'guest'; localId = 'p2'; mode = 'lobby';
         net.decoder.reset();
         net.run = -1;
-        net.edges = { fire: 0, reload: 0, swap: 0, interact: 0 };
+        net.edges = { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0 };
         net.session.set({ app: 'w7', role: 'guest', run: -1 });
         screens.showLobby({ role: 'guest', code, onLeave: leaveCoop });
       }
@@ -214,7 +214,7 @@ if (!view) {
     const partner = net.session && net.session.partner();
     const st = partner && partner.state;
     if (!st || st.role !== 'guest' || st.run !== net.run || !st.c || !st.pos) return {};
-    const [mx, my, yaw, pitch, flags, fireN, reloadN, swapN, interactN] = st.c;
+    const [mx, my, yaw, pitch, flags, fireN, reloadN, swapN, interactN, grenadeN = 0] = st.c;
     const cmd = { move: { x: mx / 100, y: my / 100 }, yaw: yaw / 1000, pitch: pitch / 1000, ads: !!(flags & 2), moving: !!(flags & 4), pos: st.pos.map(v => v / 100) };
     cmd.fire = !!(flags & 1);
     if (first) {
@@ -222,6 +222,7 @@ if (!view) {
       if (reloadN > net.seen.reload) { cmd.reload = true; net.seen.reload = reloadN; }
       if (swapN > net.seen.swap) { cmd.swap = true; net.seen.swap = swapN; }
       if (interactN > net.seen.interact) { cmd.interact = true; net.seen.interact = interactN; }
+      if (grenadeN > net.seen.grenade) { cmd.grenade = true; net.seen.grenade = grenadeN; }
     }
     return cmd;
   }
@@ -288,12 +289,12 @@ if (!view) {
 
       if (role !== 'guest') {
         const base = { move: { x: inp.moveX, y: inp.moveY }, fire: inp.fire, ads: inp.ads };
-        taps.reload ||= inp.reload; taps.swap ||= inp.swap; taps.interact ||= inp.interact;
+        taps.reload ||= inp.reload; taps.swap ||= inp.swap; taps.interact ||= inp.interact; taps.grenade ||= inp.grenade;
         acc += dt;
         let steps = 0, first = true;
         while (acc >= STEP && steps < 5) {
           const cmd = { ...base, yaw: aim.yaw, pitch: aim.pitch };
-          if (first) { cmd.reload = taps.reload; cmd.swap = taps.swap; cmd.interact = taps.interact; taps.reload = taps.swap = taps.interact = false; }
+          if (first) { cmd.reload = taps.reload; cmd.swap = taps.swap; cmd.interact = taps.interact; cmd.grenade = taps.grenade; taps.reload = taps.swap = taps.interact = taps.grenade = false; }
           const cmds = { [localId]: cmd };
           if (role === 'host') cmds.p2 = guestCommand(first);
           first = false;
@@ -328,11 +329,12 @@ if (!view) {
         if (inp.reload) net.edges.reload++;
         if (inp.swap) net.edges.swap++;
         if (inp.interact) net.edges.interact++;
+        if (inp.grenade) net.edges.grenade++;
         const e = net.edges;
         net.session.set({
           run: net.run,
           c: [Math.round(inp.moveX * 100), Math.round(inp.moveY * 100), Math.round(aim.yaw * 1000), Math.round(aim.pitch * 1000),
-            (inp.fire ? 1 : 0) | (inp.ads ? 2 : 0) | (p.moving ? 4 : 0), e.fire, e.reload, e.swap, e.interact],
+            (inp.fire ? 1 : 0) | (inp.ads ? 2 : 0) | (p.moving ? 4 : 0), e.fire, e.reload, e.swap, e.interact, e.grenade],
           pos: [Math.round(p.x * 100), Math.round(p.y * 100), Math.round(p.z * 100)]
         });
       }

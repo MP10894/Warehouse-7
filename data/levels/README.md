@@ -111,4 +111,7 @@ after `respawn` seconds. Optional `"type"` picks the enemy type from the Enemies
 `data/Game Data.xlsx`, written in lowercase with `_` for spaces: `"insurgent"` (the default),
 `"militia"`, `"heavy_insurgent"`. Each type only carries weapons from its *Possible Weapons
 Equipped* list; the group's `weapons` weights choose among those (a listed weapon the group
-doesn't mention gets weight 1, and weight 0 rules a weapon out).
+doesn't mention gets weight 1, and weight 0 rules a weapon out). A group of suicide bombers uses
+`"type": "suicide_bomber"` with `"weapons": { "rgd5": 1 }`.
+
+Pickups in `pickups` can also be `{ "type": "grenade", "amount": 2, "x", "z" }`.

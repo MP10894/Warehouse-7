@@ -103,6 +103,15 @@ Starting values, to be tuned after play-testing:
 - Each enemy type only carries weapons from its **Possible Weapons Equipped** list on the
   Enemies tab; the wave and group weapon weights choose among those.
 - Attacking enemies' shots and explosions damage base walls and upgrades as a side effect.
+- **Drops:** each type's *Item drop* cell on the Enemies tab (e.g. heavy insurgents:
+  "Armour plate (15)"). Insurgents and heavy insurgents also sometimes drop a grenade
+  (chances in settings.json → grenades → drop_chance; militia never do).
+- **Suicide bomber:** carries no gun. Once he notices a player he runs straight at them at
+  full speed (attack waves head for the base until a player is near), beeping faster as he
+  closes in. Within his *preferred fighting distance* (1 m) he blows himself up: the
+  RGD-5's blast. If he is shot dead first, his vest goes off where he falls (hurting
+  anyone nearby, enemies included). He drops nothing. Bombers come in attack waves from
+  wave 2 (`type_suicide_bomber` in waves.csv) and wait in a few places in Najaf.
 
 ## Players
 
@@ -131,7 +140,15 @@ Starting values, to be tuned after play-testing:
   magazine size; maximum carried ammunition (including the loaded magazine); reload time;
   damage to health; damage to armour; damage to environment; area of effect (0–100,
   where **100 = 10 m radius**); fire mode (semi or automatic); rate of fire; recoil (0–100);
-  bloom (0–100); muzzle velocity; calibre; projectile (bullet or rocket); aim-down-sights zoom.
+  bloom (0–100); muzzle velocity; calibre; projectile (bullet, rocket or grenade); aim-down-sights zoom.
+- **Grenades (RGD-5)** are a quick-use item, not a weapon slot. While you have any, a
+  grenade button with the count shows under the map (desktop: G). A toss takes 0.7 s: the
+  rifle dips, the left hand throws, and you can't fire, reload or swap meanwhile. The
+  grenade flies at the Weapons tab's *muzzle velocity* (= throwing speed), aimed a little
+  above your crosshair, bounces and rolls, and goes off **3.5 s** after the throw.
+  Carry up to the tab's maximum (5). You start with none; they come from grenade pickups
+  in Najaf, from insurgents and heavy insurgents, and one with each ammunition box from
+  the base's ammunition supply. Timing values: settings.json → grenades.
 - **Recoil** kicks the camera upwards; the player pulls back down.
 - **Bloom** is spread that grows the longer you fire and shrinks when you stop.
   Moving increases it.
@@ -347,6 +364,10 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Co-op: the host only sends enemies within 90 m of a player (plus all attackers), so 60+ enemies fit in a message; builds and broken base pieces are sent as an ordered list so both phones stay identical |
 | 2026-10-23 | Reload, swap and use buttons register on the first tap (taps waiting for the next game step instead of being dropped on fast screens) |
 | 2026-10-23 | AK-47 reload shows the magazine change: rifle cants over, left hand rocks the magazine out forward and lets it fall out of view, fetches a fresh one from below, hooks it in and rocks it home; the right hand pulls the charging handle only when the gun was empty. Same reload time as before. Other weapons keep the simple dip until their models have a `magazine` part |
+| 2026-10-23 | Heavy insurgents drop an armour plate (+15) when killed, read from the Enemies tab's new *Item drop* column |
+| 2026-10-23 | RGD-5 grenade as a quick-use item: grenade button with count under the map, 0.7 s toss with no firing meanwhile, timed 3.5 s fuse with bounces; from map pickups, insurgent and heavy insurgent drops, and the ammunition supply; none at the start; carry up to 5 |
+| 2026-10-23 | Suicide bomber: runs at players and blows up within 1 m (RGD-5 blast); his vest also goes off if he is shot dead; beeps as he closes in; in attack waves from wave 2 and placed in each Najaf district. Placeholder look: militia clothes with a tan explosive vest and a blinking light |
+| 2026-10-23 | Co-op messages: when many enemies are around both players, the furthest are left out first |
 
 ## Open questions
 

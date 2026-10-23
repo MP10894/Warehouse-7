@@ -2,7 +2,7 @@
 // clips into walls. Handles aiming down sights, recoil kick, reload and swap motions,
 // walking sway and the muzzle flash.
 import * as THREE from 'three';
-import { weaponModel, muzzleOf, sightOf, handLeftOf, handRightOf, LEFT_HAND_UPRIGHT, box } from './models.js';
+import { weaponModel, muzzleOf, sightOf, handLeftOf, handRightOf, LEFT_HAND_UPRIGHT, box, grenadeModel } from './models.js';
 import { ART, cloneArt } from './assets.js';
 import { makeCanvas, pixelTexture } from './textures.js';
 
@@ -83,7 +83,33 @@ export function createFpWeapon() {
   flash.visible = false;
   holder.add(flash);
 
-  const st = { ads: 0, kick: 0, flashT: 0, reload: 0, reloadDur: 1, reloadEmpty: false, swap: 0, bob: 0 };
+  const st = { ads: 0, kick: 0, flashT: 0, reload: 0, reloadDur: 1, reloadEmpty: false, swap: 0, bob: 0, throwT: 0, throwDur: 1, releaseFrac: 0.45 };
+  const handLRest = new THREE.Vector3();
+
+  // ---- grenade toss: the rifle dips, the left hand swings a grenade up and throws it ----
+  const heldGrenade = grenadeModel();
+  heldGrenade.visible = false;
+  rig.add(heldGrenade);
+  // the left hand's path in view space (metres: right, up, back): from low out of view,
+  // wound up beside your head, forward to the release, follow-through, back down
+  const TOSS = [
+    [0.0, new THREE.Vector3(-0.2, -0.45, -0.3)],
+    [0.55, new THREE.Vector3(-0.22, -0.05, -0.36)],
+    [1.0, new THREE.Vector3(-0.07, 0.05, -0.62)],
+    [1.5, new THREE.Vector3(-0.02, -0.13, -0.66)],
+    [2.2, new THREE.Vector3(-0.2, -0.45, -0.35)]
+  ];
+  const tossTmp = new THREE.Vector3();
+  /** Left-hand point at toss time s (in units of the release time: 1 = the release). */
+  function tossPoint(s, out) {
+    for (let i = 1; i < TOSS.length; i++) {
+      if (s <= TOSS[i][0] || i === TOSS.length - 1) {
+        const [a, pa] = TOSS[i - 1], [b, pb] = TOSS[i];
+        return lerp3(out, pa, pb, ease((s - a) / (b - a)));
+      }
+    }
+    return out.copy(TOSS[TOSS.length - 1][1]);
+  }
 
   // ---- magazine reload (weapons whose model has a `magazine` part, e.g. the AK-47) ----
   // Fractions of the reload time: tilt the rifle, left hand takes the magazine and rocks it
@@ -182,6 +208,7 @@ export function createFpWeapon() {
     hands.R.position.set(hr[0], hr[1], hr[2]);
     const hl = handLeftOf(id);
     hands.L.position.set(hl[0], hl[1], hl[2]);
+    handLRest.copy(hands.L.position);
     // drawn hands are fists round an upright grip: on a rifle the left hand turns to clamp
     // the handguard from the side, back of the hand (and its knuckle plate) facing you
     hands.L.rotation.set(ART.hands && !LEFT_HAND_UPRIGHT.has(id) ? Math.PI / 2 : 0, 0, 0);
@@ -207,6 +234,7 @@ export function createFpWeapon() {
       if (ev.type === 'shot') { st.kick = 1; st.flashT = 0.05; }
       else if (ev.type === 'reload') { st.reload = ev.time; st.reloadDur = ev.time; st.reloadEmpty = !!ev.empty; }
       else if (ev.type === 'swap') { st.swap = 0.4; st.reload = 0; }
+      else if (ev.type === 'throw') { st.throwT = ev.time; st.throwDur = ev.time; st.releaseFrac = ev.release ? ev.release / ev.time : 0.45; }
     },
     update(dt, player, aspect) {
       camera.aspect = aspect; camera.updateProjectionMatrix();
@@ -216,6 +244,9 @@ export function createFpWeapon() {
       st.ads += ((player.ads ? 1 : 0) - st.ads) * Math.min(1, dt * 14);
       st.kick = Math.max(0, st.kick - dt * 10);
       st.flashT -= dt; st.reload = Math.max(0, st.reload - dt); st.swap = Math.max(0, st.swap - dt);
+      st.throwT = Math.max(0, st.throwT - dt);
+      hands.L.position.copy(handLRest);
+      heldGrenade.visible = false;
       if (player.moving) st.bob += dt * 9;
       const adsPos = adsTarget || ADS[gunId] || ADS.m4a1;
       holder.position.lerpVectors(HIP, adsPos, st.ads);
@@ -232,6 +263,19 @@ export function createFpWeapon() {
         holder.position.y -= k * 0.12; holder.rotation.x -= k * 0.5; holder.rotation.z = k * 0.4;
       }
       if (st.swap > 0) holder.position.y -= (st.swap / 0.4) * 0.3;
+      if (st.throwT > 0) {
+        const u = 1 - st.throwT / st.throwDur;
+        // the gun drops away to the right while the left hand throws
+        const dip = span(u, 0, 0.18) * (1 - span(u, 0.72, 1));
+        holder.position.y -= dip * 0.1; holder.position.x += dip * 0.06; holder.rotation.x -= dip * 0.35; holder.rotation.z -= dip * 0.25;
+        const s = u / Math.max(0.05, st.releaseFrac);
+        tossPoint(s, tossTmp);
+        if (s < 1) { heldGrenade.visible = true; heldGrenade.position.set(tossTmp.x + 0.01, tossTmp.y + 0.045, tossTmp.z - 0.02); heldGrenade.rotation.set(0.3, 0, 0.4); }
+        // back in the gun's own space for the hand (the gun has moved)
+        holder.updateMatrixWorld(true);
+        const target = holder.worldToLocal(tossTmp.clone());
+        hands.L.position.lerpVectors(handLRest, target, span(u, 0, 0.08) * (1 - span(u, 0.85, 1)));
+      }
       flash.visible = st.flashT > 0;
       if (flash.visible) flash.material.rotation = Math.random() * 6;
       placeArms();

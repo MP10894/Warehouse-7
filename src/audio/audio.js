@@ -78,7 +78,11 @@ export function createAudio() {
         case 'wave': tone('sawtooth', 300, 300, 0.5, 0.14); tone('sawtooth', 240, 240, 0.6, 0.14, 0.5); break;
         case 'baseClaimed': [523, 659, 784, 1046].forEach((f, i) => tone('square', f, f, 0.14, 0.1, i * 0.12)); break;
         case 'built': [392, 523, 659].forEach((f, i) => tone('triangle', f, f, 0.18, 0.14, i * 0.1)); break;
-        case 'blocks': if (ev.cells && ev.cells.length) noise(0.7, 300, 0.6 * Math.max(0.2, fade(d))); break;
+        case 'blocks': if (!ev.placed && ev.cells && ev.cells.length) noise(0.7, 300, 0.6 * Math.max(0.2, fade(d))); break;
+        case 'throw': if (ev.actorId === local.id) { tone('square', 1800, 1700, 0.02, 0.06); noise(0.25, 900, 0.18, ev.release || 0.3, 'bandpass'); } break;
+        case 'bounce': if (d < 25) tone('triangle', 1500, 1100, 0.05, 0.12 * fade(d)); break;
+        // a suicide bomber's beeping: loud and clear, so you can hear where he is
+        case 'beep': if (d < 30) tone('square', 1900, 1900, 0.06, 0.16 * Math.max(0.25, 1 - d / 30)); break;
         case 'downed': case 'revived': tone('triangle', 440, ev.type === 'downed' ? 220 : 880, 0.3, 0.12); break;
       }
     }

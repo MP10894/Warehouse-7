@@ -87,6 +87,18 @@ export function killActor(world, a, source) {
   if (source && source.kind === 'player') source.stats.kills++;
   emit(world, { type: 'death', actorId: a.id, team: 'enemy', x: a.x, y: a.y, z: a.z });
   const w = world.data.weapons[a.weapon.w];
+  // a suicide bomber's vest goes off when he dies, wherever he falls; he drops nothing
+  if (w.projectile === 'grenade') {
+    if (!a.exploded) { a.exploded = true; explode(world, a.x, a.y + 1, a.z, w, source || a); }
+    return;
+  }
+  const def0 = world.data.enemies[a.type];
+  // the Enemies tab's "Item drop" column (e.g. heavy insurgents' armour plates), and sometimes a grenade
+  for (const d of def0.drops || []) dropPickup(world, { type: d.type, amount: d.amount, x: a.x + rand(world, -0.4, 0.4), y: a.y, z: a.z + rand(world, -0.4, 0.4) });
+  const gChance = (world.data.settings.grenades?.drop_chance || {})[a.type] || 0;
+  if (gChance > 0 && Object.values(world.data.weapons).some(x => x.projectile === 'grenade') && rand(world) < gChance) {
+    dropPickup(world, { type: 'grenade', amount: 1, x: a.x + rand(world, -0.4, 0.4), y: a.y, z: a.z + rand(world, -0.4, 0.4) });
+  }
   dropPickup(world, { type: 'weapon', weapon: a.weapon.w, mag: Math.max(0, a.weapon.mag), x: a.x + rand(world, -0.3, 0.3), y: a.y, z: a.z + rand(world, -0.3, 0.3) });
   const def = world.data.enemies[a.type];
   const amount = Math.round(rand(world, def.ammo_drop_min, def.ammo_drop_max) * (w.mag_size <= 2 ? 0.1 : 1));

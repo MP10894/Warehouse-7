@@ -81,6 +81,18 @@
     "item_respawn": 30,
     "build_range": 2.2
   },
+  "grenades": {
+    "start": 0,
+    "fuse": 3.5,
+    "throw_time": 0.7,
+    "release_at": 0.3,
+    "throw_up_deg": 12,
+    "bounce": 0.35,
+    "friction": 0.55,
+    "supply_gives": 1,
+    "drop_chance": { "insurgent": 0.2, "heavy_insurgent": 0.3 },
+    "bomber_beep_range": 25
+  },
   "hazards": {
     "tank_blast_radius": 12,
     "tank_blast_damage_factor": 4

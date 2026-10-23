@@ -1,7 +1,7 @@
 // Players: movement, picking things up, the context button (pick up / build / revive),
 // and the downed state for co-op.
 import { moveBody, groundAt } from './body.js';
-import { updatePlayerWeapon } from './weapons.js';
+import { updatePlayerWeapon, grenadeMax } from './weapons.js';
 import { emit, dropPickup } from './damage.js';
 import { buildSpotFor, build, buildLabel, crateWanted, crateName } from './base.js';
 import { onBuild } from './waves.js';
@@ -18,6 +18,7 @@ export function createPlayer(world, id, spawn) {
     reserve: { [w.calibre]: w.max_total - w.mag_size },
     reloadT: 0, swapT: 0, fireCd: 0, bloom: 0, trigger: false, ads: false, moving: false,
     carrying: null, context: null, lastHurtAt: 0, regenRate: 0,
+    grenades: Math.min(world.data.settings.grenades?.start ?? 0, grenadeMax(world)), throwT: 0, releaseT: 0,
     stats: { shots: 0, hits: 0, kills: 0 }
   };
 }
@@ -88,10 +89,23 @@ function autoCollect(world, p, pk) {
       const c = world.data.weapons[slot.w].calibre;
       took += addAmmo(world, p, c, Math.ceil((world.data.calibres[c] || 0) * pk.amount / 100));
     }
-    if (took <= 0) return false;
+    // and grenades
+    const gWant = Math.min(world.data.settings.grenades?.supply_gives ?? 0, grenadeMax(world) - (p.grenades || 0));
+    if (gWant > 0) p.grenades = (p.grenades || 0) + gWant;
+    if (took <= 0 && gWant <= 0) return false;
     emit(world, { type: 'pickup', playerId: p.id, what: 'ammo' });
-    emit(world, { type: 'message', text: 'AMMUNITION RESUPPLIED', playerId: p.id });
+    emit(world, { type: 'message', text: gWant > 0 ? `AMMUNITION RESUPPLIED · +${gWant} GRENADE` : 'AMMUNITION RESUPPLIED', playerId: p.id });
     return true;
+  }
+  if (pk.type === 'grenade') {
+    const max = grenadeMax(world), have = p.grenades || 0;
+    if (have >= max) return false;
+    const take = Math.min(pk.amount || 1, max - have);
+    p.grenades = have + take;
+    pk.amount = (pk.amount || 1) - take;
+    emit(world, { type: 'pickup', playerId: p.id, what: 'grenade' });
+    emit(world, { type: 'message', text: `+${take} GRENADE${take > 1 ? 'S' : ''}`, playerId: p.id });
+    return pk.amount <= 0;
   }
   if (pk.type === 'item') {
     if (p.carrying || !crateWanted(world, pk.item)) return false;

@@ -95,6 +95,35 @@ export function rocketModel() {
   return g;
 }
 
+/** A hand grenade (RGD-5): olive egg with the fuse and lever on top. Origin at its middle. */
+export function grenadeModel() {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.IcosahedronGeometry(0.04, 0), lambert(0x5c6440));
+  body.scale.set(1, 1.15, 1);
+  g.add(body);
+  box(0.022, 0.025, 0.022, 0x6e6e68, 0, 0.05, 0, g);     // fuse
+  box(0.012, 0.012, 0.07, 0x8a8a82, 0, 0.055, 0.02, g);  // lever
+  return g;
+}
+
+/** The explosive vest a suicide bomber wears, on his torso (torso pivot at waist height). */
+function bomberVest(torso) {
+  const v = new THREE.Group();
+  v.name = 'bomb_vest';
+  const stick = 0xc8b070, tape = 0x2a2a28, wire = 0xd0452f;   // tan explosive blocks: stand out on any clothes
+  box(0.42, 0.06, 0.27, tape, 0, 0.06, 0, v);                        // belt
+  for (let i = 0; i < 5; i++) box(0.05, 0.2, 0.05, stick, -0.14 + i * 0.07, 0.2, -0.135, v);  // charges in front
+  for (let i = 0; i < 4; i++) box(0.05, 0.2, 0.05, stick, -0.105 + i * 0.07, 0.2, 0.135, v);  // and behind
+  box(0.34, 0.03, 0.06, tape, 0, 0.27, -0.135, v);                   // strapped together
+  box(0.012, 0.012, 0.2, wire, 0.08, 0.33, -0.08, v);               // wires up to the trigger
+  box(0.08, 0.05, 0.04, 0x3e4130, 0.08, 0.35, -0.15, v);             // detonator box
+  const light = box(0.025, 0.025, 0.02, 0xff2010, 0.08, 0.385, -0.16, v);
+  light.name = 'bomb_light';
+  light.material = new THREE.MeshBasicMaterial({ color: 0xff2010 });
+  torso.add(v);
+  return v;
+}
+
 // ---------- soldiers ----------
 export const THIRD_PERSON_GUN_SCALE = 1.4;
 
@@ -120,7 +149,15 @@ function soldierFromArt(art) {
 /** kind: 'player' or 'enemy'; type: the enemy type (Enemies tab), e.g. 'heavy_insurgent'.
  *  Uses characters/enemy_<type>.glb if there is one, otherwise the insurgent's. */
 export function soldierModel(kind = 'enemy', type = 'insurgent') {
-  const art = kind === 'enemy' ? (ART.characters['enemy_' + type] || ART.characters.enemy_insurgent) : ART.characters.player;
+  const m = soldierBase(kind, type);
+  // suicide bombers: a militia-style civilian look with an explosive vest (until they get art)
+  if (type === 'suicide_bomber' && m.torso) m.bombVest = bomberVest(m.torso);
+  return m;
+}
+
+function soldierBase(kind, type) {
+  const fallback = type === 'suicide_bomber' ? (ART.characters.enemy_militia || ART.characters.enemy_insurgent) : ART.characters.enemy_insurgent;
+  const art = kind === 'enemy' ? (ART.characters['enemy_' + type] || fallback) : ART.characters.player;
   if (art) return soldierFromArt(art);
   const c = PALETTES[kind];
   const root = new THREE.Group();
@@ -210,6 +247,8 @@ export function pickupModel(pk, tex) {
   } else if (pk.type === 'ammo') {
     box(0.28, 0.16, 0.18, 0x4d5631, 0, 0.08, 0, g);
     box(0.29, 0.03, 0.19, 0xc9a43a, 0, 0.12, 0, g);
+  } else if (pk.type === 'grenade') {
+    const gr = grenadeModel(); gr.position.y = 0.05; gr.rotation.z = 1.2; g.add(gr);
   } else if (pk.type === 'health') {
     box(0.34, 0.22, 0.24, 0xe8e4da, 0, 0.11, 0, g);
     box(0.2, 0.06, 0.25, 0xc02a1e, 0, 0.12, 0, g);

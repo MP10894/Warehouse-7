@@ -109,7 +109,7 @@ for (const [i, b] of bases.entries()) {
     return ctx;
   };
   const cal = data.weapons[pl.slots[0].w].calibre;
-  pl.reserve[cal] = data.calibres[cal];   // full up, so the first box stays where it appears
+  pl.reserve[cal] = data.calibres[cal]; pl.grenades = 5;   // full up, so the first box stays where it appears
   const label = buildOnce();
   const up = w.base.upgrades.ammo;
   const locker = up.piece && w.pieces[up.piece - 1];
@@ -123,7 +123,7 @@ for (const [i, b] of bases.entries()) {
   pl.reserve[cal] = 0;
   step(w, {}, 2);
   check(!w.pickups.includes(drop) && pl.reserve[cal] > 0, `standing next to the locker you take the box (+${pl.reserve[cal]} ${cal})`);
-  pl.reserve[cal] = data.calibres[cal];
+  pl.reserve[cal] = data.calibres[cal]; pl.grenades = 5;
   const every = Number(data.upgrades.ammo.levels[0].every);
   step(w, {}, Math.round((every - 1) * 60));
   const early = w.pickups.some(k => k.type === 'resupply');

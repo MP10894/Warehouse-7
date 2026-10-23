@@ -9,7 +9,7 @@ export function createDomHud() {
     hpFill: $('hpFill'), hpNum: $('hpNum'), arFill: $('arFill'), arNum: $('arNum'), hpBar: $('hpFill').parentElement.parentElement,
     clock: $('clock'), waveLine: $('waveLine'), goalLine: $('goalLine'), carry: $('carry'),
     wName: $('wName'), wMag: $('wMag'), wRes: $('wRes'), wAmmo: $('wAmmo'), wOther: $('wOther'),
-    ctx: $('context'), hurt: $('hurt'), storm: $('storm'), toast: $('toast')
+    ctx: $('context'), hurt: $('hurt'), storm: $('storm'), toast: $('toast'), gren: $('grenade'), grenN: $('grenadeN')
   };
   let toastT = 0, hurtA = 0;
   const cache = {};
@@ -61,6 +61,14 @@ export function createDomHud() {
       }
       const other = p.slots[1 - p.active];
       set('wo', el.wOther, 'textContent', other ? `next: ${world.data.weapons[other.w].name}` : 'second slot empty');
+
+      // grenade button: only while you have grenades; dimmed while you can't throw
+      const gn = p.alive && !p.downed ? (p.grenades || 0) : 0;
+      el.gren.hidden = gn <= 0;
+      if (gn > 0) {
+        set('gn', el.grenN, 'textContent', String(gn));
+        el.gren.classList.toggle('wait', p.throwT > 0 || p.reloadT > 0 || p.swapT > 0);
+      }
 
       const ctx = p.context;
       el.ctx.hidden = !ctx;

@@ -4371,6 +4371,71 @@
    "armour_chance": 0,
    "armour": 0,
    "district": "outskirts"
+  },
+  {
+   "id": "bombers_city",
+   "type": "suicide_bomber",
+   "behaviour": "guard",
+   "respawn": 120,
+   "weapons": {
+    "rgd5": 1
+   },
+   "armour_chance": 0,
+   "armour": 0,
+   "spawns": [
+    {
+     "x": 46,
+     "z": 72,
+     "y": 0
+    },
+    {
+     "x": 92,
+     "z": 112,
+     "y": 0
+    }
+   ],
+   "district": "city-extra"
+  },
+  {
+   "id": "bombers_outskirts",
+   "type": "suicide_bomber",
+   "behaviour": "guard",
+   "respawn": 120,
+   "weapons": {
+    "rgd5": 1
+   },
+   "armour_chance": 0,
+   "armour": 0,
+   "spawns": [
+    {
+     "x": 40,
+     "z": 192
+    },
+    {
+     "x": 118,
+     "z": 222
+    }
+   ],
+   "district": "outskirts"
+  },
+  {
+   "id": "bombers_refinery",
+   "type": "suicide_bomber",
+   "behaviour": "guard",
+   "respawn": 120,
+   "weapons": {
+    "rgd5": 1
+   },
+   "armour_chance": 0,
+   "armour": 0,
+   "spawns": [
+    {
+     "x": 176,
+     "z": 90,
+     "y": 0
+    }
+   ],
+   "district": "refinery"
   }
  ],
  "wave_spawns": [
@@ -4584,6 +4649,51 @@
    "z": 218.5,
    "y": 0,
    "district": "outskirts"
+  },
+  {
+   "type": "grenade",
+   "amount": 2,
+   "x": 249.5,
+   "z": 133.5,
+   "y": 0,
+   "district": "refinery"
+  },
+  {
+   "type": "grenade",
+   "amount": 2,
+   "x": 200.5,
+   "z": 34.5,
+   "y": 0,
+   "district": "refinery"
+  },
+  {
+   "type": "grenade",
+   "amount": 2,
+   "x": 184.5,
+   "z": 230.5,
+   "y": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "grenade",
+   "amount": 2,
+   "x": 129.5,
+   "z": 232.5,
+   "district": "outskirts"
+  },
+  {
+   "type": "grenade",
+   "amount": 2,
+   "x": 40.5,
+   "z": 92.5,
+   "district": "city-extra"
+  },
+  {
+   "type": "grenade",
+   "amount": 2,
+   "x": 86.5,
+   "z": 44.5,
+   "district": "city-extra"
   }
  ],
  "weather_zones": [
