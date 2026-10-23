@@ -60,3 +60,12 @@ Najaf's city buildings are named by size, floors and state: `s` 8 × 7 m, `m` 10
 
 Simple obstacles outside buildings: `{ "type": "lowwall" | "crate", "x", "z", "w", "d", "h" }`
 fills a `w` × `d` rectangle, `h` blocks high (default 1).
+
+## Enemy groups in level.json
+
+Each group in `enemy_groups` places a few enemies that guard or roam an area and come back
+after `respawn` seconds. Optional `"type"` picks the enemy type from the Enemies tab of
+`data/Game Data.xlsx`, written in lowercase with `_` for spaces: `"insurgent"` (the default),
+`"militia"`, `"heavy_insurgent"`. Each type only carries weapons from its *Possible Weapons
+Equipped* list; the group's `weapons` weights choose among those (a listed weapon the group
+doesn't mention gets weight 1, and weight 0 rules a weapon out).

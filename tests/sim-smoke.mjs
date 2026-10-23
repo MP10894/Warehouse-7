@@ -43,16 +43,26 @@ const fresh = (opts = {}) => createWorld({ data, levelId: 'slice', ...opts });
 const noEnemies = w => { w.enemies = []; w.groups = []; w.waves.nextT = 1e9; };
 
 // --- data
-check(data.weapons.rpg7.calibre === '40mm' && data.calibres['5.56mm'] === 270, 'weapons loaded from Weapons.xlsx, ammo caps per calibre');
+check(data.weapons.rpg7.calibre === '40mm' && data.calibres['5.56mm'] === data.weapons.m4a1.max_total - data.weapons.m4a1.mag_size, 'weapons loaded from the workbook, ammo caps per calibre');
 const semi = buildData({ weaponsRows: [], materialsCsv: '\uFEFFid;health;armour\r\nx;60;2,5\r\n', enemiesCsv: 'id\n', wavesCsv: 'wave\n', settings: {}, levels: {} });
 check(semi.materials.x.armour === 2.5, 'reads semicolon CSV with decimal commas (Hungarian Excel)');
 check(data.weapons.sig_p320.max_total === 102 && data.weapons.sig_p320.muzzle_velocity === 187, 'Weapons.xlsx formulas worked out (=+C4*6, =374/2)');
 
-check(gameData.enemies && data.enemies.insurgent.reaction_time === 0.9 && data.enemies.insurgent.burst_max === 5 && data.enemies.insurgent.ammo_drop_max === 30, 'Enemies tab read, including "2 / 5" style min / max cells');
+check(gameData.enemies && data.enemies.insurgent.reaction_time > 0 && data.enemies.insurgent.burst_max === 5 && data.enemies.insurgent.ammo_drop_max === 30, 'Enemies tab read, including "2 / 5" style min / max cells');
 {
   const w = fresh();
   const allowed = data.enemies.insurgent.allowed_weapons || [];
   check(allowed.length > 0 && w.enemies.every(e => allowed.includes(e.weapon.w)), `enemies only carry their possible weapons (${allowed.join(', ')})`);
+}
+
+// --- enemy types from the Enemies tab
+if (data.enemies.heavy_insurgent) {
+  const w = fresh();
+  const { spawnEnemy, rollLoadout } = await import('../src/sim/enemies.js');
+  const e = spawnEnemy(w, { x: 50, z: 50, weapon: 'ak47', type: 'heavy_insurgent' }) || w.enemies[w.enemies.length - 1];
+  const picks = new Set(Array.from({ length: 60 }, () => rollLoadout(w, { ak47: 3, rpg7: 1 }, 0, 0, 'heavy_insurgent').weapon));
+  check(e.type === 'heavy_insurgent' && e.armour >= data.enemies.heavy_insurgent.armour && data.enemies.heavy_insurgent.armour > 0 && picks.has('rpk') && !picks.has('rpg7'),
+    `enemy types: heavy insurgent wears its armour (${e.armour}) and carries only its own weapons (${[...picks].join(', ')})`);
 }
 
 // --- damage rule from DESIGN.md
@@ -188,11 +198,23 @@ check(w0.players.length === 1 && w0.enemies.length >= 10, `level built: ${w0.ene
   const w = fresh();
   const p = w.players[0];
   p.hp = 1e9; // can't die for this test
+  const before = run(w, 70, () => ({}));
+  check(!before.some(x => x.type === 'wave') && w.timeLeft === w.data.levels.slice.time_limit, 'no base yet: no waves and the clock does not run');
+  // secure the base: clear its defenders and step inside
+  const holders = w.data.levels.slice.enemy_groups.filter(g => g.holds_base).map(g => g.id);
+  w.enemies = w.enemies.filter(e => !holders.includes(e.group));
+  for (const g of w.groups) if (holders.includes(g.id)) g.respawnT = 1e9;
+  const a = w.base.area;
+  Object.assign(p, { x: (a.x0 + a.x1) / 2, z: (a.z0 + a.z1) / 2, y: 0 });
+  w.enemies = w.enemies.filter(e => !(e.x >= a.x0 && e.x <= a.x1 && e.z >= a.z0 && e.z <= a.z1));
   const ev = run(w, 70, () => ({}));
-  check(ev.some(x => x.type === 'wave'), 'first attack wave arrives');
+  check(w.base.claimed && ev.some(x => x.type === 'wave') && w.timeLeft < w.data.levels.slice.time_limit, 'securing the base starts the clock, and the first wave arrives');
   const w2 = fresh(); noEnemies(w2); w2.players[0].hp = 1e9;
+  run(w2, 400, () => ({}));
+  check(w2.status === 'playing', 'without a base the game goes on past the time limit');
+  w2.base.claimed = true;
   run(w2, 303, () => ({}));
-  check(w2.status === 'won', `surviving the 5-minute timer wins the level (status: ${w2.status})`);
+  check(w2.status === 'won', `holding the base until the timer ends wins the level (status: ${w2.status})`);
 }
 
 // --- health regeneration: after 7 s without damage, back up to 50 over 3 s

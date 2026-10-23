@@ -26,7 +26,7 @@ export function createScreens({ view, onStart, onCoop, onLevel }) {
         <div class="eyebrow"><span>${lv.subtitle || ''}</span><span>Working title TBD</span></div>
         <h1>${lv.title || lv.name}</h1>
         <div class="levels" role="group" aria-label="Level">${picks}</div>
-        <p>Survive ${fmtTime(world.timeLeft)}. ${lv.summary || ''}</p>
+        <p>Secure a base, then hold it for ${fmtTime(world.timeLeft)} against the attack waves. The clock and the waves only start once you have a base. ${lv.summary || ''}</p>
         <ol class="steps">${(lv.briefing || []).map(b => `<li>${b}</li>`).join('')}</ol>
         <div class="ctrl">
           <div><h2>Phone</h2><ul><li>Left thumb <kbd>move</kbd> · right thumb <kbd>look</kbd></li><li><kbd>FIRE</kbd> (drag it to aim too) · <kbd>AIM</kbd> toggles sights</li><li><kbd>RELOAD</kbd> · <kbd>SWAP</kbd> · yellow button to use</li></ul></div>
@@ -80,11 +80,11 @@ export function createScreens({ view, onStart, onCoop, onLevel }) {
     showResults(world, player, coop = null) {
       const won = world.status === 'won';
       const acc = player.stats.shots ? Math.round(player.stats.hits / player.stats.shots * 100) : 0;
-      const survived = world.data.levels[world.levelId].time_limit - world.timeLeft;
+      const survived = world.time;
       card.innerHTML = `
         <div class="eyebrow"><span>After-action report</span><span>${won ? 'Status: survived' : 'Status: killed in action'}</span></div>
         <h1>${won ? 'Held out' : 'KIA'}</h1>
-        <p>${won ? `You survived until the timer ran out${world.base.claimed ? `, holding the ${world.base.name.toLowerCase()}` : ' without a base'}.` : coop ? 'Both of you went down: the level is lost.' : 'Single-player death is permanent: the level is lost.'}</p>
+        <p>${won ? `You held the ${world.base.name.toLowerCase()} until the clock ran out.` : coop ? 'Both of you went down: the level is lost.' : 'Single-player death is permanent: the level is lost.'}</p>
         <div class="results">
           <div><span>Survived</span><b>${fmtTime(survived)}</b></div>
           <div><span>Kills</span><b>${player.stats.kills}</b></div>

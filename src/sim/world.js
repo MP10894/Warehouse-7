@@ -33,8 +33,8 @@ export function createWorld({ data, levelId, seed = 7, playerIds = ['p1'] }) {
   for (const g of level.enemy_groups) {
     world.groups.push({ id: g.id, respawnT: g.respawn || 0 });
     for (const sp of g.spawns) {
-      const lo = rollLoadout(world, g.weapons, g.armour_chance || 0, g.armour || 0);
-      spawnEnemy(world, { x: sp.x + 0.5, y: sp.y, z: sp.z + 0.5, weapon: lo.weapon, armour: lo.armour, group: g.id, behaviour: g.behaviour, radius: g.radius });
+      const lo = rollLoadout(world, g.weapons, g.armour_chance || 0, g.armour || 0, g.type);
+      spawnEnemy(world, { x: sp.x + 0.5, y: sp.y, z: sp.z + 0.5, weapon: lo.weapon, armour: lo.armour, group: g.id, behaviour: g.behaviour, radius: g.radius, type: g.type });
     }
   }
   world.startEnemies = world.enemies.length;

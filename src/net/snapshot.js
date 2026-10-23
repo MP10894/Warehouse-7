@@ -46,7 +46,7 @@ export function createHostEncoder(data) {
     encode(world) {
       const patch = {};
       const g = [cm(world.time), cm(world.timeLeft), STATUS.indexOf(world.status), world.kills,
-        world.waves.number, Math.round(world.waves.nextT * 10), world.base.claimed ? 1 : 0, world.base.upgrades.walls.level,
+        world.waves.number, world.waves.nextT === null ? -1 : Math.round(world.waves.nextT * 10), world.base.claimed ? 1 : 0, world.base.upgrades.walls.level,
         world.weather.map(z => (z.active ? Math.round(z.intensity * 100) : -1)), world.outcome ? STATUS.indexOf(world.outcome) : 0];
       patch.t = world.tick;
       patch.g = g;
@@ -118,7 +118,7 @@ export function createGuestDecoder(data) {
       world.timeLeft = timeLeft / 100;
       world.kills = kills;
       world.waves.number = waveNo;
-      world.waves.nextT = nextT / 10;
+      world.waves.nextT = nextT < 0 ? null : nextT / 10;
       world.outcome = outcome ? STATUS[outcome] : null;
       if (claimed && !world.base.claimed) world.base.claimed = true;
       for (let lv = world.base.upgrades.walls.level + 1; lv <= walls; lv++) placeWalls(world, lv);

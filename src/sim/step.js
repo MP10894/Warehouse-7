@@ -47,7 +47,8 @@ export function stepWorld(world, commands, dt) {
   if (world.status !== 'playing') return;
   world.tick++;
   world.time += dt;
-  if (!world.outcome) world.timeLeft = Math.max(0, world.timeLeft - dt);
+  // the clock only runs once a base has been secured (no base yet: no time limit)
+  if (!world.outcome && world.base.claimed) world.timeLeft = Math.max(0, world.timeLeft - dt);
   maintainNav(world);
   for (const p of world.players) updatePlayer(world, p, commands[p.id], dt);
   updateProjectiles(world, dt);

@@ -50,6 +50,7 @@ canvas.layer {
   width: min(46vw, 420px);
 }
 #clock { font-size: 30px; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+#clock.waiting { opacity: .45; }
 #clock.urgent { color: var(--red); }
 #waveLine { font-size: 17px; color: var(--amber); }
 #goalLine { font-size: 16px; color: var(--muted); }

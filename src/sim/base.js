@@ -2,6 +2,7 @@
 import { placeBlocks } from './level.js';
 import { V } from './grid.js';
 import { markNavDirty } from './nav.js';
+import { startWaves } from './waves.js';
 import { emit, dropPickup } from './damage.js';
 
 export function createBase(level) {
@@ -28,7 +29,9 @@ export function updateBase(world) {
   if (!defendersLeft && playerInside) {
     b.claimed = true;
     emit(world, { type: 'baseClaimed' });
-    emit(world, { type: 'message', text: `${b.name.toUpperCase()} SECURED — IT'S YOUR BASE` });
+    emit(world, { type: 'message', text: `${b.name.toUpperCase()} SECURED — HOLD IT UNTIL THE CLOCK RUNS OUT` });
+    // the level timer and the attack waves start now
+    startWaves(world);
   }
 }
 

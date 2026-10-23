@@ -19,17 +19,20 @@ weapons kick, walls break.
 
 1. Explore the level, fight roaming enemies, pick up weapons and ammunition they drop.
 2. Clear one of the level's base areas. The first one cleared becomes your base, for good.
+   **Securing it starts the level clock and the attack waves**; until then there is no time
+   limit and no waves.
 3. Venture out to fetch base-building items (well defended), carry them home one at a
    time, and build or improve upgrades.
-4. Every upgrade makes the enemy waves come faster and harder. Survive to the end.
+4. Every upgrade makes the enemy waves come faster and harder. Hold the base until the clock
+   runs out.
 
 ## Levels
 
 - Each level has a theme that sets its map design, objects, colours and weather.
   Winning a level unlocks the next.
 - Target size: about **1 minute to walk across** (roughly 250–300 m at walking speed).
-- **Winning:** survive until the level timer runs out. The first test uses **5 minutes**;
-  real levels will run longer.
+- **Winning:** secure a base, then hold out until the level clock runs out. The clock only
+  starts when the base is secured. The test slice uses **5 minutes**, Najaf **15**.
 - Buildings have up to 3 floors (ground + 2). Floors, structural columns, stairs and level
   boundaries are indestructible; ordinary walls can be destroyed.
 
@@ -67,9 +70,8 @@ Layout plan (agreed): [docs/NAJAF_PLAN.md](docs/NAJAF_PLAN.md) (map in
 
 - Enemies roam the level: some stay near their spawn zones, some range further.
   They respawn periodically, except in a cleared base.
-- Waves of attackers are always coming:
-  - with a base, they attack the base;
-  - without one, they head for the players' location.
+- Once a base is secured, waves of attackers keep coming and attack the base. Before
+  that there are no waves.
 - Waves get harder over time, and **build progress speeds up the escalation**.
 - For now, difficulty varies only by **number of enemies, their weapons, and whether
   they wear armour**. A full enemy roster will come later (Enemies tab of the workbook).
@@ -287,6 +289,8 @@ tag `warehouse-prototype`.
 | 2026-10-22 | First-person hands: tan tactical gloves with hard knuckle plates and grey cuffs, sleeve in the team's grey-blue |
 | 2026-10-22 | First-person hands: budget raised to 300 triangles with separate fingers and thumb; forearms added and aimed at the shoulders so hands never float |
 | 2026-10-22 | AK-47 drawn: real proportions, look from the OpenArt sheet; when aiming a rifle the view keeps its stock in front of the eye |
+| 2026-10-23 | The clock and the attack waves start only when a base is secured; before that the game has no time limit. Win = secure a base and hold it until the clock runs out |
+| 2026-10-23 | Game Data workbook: MP5, Mk14 EBR and RPK added; Militia and Heavy Insurgent enemy types; Armour column on the Enemies tab is each type's minimum armour |
 
 ## Open questions
 

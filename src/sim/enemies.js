@@ -10,12 +10,15 @@ import { stormAt } from './weather.js';
 
 const EYE = 1.55;
 
-export function spawnEnemy(world, { x, y, z, weapon, armour = 0, group = null, wave = false, behaviour = 'guard', radius = 0 }) {
-  const def = world.data.enemies.insurgent;
+export function spawnEnemy(world, { x, y, z, weapon, armour = 0, group = null, wave = false, behaviour = 'guard', radius = 0, type = 'insurgent' }) {
+  if (!world.data.enemies[type]) type = 'insurgent';
+  const def = world.data.enemies[type];
+  // the Enemies tab's Armour column is the least this type wears
+  armour = Math.max(armour, def.armour || 0);
   const wdef = world.data.weapons[weapon];
   const gy = groundAt(world, x, z, (y ?? 30) + 0.6);
   const e = {
-    id: world.nextId++, kind: 'enemy', type: 'insurgent', group, wave, behaviour, radius,
+    id: world.nextId++, kind: 'enemy', type, group, wave, behaviour, radius,
     x, y: gy, z, vy: 0, onGround: true, yaw: rand(world, 0, Math.PI * 2), pitch: 0,
     hp: def.health, armour, alive: true, state: 'idle',
     weapon: { w: weapon, mag: wdef.mag_size }, reloadT: 0, fireCd: 0,
@@ -35,7 +38,9 @@ export function pickEnemyWeapon(world, weights, type = 'insurgent') {
   const allowed = world.data.enemies[type] && world.data.enemies[type].allowed_weapons;
   if (allowed && allowed.length) {
     const w = {};
-    for (const id of allowed) w[id] = weights[id] || 0;
+    // a weapon the group or wave doesn't mention still turns up now and then (weight 1);
+    // a weight of 0 rules it out
+    for (const id of allowed) w[id] = weights[id] ?? 1;
     return weightedPick(world, w) || allowed[Math.floor(rand(world, 0, allowed.length))];
   }
   return weightedPick(world, weights) || 'ak47';
@@ -206,7 +211,7 @@ export function updateGroups(world, dt) {
     const a = world.base.area;
     if (world.base.claimed && sp.x >= a.x0 && sp.x <= a.x1 && sp.z >= a.z0 && sp.z <= a.z1) continue;
     if (world.players.some(p => p.alive && Math.hypot(p.x - sp.x, p.z - sp.z) < s.respawn_min_player_distance)) continue;
-    const lo = rollLoadout(world, gdef.weapons, gdef.armour_chance || 0, gdef.armour || 0);
-    spawnEnemy(world, { x: sp.x + 0.5, y: sp.y, z: sp.z + 0.5, weapon: lo.weapon, armour: lo.armour, group: gstate.id, behaviour: gdef.behaviour, radius: gdef.radius });
+    const lo = rollLoadout(world, gdef.weapons, gdef.armour_chance || 0, gdef.armour || 0, gdef.type);
+    spawnEnemy(world, { x: sp.x + 0.5, y: sp.y, z: sp.z + 0.5, weapon: lo.weapon, armour: lo.armour, group: gstate.id, behaviour: gdef.behaviour, radius: gdef.radius, type: gdef.type });
   }
 }

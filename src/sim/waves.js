@@ -4,8 +4,15 @@ import { rand } from './rng.js';
 import { spawnEnemy, pickEnemyWeapon } from './enemies.js';
 import { emit } from './damage.js';
 
+// Waves (and the level timer) only start once a base has been secured: until then the
+// game can go on for as long as it takes. nextT is null while waves aren't running.
 export function createWaves(settings) {
-  return { index: 0, number: 0, nextT: settings.waves.first_wave_at, interval: settings.waves.interval_start };
+  return { index: 0, number: 0, nextT: null, interval: settings.waves.interval_start };
+}
+
+/** A base was just secured: the first wave comes `first_wave_at` seconds later. */
+export function startWaves(world) {
+  if (world.waves.nextT === null) world.waves.nextT = world.time + world.data.settings.waves.first_wave_at;
 }
 
 function waveRow(world, index) {
@@ -43,13 +50,13 @@ export function spawnWave(world) {
 }
 
 export function updateWaves(world) {
-  if (world.time >= world.waves.nextT) spawnWave(world);
+  if (world.waves.nextT !== null && world.time >= world.waves.nextT) spawnWave(world);
 }
 
 /** Building speeds up the next wave and makes later ones bigger. */
 export function onBuild(world) {
   const s = world.data.settings.waves;
   const w = world.waves;
-  w.nextT = Math.max(world.time + 5, w.nextT - s.build_interval_cut);
+  if (w.nextT !== null) w.nextT = Math.max(world.time + 5, w.nextT - s.build_interval_cut);
   w.index += s.build_wave_bump;
 }
