@@ -415,6 +415,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Every district has a full set of upgrade crates 40–80 m from its base; a crate returns to where it was found |
 | 2026-10-23 | The ammunition supply doubles as an armoury: MP5 (level 1), M4A1 (level 2), Mk14-EBR (level 3), full load; the old weapon is dropped beside the locker |
 | 2026-10-23 | Drifting smoke (some burnt wrecks, a few rubbish fires in the city) and swaying washing; no birds over the city |
+| 2026-10-23 | MP5 drawn (MP5A2, fixed stock) from the side view of its OpenArt sheet; the stray prong under the handguard left out; open sights you aim through; magazine tips out and back in on a reload, charging handle pulled on an empty one |
 
 ## Open questions
 

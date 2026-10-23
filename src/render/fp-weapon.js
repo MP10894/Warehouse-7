@@ -124,6 +124,7 @@ export function createFpWeapon() {
     ak47: { kind: 'rock', grab: [-0.015, -0.17, 0.045], out: 0.65 },
     rpk: { kind: 'rock', grab: [-0.01, -0.16, 0.05], out: 0.5 },
     mk14ebr: { kind: 'rock', grab: [-0.012, -0.085, 0.035], out: 0.55 },   // M14 magazines rock in too
+    mp5: { kind: 'rock', grab: [-0.012, -0.077, -0.02], out: 0.3 },        // the curved magazine tips out a little
     sig_p320: { kind: 'drop', grab: [-0.012, -0.085, 0.012], slideBack: 0.028 }
   };
   const ROCK_TILT = { rz: -0.85, ry: 0.4, rx: 0.4, py: 0.07, px: -0.1, pz: -0.04 };

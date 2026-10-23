@@ -21,7 +21,7 @@ const CHARACTER_PARTS = ['body', 'torso', 'vest', 'head', 'upper_arm_R', 'lower_
   'upper_leg_R', 'lower_leg_R', 'upper_leg_L', 'lower_leg_L', 'gun_mount'];
 const BUDGET = { character: 300, weapon: 300, item: 60, upgrade: 150, hands: 300 };
 // weapon length in metres, from the placeholders (a model may be 50% shorter or longer)
-const WEAPON_LENGTH = { sig_p320: 0.2, m4a1: 0.85, ak47: 0.88, rpg7: 1.1, mk14ebr: 0.93 };
+const WEAPON_LENGTH = { sig_p320: 0.2, m4a1: 0.85, ak47: 0.88, rpg7: 1.1, mk14ebr: 0.93, mp5: 0.68 };
 
 const base = p => p.split('/').pop().replace(/\.(png|glb)$/, '');
 const folder = p => p.split('/').slice(-2, -1)[0];
