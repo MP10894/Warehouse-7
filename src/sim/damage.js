@@ -5,6 +5,7 @@ import { V, V_INFO, getV, cellXYZ, gidx } from './grid.js';
 import { terrainHeight } from './terrain.js';
 import { rand } from './rng.js';
 import { markNavDirty } from './nav.js';
+import { onPieceDestroyed } from './base.js';
 
 export const emit = (world, ev) => world.events.push(ev);
 
@@ -119,8 +120,11 @@ export function destroyPiece(world, p) {
     // rubble is decoration only (see grid.js), so it can go anywhere without blocking anyone
     if (supported) g.cells[gidx(g, x, y, z)] = V.RUBBLE;
   }
+  // a burst fuel tank leaves a ring of scorched debris where it stood
+  if (p.tank) for (const i of p.tank.floor) if (g.cells[i] === V.AIR) g.cells[i] = V.RUBBLE;
   p.cells = [];
   world.voxelVersion++;
+  onPieceDestroyed(world, p);
   if (changed.length) {
     const xyz = changed.map(i => cellXYZ(g, i));
     markNavDirty(world, Math.min(...xyz.map(c => c[0])), Math.min(...xyz.map(c => c[2])), Math.max(...xyz.map(c => c[0])), Math.max(...xyz.map(c => c[2])));
@@ -153,6 +157,66 @@ export function explode(world, x, y, z, wdef, source) {
           if (pid) hit.add(pid);
         }
     for (const pid of hit) damagePiece(world, pid, wdef.damage_environment);
+  }
+  // a rocket that bursts against a fuel tank sets the whole tank off
+  if (wdef.projectile === 'rocket') {
+    const tank = tankNear(world, x, y, z, 1.5);
+    if (tank) tankExplode(world, tank, wdef, source);
+  }
+}
+
+function tankNear(world, x, y, z, r) {
+  const g = world.grid;
+  for (let cy = Math.floor(y - r); cy <= Math.floor(y + r); cy++)
+    for (let cz = Math.floor(z - r); cz <= Math.floor(z + r); cz++)
+      for (let cx = Math.floor(x - r); cx <= Math.floor(x + r); cx++) {
+        if (cx < 0 || cy < 0 || cz < 0 || cx >= g.w || cy >= g.h || cz >= g.d) continue;
+        const pid = world.pieceOf[gidx(g, cx, cy, cz)];
+        const p = pid ? world.pieces[pid - 1] : null;
+        if (p && p.alive && p.tank) return p;
+      }
+  return null;
+}
+
+/**
+ * A fuel tank blows up: it is gone, and everyone and everything within the blast radius of
+ * its wall is hurt, most at the wall, nothing at the edge. The blast does not set off other
+ * tanks (no chain reactions). Sizes are in settings.json → hazards.
+ */
+export function tankExplode(world, p, wdef, source) {
+  const hz = world.data.settings.hazards || {};
+  const R = hz.tank_blast_radius ?? 12, f = hz.tank_blast_damage_factor ?? 4;
+  const t = p.tank, top = t.y0 + t.h;
+  destroyPiece(world, p);
+  emit(world, { type: 'explosion', x: t.cx, y: t.y0 + t.h * 0.6, z: t.cz, r: t.r + R * 0.6, big: true });
+  emit(world, { type: 'message', text: 'FUEL TANK EXPLODED' });
+  // distance from the tank's wall (or roof)
+  const away = (x, y, z) => {
+    const out = Math.max(0, Math.hypot(x - t.cx, z - t.cz) - t.r);
+    const up = Math.max(0, y - top);
+    return Math.hypot(out, up);
+  };
+  for (const a of [...world.players, ...world.enemies]) {
+    if (!a.alive) continue;
+    const d = away(a.x, a.y + 0.9, a.z);
+    if (d > R) continue;
+    const k = 1 - d / R;
+    damageActor(world, a, wdef.damage_health * f * k, wdef.damage_armour * f * k, source);
+  }
+  const g = world.grid, hit = new Map(), reach = t.r + R;
+  for (let cy = 0; cy < Math.min(g.h, top + R); cy++)
+    for (let cz = Math.floor(t.cz - reach); cz <= Math.floor(t.cz + reach); cz++)
+      for (let cx = Math.floor(t.cx - reach); cx <= Math.floor(t.cx + reach); cx++) {
+        if (cx < 0 || cz < 0 || cx >= g.w || cz >= g.d) continue;
+        const pid = world.pieceOf[gidx(g, cx, cy, cz)];
+        if (!pid || hit.has(pid)) continue;
+        const d = away(cx + 0.5, cy + 0.5, cz + 0.5);
+        if (d <= R) hit.set(pid, 1 - d / R);
+      }
+  for (const [pid, k] of hit) {
+    const q = world.pieces[pid - 1];
+    if (q.tank) continue; // no chain reactions
+    damagePiece(world, pid, wdef.damage_environment * f * k);
   }
 }
 

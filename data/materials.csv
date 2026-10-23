@@ -3,3 +3,5 @@ wall,Concrete wall,60,40,yes
 lowwall,Low stone wall,80,40,yes
 crate,Wooden crate,30,0,no
 sandbags,Sandbag wall,120,60,yes
+tank,Fuel tank,100000,100000,no
+locker,Upgrade locker,150,60,no

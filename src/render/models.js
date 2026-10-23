@@ -210,6 +210,14 @@ export function pickupModel(pk, tex) {
   } else if (pk.type === 'ammo') {
     box(0.28, 0.16, 0.18, 0x4d5631, 0, 0.08, 0, g);
     box(0.29, 0.03, 0.19, 0xc9a43a, 0, 0.12, 0, g);
+  } else if (pk.type === 'health') {
+    box(0.34, 0.22, 0.24, 0xe8e4da, 0, 0.11, 0, g);
+    box(0.2, 0.06, 0.25, 0xc02a1e, 0, 0.12, 0, g);
+    box(0.06, 0.18, 0.25, 0xc02a1e, 0, 0.12, 0, g);
+  } else if (pk.type === 'resupply') {
+    box(0.42, 0.24, 0.26, 0x4d5631, 0, 0.12, 0, g);
+    box(0.43, 0.04, 0.27, 0xc9a43a, 0, 0.18, 0, g);
+    box(0.14, 0.04, 0.06, 0x2a2a28, 0, 0.26, 0, g);
   } else if (pk.type === 'armour') {
     box(0.42, 0.42, 0.12, 0x2e3a2c, 0, 0.25, 0, g);
     box(0.3, 0.12, 0.13, 0x4a5a44, 0, 0.32, 0, g);

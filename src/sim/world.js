@@ -24,7 +24,8 @@ export function createWorld({ data, levelId, seed = 7, playerIds = ['p1'] }) {
     cache: {} // derived data (navigation); rebuilt on demand, never sent over a network
   };
   buildLevel(world, level);
-  world.base = createBase(level);
+  world.basePieceCount = world.pieces.length; // pieces after this were put up by building
+  world.base = createBase(level, data.upgrades);
   world.waves = createWaves();
   world.weather = createWeather(level);
 

@@ -20,7 +20,7 @@ const loadLevel = id => {
 const gameData = gameDataFromXlsx(readFileSync(new URL('../data/Game Data.xlsx', import.meta.url)), byKey(parseCsv(read('data/enemies.csv')), 'id'));
 const data = buildData({
   weaponsRows: gameData.weapons, enemiesRows: gameData.enemies, materialsCsv: read('data/materials.csv'),
-  enemiesCsv: read('data/enemies.csv'), wavesCsv: read('data/waves.csv'), settings: JSON.parse(read('data/settings.json')),
+  enemiesCsv: read('data/enemies.csv'), wavesCsv: read('data/waves.csv'), upgradesCsv: read('data/upgrades.csv'), settings: JSON.parse(read('data/settings.json')),
   levels: { najaf: loadLevel('najaf') }
 });
 let failures = 0;
@@ -102,10 +102,13 @@ check(bad.length === 0, `the roof of every building with stairs can be reached${
   const host = createWorld({ data, levelId: 'najaf', seed: 21 });
   const guest = createWorld({ data, levelId: 'najaf', seed: 21, playerIds: ['p1', 'p2'] });
   const enc = createHostEncoder(data), dec = createGuestDecoder(data);
+  // (only enemies within 90 m of a player are sent: put the host's player among them)
+  const hv = host.enemies.find(e => e.type === 'heavy_insurgent');
+  host.players[0].x = hv.x; host.players[0].z = hv.z;
   enc.record(host, []);
   guest.enemies = [];   // the partner learns about the enemies only from the host's messages
   dec.apply(guest, enc.encode(host), 'p2');
-  const want = host.enemies.filter(e => e.type === 'heavy_insurgent').map(e => e.id);
+  const want = host.enemies.filter(e => e.type === 'heavy_insurgent' && Math.abs(e.x - hv.x) < 90 && Math.abs(e.z - hv.z) < 90).map(e => e.id);
   const got = guest.enemies.filter(e => e.type === 'heavy_insurgent').map(e => e.id);
   check(want.length > 0 && want.every(id => got.includes(id)), `co-op partner gets each enemy's type (${got.length} heavy insurgents)`);
 }

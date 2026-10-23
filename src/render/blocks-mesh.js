@@ -17,7 +17,13 @@ const LOOK = {
   [V.RAMP_E]: { tex: 'stairs', scale: 1 },
   [V.RAMP_W]: { tex: 'stairs', scale: 1 },
   [V.RAMP_N]: { tex: 'stairs', scale: 1 },
-  [V.RAMP_S]: { tex: 'stairs', scale: 1 }
+  [V.RAMP_S]: { tex: 'stairs', scale: 1 },
+  [V.METAL]: { tex: 'metal', scale: 0.5 },
+  [V.PIPE]: { tex: 'pipe', scale: 1 },
+  [V.TANK]: { tex: 'tank', scale: 0.25 },
+  [V.ROCK]: { tex: 'rock', scale: 0.5 },
+  [V.FENCE]: { tex: 'fence', scale: 1 },
+  [V.LOCKER]: { tex: 'locker', scale: 1 }
 };
 const SUN_H = new THREE.Vector2(SUN.x, SUN.z).normalize();
 
@@ -26,7 +32,9 @@ export function createBlockMeshes(scene, world, tex) {
   const cw = Math.ceil(g.w / CHUNK), cd = Math.ceil(g.d / CHUNK);
   const chunks = new Map();
   const mats = {};
-  const mat = k => mats[k] || (mats[k] = new THREE.MeshBasicMaterial({ map: tex[k], vertexColors: true, side: THREE.DoubleSide }));
+  const mat = k => mats[k] || (mats[k] = new THREE.MeshBasicMaterial({ map: tex[k], vertexColors: true, side: THREE.DoubleSide, ...(k === 'fence' ? { alphaTest: 0.5 } : {}) }));
+  // see-through blocks (fences) don't hide the faces of what is next to them
+  const hides = t => isFull(t) && t !== V.FENCE;
   const decalsByChunk = new Map();
   for (const [x, y, z] of world.level.decals) {
     const key = Math.floor(x / CHUNK) + Math.floor(z / CHUNK) * cw;
@@ -62,14 +70,20 @@ export function createBlockMeshes(scene, world, tex) {
           const t = cell(x, y, z);
           if (t === V.AIR) continue;
           const L = LOOK[t], k = L.tex, s = L.scale;
-          if (isFull(t)) {
+          if (t === V.FENCE) {
+            // one chain-link panel down the middle of the cell, along the fence line
+            const alongX = cell(x + 1, y, z) === V.FENCE || cell(x - 1, y, z) === V.FENCE || !(cell(x, y, z + 1) === V.FENCE || cell(x, y, z - 1) === V.FENCE);
+            if (alongX) quad(k, [[x, y, z + 0.5], [x + 1, y, z + 0.5], [x + 1, y + 1, z + 0.5], [x, y + 1, z + 0.5]], [[x, y], [x + 1, y], [x + 1, y + 1], [x, y + 1]], 0.9);
+            else quad(k, [[x + 0.5, y, z], [x + 0.5, y, z + 1], [x + 0.5, y + 1, z + 1], [x + 0.5, y + 1, z]], [[z, y], [z + 1, y], [z + 1, y + 1], [z, y + 1]], 0.9);
+          } else if (isFull(t)) {
+            const covers = hides;
             // +x / −x / +z / −z / top / bottom
-            if (!isFull(cell(x + 1, y, z))) quad(k, [[x + 1, y, z + 1], [x + 1, y, z], [x + 1, y + 1, z], [x + 1, y + 1, z + 1]], [[z * s, y * s], [(z + 1) * s, y * s], [(z + 1) * s, (y + 1) * s], [z * s, (y + 1) * s]], sideShade(1, 0) * (roofed(x + 1, y + 1, z) ? 0.62 : 1));
-            if (!isFull(cell(x - 1, y, z))) quad(k, [[x, y, z], [x, y, z + 1], [x, y + 1, z + 1], [x, y + 1, z]], [[z * s, y * s], [(z + 1) * s, y * s], [(z + 1) * s, (y + 1) * s], [z * s, (y + 1) * s]], sideShade(-1, 0) * (roofed(x - 1, y + 1, z) ? 0.62 : 1));
-            if (!isFull(cell(x, y, z + 1))) quad(k, [[x, y, z + 1], [x + 1, y, z + 1], [x + 1, y + 1, z + 1], [x, y + 1, z + 1]], [[x * s, y * s], [(x + 1) * s, y * s], [(x + 1) * s, (y + 1) * s], [x * s, (y + 1) * s]], sideShade(0, 1) * (roofed(x, y + 1, z + 1) ? 0.62 : 1));
-            if (!isFull(cell(x, y, z - 1))) quad(k, [[x + 1, y, z], [x, y, z], [x, y + 1, z], [x + 1, y + 1, z]], [[x * s, y * s], [(x + 1) * s, y * s], [(x + 1) * s, (y + 1) * s], [x * s, (y + 1) * s]], sideShade(0, -1) * (roofed(x, y + 1, z - 1) ? 0.62 : 1));
-            if (!isFull(cell(x, y + 1, z))) quad(k, [[x, y + 1, z], [x, y + 1, z + 1], [x + 1, y + 1, z + 1], [x + 1, y + 1, z]], [[x * s, z * s], [x * s, (z + 1) * s], [(x + 1) * s, (z + 1) * s], [(x + 1) * s, z * s]], roofed(x, y + 2, z) ? 0.66 : 1.05);
-            if (!isFull(cell(x, y - 1, z)) && y > 0) quad(k, [[x, y, z], [x + 1, y, z], [x + 1, y, z + 1], [x, y, z + 1]], [[x * s, z * s], [(x + 1) * s, z * s], [(x + 1) * s, (z + 1) * s], [x * s, (z + 1) * s]], 0.42);
+            if (!covers(cell(x + 1, y, z))) quad(k, [[x + 1, y, z + 1], [x + 1, y, z], [x + 1, y + 1, z], [x + 1, y + 1, z + 1]], [[z * s, y * s], [(z + 1) * s, y * s], [(z + 1) * s, (y + 1) * s], [z * s, (y + 1) * s]], sideShade(1, 0) * (roofed(x + 1, y + 1, z) ? 0.62 : 1));
+            if (!covers(cell(x - 1, y, z))) quad(k, [[x, y, z], [x, y, z + 1], [x, y + 1, z + 1], [x, y + 1, z]], [[z * s, y * s], [(z + 1) * s, y * s], [(z + 1) * s, (y + 1) * s], [z * s, (y + 1) * s]], sideShade(-1, 0) * (roofed(x - 1, y + 1, z) ? 0.62 : 1));
+            if (!covers(cell(x, y, z + 1))) quad(k, [[x, y, z + 1], [x + 1, y, z + 1], [x + 1, y + 1, z + 1], [x, y + 1, z + 1]], [[x * s, y * s], [(x + 1) * s, y * s], [(x + 1) * s, (y + 1) * s], [x * s, (y + 1) * s]], sideShade(0, 1) * (roofed(x, y + 1, z + 1) ? 0.62 : 1));
+            if (!covers(cell(x, y, z - 1))) quad(k, [[x + 1, y, z], [x, y, z], [x, y + 1, z], [x + 1, y + 1, z]], [[x * s, y * s], [(x + 1) * s, y * s], [(x + 1) * s, (y + 1) * s], [x * s, (y + 1) * s]], sideShade(0, -1) * (roofed(x, y + 1, z - 1) ? 0.62 : 1));
+            if (!covers(cell(x, y + 1, z))) quad(k, [[x, y + 1, z], [x, y + 1, z + 1], [x + 1, y + 1, z + 1], [x + 1, y + 1, z]], [[x * s, z * s], [x * s, (z + 1) * s], [(x + 1) * s, (z + 1) * s], [(x + 1) * s, z * s]], roofed(x, y + 2, z) ? 0.66 : 1.05);
+            if (!covers(cell(x, y - 1, z)) && y > 0) quad(k, [[x, y, z], [x + 1, y, z], [x + 1, y, z + 1], [x, y, z + 1]], [[x * s, z * s], [(x + 1) * s, z * s], [(x + 1) * s, (z + 1) * s], [x * s, (z + 1) * s]], 0.42);
           } else if (t === V.RUBBLE) {
             const h = 0.22, sh = roofed(x, y + 1, z) ? 0.62 : 1; // low: people walk through it
             quad(k, [[x, y + h, z], [x, y + h, z + 1], [x + 1, y + h, z + 1], [x + 1, y + h, z]], [[0, 0], [0, 1], [1, 1], [1, 0]], 0.95 * sh);

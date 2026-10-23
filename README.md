@@ -1,7 +1,7 @@
 # Ruined City (working title)
 
 A retro low-poly survival shooter built with [Three.js](https://threejs.org), playable in a
-phone or desktop browser. The current build has two levels, picked on the start screen: Najaf (Level 1, city district only so far) and the small test slice. Claim a base in a
+phone or desktop browser. The current build has two levels, picked on the start screen: Najaf (Level 1: city, refinery and outskirts, with three possible bases) and the small test slice. Claim a base in a
 ruined desert city, fortify it, and survive escalating enemy waves. See `DESIGN.md`.
 
 ## Run it on your computer
@@ -43,6 +43,7 @@ also work. Details in `DESIGN.md` → "How co-op works".
 | `data/Game Data.xlsx` | The game-data workbook. **Weapons** tab: every weapon attribute. **Enemies** tab: health, speed, sight, reaction time, aim error in degrees, bursts, ammo drops, and which weapons each enemy type can carry. Edit in Excel as normal; formulas and "2 / 5" style min / max cells are fine |
 | `data/enemies.csv` | Fallback enemy values, used for anything the Enemies tab leaves out |
 | `data/waves.csv` | How big and how well armed each attack wave is. `type_<enemy>` columns set the mix of enemy types (e.g. `type_militia`), `weight_<weapon>` columns the weapons |
+| `data/upgrades.csv` | Base upgrades, one row per level: the crate it takes, wall height, and what a locker hands out (`resupply`, `health` or `armour`), how often (`every`, seconds after the last was taken) and how much (`amount`: % of each gun's ammunition, or health / armour points) |
 | `data/materials.csv` | How tough each breakable wall, crate and sandbag is |
 | `data/settings.json` | Player speed, look sensitivity, field of view, recoil and bloom feel, wave timing, weather |
 

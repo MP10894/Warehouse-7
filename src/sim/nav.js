@@ -266,7 +266,7 @@ export function maintainNav(world) {
     c.playerKey = key;
     c.playerFieldAt = world.time;
   }
-  if (!c.baseField && world.base) {
+  if (!c.baseField && world.base && world.base.claimed && world.base.area) {
     const a = world.base.area, src = [];
     const cx = Math.floor((a.x0 + a.x1) / 2), cz = Math.floor((a.z0 + a.z1) / 2);
     for (let z = cz - 3; z <= cz + 3; z++) for (let x = cx - 3; x <= cx + 3; x++) {

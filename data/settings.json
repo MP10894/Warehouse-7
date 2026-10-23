@@ -74,11 +74,21 @@
     "break_after_wave": 20,
     "max_attackers_alive": 20,
     "build_interval_cut": 10,
-    "build_wave_bump": 1
+    "build_wave_bump": 1,
+    "min_spawn_distance": 60
   },
   "base": {
     "item_respawn": 30,
     "build_range": 2.2
+  },
+  "hazards": {
+    "tank_blast_radius": 12,
+    "tank_blast_damage_factor": 4
+  },
+  "markers": {
+    "spot_size": 2.2,
+    "faint_opacity": 0.55,
+    "pulse_speed": 4
   },
   "weather": {
     "fade_time": 6,

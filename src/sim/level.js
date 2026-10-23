@@ -129,22 +129,51 @@ function stampBuilding(world, text, ox, oz, turn = 0, mirror = false) {
   }
 }
 
+// Prop types for level.json → block type and (for breakable ones) materials.csv row.
+const PROP = {
+  crate: [V.CRATE, 'crate'], lowwall: [V.LOWWALL, 'lowwall'], sandbag: [V.SANDBAG, 'sandbags'],
+  metal: [V.METAL, null], pipe: [V.PIPE, null], rock: [V.ROCK, null], fence: [V.FENCE, null],
+  slab: [V.SLAB, null], column: [V.COLUMN, null], tank: [V.TANK, 'tank']
+};
+
+/**
+ * Simple shapes placed straight from level.json:
+ *   box:      { type, x, z, w, d, h, y }   w × d metres from (x, z), h blocks high, y metres off the ground
+ *   cylinder: { type, shape: "cylinder", x, z, r, h, y }   centred on (x, z)
+ * A "tank" is always a cylinder and is one piece: an RPG hit sets the whole tank off.
+ */
 function stampProp(world, p) {
   const g = world.grid;
-  const type = p.type === 'crate' ? V.CRATE : V.LOWWALL;
-  const material = p.type === 'crate' ? 'crate' : 'lowwall';
-  for (let dz = 0; dz < (p.d || 1); dz++) {
-    for (let dx = 0; dx < (p.w || 1); dx++) {
-      const x = p.x + dx, z = p.z + dz;
-      const y0 = Math.max(0, Math.round(terrainHeight(world.terrain, x + 0.5, z + 0.5)));
-      const cells = [];
-      for (let y = y0; y < y0 + (p.h || 1); y++) {
-        if (getV(g, x, y, z) !== V.AIR) continue;
-        setV(g, x, y, z, type);
-        cells.push(gidx(g, x, y, z));
-      }
-      if (cells.length) addPiece(world, material, cells);
+  const [type, material] = PROP[p.type] || PROP.lowwall;
+  const cyl = p.shape === 'cylinder' || p.type === 'tank';
+  const cols = [];
+  if (cyl) {
+    const r = p.r || 1;
+    for (let z = Math.floor(p.z - r); z <= Math.ceil(p.z + r); z++)
+      for (let x = Math.floor(p.x - r); x <= Math.ceil(p.x + r); x++)
+        if ((x + 0.5 - p.x) ** 2 + (z + 0.5 - p.z) ** 2 <= r * r) cols.push([x, z]);
+  } else {
+    for (let dz = 0; dz < (p.d || 1); dz++) for (let dx = 0; dx < (p.w || 1); dx++) cols.push([p.x + dx, p.z + dz]);
+  }
+  const all = [], floor = [];
+  let y0min = Infinity;
+  for (const [x, z] of cols) {
+    const y0 = Math.max(0, Math.round(terrainHeight(world.terrain, x + 0.5, z + 0.5)) + (p.y || 0));
+    y0min = Math.min(y0min, y0);
+    const cells = [];
+    for (let y = y0; y < y0 + (p.h || 1); y++) {
+      if (!inGrid(g, x, y, z) || getV(g, x, y, z) !== V.AIR) continue;
+      setV(g, x, y, z, type);
+      cells.push(gidx(g, x, y, z));
+      if (y === y0) floor.push(gidx(g, x, y, z));
     }
+    if (!cells.length) continue;
+    if (p.type === 'tank') all.push(...cells);
+    else if (material) addPiece(world, material, cells);
+  }
+  if (p.type === 'tank' && all.length) {
+    const id = addPiece(world, 'tank', all);
+    world.pieces[id - 1].tank = { cx: p.x, cz: p.z, r: p.r || 1, y0: y0min, h: p.h || 1, floor };
   }
 }
 

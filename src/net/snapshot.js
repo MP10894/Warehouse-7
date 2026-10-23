@@ -3,11 +3,13 @@
 // The guest builds the same level from the same seed, so only moving and changing
 // things travel: people, bullets, pickups, broken walls, base walls, clock, events.
 import { destroyPiece } from '../sim/damage.js';
-import { placeWalls } from '../sim/base.js';
+import { claimBase, applyUpgrade } from '../sim/base.js';
 
 const STATES = ['idle', 'chase', 'aim', 'fire', 'pain', 'dead'];
 const STATUS = ['playing', 'won', 'lost'];
-const PICKUP_TYPES = ['weapon', 'ammo', 'armour', 'item'];
+const PICKUP_TYPES = ['weapon', 'ammo', 'armour', 'item', 'health', 'resupply'];
+// enemies further than this from both players are not sent (the guest can't see that far)
+const SEND_RANGE = 90;
 // events the guest needs to replay for sound, effects and HUD (broken walls are rebuilt
 // from the piece list instead, so 'blocks' is not forwarded)
 const FORWARD = new Set(['shot', 'impact', 'explosion', 'hurt', 'death', 'downed', 'revived', 'pickup', 'message',
@@ -25,7 +27,7 @@ export function createHostEncoder(data) {
   const enemyIds = Object.keys(data.enemies);
   const wIdx = id => weaponIds.indexOf(id);
   const ring = [];
-  let seq = 0, lastPickups = '', lastPieces = '';
+  let seq = 0, lastPickups = '', lastPieces = '', lastLog = null;
 
   function slimEvent(ev, tick) {
     const out = { q: ++seq, k: tick };
@@ -47,7 +49,7 @@ export function createHostEncoder(data) {
     encode(world) {
       const patch = {};
       const g = [cm(world.time), cm(world.timeLeft), STATUS.indexOf(world.status), world.kills,
-        world.waves.number, world.waves.nextT === null ? -1 : Math.round(world.waves.nextT * 10), world.base.claimed ? 1 : 0, world.base.upgrades.walls.level,
+        world.waves.number, world.waves.nextT === null ? -1 : Math.round(world.waves.nextT * 10), world.base.claimed ? 1 : 0, world.base.claimed ? world.base.index : -1,
         world.weather.map(z => (z.active ? Math.round(z.intensity * 100) : -1)), world.outcome ? STATUS.indexOf(world.outcome) : 0,
         world.waves.queue.length];
       patch.t = world.tick;
@@ -64,7 +66,8 @@ export function createHostEncoder(data) {
         Math.round(p.bloom * 1000),
         `${p.stats.shots}|${p.stats.hits}|${p.stats.kills}`
       ]);
-      patch.n = world.enemies.filter(e => e.alive || e.deadT < 12).map(e => [
+      const near = (e, r) => world.players.some(p => Math.abs(p.x - e.x) < r && Math.abs(p.z - e.z) < r);
+      patch.n = world.enemies.filter(e => (e.alive && (e.wave || near(e, SEND_RANGE))) || (!e.alive && e.deadT < 12 && near(e, 60))).map(e => [
         e.id, cm(e.x), cm(e.y), cm(e.z), mr(e.yaw), mr(e.pitch || 0), Math.ceil(e.armour), STATES.indexOf(e.state), wIdx(e.weapon.w),
         (e.alive ? 1 : 0) | (e.moving ? 2 : 0) | (e.aiming ? 4 : 0) | (e.wave ? 8 : 0),
         Math.round(e.animT * 10), Math.round(e.deadT * 10), enemyIds.indexOf(e.type)
@@ -77,6 +80,10 @@ export function createHostEncoder(data) {
         k.type === 'weapon' ? wIdx(k.weapon) : k.type === 'ammo' ? k.calibre : k.type === 'item' ? k.item : k.amount, k.mag ?? k.amount ?? 0]));
       if (pk !== lastPickups) { patch.k = JSON.parse(pk); lastPickups = pk; }
 
+      // what has been built and broken in the base, in order (see base.js → onPieceDestroyed)
+      const log = world.base.log.join(',');
+      if (log !== lastLog) { patch.u = log; lastLog = log; }
+
       // broken pieces as a bit set, base64 (a few dozen characters)
       const bits = new Uint8Array(Math.ceil(world.pieces.length / 8));
       world.pieces.forEach((p, i) => { if (!p.alive) bits[i >> 3] |= 1 << (i & 7); });
@@ -87,7 +94,7 @@ export function createHostEncoder(data) {
 
       // the room keeps every field, so the budget covers the parts not resent this time too;
       // stay under the 4 KB limit by trimming the least important parts first
-      const kept = (patch.k ? 0 : lastPickups.length) + (patch.d ? 0 : lastPieces.length) + 250;
+      const kept = (patch.k ? 0 : lastPickups.length) + (patch.d ? 0 : lastPieces.length) + (patch.u !== undefined ? 0 : (lastLog || '').length) + 250;
       const size = () => JSON.stringify(patch).length + kept;
       const LIMIT = 3900;
       while (size() > LIMIT && patch.b.length) patch.b.shift();
@@ -98,7 +105,7 @@ export function createHostEncoder(data) {
     },
 
     /** Everything again (when a guest joins mid-way, or after a reconnect). */
-    forceFull() { lastPickups = ''; lastPieces = ''; }
+    forceFull() { lastPickups = ''; lastPieces = ''; lastLog = null; }
   };
 }
 
@@ -106,16 +113,25 @@ export function createHostEncoder(data) {
 export function createGuestDecoder(data) {
   const weaponIds = Object.keys(data.weapons);
   const enemyIds = Object.keys(data.enemies);
-  let lastTick = -1, lastSeq = 0;
+  const upgradeIds = Object.keys(data.upgrades || {});
+  let lastTick = -1, lastSeq = 0, applied = 0;
+
+  function applyBroken(world, d) {
+    const bin = atob(d);
+    world.pieces.forEach((p, i) => {
+      const broken = (bin.charCodeAt(i >> 3) >> (i & 7)) & 1;
+      if (broken && p.alive) destroyPiece(world, p); // emits a local 'blocks' event for the renderer
+    });
+  }
 
   return {
-    reset() { lastTick = -1; lastSeq = 0; },
+    reset() { lastTick = -1; lastSeq = 0; applied = 0; },
 
     apply(world, snap, localId) {
       const replay = [];
       if (!snap || typeof snap.t !== 'number' || snap.t <= lastTick) return replay;
       lastTick = snap.t;
-      const [time, timeLeft, status, kills, waveNo, nextT, claimed, walls, weather, outcome, queued] = snap.g;
+      const [time, timeLeft, status, kills, waveNo, nextT, claimed, baseIndex, weather, outcome, queued] = snap.g;
       world.tick = snap.t;
       world.time = time / 100;
       world.timeLeft = timeLeft / 100;
@@ -124,8 +140,10 @@ export function createGuestDecoder(data) {
       world.waves.nextT = nextT < 0 ? null : nextT / 10;
       world.waves.queued = queued || 0;   // attackers waiting to come in (host only knows who)
       world.outcome = outcome ? STATUS[outcome] : null;
-      if (claimed && !world.base.claimed) world.base.claimed = true;
-      for (let lv = world.base.upgrades.walls.level + 1; lv <= walls; lv++) placeWalls(world, lv);
+      if (claimed && !world.base.claimed) {
+        if (baseIndex >= 0) claimBase(world, baseIndex, true);
+        else world.base.claimed = true;
+      }
       (weather || []).forEach((v, i) => {
         const z = world.weather[i];
         if (!z) return;
@@ -187,12 +205,22 @@ export function createGuestDecoder(data) {
         });
       }
 
-      if (snap.d) {
-        const bin = atob(snap.d);
-        world.pieces.forEach((p, i) => {
-          const broken = (bin.charCodeAt(i >> 3) >> (i & 7)) & 1;
-          if (broken && p.alive) destroyPiece(world, p); // emits a local 'blocks' event for the renderer
-        });
+      // breakages first, then the host's builds and base breakages in their order, then
+      // breakages again (pieces that were built and broken since)
+      if (snap.d) applyBroken(world, snap.d);
+      if (typeof snap.u === 'string' && world.base.claimed) {
+        const log = snap.u ? snap.u.split(',') : [];
+        for (; applied < log.length; applied++) {
+          const tok = log[applied];
+          if (tok[0] === '-') {
+            const p = world.pieces[world.basePieceCount + Number(tok.slice(1)) - 1];
+            if (p && p.alive) destroyPiece(world, p);
+          } else {
+            const [i, lv] = tok.split('.').map(Number);
+            if (upgradeIds[i]) applyUpgrade(world, upgradeIds[i], lv);
+          }
+        }
+        if (snap.d) applyBroken(world, snap.d);
       }
 
       for (const ev of snap.e || []) {

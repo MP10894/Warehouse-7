@@ -2,6 +2,7 @@
 // Plus the minimap, drawn on its own small canvas.
 import { V, isFull } from '../sim/grid.js';
 import { terrainHeight, groundType } from '../sim/terrain.js';
+import { levelBases, crateWanted, spotUseful } from '../sim/base.js';
 
 export function createHud() {
   const st = { hitT: 0, headHit: false, hurt: [] };
@@ -63,10 +64,11 @@ export function createMinimap(canvas) {
       let top = -1;
       for (let y = grid.h - 1; y >= 0; y--) { const t = grid.cells[x + z * grid.w + y * grid.w * grid.d]; if (t !== V.AIR) { top = t; break; } }
       const gt = groundType(world.ground, x, z);
-      let c = gt === 'r' ? [70, 68, 64] : gt === 'p' ? [150, 142, 128] : gt === 'g' ? [140, 128, 108] : [196, 168, 118];
+      let c = gt === 'r' ? [70, 68, 64] : gt === 'p' ? [150, 142, 128] : gt === 'g' ? [140, 128, 108] : gt === 'c' ? [150, 150, 144] : gt === 'd' ? [170, 140, 100] : [196, 168, 118];
       const h = terrainHeight(world.terrain, x + 0.5, z + 0.5);
       c = c.map(v => v + h * 6);
-      if (top >= 0) c = isFull(top) ? (top === V.SLAB ? [96, 92, 86] : [52, 50, 46]) : [120, 112, 100];
+      if (top >= 0) c = top === V.TANK ? [170, 174, 172] : top === V.FENCE ? [110, 110, 104] : top === V.PIPE ? [70, 92, 106]
+        : top === V.ROCK ? [120, 104, 86] : isFull(top) ? (top === V.SLAB ? [96, 92, 86] : [52, 50, 46]) : [120, 112, 100];
       const i = (x + z * size) * 4;
       img.data[i] = c[0]; img.data[i + 1] = c[1]; img.data[i + 2] = c[2]; img.data[i + 3] = 255;
     }
@@ -85,17 +87,21 @@ export function createMinimap(canvas) {
       const edge = v => Math.max(3, Math.min(W - 3, v));
       g.imageSmoothingEnabled = false;
       g.drawImage(base, ox, oz, span, span, 0, 0, W, H);
-      const a = world.base.area;
-      g.strokeStyle = world.base.claimed ? '#f0a23a' : '#c8402e';
-      g.lineWidth = 2;
-      g.strokeRect(X(a.x0), Z(a.z0), (a.x1 - a.x0) * k, (a.z1 - a.z0) * k);
+      // base areas: red while enemy-held, orange once yours (the others fade out then)
+      levelBases(world.data.levels[world.levelId]).forEach((def, i) => {
+        const a = def.area, mine = world.base.claimed && world.base.index === i;
+        if (world.base.claimed && !mine) g.strokeStyle = 'rgba(200,64,46,0.35)';
+        else g.strokeStyle = mine ? '#f0a23a' : '#c8402e';
+        g.lineWidth = 2;
+        g.strokeRect(X(a.x0), Z(a.z0), (a.x1 - a.x0) * k, (a.z1 - a.z0) * k);
+      });
       for (const pk of world.pickups) {
-        if (pk.type !== 'item') continue;
+        if (pk.type !== 'item' || !crateWanted(world, pk.item)) continue;
         if (Math.floor(now / 300) % 2) { g.fillStyle = '#ffd040'; g.fillRect(edge(X(pk.x)) - 3, edge(Z(pk.z)) - 3, 6, 6); }
       }
-      for (const s of world.base.buildSpots) {
-        if (!world.base.claimed) continue;
-        g.strokeStyle = '#ffd040'; g.lineWidth = 1; g.strokeRect(X(s.x) - 3, Z(s.z) - 3, 6, 6);
+      if (world.base.claimed) for (const s of world.base.buildSpots) {
+        if (!spotUseful(world, s)) continue;
+        g.strokeStyle = '#ffd040'; g.lineWidth = 1; g.strokeRect(X(s.x + 0.5) - 3, Z(s.z + 0.5) - 3, 6, 6);
       }
       for (const w of world.weather) {
         if (!w.active) continue;

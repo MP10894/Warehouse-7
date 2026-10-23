@@ -80,5 +80,35 @@ export function makeTextures() {
   });
   T.stairs = noiseTex(16, [158, 152, 142], 18, (x, y, c) => (y % 8 === 0 ? [96, 92, 86] : c));
   T.floorTile = noiseTex(16, [168, 160, 146], 16, (x, y, c) => (x === 0 || y === 0 ? c.map(v => v - 26) : c));
+  // refinery and outskirts
+  T.metal = noiseTex(32, [122, 128, 128], 14, (x, y, c) => {
+    if (x % 8 === 0) return c.map(v => v - 34);            // corrugation
+    if (x % 8 === 1) return c.map(v => v + 14);
+    if (y === 0 || y === 31) return c.map(v => v - 40);    // panel seam
+    if (Math.sin(x * 0.7 + y * 0.13) + Math.sin(y * 0.41) > 1.6) return [128, 84, 52]; // rust
+    return c;
+  });
+  T.pipe = noiseTex(16, [92, 112, 124], 12, (x, y, c) => (y % 8 === 0 ? [62, 74, 82] : x % 16 === 3 ? c.map(v => v + 22) : c));
+  T.tank = noiseTex(32, [206, 206, 198], 10, (x, y, c) => {
+    if (y % 16 === 0) return [150, 150, 144];               // welded seams
+    if (x % 32 === 0) return c.map(v => v - 22);
+    if (rnd() < 0.015 || (x % 32 > 10 && x % 32 < 12 && y % 16 > 2)) return [170, 132, 96]; // rust streak
+    return c;
+  });
+  T.rock = noiseTex(16, [138, 120, 98], 40, (x, y, c) => (rnd() < 0.08 ? c.map(v => v - 30) : c));
+  T.locker = noiseTex(16, [86, 98, 70], 12, (x, y, c) => {
+    if (y < 2) return [214, 170, 48];                       // yellow band
+    if (x === 0 || x === 15 || y === 15) return c.map(v => v - 30);
+    if (y > 5 && y < 11 && y % 2 === 0 && x > 3 && x < 12) return [52, 58, 42]; // vents
+    return c;
+  });
+  // chain-link: see-through diamonds, solid top and bottom rails
+  T.fence = pixelTexture(makeCanvas(16, 16, g => {
+    g.clearRect(0, 0, 16, 16);
+    g.fillStyle = 'rgb(150,150,142)';
+    for (let i = 0; i < 16; i++) { g.fillRect(i, i % 8, 1, 1); g.fillRect(i, 7 - (i % 8), 1, 1); g.fillRect(i, 8 + (i % 8), 1, 1); g.fillRect(i, 15 - (i % 8), 1, 1); }
+    g.fillStyle = 'rgb(110,110,104)';
+    g.fillRect(0, 0, 1, 16);
+  }));
   return T;
 }

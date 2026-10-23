@@ -14,7 +14,13 @@ export const V = {
   RAMP_E: 8,    // stairs rising towards +x
   RAMP_W: 9,    //                    −x
   RAMP_N: 10,   //                    −z
-  RAMP_S: 11    //                    +z
+  RAMP_S: 11,   //                    +z
+  METAL: 12,    // steel plate, containers, trucks, refinery structures; indestructible
+  PIPE: 13,     // refinery pipework; indestructible
+  TANK: 14,     // fuel tank wall; bullets do nothing, an RPG hit blows the whole tank up
+  ROCK: 15,     // natural rock; indestructible
+  FENCE: 16,    // chain-link fence: you can't walk through it, but you can see and shoot through it
+  LOCKER: 17    // a base upgrade (ammunition, first aid or armour locker), destructible
 };
 
 /** Per block type: does it fill the whole cell, and which materials.csv row it uses (null = unbreakable). */
@@ -29,7 +35,13 @@ export const V_INFO = {
   [V.RAMP_E]: { full: false, ramp: true, material: null },
   [V.RAMP_W]: { full: false, ramp: true, material: null },
   [V.RAMP_N]: { full: false, ramp: true, material: null },
-  [V.RAMP_S]: { full: false, ramp: true, material: null }
+  [V.RAMP_S]: { full: false, ramp: true, material: null },
+  [V.METAL]: { full: true, material: null },
+  [V.PIPE]: { full: true, material: null },
+  [V.TANK]: { full: true, material: 'tank' },
+  [V.ROCK]: { full: true, material: null },
+  [V.FENCE]: { full: true, seeThrough: true, material: null },
+  [V.LOCKER]: { full: true, material: 'locker' }
 };
 
 export const isRamp = t => t >= V.RAMP_E && t <= V.RAMP_S;
@@ -76,6 +88,6 @@ export function blockTop(t, cy, px, pz) {
 export function solidAt(g, x, y, z) {
   const cx = Math.floor(x), cy = Math.floor(y), cz = Math.floor(z);
   const t = getV(g, cx, cy, cz);
-  if (t === V.AIR) return false;
+  if (t === V.AIR || t === V.FENCE) return false; // bullets and eyes pass through chain-link
   return y < blockTop(t, cy, x, z);
 }

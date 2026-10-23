@@ -45,12 +45,15 @@ export function spawnWave(world) {
   w.nextT = null;
   const level = world.data.levels[world.levelId];
   const row = waveRow(world, w.index);
-  // come in from the two edge points furthest from the players
-  const pts = [...level.wave_spawns].sort((a, b) => {
-    const da = Math.min(...world.players.map(p => Math.hypot(p.x - a.x, p.z - a.z)));
-    const db = Math.min(...world.players.map(p => Math.hypot(p.x - b.x, p.z - b.z)));
-    return db - da;
-  }).slice(0, 2);
+  // come in from the two edge points nearest the base that are not too close to a player
+  // (on a big map the furthest points would mean a long walk before anyone arrives)
+  const minD = world.data.settings.waves.min_spawn_distance ?? 60;
+  const ar = world.base.area;
+  const bx = ar ? (ar.x0 + ar.x1) / 2 : 0, bz = ar ? (ar.z0 + ar.z1) / 2 : 0;
+  const fromPlayers = q => Math.min(...world.players.map(p => Math.hypot(p.x - q.x, p.z - q.z)));
+  const far = level.wave_spawns.filter(q => fromPlayers(q) >= minD);
+  const pts = (far.length >= 2 ? far : [...level.wave_spawns].sort((a, b) => fromPlayers(b) - fromPlayers(a)).slice(0, 2))
+    .sort((a, b) => Math.hypot(a.x - bx, a.z - bz) - Math.hypot(b.x - bx, b.z - bz)).slice(0, 2);
   for (let i = 0; i < row.count; i++) {
     const sp = pts[i % pts.length];
     const type = weightedPick(world, row.types) || 'insurgent';

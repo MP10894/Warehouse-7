@@ -24,6 +24,7 @@ import { createWorldView } from './render/world-view.js';
 import { createEffects } from './render/effects.js';
 import { createFpWeapon } from './render/fp-weapon.js';
 import { createWeatherFx } from './render/weather-fx.js';
+import { createBaseMarkers } from './render/base-markers.js';
 import { createHud, createMinimap } from './render/hud.js';
 import { createInput } from './input/input.js';
 import { createAudio } from './audio/audio.js';
@@ -85,6 +86,7 @@ if (!view) {
     console.log('[art]\n' + art.report.join('\n'));
   });
   const weatherFx = createWeatherFx(view.scene, S);
+  const markers = createBaseMarkers(view.scene, S);
   const hud = createHud();
   const minimap = createMinimap($('minimap'));
   const audio = createAudio();
@@ -351,6 +353,7 @@ if (!view) {
     worldView.sync(world, dt);
     effects.update(dt);
     weatherFx.update(dt, world, view.camera);
+    markers.update(world, mode === 'playing' ? p : null, dt);
     audio.setStorm(weatherFx.level);
     fp.update(dt, p, view.W / view.H);
     view.render(mode === 'playing' ? fp : null);

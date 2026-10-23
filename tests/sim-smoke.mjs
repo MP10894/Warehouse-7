@@ -23,7 +23,7 @@ const workbook = ['Game Data.xlsx'].map(f => new URL('../data/' + f, import.meta
 const gameData = gameDataFromXlsx(readFileSync(workbook), byKey(parseCsv(read('data/enemies.csv')), 'id'));
 const data = buildData({
   weaponsRows: gameData.weapons, enemiesRows: gameData.enemies, materialsCsv: read('data/materials.csv'),
-  enemiesCsv: read('data/enemies.csv'), wavesCsv: read('data/waves.csv'),
+  enemiesCsv: read('data/enemies.csv'), wavesCsv: read('data/waves.csv'), upgradesCsv: read('data/upgrades.csv'),
   settings: JSON.parse(read('data/settings.json')),
   levels: { slice: { json: read(lv + 'level.json'), terrain: read(lv + 'terrain.txt'), ground: read(lv + 'ground.txt'), buildings } }
 });

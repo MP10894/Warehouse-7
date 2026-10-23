@@ -7,7 +7,8 @@ import { cellXYZ } from '../sim/grid.js';
 const POOL = 160;
 const MATERIAL_COLOUR = {
   wall: [0.75, 0.68, 0.55], lowwall: [0.68, 0.6, 0.47], crate: [0.6, 0.45, 0.26], sandbags: [0.7, 0.62, 0.44],
-  concrete: [0.62, 0.6, 0.56], ground: [0.8, 0.68, 0.48], terrain: [0.8, 0.68, 0.48]
+  concrete: [0.62, 0.6, 0.56], ground: [0.8, 0.68, 0.48], terrain: [0.8, 0.68, 0.48],
+  tank: [0.3, 0.28, 0.26], locker: [0.32, 0.36, 0.28]
 };
 
 function blobTex(soft) {
@@ -76,9 +77,16 @@ export function createEffects(scene) {
         emit(ev.x, ev.y, ev.z, [1, 0.5, 0.15], R * 0.4, 0.5, 0, 1, 0, R, 0, true);
         for (let i = 0; i < 10; i++) emit(ev.x + r() * R * 0.5, ev.y + Math.random() * R * 0.4, ev.z + r() * R * 0.5, [0.35, 0.32, 0.28], R * 0.35, 1.8 + Math.random(), r() * 1.5, 0.8 + Math.random(), r() * 1.5, R * 0.6);
         for (let i = 0; i < 10; i++) emit(ev.x, ev.y, ev.z, [1, 0.75, 0.3], 0.1, 0.6, r() * 14, Math.random() * 8, r() * 14, 0, 12, true, hard);
-      } else if (ev.type === 'blocks' && ev.cells && ev.cells.length && world) {
+        if (ev.big) {
+          // a fuel tank: a rising fireball and a column of black smoke
+          for (let i = 0; i < 14; i++) emit(ev.x + r() * R * 0.4, ev.y + i * 0.8, ev.z + r() * R * 0.4, [1, 0.45 + Math.random() * 0.3, 0.1], R * 0.3, 0.9 + Math.random() * 0.6, r() * 2, 4 + Math.random() * 5, r() * 2, R * 0.4, 0, true);
+          for (let i = 0; i < 18; i++) emit(ev.x + r() * R * 0.5, ev.y + Math.random() * 6, ev.z + r() * R * 0.5, [0.12, 0.11, 0.1], R * 0.4, 4 + Math.random() * 3, r() * 2, 3 + Math.random() * 3, r() * 2, R * 0.8);
+        }
+      } else if (ev.type === 'blocks' && !ev.placed && ev.cells && ev.cells.length && world) {
         const c = MATERIAL_COLOUR[ev.material] || MATERIAL_COLOUR.wall;
-        for (const i of ev.cells) {
+        // big breaks (a whole fuel tank) throw debris from a sample of their blocks only
+        const cells = ev.cells.length > 30 ? ev.cells.filter((_, k) => k % Math.ceil(ev.cells.length / 30) === 0) : ev.cells;
+        for (const i of cells) {
           const [x, y, z] = cellXYZ(world.grid, i);
           for (let k = 0; k < 3; k++) chunk(x + Math.random(), y + Math.random(), z + Math.random(), c);
           emit(x + 0.5, y + 0.5, z + 0.5, c, 1.0, 1.4, r(), 0.6, r(), 1.5);

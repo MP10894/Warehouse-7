@@ -7,7 +7,9 @@ const SURFACE = {
   s: [0.86, 0.72, 0.5],  // sand
   r: [0.34, 0.33, 0.32], // road
   p: [0.66, 0.62, 0.56], // paving
-  g: [0.6, 0.55, 0.48]   // gravel
+  g: [0.6, 0.55, 0.48],  // gravel
+  c: [0.6, 0.6, 0.57],   // concrete (refinery)
+  d: [0.74, 0.6, 0.42]   // dirt track
 };
 export const SUN = new THREE.Vector3(-0.45, 0.8, 0.35).normalize();
 

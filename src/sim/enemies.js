@@ -7,6 +7,7 @@ import { flowNext, nodeAt } from './nav.js';
 import { aimVector, spreadDir, spawnProjectile } from './weapons.js';
 import { emit } from './damage.js';
 import { stormAt } from './weather.js';
+import { holdsBase, levelBases } from './base.js';
 
 const EYE = 1.55;
 
@@ -203,7 +204,8 @@ export function updateGroups(world, dt) {
     const gdef = level.enemy_groups.find(g => g.id === gstate.id);
     const alive = world.enemies.filter(e => e.alive && e.group === gstate.id).length;
     if (alive >= gdef.spawns.length || !gdef.respawn) continue;
-    if (gdef.holds_base && world.base.claimed) continue;
+    // defenders of the claimed base stop coming back; other bases stay enemy territory
+    if (world.base.claimed && holdsBase(gdef, { id: world.base.id, index: world.base.index }, levelBases(level).length)) continue;
     gstate.respawnT -= dt;
     if (gstate.respawnT > 0) continue;
     gstate.respawnT = gdef.respawn;

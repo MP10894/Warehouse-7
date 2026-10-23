@@ -6,6 +6,7 @@ import gameData from 'virtual:gamedata';
 import materialsCsv from '../../data/materials.csv?raw';
 import enemiesCsv from '../../data/enemies.csv?raw';
 import wavesCsv from '../../data/waves.csv?raw';
+import upgradesCsv from '../../data/upgrades.csv?raw';
 import settings from '../../data/settings.json';
 import { buildData } from './parse.js';
 
@@ -24,4 +25,4 @@ for (const [path, text] of Object.entries(files)) {
 }
 for (const id of Object.keys(levels)) if (!levels[id].json) delete levels[id];
 
-export const DATA = buildData({ weaponsRows: gameData.weapons, enemiesRows: gameData.enemies, materialsCsv, enemiesCsv, wavesCsv, settings, levels });
+export const DATA = buildData({ weaponsRows: gameData.weapons, enemiesRows: gameData.enemies, materialsCsv, enemiesCsv, wavesCsv, upgradesCsv, settings, levels });

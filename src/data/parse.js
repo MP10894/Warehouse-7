@@ -38,7 +38,25 @@ export function byKey(rows, key) {
  * may be null, in which case data/enemies.csv is used.
  * levels: { [levelId]: { json, terrain, ground, buildings: { 'tower.txt': text, ... } } }
  */
-export function buildData({ weaponsRows, enemiesRows = null, materialsCsv, enemiesCsv, wavesCsv, settings, levels }) {
+// Used when no upgrades table is given (older test set-ups): walls only, as before.
+export const DEFAULT_UPGRADES_CSV = 'id,name,needs,level,wall_height\nwalls,Walls,construction_crate,1,1\nwalls,Walls,construction_crate,2,2\n';
+
+/**
+ * Upgrades table → { walls: { id, name, needs, levels: [row for level 1, row for level 2, …] }, … }.
+ * The number of rows an upgrade has is its number of levels.
+ */
+export function parseUpgrades(text) {
+  const out = {};
+  for (const r of parseCsv(text)) {
+    if (!r.id) continue;
+    const u = out[r.id] || (out[r.id] = { id: r.id, name: r.name || r.id, needs: r.needs, levels: [] });
+    u.levels[Number(r.level) - 1] = r;
+  }
+  for (const u of Object.values(out)) u.levels = u.levels.filter(Boolean);
+  return out;
+}
+
+export function buildData({ weaponsRows, enemiesRows = null, materialsCsv, enemiesCsv, wavesCsv, upgradesCsv = DEFAULT_UPGRADES_CSV, settings, levels }) {
   const weapons = byKey(weaponsRows, 'id');
   // Ammunition carried per calibre: the largest (max_total − magazine) among weapons of that calibre.
   const calibres = {};
@@ -60,6 +78,7 @@ export function buildData({ weaponsRows, enemiesRows = null, materialsCsv, enemi
     materials: byKey(parseCsv(materialsCsv), 'id'),
     enemies: enemiesRows && enemiesRows.length ? byKey(enemiesRows, 'id') : byKey(parseCsv(enemiesCsv), 'id'),
     waves: parseCsv(wavesCsv),
+    upgrades: parseUpgrades(upgradesCsv),
     settings,
     levels: parsedLevels
   };

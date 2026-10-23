@@ -3,7 +3,7 @@
 import { moveBody, groundAt } from './body.js';
 import { updatePlayerWeapon } from './weapons.js';
 import { emit, dropPickup } from './damage.js';
-import { buildSpotFor, build } from './base.js';
+import { buildSpotFor, build, buildLabel, crateWanted, crateName } from './base.js';
 import { onBuild } from './waves.js';
 
 export function createPlayer(world, id, spawn) {
@@ -73,11 +73,31 @@ function autoCollect(world, p, pk) {
     emit(world, { type: 'message', text: `PICKED UP ${def.name.toUpperCase()}`, playerId: p.id });
     return true;
   }
+  if (pk.type === 'health') {
+    if (p.hp >= s.max_health) return false;
+    p.hp = Math.min(s.max_health, p.hp + pk.amount);
+    emit(world, { type: 'pickup', playerId: p.id, what: 'health' });
+    emit(world, { type: 'message', text: `+${pk.amount} HEALTH`, playerId: p.id });
+    return true;
+  }
+  if (pk.type === 'resupply') {
+    // ammunition for every gun you carry: a share (amount %) of what you can carry of each
+    let took = 0;
+    for (const slot of p.slots) {
+      if (!slot) continue;
+      const c = world.data.weapons[slot.w].calibre;
+      took += addAmmo(world, p, c, Math.ceil((world.data.calibres[c] || 0) * pk.amount / 100));
+    }
+    if (took <= 0) return false;
+    emit(world, { type: 'pickup', playerId: p.id, what: 'ammo' });
+    emit(world, { type: 'message', text: 'AMMUNITION RESUPPLIED', playerId: p.id });
+    return true;
+  }
   if (pk.type === 'item') {
-    if (p.carrying) return false;
+    if (p.carrying || !crateWanted(world, pk.item)) return false;
     p.carrying = { item: pk.item, origin: pk.origin || { x: pk.x, y: pk.y, z: pk.z } };
     emit(world, { type: 'pickup', playerId: p.id, what: 'item', item: pk.item });
-    emit(world, { type: 'message', text: 'CONSTRUCTION CRATE — TAKE IT TO YOUR BASE', playerId: p.id });
+    emit(world, { type: 'message', text: `${crateName(pk.item)} — TAKE IT TO YOUR BASE`, playerId: p.id });
     return true;
   }
   return false;
@@ -91,7 +111,7 @@ function findContext(world, p) {
   const downed = world.players.find(o => o !== p && o.downed && Math.hypot(o.x - p.x, o.z - p.z) <= s.revive_range);
   if (downed) return { kind: 'revive', label: 'REVIVE', targetId: downed.id };
   const spot = buildSpotFor(world, p);
-  if (spot) return { kind: 'build', label: world.base.upgrades.walls.level ? 'REINFORCE WALLS' : 'BUILD WALLS', spot };
+  if (spot) return { kind: 'build', label: buildLabel(world, spot), spot };
   if (p.slots.every(Boolean)) {
     const pk = world.pickups.find(k => k.type === 'weapon' && !ownsWeapon(p, k.weapon) && near(p, k, s.pickup_range));
     if (pk) return { kind: 'pickup', label: `TAKE ${weaponName(world, pk.weapon).toUpperCase()}`, pickupId: pk.id };
@@ -178,7 +198,7 @@ export function updatePlayer(world, p, cmd, dt) {
   const range = s.player.pickup_range * 0.8;
   const used = new Set();
   for (const pk of world.pickups) {
-    if (near(p, pk, range) && autoCollect(world, p, pk)) used.add(pk);
+    if (near(p, pk, Math.max(range, pk.reach || 0)) && autoCollect(world, p, pk)) used.add(pk);
   }
   if (used.size) world.pickups = world.pickups.filter(k => !used.has(k));
 

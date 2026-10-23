@@ -18,9 +18,11 @@ export function createDomHud() {
   function goal(world, p) {
     const b = world.base, goals = world.data.levels[world.levelId].goals || {};
     if (!b.claimed) return goals.claim || `Clear the ${b.name.toLowerCase()} to claim a base`;
-    if (p.carrying) return 'Take the crate to the build spot in your base';
-    if (b.upgrades.walls.level === 0) return goals.fetch || 'Fetch the construction crate';
-    return `Hold out until the timer runs out · walls level ${b.upgrades.walls.level}`;
+    if (p.carrying) return `Take the ${p.carrying.item.replace(/_/g, ' ')} to its build spot in your base`;
+    const ups = Object.entries(b.upgrades).filter(([id]) => b.buildSpots.some(s => s.upgrade === id));
+    if (ups.every(([, u]) => u.level === 0)) return goals.fetch || 'Fetch a crate and build an upgrade';
+    const short = { walls: 'walls', ammo: 'ammo', medical: 'first aid', armour: 'armour' };
+    return 'Hold out · ' + ups.map(([id, u]) => `${short[id] || id} ${u.level}/${world.data.upgrades[id].levels.length}`).join(' · ');
   }
 
   return {
@@ -47,6 +49,7 @@ export function createDomHud() {
         : `Wave ${w.number}: ${attackers} attacker${attackers === 1 ? '' : 's'} left`);
       set('goal', el.goalLine, 'textContent', p.downed ? 'You are down — your partner can revive you' : goal(world, p));
       el.carry.hidden = !p.carrying;
+      if (p.carrying) set('carry', el.carry, 'textContent', `Carrying: ${p.carrying.item.replace(/_/g, ' ')} (slow)`);
 
       const slot = p.slots[p.active];
       if (slot) {
