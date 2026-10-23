@@ -128,7 +128,8 @@ const COLUMNS = [
   ['muzzle_velocity', h => h.includes('velocity')],
   ['calibre', h => h.includes('calibre') || h.includes('caliber')],
   ['projectile', h => h.includes('projectile')],
-  ['ads_zoom', h => h.includes('zoom')]
+  ['ads_zoom', h => h.includes('zoom')],
+  ['scope', h => h.includes('scope')]
 ];
 const REQUIRED = ['name', 'mag_size', 'max_total', 'reload_time', 'damage_health', 'damage_armour', 'damage_environment', 'area_of_effect', 'fire_mode', 'rate_of_fire', 'recoil', 'bloom', 'muzzle_velocity', 'calibre'];
 
@@ -180,7 +181,9 @@ export function weaponsFromSheet(cells, label = 'Weapons tab') {
       bloom: num('bloom', 0),
       muzzle_velocity: num('muzzle_velocity', 300),
       projectile: projectileKind(v('projectile')),
-      ads_zoom: num('ads_zoom', 0.7)
+      ads_zoom: num('ads_zoom', 0.7),
+      // telescopic sight: magnification (e.g. 4 = 4×); 0 = iron sights
+      scope: num('scope', 0)
     };
   });
 }

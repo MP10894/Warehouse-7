@@ -54,7 +54,8 @@ Layout plan (agreed): [docs/NAJAF_PLAN.md](docs/NAJAF_PLAN.md) (map in
 - Enemies no longer respawn inside a cleared base area.
 - A base can't be lost, but enemies can destroy everything built in it.
 - Base-building items are scattered around the level. Picking one up puts it in your
-  inventory and **slows you down**. You can carry **one at a time**.
+  inventory. You can carry **one at a time**. (It used to slow you down; removed on
+  2026-10-23 because it slowed the game too much. `carry_speed_factor` in settings.json.)
 - Building is contextual: a Build button appears when you're in the right spot with the
   right item.
 - Upgrades can be built and then **improved** (levels to be defined):
@@ -76,6 +77,11 @@ Starting values, to be tuned after play-testing:
   (refills a share of every gun you carry: 30 / 40 / 50 %), a first aid kit (+25 / 40 / 60
   health, up to full) or armour (+25 / 50 / 75). The next one appears 45 / 35 / 25 s
   after the last was taken (armour: 60 / 45 / 30 s).
+- **Armoury:** at a built ammunition supply the use button says ARMOURY and opens a small
+  panel of weapons to swap for: the MP5 at level 1, the M4A1 at level 2, the Mk14-EBR at
+  level 3 (upgrades.csv → `unlocks`). The new weapon comes fully loaded and goes into an
+  empty slot, or replaces the one in your hands, which is left on the ground a few steps
+  from the locker so you can take it back. On a computer: 1–3 to pick, E or Esc to close.
 - A locker can be destroyed (150 health, 60 armour). Its upgrade goes back to nothing and
   its crate starts coming back again.
 - A crate is only picked up while its upgrade is below the top level, so you can't get
@@ -85,6 +91,9 @@ Starting values, to be tuned after play-testing:
   walls go. The markings are faint, pulse while you carry the matching crate, and
   disappear once that upgrade is at its top level (wall lines come back where walls are
   blown away). Built lockers show their icon and level above them.
+- **Crates in every district:** each district (city, refinery, outskirts) has its own
+  construction, ammunition, medical and armour crate, 40–80 m from its base, plus a couple
+  of spares further out. A used crate comes back where it was found.
 
 ## Enemies and waves
 
@@ -140,7 +149,11 @@ Starting values, to be tuned after play-testing:
   magazine size; maximum carried ammunition (including the loaded magazine); reload time;
   damage to health; damage to armour; damage to environment; area of effect (0–100,
   where **100 = 10 m radius**); fire mode (semi or automatic); rate of fire; recoil (0–100);
-  bloom (0–100); muzzle velocity; calibre; projectile (bullet, rocket or grenade); aim-down-sights zoom.
+  bloom (0–100); muzzle velocity; calibre; projectile (bullet, rocket or grenade); aim-down-sights zoom;
+  scope magnification (empty = iron sights).
+- **Scopes** (the Mk14 EBR, 4×): aiming down sights looks through the scope: a black ring
+  round the lens, a thin crosshair, the gun out of sight. Look speed drops (0.3 of normal),
+  and the aim drifts slightly, three times as much while walking. All on the tuning panel.
 - **Grenades (RGD-5)** are a quick-use item, not a weapon slot. While you have any, a
   grenade button with the count shows under the map (desktop: G). A toss takes 0.7 s: the
   rifle dips, the left hand throws, and you can't fire, reload or swap meanwhile. The
@@ -185,6 +198,28 @@ Starting values, to be tuned after play-testing:
   so placeholder models can be made in code and swapped for drawn art later.
 - File rules for art (sizes, names, pivots, budgets, palette): [ART_SPEC.md](ART_SPEC.md). Art goes in
   `assets/`; missing files keep the code-drawn placeholders.
+- **Lived-in streets (decoration):** every building gets its own painted plaster colour and
+  a darker band along the bottom (police station white and blue, clinic white and green);
+  ground floors facing a street get rolled-down shop shutters and striped awnings; windows
+  get frames and wooden shutters; air-conditioning boxes, grime under the roof line, water
+  tanks, satellite dishes, aerials and washing lines on roofs, and sagging wires across the
+  streets; on the ground oil stains, cracks, scorch marks, tyre tracks and sand blown
+  against walls. All of it is decoration only (like rubble: no collision, no effect on
+  bullets or path-finding), placed by rules the same way every run, and it disappears with
+  the wall it hangs on. Amount: settings.json → decor.amount, also on the tuning panel.
+- **Street clutter (decoration):** bullet holes (many on damaged and ruined buildings),
+  scorch on walls and torn posters (pictures only, no writing); rubbish bags, tyre stacks,
+  gas bottles, plastic chairs, potted plants by doors and produce crates in front of shops;
+  loose paper and broken concrete in the streets, dry shrubs out in the open, razor wire
+  along some low walls and sandbags. Market stalls (over the market crates), carpets and
+  date palms are placed by hand in level.json → `decor`. All decoration only, like the rest.
+- **Things that move:** washing on the rooftop lines swings in the wind; thin smoke rises
+  from some burnt-out wrecks and a few smouldering rubbish heaps in the city (never in a
+  base) and drifts the same way as the refinery flare's smoke. No birds.
+- **Wrecked vehicles are solid cover:** burnt-out or abandoned cars, pickups and lorries
+  (prop type `wreck`) block movement and bullets like steel and never break. The block grid
+  holds them as plain solid blocks; the graphics draw the vehicle over them. 14 in the city
+  streets (always with room to pass), a convoy, an army truck and a few by the roads outside.
 
 ## Controls (phone, held sideways)
 
@@ -259,8 +294,8 @@ around the crossroads where you start:
   towers, the flare stack with its permanent smoke, the loading bay, the security post
   (armour crate), and **base C, the control building**.
 - **Outskirts** (south and west): dunes, the dry riverbed, rock outcrops, single-storey
-  houses, the gas station, the army checkpoint (ammunition crate behind sandbags), the
-  quarry (second construction crate), the wrecked convoy, sandstorm zones, high dunes
+  houses, the gas station, the army checkpoint (spare ammunition crate behind sandbags), the
+  quarry (construction crate), the wrecked convoy (armour crate), sandstorm zones, high dunes
   along the map edge, and **base B, the truck stop**.
 
 65 enemies in 22 groups. The refinery and outskirts were drafted by
@@ -369,6 +404,19 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Suicide bomber: runs at players and blows up within 1 m (RGD-5 blast); his vest also goes off if he is shot dead; beeps as he closes in; in attack waves from wave 2 and placed in each Najaf district. Placeholder look: militia clothes with a tan explosive vest and a blinking light |
 | 2026-10-23 | Co-op messages: when many enemies are around both players, the furthest are left out first |
 | 2026-10-23 | Suicide bomber has his own model from an OpenArt sheet: red face scarf, maroon track jacket, tan explosive charges on a black harness and a belt of charges, detonator in his right hand, blinking red light on his chest |
+| 2026-10-23 | Reload animations for the RPK (drum rocks out and in like the AK's magazine; charging handle only when empty) and the P320 (magazine slides out of the grip and falls, fresh one pushed home; when empty the slide stays locked back until the slide catch drops it at the end) |
+| 2026-10-23 | Mk14 EBR gets a 4× scope: full-screen scope view when aiming, slower look, slight drift. Weapons tab has a new *Scope magnification* column (empty = iron sights) |
+| 2026-10-23 | Carrying a crate no longer slows you down (it slowed the game too much) |
+| 2026-10-23 | Mk14 EBR drawn from the side view of its OpenArt sheet: black chassis, railed handguard, 4× scope on rings, folded bipod, 20-round magazine (rocks in and out on a reload, like the AK), operating rod handle pulled on an empty reload |
+| 2026-10-23 | Lived-in streets, first part: building colours, shop fronts, windows, rooftops, wires and ground marks (decoration only). Street clutter and movement (smoke, washing swaying, birds, ambient sound) next |
+| 2026-10-23 | Wrecked cars and trucks will be solid cover, not decoration |
+| 2026-10-23 | Street clutter added (decoration only), plus 22 wrecked vehicles as solid, unbreakable cover. Next: movement (smoke, swaying washing, birds, ambient sound) |
+| 2026-10-23 | Sound design (ambient sound and the rest) is parked until gameplay, mechanics and graphics are settled |
+| 2026-10-23 | Every district has a full set of upgrade crates 40–80 m from its base; a crate returns to where it was found |
+| 2026-10-23 | The ammunition supply doubles as an armoury: MP5 (level 1), M4A1 (level 2), Mk14-EBR (level 3), full load; the old weapon is dropped beside the locker |
+| 2026-10-23 | Drifting smoke (some burnt wrecks, a few rubbish fires in the city) and swaying washing; no birds over the city |
+| 2026-10-23 | MP5 drawn (MP5A2, fixed stock) from the side view of its OpenArt sheet; the stray prong under the handguard left out; open sights you aim through; magazine tips out and back in on a reload, charging handle pulled on an empty one |
+| 2026-10-23 | Weapon triangle budget raised from 300 to 400 for every gun. MP5 reworked: grip at its real length, round front sight hood, drum rear sight you look through (the post sits in the hood's ring) |
 
 ## Open questions
 

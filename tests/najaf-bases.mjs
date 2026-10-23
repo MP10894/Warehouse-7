@@ -60,6 +60,25 @@ for (const item of ['construction_crate', 'ammo_crate', 'medical_crate', 'armour
   }
 }
 
+// every base has each kind of upgrade crate within 80 m, on ground you can walk to
+{
+  const w = createWorld({ data, levelId: 'najaf', seed: 2 });
+  const nav = buildNav(w);
+  const p = w.players[0];
+  const field = flowField(nav, [nodeAt(nav, p.x, p.y, p.z)]);
+  const reach = it => { const y = groundAt(w, it.x, it.z, (it.y ?? 30) + 0.6), n = nodeAt(nav, it.x, y, it.z); return n >= 0 && field[n] >= 0; };
+  const unreachable = level.base_items.filter(it => !reach(it)).map(it => `${it.item}@${it.x},${it.z}`);
+  check(!unreachable.length, `all ${level.base_items.length} upgrade crates lie where you can walk to them${unreachable.length ? ': ' + unreachable.join(' ') : ''}`);
+  for (const b of bases) {
+    const cx = (b.area.x0 + b.area.x1) / 2, cz = (b.area.z0 + b.area.z1) / 2;
+    const far = ['construction_crate', 'ammo_crate', 'medical_crate', 'armour_crate'].map(item => {
+      const d = Math.min(...level.base_items.filter(it => it.item === item).map(it => Math.hypot(it.x - cx, it.z - cz)));
+      return [item, Math.round(d)];
+    });
+    check(far.every(([, d]) => d <= 80), `${b.name}: every kind of crate within 80 m (${far.map(([i, d]) => `${i.split('_')[0]} ${d} m`).join(', ')})`);
+  }
+}
+
 // each base can be claimed by clearing its defenders and walking in; the others stay enemy territory
 for (const [i, b] of bases.entries()) {
   const w = createWorld({ data, levelId: 'najaf', seed: 4 + i });

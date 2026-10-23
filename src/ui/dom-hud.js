@@ -49,7 +49,7 @@ export function createDomHud() {
         : `Wave ${w.number}: ${attackers} attacker${attackers === 1 ? '' : 's'} left`);
       set('goal', el.goalLine, 'textContent', p.downed ? 'You are down — your partner can revive you' : goal(world, p));
       el.carry.hidden = !p.carrying;
-      if (p.carrying) set('carry', el.carry, 'textContent', `Carrying: ${p.carrying.item.replace(/_/g, ' ')} (slow)`);
+      if (p.carrying) set('carry', el.carry, 'textContent', `Carrying: ${p.carrying.item.replace(/_/g, ' ')}`);
 
       const slot = p.slots[p.active];
       if (slot) {

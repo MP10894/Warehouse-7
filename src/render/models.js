@@ -60,6 +60,7 @@ export function weaponModel(id) {
     box(0.04, 0.1, 0.04, wood, 0, -0.01, 0.08, g);
   } else {
     box(0.05, 0.07, 0.4, black, 0, 0.05, -0.1, g);
+    if (id === 'mk14ebr') { box(0.035, 0.035, 0.2, black, 0, 0.12, -0.08, g); box(0.045, 0.045, 0.03, black, 0, 0.12, -0.19, g); }
   }
   return g;
 }

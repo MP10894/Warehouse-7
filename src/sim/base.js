@@ -123,6 +123,36 @@ export function buildSpotFor(world, p) {
   return b.buildSpots.find(s => s.needs === p.carrying.item && Math.hypot(s.x + 0.5 - p.x, s.z + 0.5 - p.z) <= r && spotUseful(world, s)) || null;
 }
 
+/**
+ * The armoury: a built ammunition supply also hands out weapons (upgrades.csv → unlocks,
+ * one or more weapon ids per level, separated by spaces; every level keeps the ones before).
+ * Returns the weapon ids on offer now (empty when there is no supply).
+ */
+export function armouryWeapons(world) {
+  const b = world.base;
+  if (!b.claimed) return [];
+  const out = [];
+  for (const [id, up] of Object.entries(b.upgrades)) {
+    const def = upgradeDef(world, id);
+    if (!up.level || !def) continue;
+    for (const row of def.levels.slice(0, up.level))
+      for (const w of String(row.unlocks || '').split(/[\s;,]+/)) if (w && world.data.weapons[w] && !out.includes(w)) out.push(w);
+  }
+  return out;
+}
+
+/** Is this player standing at a locker that hands out weapons? Returns that build spot or null. */
+export function armouryFor(world, p) {
+  const b = world.base;
+  if (!b.claimed) return null;
+  const r = world.data.settings.base.build_range;
+  return b.buildSpots.find(s => {
+    const up = b.upgrades[s.upgrade];
+    return up && up.level > 0 && upgradeDef(world, s.upgrade)?.levels.some(l => l.unlocks) &&
+      Math.hypot(s.x + 0.5 - p.x, s.z + 0.5 - p.z) <= r && Math.abs(groundAt(world, s.x + 0.5, s.z + 0.5, p.y + 1) - p.y) < 1.6;
+  }) || null;
+}
+
 /** Context-button text for building at a spot. */
 export function buildLabel(world, spot) {
   const up = world.base.upgrades[spot.upgrade], max = maxLevel(world, spot.upgrade);
@@ -212,7 +242,10 @@ function ensureCrate(world, item) {
     || world.players.some(p => p.carrying && p.carrying.item === item)
     || world.pending.some(j => j.kind === 'respawnItem' && j.item === item);
   if (exists) return;
-  const home = (world.data.levels[world.levelId].base_items || []).find(it => it.item === item);
+  // bring it back at the home spot nearest the base
+  const a = world.base.area, bx = a ? (a.x0 + a.x1) / 2 : 0, bz = a ? (a.z0 + a.z1) / 2 : 0;
+  const home = (world.data.levels[world.levelId].base_items || []).filter(it => it.item === item)
+    .sort((p, q) => Math.hypot(p.x - bx, p.z - bz) - Math.hypot(q.x - bx, q.z - bz))[0];
   if (home) world.pending.push({ kind: 'respawnItem', item, x: home.x, y: groundAt(world, home.x, home.z, (home.y ?? 30) + 0.6), z: home.z, t: world.data.settings.base.item_respawn });
 }
 

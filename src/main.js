@@ -20,6 +20,7 @@ import { createRecoil } from './input/recoil.js';
 import { createAimAssist } from './input/aim-assist.js';
 import { buildTerrain } from './render/terrain-mesh.js';
 import { createBlockMeshes } from './render/blocks-mesh.js';
+import { createDecor } from './render/decor.js';
 import { createWorldView } from './render/world-view.js';
 import { createEffects } from './render/effects.js';
 import { createFpWeapon } from './render/fp-weapon.js';
@@ -29,6 +30,7 @@ import { createHud, createMinimap } from './render/hud.js';
 import { createInput } from './input/input.js';
 import { createAudio } from './audio/audio.js';
 import { createDomHud } from './ui/dom-hud.js';
+import { createArmoury } from './ui/armoury.js';
 import { createScreens } from './ui/screens.js';
 import { createTuning } from './ui/tuning.js';
 import { getTransport } from './net/transport.js';
@@ -52,7 +54,7 @@ if (!view) {
     settings: S,
     onOpen: () => { if (role === 'solo') paused = true; input.setEnabled(false); },
     onClose: () => { paused = false; acc = 0; if (mode === 'playing') input.setEnabled(true); },
-    onChange: path => { if (path.startsWith('camera.')) view.resize(); }
+    onChange: path => { if (path.startsWith('camera.')) view.resize(); if (path.startsWith('decor.') && scenery.decor) scenery.decor.rebuild(); }
   });
   view.resize();
 
@@ -67,13 +69,14 @@ if (!view) {
   let world = newWorld((Math.random() * 1e9) | 0, ['p1']);
 
   const tex = makeTextures();
-  const scenery = { terrain: null, blocks: null };
+  const scenery = { terrain: null, blocks: null, decor: null };
   function buildScenery() {
     // the ground and buildings are rebuilt for each new run (walls may have been destroyed)
     if (scenery.terrain) view.scene.remove(scenery.terrain);
     view.scene.children.filter(c => c.userData.blocks).forEach(c => view.scene.remove(c));
     scenery.terrain = buildTerrain(view.scene, world, tex);
     scenery.blocks = createBlockMeshes(view.scene, world, tex);
+    scenery.decor = createDecor(view.scene, world, S);
   }
   buildScenery();
   const worldView = createWorldView(view.scene, tex, localId);
@@ -95,9 +98,16 @@ if (!view) {
   const input = createInput({ app, touchEl: $('touch'), stick: $('stick'), knob: $('knob'), buttons, view, settings: S });
   const aim = { yaw: 0, pitch: 0 };
   let acc = 0, shake = 0;
+  // telescopic sights: how far into the scope view we are (0–1), and the reticle's drift
+  let scopeK = 0, swayT = 0;
+  const aimOut = { yaw: 0, pitch: 0 };
   // taps on RELOAD, SWAP and the use button wait here until a game step takes them: on a
   // fast screen many frames have no game step, and a tap read on such a frame was lost
-  const taps = { reload: false, swap: false, interact: false, grenade: false };
+  const taps = { reload: false, swap: false, interact: false, grenade: false, armoury: null };
+  // the armoury panel at a built ammunition supply: picking a weapon becomes a command
+  const armoury = createArmoury({ root: app, onPick: w => {
+    if (role === 'guest') { net.armouryN++; net.armouryW = w; } else taps.armoury = w;
+  } });
   const recoil = createRecoil();
   const assist = createAimAssist();
   // a shot's kick moves the aim now; recoil.update brings it back afterwards
@@ -118,7 +128,7 @@ if (!view) {
     encoder: createHostEncoder(DATA), decoder: createGuestDecoder(DATA),
     edges: { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0 }, // guest: press counters it sends
     seen: { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0 },  // host: last counters it acted on
-    prevFire: false, lostAt: 0
+    prevFire: false, lostAt: 0, armouryN: 0, armouryW: '', seenArmoury: 0
   };
 
   function enterPlay(seed, ids, level) {
@@ -131,7 +141,8 @@ if (!view) {
     const p = local();
     aim.yaw = p.yaw; aim.pitch = 0;
     acc = 0; shake = 0; recoil.reset(); assist.reset();
-    taps.reload = taps.swap = taps.interact = taps.grenade = false;
+    taps.reload = taps.swap = taps.interact = taps.grenade = false; taps.armoury = null;
+    armoury.close();
     mode = 'playing';
     screens.hide();
     input.setEnabled(true);
@@ -151,6 +162,7 @@ if (!view) {
     const partner = net.session.partner();
     const c = partner && partner.state && partner.state.c;
     net.seen = c ? { fire: c[5], reload: c[6], swap: c[7], interact: c[8], grenade: c[9] || 0 } : { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0 };
+    net.seenArmoury = partner && partner.state && partner.state.a ? partner.state.a[0] : 0;
     const seed = (Math.random() * 1e9) | 0;
     enterPlay(seed, ['p1', 'p2']);
     net.session.set({ role: 'host', run: net.run, seed, level: levelId, started: 1 });
@@ -223,6 +235,7 @@ if (!view) {
       if (swapN > net.seen.swap) { cmd.swap = true; net.seen.swap = swapN; }
       if (interactN > net.seen.interact) { cmd.interact = true; net.seen.interact = interactN; }
       if (grenadeN > net.seen.grenade) { cmd.grenade = true; net.seen.grenade = grenadeN; }
+      if (st.a && st.a[0] > net.seenArmoury) { cmd.armoury = st.a[1]; net.seenArmoury = st.a[0]; }
     }
     return cmd;
   }
@@ -236,7 +249,7 @@ if (!view) {
       hud.handle(ev, p);
       audio.handle(ev, p);
       domHud.handle(ev, localId);
-      if (ev.type === 'blocks') scenery.blocks.update(ev.cells || [], !!ev.rebuild);
+      if (ev.type === 'blocks') { scenery.blocks.update(ev.cells || [], !!ev.rebuild); scenery.decor.update(ev.cells || []); }
       if (ev.type === 'explosion') shake = Math.max(shake, Math.max(0, 1 - Math.hypot(ev.x - p.x, ev.z - p.z) / 25));
       if (ev.type === 'hurt' && ev.targetId === localId) shake = Math.max(shake, 0.25);
       if (ev.type === 'status' && mode === 'playing') {
@@ -286,6 +299,15 @@ if (!view) {
       const inp = input.sample();
       aim.yaw += -inp.lookX + inp.turn * 2.4 * dt;
       aim.pitch = Math.max(-S.controls.max_pitch, Math.min(S.controls.max_pitch, aim.pitch - inp.lookY));
+      // through a scope the aim drifts a little (more while walking): it moves where you shoot too
+      swayT += dt;
+      const lp = local();
+      // the use button at the ammunition supply opens the armoury instead of acting in the game
+      if (inp.interact && lp.context && lp.context.kind === 'armoury') { armoury.toggle(world, lp); inp.interact = false; }
+      armoury.update(world, lp);
+      const sw = scopeK * (S.controls.scope_sway ?? 0.003) * (lp.moving ? (S.controls.scope_sway_moving ?? 3) : 1);
+      aimOut.yaw = aim.yaw + Math.sin(swayT * 0.9) * sw;
+      aimOut.pitch = aim.pitch + Math.sin(swayT * 1.7) * sw * 0.6;
 
       if (role !== 'guest') {
         const base = { move: { x: inp.moveX, y: inp.moveY }, fire: inp.fire, ads: inp.ads };
@@ -293,8 +315,8 @@ if (!view) {
         acc += dt;
         let steps = 0, first = true;
         while (acc >= STEP && steps < 5) {
-          const cmd = { ...base, yaw: aim.yaw, pitch: aim.pitch };
-          if (first) { cmd.reload = taps.reload; cmd.swap = taps.swap; cmd.interact = taps.interact; cmd.grenade = taps.grenade; taps.reload = taps.swap = taps.interact = taps.grenade = false; }
+          const cmd = { ...base, yaw: aimOut.yaw, pitch: aimOut.pitch };
+          if (first) { cmd.reload = taps.reload; cmd.swap = taps.swap; cmd.interact = taps.interact; cmd.grenade = taps.grenade; cmd.armoury = taps.armoury; taps.reload = taps.swap = taps.interact = taps.grenade = false; taps.armoury = null; }
           const cmds = { [localId]: cmd };
           if (role === 'host') cmds.p2 = guestCommand(first);
           first = false;
@@ -321,7 +343,7 @@ if (!view) {
         }
         p = local();
         if (p.alive && !p.downed) {
-          p.yaw = aim.yaw; p.pitch = aim.pitch; p.ads = inp.ads;
+          p.yaw = aimOut.yaw; p.pitch = aimOut.pitch; p.ads = inp.ads;
           walkPlayer(world, p, { x: inp.moveX, y: inp.moveY }, dt);
         }
         if (inp.fire && !net.prevFire) net.edges.fire++;
@@ -333,9 +355,10 @@ if (!view) {
         const e = net.edges;
         net.session.set({
           run: net.run,
-          c: [Math.round(inp.moveX * 100), Math.round(inp.moveY * 100), Math.round(aim.yaw * 1000), Math.round(aim.pitch * 1000),
+          c: [Math.round(inp.moveX * 100), Math.round(inp.moveY * 100), Math.round(aimOut.yaw * 1000), Math.round(aimOut.pitch * 1000),
             (inp.fire ? 1 : 0) | (inp.ads ? 2 : 0) | (p.moving ? 4 : 0), e.fire, e.reload, e.swap, e.interact, e.grenade],
-          pos: [Math.round(p.x * 100), Math.round(p.y * 100), Math.round(p.z * 100)]
+          pos: [Math.round(p.x * 100), Math.round(p.y * 100), Math.round(p.z * 100)],
+          a: [net.armouryN, net.armouryW]
         });
       }
 
@@ -355,16 +378,26 @@ if (!view) {
 
     shake = Math.max(0, shake - dt * 2);
     const slot = p.slots[p.active];
-    const zoom = p.ads && slot ? DATA.weapons[slot.w].ads_zoom : 1;
-    view.follow(p, aim, zoom, shake, dt);
+    const wdef = slot ? DATA.weapons[slot.w] : null;
+    const scope = wdef && wdef.scope > 1 ? wdef.scope : 0;
+    input.setScoped(!!scope);
+    const scopedNow = !!scope && p.ads && p.alive && !p.downed && mode === 'playing';
+    scopeK += ((scopedNow ? 1 : 0) - scopeK) * Math.min(1, dt * 12);
+    if (!scopedNow && scopeK < 0.02) scopeK = 0;
+    // a scope magnifies (4 = 4×); iron sights use the workbook's zoom
+    const zoom = p.ads && wdef ? (scope ? 1 / scope : wdef.ads_zoom) : 1;
+    if (mode !== 'playing') { aimOut.yaw = aim.yaw; aimOut.pitch = aim.pitch; }
+    view.follow(p, scopeK > 0 ? aimOut : aim, zoom, shake, dt);
     worldView.sync(world, dt);
     effects.update(dt);
     weatherFx.update(dt, world, view.camera);
+    if (scenery.decor) scenery.decor.tick(dt, view.camera);
     markers.update(world, mode === 'playing' ? p : null, dt);
     audio.setStorm(weatherFx.level);
     fp.update(dt, p, view.W / view.H);
-    view.render(mode === 'playing' ? fp : null);
-    hud.draw(view.hud, view.W, view.H, mode === 'playing' ? p : null, world, dt);
+    // looking through the scope: the gun is out of sight, the scope picture covers the view
+    view.render(mode === 'playing' && scopeK < 0.6 ? fp : null);
+    hud.draw(view.hud, view.W, view.H, mode === 'playing' ? p : null, world, dt, scopeK);
     minimap.draw(world, p, now);
     domHud.frame(dt, world, p, weatherFx.level * 0.8);
 
@@ -395,7 +428,7 @@ if (!view) {
 
   aim.yaw = local().yaw;
   // handle for automated browser tests
-  window.__game = { get world() { return world; }, aim, fp, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
+  window.__game = { get world() { return world; }, get scenery() { return scenery; }, aim, fp, view, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
   screens.showMenu(world);
   requestAnimationFrame(frame);
 }

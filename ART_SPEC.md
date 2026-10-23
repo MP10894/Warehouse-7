@@ -122,7 +122,7 @@ One `.glb` per weapon, named with the weapon id from the Weapons tab
 (lowercase, spaces become `_`, hyphens dropped): `sig_p320.glb`, `m4a1.glb`, `ak47.glb`,
 `rpg7.glb`.
 
-**Budget: 300 triangles** (weapons are on screen all the time).
+**Budget: 400 triangles** (weapons are on screen all the time; raised from 300 on 2026-10-23 so round sights and other details read properly).
 
 **Scale: 1 Blockbench unit = 1 texture pixel = 1/256 m (256 px per metre).** A weapon in
 your hands is seen far closer than any wall, so at the world's 32 px per metre a pistol
@@ -147,9 +147,14 @@ would be only 6 pixels long. At 256 it is about 50 units (and pixels) long, a ri
     rocket.
   - `magazine` (optional, a group with the magazine's boxes): with it, the reload shows the
     left hand taking the magazine out and putting a fresh one in. Put the group's pivot
-    where the magazine rocks about: the front lug (top front) for an AK-pattern magazine.
+    where the magazine rocks about: the front lug (top front) for an AK-pattern magazine or
+    the RPK's drum. (Pistols drop theirs straight out of the grip instead.)
   - `charging_handle` (optional, a group): slides back 9 cm when an empty gun is reloaded;
     the right hand pulls it. Put it on the right side.
+  - `slide` (optional, pistols, a group with the slide and its sights): sits locked back
+    while the pistol is empty and slams forward at the end of an empty reload. A pistol's
+    `magazine` group should include the part hidden inside the grip, since it slides out
+    along the grip.
 - The same model is used in first person (seen close) and on soldiers (seen small), so the
   side facing the player's eye (top and right side) matters most.
 
@@ -276,20 +281,52 @@ black, white, muzzle-flash yellow, flame orange, sky). Picture: `docs/palette.pn
 3. **Refine**: Martial opens the `.bbmodel` in Blockbench and makes it look right.
 4. **Check**: Claude checks the saved file (`tools/bbmodel.py`) and converts or commits it.
 
+**Weapon reference prompt (OpenArt).** The wording used for the Mk14 sheet; keep it the same
+for every gun so the sheets match, and change only the name, the description, the "Details"
+list, the length and the negative-prompt extras:
+
+```
+Prompt
+Weapon reference sheet of a single stylised low-poly 3D game asset, PS1-era retro style,
+chunky blocky shapes, flat colours with light pixel texture. <GUN NAME>, <one-line description>.
+Three orthographic views of the same <gun> at exactly the same scale, laid out on a plain flat
+light grey background, even lighting, no shadows:
+
+1. Large full side view (left side), perfectly flat and straight-on, muzzle pointing left, the
+   whole <gun> level and horizontal, filling the width of the sheet.
+2. Front view, looking straight down the barrel.
+3. Back view, looking straight at the butt plate.
+
+Details to show clearly:
+* <Body and stock>  * <Barrel>  * <Sights or scope>  * <Magazine>  * <Receiver>
+* Accents: a few dark grey parts so the shapes read against the black.
+
+Real proportions: about <N> cm long overall, <where the magazine sits>. Game asset reference,
+clean silhouette, consistent design across all three views.
+
+Negative prompt
+perspective, three-quarter view, angled view, tilted rifle, foreshortening, camera angle,
+dramatic lighting, cast shadows, background scenery, hands, person, text, letters, logos,
+extra barrels, multiple rifles, cropped muzzle, cropped stock, different scale between views,
+realistic photo, smooth high-poly, <parts this gun must not have>
+```
+
+The side view matters most: models can be built from it alone (the Mk14 was).
+
 Drafts so far: `assets/blocks/wall.png`, `assets/sources/enemy_insurgent.bbmodel`
 (→ `assets/characters/enemy_insurgent.glb`, rebuilt from its OpenArt sheet),
 `assets/sources/enemy_heavy_insurgent.bbmodel` (→ `assets/characters/enemy_heavy_insurgent.glb`), `assets/sources/enemy_militia.bbmodel` (→ `assets/characters/enemy_militia.glb`; the palette has no maroon, so the jacket uses the dark reds), `assets/sources/enemy_suicide_bomber.bbmodel` (→ `assets/characters/enemy_suicide_bomber.glb`; charges and charge belt painted as tan blocks with black tape so they read at a distance), `assets/sources/sig_p320.bbmodel`
 (→ `assets/weapons/sig_p320.glb`), `assets/sources/player_hands.bbmodel` (→ `assets/items/player_hands.glb`),
 `assets/sources/ak47.bbmodel` (→ `assets/weapons/ak47.glb`; shape from the real rifle's
 proportions because its reference sheet had no usable side view), `assets/sources/rpk.bbmodel`
-(→ `assets/weapons/rpk.glb`; real proportions, look from its sheet), all with OpenArt
+(→ `assets/weapons/rpk.glb`; real proportions, look from its sheet), `assets/sources/mk14ebr.bbmodel` (→ `assets/weapons/mk14ebr.glb`; from the sheet's side view only, since its front and back views were wrong; 300 triangles, the full budget), `assets/sources/mp5.bbmodel` (→ `assets/weapons/mp5.glb`; from the sheet's side view, without the stray prong under the handguard; short grip, a round front sight hood (a ring of 8 turned boxes) and a drum rear sight with a peep hole you aim through; 396 triangles), all with OpenArt
 references in `assets/sources/reference/`.
 
 ## Decisions (2026-10-22)
 
 1. Pixel density **32 px per metre**; terrain 16.
 2. Tool: **Blockbench**.
-3. Triangle budgets: characters **300**, weapons **300**, carried crates and pickups **60**,
+3. Triangle budgets: characters **300**, weapons **400** (300 until 2026-10-23), carried crates and pickups **60**,
    base upgrades **150**, first-person hands and forearms **300** (raised from 100 on 2026-10-22
    so the hands read as hands).
 4. **Simple gloved hands** in first person.

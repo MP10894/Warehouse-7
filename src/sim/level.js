@@ -70,7 +70,7 @@ export function orientFloors(floors, turn = 0, mirror = false) {
   return out.map(f => ({ floor: f.floor, rows: f.grid.map(r => r.join('')) }));
 }
 
-function stampBuilding(world, text, ox, oz, turn = 0, mirror = false) {
+function stampBuilding(world, text, ox, oz, turn = 0, mirror = false, file = '') {
   let floors = parseBuilding(text);
   if (floors.length && (turn || mirror)) floors = orientFloors(floors, turn, mirror);
   if (!floors.length) return;
@@ -83,6 +83,11 @@ function stampBuilding(world, text, ox, oz, turn = 0, mirror = false) {
   const samples = [[ox, oz], [ox + w, oz], [ox, oz + d], [ox + w, oz + d], [ox + w / 2, oz + d / 2]];
   const base = Math.round(samples.reduce((s, [x, z]) => s + terrainHeight(t, x, z), 0) / samples.length);
   flattenTerrain(t, ox - 1, oz - 1, ox + w + 1, oz + d + 1, base);
+  // what the graphics need to dress the building (colours, shop fronts, roof clutter)
+  const top = Math.max(...floors.map(f => f.floor));
+  const walled = floors.some(f => f.rows.some(r => /[#wd]/.test(r)));
+  const roofed = floors.some(f => f.floor === top && f.rows.some(r => r.includes('l')));
+  world.level.buildings.push({ file, x: ox, z: oz, w, d, base, top, walled, roofed });
 
   const ramps = [], rubble = [];
   for (const f of floors) {
@@ -133,7 +138,7 @@ function stampBuilding(world, text, ox, oz, turn = 0, mirror = false) {
 const PROP = {
   crate: [V.CRATE, 'crate'], lowwall: [V.LOWWALL, 'lowwall'], sandbag: [V.SANDBAG, 'sandbags'],
   metal: [V.METAL, null], pipe: [V.PIPE, null], rock: [V.ROCK, null], fence: [V.FENCE, null],
-  slab: [V.SLAB, null], column: [V.COLUMN, null], tank: [V.TANK, 'tank']
+  slab: [V.SLAB, null], column: [V.COLUMN, null], tank: [V.TANK, 'tank'], wreck: [V.WRECK, null]
 };
 
 /**
@@ -141,6 +146,8 @@ const PROP = {
  *   box:      { type, x, z, w, d, h, y }   w × d metres from (x, z), h blocks high, y metres off the ground
  *   cylinder: { type, shape: "cylinder", x, z, r, h, y }   centred on (x, z)
  * A "tank" is always a cylinder and is one piece: an RPG hit sets the whole tank off.
+ * A "wreck" is a burnt-out vehicle: { type: "wreck", model: "car" | "pickup" | "truck", x, z,
+ * w, d, h }: solid cover that never breaks; the graphics draw the vehicle over its blocks.
  */
 function stampProp(world, p) {
   const g = world.grid;
@@ -171,6 +178,9 @@ function stampProp(world, p) {
     if (p.type === 'tank') all.push(...cells);
     else if (material) addPiece(world, material, cells);
   }
+  if (p.type === 'wreck' && cols.length) {
+    world.level.wrecks.push({ model: p.model || 'car', x: p.x, z: p.z, w: p.w || 1, d: p.d || 1, h: p.h || 1, y: y0min === Infinity ? 0 : y0min, burnt: !!p.burnt, ...(p.colour ? { colour: p.colour } : {}) });
+  }
   if (p.type === 'tank' && all.length) {
     const id = addPiece(world, 'tank', all);
     world.pieces[id - 1].tank = { cx: p.x, cz: p.z, r: p.r || 1, y0: y0min, h: p.h || 1, floor };
@@ -185,11 +195,12 @@ export function buildLevel(world, level) {
   world.pieces = [];
   world.terrain = parseTerrain(level.terrainText, level.terrain_spacing || 4);
   world.ground = parseGround(level.groundText || '');
-  world.level = { name: level.name, size, decals: [] };
+  world.level = { name: level.name, size, decals: [], buildings: [], wrecks: [],
+    decor: (level.decor || []).map(d => ({ ...d })) };   // hand-placed decoration (market stalls, carpets, palms)
   for (const b of level.buildings || []) {
     const text = level.buildingTexts[b.file];
     if (!text) throw new Error(`Building file not found: ${b.file}`);
-    stampBuilding(world, text, b.x, b.z, b.turn || 0, !!b.mirror);
+    stampBuilding(world, text, b.x, b.z, b.turn || 0, !!b.mirror, b.file);
   }
   for (const p of level.props || []) stampProp(world, p);
   world.voxelVersion = 1;

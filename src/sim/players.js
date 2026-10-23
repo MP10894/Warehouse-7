@@ -3,7 +3,8 @@
 import { moveBody, groundAt } from './body.js';
 import { updatePlayerWeapon, grenadeMax } from './weapons.js';
 import { emit, dropPickup } from './damage.js';
-import { buildSpotFor, build, buildLabel, crateWanted, crateName } from './base.js';
+import { buildSpotFor, build, buildLabel, crateWanted, crateName, armouryFor, armouryWeapons } from './base.js';
+import { blocked } from './body.js';
 import { onBuild } from './waves.js';
 
 export function createPlayer(world, id, spawn) {
@@ -126,6 +127,7 @@ function findContext(world, p) {
   if (downed) return { kind: 'revive', label: 'REVIVE', targetId: downed.id };
   const spot = buildSpotFor(world, p);
   if (spot) return { kind: 'build', label: buildLabel(world, spot), spot };
+  if (armouryFor(world, p) && armouryWeapons(world).length) return { kind: 'armoury', label: 'ARMOURY' };
   if (p.slots.every(Boolean)) {
     const pk = world.pickups.find(k => k.type === 'weapon' && !ownsWeapon(p, k.weapon) && near(p, k, s.pickup_range));
     if (pk) return { kind: 'pickup', label: `TAKE ${weaponName(world, pk.weapon).toUpperCase()}`, pickupId: pk.id };
@@ -155,6 +157,35 @@ function doContext(world, p, ctx) {
     emit(world, { type: 'pickup', playerId: p.id, what: 'weapon', weapon: pk.weapon });
     emit(world, { type: 'message', text: `PICKED UP ${def.name.toUpperCase()}`, playerId: p.id });
   }
+}
+
+/**
+ * Take a weapon from the armoury (the ammunition supply): it goes into a free slot, or replaces
+ * the weapon in your hands, which is left on the ground beside the locker (a little way off,
+ * so you can walk over and take it back). The new weapon comes loaded with full ammunition.
+ */
+export function takeFromArmoury(world, p, weaponId) {
+  const spot = armouryFor(world, p);
+  if (!spot || !armouryWeapons(world).includes(weaponId) || ownsWeapon(p, weaponId)) return false;
+  const def = world.data.weapons[weaponId];
+  const free = p.slots.findIndex(x => !x);
+  const slot = free >= 0 ? free : p.active;
+  const old = p.slots[slot];
+  p.slots[slot] = { w: weaponId, mag: def.mag_size };
+  p.reserve[def.calibre] = Math.max(p.reserve[def.calibre] || 0, Math.min(world.data.calibres[def.calibre] || 0, def.max_total - def.mag_size));
+  p.active = slot; p.reloadT = 0; p.swapT = world.data.settings.player.swap_time;
+  if (old) {
+    const sx = spot.x + 0.5, sz = spot.z + 0.5;
+    let dx = p.x - sx, dz = p.z - sz;
+    const len = Math.hypot(dx, dz) || 1; dx /= len; dz /= len;
+    const off = world.data.settings.base.build_range + 0.5;
+    let x = sx + dx * off, z = sz + dz * off, y = groundAt(world, x, z, p.y + 1);
+    if (Math.abs(y - p.y) > 1.2 || blocked(world, x, z, y, 0.25, 1.6, 0.3)) { x = p.x; z = p.z; y = p.y; }
+    dropPickup(world, { type: 'weapon', weapon: old.w, mag: old.mag, x, y, z });
+  }
+  emit(world, { type: 'pickup', playerId: p.id, what: 'weapon', weapon: weaponId });
+  emit(world, { type: 'message', text: `${def.name.toUpperCase()} FROM THE ARMOURY`, playerId: p.id });
+  return true;
 }
 
 /** Walk a player from a joystick/keys vector { x, y }. Shared with the co-op guest's own device. */
@@ -216,6 +247,7 @@ export function updatePlayer(world, p, cmd, dt) {
   }
   if (used.size) world.pickups = world.pickups.filter(k => !used.has(k));
 
+  if (cmd.armoury) takeFromArmoury(world, p, cmd.armoury);
   p.context = findContext(world, p);
-  if (cmd.interact && p.context) doContext(world, p, p.context);
+  if (cmd.interact && p.context && p.context.kind !== 'armoury') doContext(world, p, p.context);
 }

@@ -73,9 +73,22 @@ Simple shapes outside buildings. `{ "type", "x", "z", "w", "d", "h", "y" }` fill
 | `slab`, `column` | Concrete. Unbreakable |
 | `fence` | Chain-link: nobody can walk through it, but you can see and shoot through it |
 | `tank` | A fuel tank (always round): it blows up when a rocket hits it |
+| `wreck` | A wrecked vehicle: solid cover, unbreakable. Add `"model"`: `car` (2 × 4, h 1), `pickup` (2 × 5, h 1) or `truck` (3 × 7, h 2); the long side sets which way it points. Optional `"burnt": true`, `"colour": "army"` |
 
 Round shapes: add `"shape": "cylinder"` and give `"r"` (radius) instead of `w` and `d`; `x`
 and `z` are then the centre. Fuel tanks are always round: `{ "type": "tank", "x", "z", "r", "h" }`.
+
+## Hand-placed decoration in level.json
+
+`decor` lists decoration that rules can't place by themselves. It is purely visual: you walk
+straight through it. Each entry is `{ "type", "x", "z" }` (centre, in metres) plus:
+
+| `type` | What it is |
+|---|---|
+| `stall` | Market stall, about 2.4 × 1.6 m. `"turn"`: 0–3 quarter turns (0 = counter faces north). `"counter": true` when a crate prop stands under the front (the goods go on the crate) |
+| `carpet` | A carpet on the ground (`"turn"` 0–3), or hung on a rail with `"hang": true` |
+| `palm` | A date palm, 5–7.5 m tall (`"h"` to set it) |
+| `shrub`, `pot`, `trash`, `tyrestack`, `gas`, `chair` | The same clutter the rules put along walls |
 
 ## Bases in level.json
 

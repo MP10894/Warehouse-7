@@ -20,7 +20,8 @@ export const V = {
   TANK: 14,     // fuel tank wall; bullets do nothing, an RPG hit blows the whole tank up
   ROCK: 15,     // natural rock; indestructible
   FENCE: 16,    // chain-link fence: you can't walk through it, but you can see and shoot through it
-  LOCKER: 17    // a base upgrade (ammunition, first aid or armour locker), destructible
+  LOCKER: 17,   // a base upgrade (ammunition, first aid or armour locker), destructible
+  WRECK: 18     // a wrecked car or truck: solid cover, unbreakable; drawn as a vehicle model
 };
 
 /** Per block type: does it fill the whole cell, and which materials.csv row it uses (null = unbreakable). */
@@ -41,7 +42,8 @@ export const V_INFO = {
   [V.TANK]: { full: true, material: 'tank' },
   [V.ROCK]: { full: true, material: null },
   [V.FENCE]: { full: true, seeThrough: true, material: null },
-  [V.LOCKER]: { full: true, material: 'locker' }
+  [V.LOCKER]: { full: true, material: 'locker' },
+  [V.WRECK]: { full: true, material: null }
 };
 
 export const isRamp = t => t >= V.RAMP_E && t <= V.RAMP_S;
