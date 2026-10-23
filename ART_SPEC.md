@@ -281,21 +281,34 @@ black, white, muzzle-flash yellow, flame orange, sky). Picture: `docs/palette.pn
 3. **Refine**: Martial opens the `.bbmodel` in Blockbench and makes it look right.
 4. **Check**: Claude checks the saved file (`tools/bbmodel.py`) and converts or commits it.
 
-**Weapon reference prompt (OpenArt).** Keep the style wording the same for every gun so the
-sheets match; change only the name and the "Gun details" line:
+**Weapon reference prompt (OpenArt).** The wording used for the Mk14 sheet; keep it the same
+for every gun so the sheets match, and change only the name, the description, the "Details"
+list, the length and the negative-prompt extras:
 
 ```
-Low poly PS1 style 3D model of a <GUN NAME>, weapon reference sheet showing a side view, a
-front view and a back view. Retro 1990s PlayStation 1 game asset: chunky low polygon shapes
-with hard edges, small pixelated low-resolution textures, slightly worn metal, flat lighting.
-Plain white background, no text, no labels, no watermark.
+Prompt
+Weapon reference sheet of a single stylised low-poly 3D game asset, PS1-era retro style,
+chunky blocky shapes, flat colours with light pixel texture. <GUN NAME>, <one-line description>.
+Three orthographic views of the same <gun> at exactly the same scale, laid out on a plain flat
+light grey background, even lighting, no shadows:
 
-Layout: a large left side view across the top (muzzle pointing left, perfectly flat side-on,
-no perspective), with a smaller front view (looking down the barrel) and back view (looking at
-the butt plate) underneath. All views the same scale, not overlapping.
+1. Large full side view (left side), perfectly flat and straight-on, muzzle pointing left, the
+   whole <gun> level and horizontal, filling the width of the sheet.
+2. Front view, looking straight down the barrel.
+3. Back view, looking straight at the butt plate.
 
-Gun details: <the parts that make this gun recognisable, and its colours>. No hands, no
-scope (unless it has one), no sling.
+Details to show clearly:
+* <Body and stock>  * <Barrel>  * <Sights or scope>  * <Magazine>  * <Receiver>
+* Accents: a few dark grey parts so the shapes read against the black.
+
+Real proportions: about <N> cm long overall, <where the magazine sits>. Game asset reference,
+clean silhouette, consistent design across all three views.
+
+Negative prompt
+perspective, three-quarter view, angled view, tilted rifle, foreshortening, camera angle,
+dramatic lighting, cast shadows, background scenery, hands, person, text, letters, logos,
+extra barrels, multiple rifles, cropped muzzle, cropped stock, different scale between views,
+realistic photo, smooth high-poly, <parts this gun must not have>
 ```
 
 The side view matters most: models can be built from it alone (the Mk14 was).
