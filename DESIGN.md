@@ -304,6 +304,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | RPK drawn: real proportions (1.04 m, 75-round drum, club-foot stock, bipod folded), look from the OpenArt sheet |
 | 2026-10-23 | Insurgent redrawn from an OpenArt sheet: sand head wrap and scarf, khaki tunic, olive chest rig (the armour part), olive trousers, dark boots, rolled sleeves |
 | 2026-10-23 | Rubble is decoration only (no collision, nothing stands on it, bullets pass): fixes getting stuck in rubble after falling through a hole; broken walls leave rubble everywhere again |
+| 2026-10-23 | Heavy Insurgent has its own model: black helmet, face scarf, bulky black vest with shoulder pads, black gloves and knee pads. Each enemy type can have its own model (`enemy_<type>.glb`) |
 
 ## Open questions
 

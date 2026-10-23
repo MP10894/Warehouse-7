@@ -117,8 +117,10 @@ function soldierFromArt(art) {
   };
 }
 
-export function soldierModel(kind = 'enemy') {
-  const art = ART.characters[kind === 'enemy' ? 'enemy_insurgent' : 'player'];
+/** kind: 'player' or 'enemy'; type: the enemy type (Enemies tab), e.g. 'heavy_insurgent'.
+ *  Uses characters/enemy_<type>.glb if there is one, otherwise the insurgent's. */
+export function soldierModel(kind = 'enemy', type = 'insurgent') {
+  const art = kind === 'enemy' ? (ART.characters['enemy_' + type] || ART.characters.enemy_insurgent) : ART.characters.player;
   if (art) return soldierFromArt(art);
   const c = PALETTES[kind];
   const root = new THREE.Group();

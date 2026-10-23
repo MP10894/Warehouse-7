@@ -103,8 +103,9 @@ north/−Z).
 - Overall height **1.75–1.80 m** (the game refuses anything outside 1.5–2.1 m, which
   usually means the export scale was wrong). Heads must line up with headshot zones.
 - Pose: standing, **arms hanging down**. The game raises the arms to aim.
-- Files: `enemy_insurgent.glb`, `player.glb`. Later enemy types get `enemy_<type>.glb`
-  with the type name from the Enemies tab.
+- Files: `enemy_insurgent.glb`, `player.glb`, and one per enemy type: `enemy_<type>.glb` with the
+  type name from the Enemies tab (e.g. `enemy_heavy_insurgent.glb`, `enemy_militia.glb`). A type
+  without its own file uses the insurgent's.
 - **Colour variants** (several insurgent outfits, partner colours in co-op) will be
   separate textures for the same model: `enemy_insurgent_2.png`, `player_p2.png`, and so on.
   (Not read by the game yet.)
@@ -264,7 +265,8 @@ black, white, muzzle-flash yellow, flame orange, sky). Picture: `docs/palette.pn
 4. **Check**: Claude checks the saved file (`tools/bbmodel.py`) and converts or commits it.
 
 Drafts so far: `assets/blocks/wall.png`, `assets/sources/enemy_insurgent.bbmodel`
-(→ `assets/characters/enemy_insurgent.glb`, rebuilt from its OpenArt sheet), `assets/sources/sig_p320.bbmodel`
+(→ `assets/characters/enemy_insurgent.glb`, rebuilt from its OpenArt sheet),
+`assets/sources/enemy_heavy_insurgent.bbmodel` (→ `assets/characters/enemy_heavy_insurgent.glb`), `assets/sources/sig_p320.bbmodel`
 (→ `assets/weapons/sig_p320.glb`), `assets/sources/player_hands.bbmodel` (→ `assets/items/player_hands.glb`),
 `assets/sources/ak47.bbmodel` (→ `assets/weapons/ak47.glb`; shape from the real rifle's
 proportions because its reference sheet had no usable side view), `assets/sources/rpk.bbmodel`

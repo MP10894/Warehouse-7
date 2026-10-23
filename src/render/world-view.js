@@ -25,7 +25,7 @@ export function createWorldView(scene, tex, initialLocalId) {
   function actorView(a) {
     let v = actors.get(a.id);
     if (!v) {
-      v = { model: soldierModel(a.kind === 'player' ? 'player' : 'enemy'), flinch: 0 };
+      v = { model: soldierModel(a.kind === 'player' ? 'player' : 'enemy', a.type), flinch: 0 };
       scene.add(v.model.root);
       actors.set(a.id, v);
     }

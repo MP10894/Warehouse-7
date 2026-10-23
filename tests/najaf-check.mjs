@@ -96,6 +96,20 @@ check(bad.length === 0, `the roof of every building with stairs can be reached${
     `early waves bring militia, late waves heavy insurgents (wave 1: ${first.join(', ')}; wave 6: ${[...new Set(sixth)].join(', ')})`);
 }
 
+// the co-op partner sees each enemy's type (so heavy insurgents look heavy on both phones)
+{
+  const { createHostEncoder, createGuestDecoder } = await import('../src/net/snapshot.js');
+  const host = createWorld({ data, levelId: 'najaf', seed: 21 });
+  const guest = createWorld({ data, levelId: 'najaf', seed: 21, playerIds: ['p1', 'p2'] });
+  const enc = createHostEncoder(data), dec = createGuestDecoder(data);
+  enc.record(host, []);
+  guest.enemies = [];   // the partner learns about the enemies only from the host's messages
+  dec.apply(guest, enc.encode(host), 'p2');
+  const want = host.enemies.filter(e => e.type === 'heavy_insurgent').map(e => e.id);
+  const got = guest.enemies.filter(e => e.type === 'heavy_insurgent').map(e => e.id);
+  check(want.length > 0 && want.every(id => got.includes(id)), `co-op partner gets each enemy's type (${got.length} heavy insurgents)`);
+}
+
 // rubble is decoration only: it never blocks or traps anyone (play-test bugs, 2026-10-22/23)
 {
   const w = createWorld({ data, levelId: 'najaf', seed: 9 });

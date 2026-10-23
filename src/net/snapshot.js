@@ -22,6 +22,7 @@ const r2 = v => Math.round(v * 100) / 100;
 /** Host side: keeps recent events with sequence numbers and builds snapshots. */
 export function createHostEncoder(data) {
   const weaponIds = Object.keys(data.weapons);
+  const enemyIds = Object.keys(data.enemies);
   const wIdx = id => weaponIds.indexOf(id);
   const ring = [];
   let seq = 0, lastPickups = '', lastPieces = '';
@@ -66,7 +67,7 @@ export function createHostEncoder(data) {
       patch.n = world.enemies.filter(e => e.alive || e.deadT < 12).map(e => [
         e.id, cm(e.x), cm(e.y), cm(e.z), mr(e.yaw), mr(e.pitch || 0), Math.ceil(e.armour), STATES.indexOf(e.state), wIdx(e.weapon.w),
         (e.alive ? 1 : 0) | (e.moving ? 2 : 0) | (e.aiming ? 4 : 0) | (e.wave ? 8 : 0),
-        Math.round(e.animT * 10), Math.round(e.deadT * 10)
+        Math.round(e.animT * 10), Math.round(e.deadT * 10), enemyIds.indexOf(e.type)
       ]);
       patch.b = world.projectiles.slice(-14).map(pr => [pr.id, cm(pr.x), cm(pr.y), cm(pr.z), Math.round(pr.vx), Math.round(pr.vy), Math.round(pr.vz),
         pr.team === 'enemy' ? 1 : 0, pr.kind === 'rocket' ? 1 : 0]);
@@ -104,6 +105,7 @@ export function createHostEncoder(data) {
 /** Guest side: copy a snapshot into the local world. Returns the events to replay. */
 export function createGuestDecoder(data) {
   const weaponIds = Object.keys(data.weapons);
+  const enemyIds = Object.keys(data.enemies);
   let lastTick = -1, lastSeq = 0;
 
   return {
@@ -158,8 +160,8 @@ export function createGuestDecoder(data) {
 
       const byId = new Map(world.enemies.map(e => [e.id, e]));
       world.enemies = (snap.n || []).map(row => {
-        const [id, x, y, z, yaw, pitch, armour, state, w, flags, animT, deadT] = row;
-        const e = byId.get(id) || { id, kind: 'enemy', type: 'insurgent', weapon: { w: weaponIds[w], mag: 1 }, hp: 100 };
+        const [id, x, y, z, yaw, pitch, armour, state, w, flags, animT, deadT, ti] = row;
+        const e = byId.get(id) || { id, kind: 'enemy', type: enemyIds[ti] || 'insurgent', weapon: { w: weaponIds[w], mag: 1 }, hp: 100 };
         Object.assign(e, {
           x: x / 100, y: y / 100, z: z / 100, yaw: yaw / 1000, pitch: pitch / 1000, armour, state: STATES[state] || 'idle',
           alive: !!(flags & 1), moving: !!(flags & 2), aiming: !!(flags & 4), wave: !!(flags & 8),
