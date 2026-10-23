@@ -25,6 +25,7 @@ rnd = random.Random(74)
 # Measured from the muzzle (d, metres, increasing towards the butt) and from the bore line
 # (y, metres, up). The grip, where the right hand holds, becomes the model's origin.
 GRIP_D, GRIP_Y = 0.775, -0.095
+DRUM_Y = -0.137   # centre of the drum, hanging just under the receiver
 # name, d from/to, y from/to, half width, material, rotation about x (degrees), pivot (d, y)
 PARTS = [
     ('muzzle_brake',  0.000, 0.042, -0.013, 0.013, 0.014, 'brake', 0, None),
@@ -41,9 +42,11 @@ PARTS = [
     ('rear_sight',    0.585, 0.645, 0.010, 0.045, 0.016, 'steel', 0, None),
     ('receiver',      0.600, 0.840, -0.060, 0.012, 0.022, 'steel', 0, None),
     ('dust_cover',    0.640, 0.840, 0.012, 0.034, 0.019, 'steel_light', 0, None),
-    ('drum_wide',     0.615, 0.785, -0.205, -0.115, 0.030, 'drum', 0, None),
-    ('drum_tall',     0.655, 0.745, -0.245, -0.060, 0.030, 'drum', 0, None),
-    ('drum_core',     0.640, 0.760, -0.230, -0.090, 0.024, 'drum', 0, None),
+    # 75-round drum: its round faces point forwards and backwards (axis along the barrel),
+    # so from the side you see its ribbed edge. Three boxes make an eight-sided disc.
+    ('drum_wide',     0.598, 0.698, DRUM_Y - 0.044, DRUM_Y + 0.044, 0.075, 'drum', 0, None),
+    ('drum_tall',     0.598, 0.698, DRUM_Y - 0.075, DRUM_Y + 0.075, 0.044, 'drum', 0, None),
+    ('drum_core',     0.594, 0.702, DRUM_Y - 0.064, DRUM_Y + 0.064, 0.064, 'drum', 0, None),
     ('trigger_guard', 0.705, 0.770, -0.100, -0.088, 0.008, 'steel', 0, None),
     ('trigger',       0.726, 0.736, -0.088, -0.060, 0.004, 'steel', 0, None),
     ('pistol_grip',   0.755, 0.800, -0.165, -0.058, 0.016, 'wood', -18, (0.777, -0.060)),
@@ -76,13 +79,17 @@ def colour(mat, d, y, x, face, part):
         return C['Rust and oil'][1] if grain else (C['Rust and oil'][3] if n > 0.93 else base)
     if mat == 'brake':  # slotted muzzle brake
         return C['Gun metal'][0] if (face in ('east', 'west', 'up') and int(d / 0.008) % 2 == 1 and abs(y) < 0.008) else C['Gun metal'][2]
-    if mat == 'drum':   # round drum: rings on the sides
-        if face in ('east', 'west'):
-            r = ((d - 0.700) ** 2 + (y + 0.152) ** 2) ** 0.5
-            if abs(r - 0.075) < 0.006 or abs(r - 0.035) < 0.005:
+    if mat == 'drum':
+        if face in ('north', 'south'):   # the round faces: rim, ring and centre hub
+            r = (x * x + (y - DRUM_Y) ** 2) ** 0.5
+            if r < 0.016:
+                return C['Gun metal'][3]
+            if abs(r - 0.045) < 0.004 or r > 0.068:
                 return C['Gun metal'][0]
-            return C['Gun metal'][2] if r < 0.035 else C['Gun metal'][1]
-        return C['Gun metal'][1]
+            return C['Gun metal'][1]
+        # the edge all round: ribs running round the drum
+        k = (d - 0.594) / 0.108
+        return C['Gun metal'][0] if (0.12 < k < 0.2 or 0.45 < k < 0.55 or 0.8 < k < 0.88) else C['Gun metal'][1]
     if mat == 'magazine':
         rib = face in ('east', 'west') and int(y * 140) % 3 == 0
         return C['Gun metal'][0] if rib else (C['Gun metal'][1] if n > 0.05 else C['Gun metal'][2])
