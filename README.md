@@ -1,7 +1,7 @@
-# Ruined City (working title)
+# Operator: Non-Permissive Environments
 
 A retro low-poly survival shooter built with [Three.js](https://threejs.org), playable in a
-phone or desktop browser. The current build has two levels, picked on the start screen: Najaf (Level 1: city, refinery and outskirts, with three possible bases) and the small test slice. Claim a base in a
+phone or desktop browser. The current build has one level, Najaf (city, refinery and outskirts, with three possible bases), picked on the menu after the title screen. Claim a base in a
 ruined desert city, fortify it, and survive escalating enemy waves. See `DESIGN.md`.
 
 ## Run it on your computer
@@ -61,7 +61,6 @@ Details in `DESIGN.md` → "How co-op works".
 | File | What it controls |
 |---|---|
 | `data/levels/najaf/` | Najaf (Level 1): building floor plans, ground heights, where everything goes ([guide](data/levels/README.md)) |
-| `data/levels/slice/` | The small test slice, same format |
 | `assets/` | Art files that replace the placeholders: rules in [ART_SPEC.md](ART_SPEC.md); Blockbench palette in `assets/palette/`; working `.bbmodel` files in `assets/sources/` |
 | `data/Game Data.xlsx` | The game-data workbook. **Weapons** tab: every weapon attribute (a projectile of "grenade" makes a thrown, quick-use item; a number in *Scope magnification* gives the weapon a scope, e.g. 4 = 4×). **Enemies** tab: health, speed, sight, reaction time, aim error in degrees, bursts, ammo drops, item drops (e.g. "Armour plate (15)", "Grenade (1)"), and which weapons each enemy type can carry. Edit in Excel as normal; formulas and "2 / 5" style min / max cells are fine |
 | `data/enemies.csv` | Fallback enemy values, used for anything the Enemies tab leaves out |

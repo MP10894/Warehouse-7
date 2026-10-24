@@ -16,7 +16,7 @@ import { createAimAssist, anglesTo } from '../src/input/aim-assist.js';
 import { setV } from '../src/sim/grid.js';
 
 const read = p => readFileSync(new URL('../' + p, import.meta.url), 'utf8');
-const lv = 'data/levels/slice/';
+const lv = 'tests/fixtures/slice/';   // a small test level (not part of the game)
 const buildings = {};
 for (const f of readdirSync(new URL('../' + lv + 'buildings', import.meta.url))) buildings[f] = read(lv + 'buildings/' + f);
 const workbook = ['Game Data.xlsx'].map(f => new URL('../data/' + f, import.meta.url)).find(u => existsSync(u));

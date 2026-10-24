@@ -419,6 +419,8 @@ if (!view) {
     if (!scopedNow && scopeK < 0.02) scopeK = 0;
     // a scope magnifies (4 = 4×); iron sights use the workbook's zoom
     const zoom = p.ads && wdef ? (scope ? 1 / scope : wdef.ads_zoom) : 1;
+    // title screen without its art: the level slowly turns behind the name
+    if (screens.titleShowing && !screens.hasTitleArt) { aim.yaw += dt * 0.05; aim.pitch = 0.04; }
     if (mode !== 'playing') { aimOut.yaw = aim.yaw; aimOut.pitch = aim.pitch; }
     view.follow(p, scopeK > 0 ? aimOut : aim, zoom, shake, dt);
     worldView.sync(world, dt);
@@ -462,6 +464,7 @@ if (!view) {
   aim.yaw = local().yaw;
   // handle for automated browser tests
   window.__game = { get world() { return world; }, get scenery() { return scenery; }, aim, fp, view, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
-  screens.showMenu(world);
+  // the title screen first; Start leads to the briefing and level menu
+  screens.showTitle(() => { audio.init(); screens.showMenu(world); });
   requestAnimationFrame(frame);
 }

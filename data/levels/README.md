@@ -10,7 +10,7 @@ Each level is a folder in `data/levels/` with:
 | `buildings/*.txt` | Building floor plans, one text grid per floor |
 
 Coordinates are in metres: **x** runs west → east (left → right in the text files),
-**z** runs north → south (top → bottom). Najaf is 256 × 256 m; the test slice is 100 × 100 m.
+**z** runs north → south (top → bottom). Najaf is 256 × 256 m.
 
 Najaf's city was first drafted by `tools/make_najaf.py`, the refinery and outskirts by
 `tools/make_najaf_districts.py`. Edit the files here directly from now on. (Running

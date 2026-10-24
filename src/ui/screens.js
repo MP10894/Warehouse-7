@@ -15,25 +15,42 @@ export function createScreens({ view, onStart, onCoop, onLevel }) {
   }
   const viewButton = () => `<button class="view" id="viewBtn" type="button">${view.viewLabel()}</button>`;
 
+  // title screen art, if drawn (assets/ui/title.jpg / .png / .webp)
+  const titleArt = Object.values(import.meta.glob('../../assets/ui/title.{jpg,jpeg,png,webp}', { query: '?art', import: 'default', eager: true }))[0] || null;
+
   return {
     hide() { screen.hidden = true; },
+    /** The title screen: game name and Start. Behind it, the art (or the level itself, slowly turning). */
+    showTitle(onTitleStart) {
+      const t = document.getElementById('title');
+      screen.hidden = true;
+      if (titleArt) t.querySelector('.title-art').style.backgroundImage = `url("${titleArt}")`;
+      document.getElementById('titleVer').textContent = `v${typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev'}`;
+      t.hidden = false;
+      const app = document.getElementById('app');
+      app.classList.add('titling');
+      const b = document.getElementById('titleStart');
+      b.onclick = () => { t.hidden = true; app.classList.remove('titling'); onTitleStart(); };
+    },
+    get titleShowing() { return !document.getElementById('title').hidden; },
+    get hasTitleArt() { return !!titleArt; },
 
     showMenu(world) {
       const lv = world.data.levels[world.levelId];
       const picks = Object.entries(world.data.levels)
         .map(([id, l]) => `<button class="lvl${id === world.levelId ? ' on' : ''}" type="button" data-level="${id}" aria-pressed="${id === world.levelId}">${l.title || l.name}</button>`).join('');
       card.innerHTML = `
-        <div class="eyebrow"><span>${lv.subtitle || ''}</span><span>Warehouse 7 · v${typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev'}</span></div>
+        <div class="eyebrow"><span>${lv.subtitle || ''}</span><span>Operator · v${typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev'}</span></div>
         <h1>${lv.title || lv.name}</h1>
         <div class="levels" role="group" aria-label="Level">${picks}</div>
+        <div class="actions"><button class="go" id="go" type="button">Start</button><button class="view coop" id="coopBtn" type="button">Co-op</button>${viewButton()}</div>
         <p>Secure a base, then hold it for ${fmtTime(world.timeLeft)} against the attack waves. The clock and the waves only start once you have a base. ${lv.summary || ''}</p>
         <ol class="steps">${(lv.briefing || []).map(b => `<li>${b}</li>`).join('')}</ol>
         <div class="ctrl">
           <div><h2>Phone</h2><ul><li>Left thumb <kbd>move</kbd> · right thumb <kbd>look</kbd></li><li><kbd>FIRE</kbd> (drag it to aim too) · <kbd>AIM</kbd> toggles sights</li><li><kbd>RELOAD</kbd> · <kbd>SWAP</kbd> · yellow button to use</li></ul></div>
           <div><h2>Desktop</h2><ul><li><kbd>WASD</kbd> move · click to lock the mouse</li><li>Click fire · right-click aim</li><li><kbd>R</kbd> reload · <kbd>Q</kbd> swap · <kbd>E</kbd> use</li></ul></div>
         </div>
-        <span class="rot">Hold your phone sideways. If the picture is upside down, tap View to flip it.</span>
-        <div class="actions"><button class="go" id="go" type="button">Start</button><button class="view coop" id="coopBtn" type="button">Co-op</button>${viewButton()}</div>`;
+        <span class="rot">Hold your phone sideways. If the picture is upside down, tap View to flip it.</span>`;
       screen.hidden = false;
       wire();
     },

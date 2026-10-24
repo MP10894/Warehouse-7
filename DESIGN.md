@@ -4,7 +4,7 @@ The source of truth for what the game is. Update it when a decision is made, so 
 sessions start from the same page. Martial's original concept is in
 `docs/20261022 - Planning & Process.docx`; this file is the agreed, structured version.
 
-Working title: not decided yet (the repository is called Warehouse 7 after the first prototype).
+Title: **Operator: Non-Permissive Environments** (the repository is still called Warehouse 7, after the first prototype).
 The game is separate from PMC Ltd.
 
 ## Vision
@@ -32,7 +32,7 @@ weapons kick, walls break.
   Winning a level unlocks the next.
 - Target size: about **1 minute to walk across** (roughly 250–300 m at walking speed).
 - **Winning:** secure a base, then hold out until the level clock runs out. The clock only
-  starts when the base is secured. The test slice uses **5 minutes**, Najaf **15**.
+  starts when the base is secured. Najaf uses **15 minutes**.
 - Buildings have up to 3 floors (ground + 2). Floors, structural columns, stairs and level
   boundaries are indestructible; ordinary walls can be destroyed.
 
@@ -284,7 +284,7 @@ joining a game already in progress isn't supported.
 
 ## Current build
 
-**Test slice (v0.2).** A 100 × 100 m piece of Level 1 (`data/levels/slice/`) with everything in the vertical
+**Test slice (v0.2, retired).** A 100 × 100 m piece of Level 1, now kept only as a small level for the automated checks (`tests/fixtures/slice/`), with everything in the vertical
 slice: a three-storey tower with stairs and a walkable roof, a ruined concrete shell,
 city and desert houses, dunes, the compound base, all four weapons from the sheet,
 travelling bullets and rockets, armour, two weapon slots, enemies that guard, roam and
@@ -316,7 +316,7 @@ tag `warehouse-prototype`.
 ### Level engine (agreed)
 
 - Buildings are made of 1-metre blocks, written as one text grid per floor
-  (`data/levels/slice/buildings/*.txt`, guide in `data/levels/README.md`). Floors are 3 m.
+  (`data/levels/<level>/buildings/*.txt`, guide in `data/levels/README.md`). Floors are 3 m.
 - The ground is a smooth height map from `terrain.txt` (digits, one point every 4 m),
   with surface types from `ground.txt`. (Planned as an image; text turned out simpler
   to edit and keeps everything in plain files. Can switch later.)
@@ -338,7 +338,7 @@ tag `warehouse-prototype`.
 | `data/materials.csv` | Health and armour of each breakable material, and whether it leaves rubble |
 | `data/upgrades.csv` | Each upgrade's levels: crate needed, wall height, what a locker hands out, how often, how much |
 | `data/settings.json` | Player, controls (incl. aim assist), camera, ballistics (bullet speed factor, recoil, bloom), waves (first wave, break, attacker cap, how far from you waves start), base, hazards (fuel-tank blast), markers (base markings), weather |
-| `data/levels/slice/level.json` | Positions of buildings, props, base, enemies, pickups, weather zones, timer |
+| `data/levels/najaf/level.json` | Positions of buildings, props, bases, enemies, pickups, weather zones, timer |
 
 ## Decision log
 
@@ -434,6 +434,7 @@ tag `warehouse-prototype`.
 | 2026-10-24 | Mini Uzi drawn, without a stock (the sheet's wire stock left out); its magazine drops out of the grip and a fresh one is pushed up on a reload, like the pistol's |
 | 2026-10-24 | Galil drawn: classic AR with a brown wooden handguard and the real folding tube stock; AK-style magazine rocks in. Every weapon now has drawn art |
 | 2026-10-24 | The game is published as a website (GitHub Pages, on every push to main after the checks pass), installable to a phone's home screen, starting offline from a saved copy and loading new versions when online. Online co-op connects the two phones directly (WebRTC via the free PeerJS service); the claude.ai room stays for the play link; both players must run the same version |
+| 2026-10-24 | The game is called **Operator: Non-Permissive Environments**. It opens on a title screen (name, Start; art from `assets/ui/title.jpg` when drawn, the level slowly turning behind it until then), then the briefing menu with the level choice (Najaf only), Start and Co-op. The test slice is retired from the game (kept as a fixture for the checks) |
 
 ## Open questions
 

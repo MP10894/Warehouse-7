@@ -1,6 +1,6 @@
 {
-  "name": "Warehouse 7",
-  "short_name": "Warehouse 7",
+  "name": "Operator: Non-Permissive Environments",
+  "short_name": "Operator",
   "description": "Hold a base in a ruined city: a low-poly shooter for one or two players.",
   "start_url": "./",
   "scope": "./",

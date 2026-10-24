@@ -274,3 +274,28 @@ p.tart { color: var(--muted); }
 #armoury .list button.locked em, #armoury .list button.owned em { color: var(--muted); }
 #armoury kbd { display: none; font-family: var(--hud); border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; margin-right: 6px; }
 #app:not(.touch) #armoury kbd { display: inline; }
+
+/* ---- title screen ---- */
+#title {
+  position: absolute; inset: 0; z-index: 6; display: grid; align-items: center; overflow: hidden;
+  padding-left: max(28px, calc(env(safe-area-inset-left, 0px) + 20px)); padding-right: max(28px, env(safe-area-inset-right, 0px));
+  background: linear-gradient(90deg, rgba(12, 10, 7, .82) 0%, rgba(12, 10, 7, .45) 45%, rgba(12, 10, 7, .05) 75%);
+}
+#title[hidden] { display: none; }
+#title .title-art { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center; }
+#title .title-text { display: grid; justify-items: start; gap: 6px; max-width: min(70vw, 640px); }
+#title h1 {
+  margin: 0; font-family: var(--display); font-weight: 400; color: var(--amber); text-transform: uppercase;
+  font-size: clamp(44px, 11vw, 112px); line-height: .9; letter-spacing: .04em; text-shadow: 0 4px 0 #000, 0 0 30px rgba(0, 0, 0, .6);
+}
+#title .title-sub {
+  margin: 0 0 14px; font-family: var(--display); color: var(--ink); text-transform: uppercase;
+  font-size: clamp(15px, 3.1vw, 30px); letter-spacing: .12em; text-shadow: 0 3px 0 #000;
+}
+#title .title-sub::before { content: ''; display: block; width: 3.2em; height: 4px; margin-bottom: 10px;
+  background: repeating-linear-gradient(-45deg, var(--amber) 0 6px, #1b1a18 6px 12px); }
+#title .go { font-size: 20px; padding: 12px 42px; }
+#title .title-ver { position: absolute; right: max(14px, env(safe-area-inset-right, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+  font-family: var(--hud); font-size: 15px; color: var(--muted); text-shadow: 0 2px 0 #000; }
+/* nothing but the scene and the title while it shows */
+#app.titling > :not(#title):not(#view) { visibility: hidden !important; }

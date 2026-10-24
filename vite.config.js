@@ -38,12 +38,12 @@ function gameDataWorkbook() {
 // Art files imported with `?art` become data URLs inside the game code, so the
 // single-file play link carries them (see src/render/assets.js).
 function artFiles() {
-  const types = { png: 'image/png', glb: 'model/gltf-binary' };
+  const types = { png: 'image/png', glb: 'model/gltf-binary', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp' };
   return {
     name: 'art-files',
     enforce: 'pre',
     load(id) {
-      const m = id.match(/^(.*\.(png|glb))\?art$/);
+      const m = id.match(/^(.*\.(png|glb|jpg|jpeg|webp))\?art$/);
       if (!m) return null;
       this.addWatchFile(m[1]);
       return `export default ${JSON.stringify(`data:${types[m[2]]};base64,${readFileSync(m[1]).toString('base64')}`)};`;
