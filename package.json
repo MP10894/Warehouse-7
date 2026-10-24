@@ -1,7 +1,7 @@
 {
   "name": "warehouse-7",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,6 +11,7 @@
     "test:sim": "node tests/sim-smoke.mjs && node tests/najaf-check.mjs && node tests/najaf-bases.mjs && node tests/combat-items.mjs && node tests/decor-check.mjs && node tests/armoury-check.mjs"
   },
   "dependencies": {
+    "peerjs": "^1.5.4",
     "three": "0.160.0"
   },
   "devDependencies": {

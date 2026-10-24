@@ -23,7 +23,7 @@ export function createScreens({ view, onStart, onCoop, onLevel }) {
       const picks = Object.entries(world.data.levels)
         .map(([id, l]) => `<button class="lvl${id === world.levelId ? ' on' : ''}" type="button" data-level="${id}" aria-pressed="${id === world.levelId}">${l.title || l.name}</button>`).join('');
       card.innerHTML = `
-        <div class="eyebrow"><span>${lv.subtitle || ''}</span><span>Working title TBD</span></div>
+        <div class="eyebrow"><span>${lv.subtitle || ''}</span><span>Warehouse 7 · v${typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev'}</span></div>
         <h1>${lv.title || lv.name}</h1>
         <div class="levels" role="group" aria-label="Level">${picks}</div>
         <p>Secure a base, then hold it for ${fmtTime(world.timeLeft)} against the attack waves. The clock and the waves only start once you have a base. ${lv.summary || ''}</p>
@@ -33,7 +33,7 @@ export function createScreens({ view, onStart, onCoop, onLevel }) {
           <div><h2>Desktop</h2><ul><li><kbd>WASD</kbd> move · click to lock the mouse</li><li>Click fire · right-click aim</li><li><kbd>R</kbd> reload · <kbd>Q</kbd> swap · <kbd>E</kbd> use</li></ul></div>
         </div>
         <span class="rot">Hold your phone sideways. If the picture is upside down, tap View to flip it.</span>
-        <div class="actions"><button class="go" id="go" type="button">Start</button><button class="view coop" id="coopBtn" type="button">Co-op test</button>${viewButton()}</div>`;
+        <div class="actions"><button class="go" id="go" type="button">Start</button><button class="view coop" id="coopBtn" type="button">Co-op</button>${viewButton()}</div>`;
       screen.hidden = false;
       wire();
     },
@@ -41,10 +41,10 @@ export function createScreens({ view, onStart, onCoop, onLevel }) {
     /** Co-op: choose to host or join. */
     showCoop({ transportLabel, onHost, onJoin, onBack, error }) {
       card.innerHTML = `
-        <div class="eyebrow"><span>Co-op test</span><span>2 players</span></div>
+        <div class="eyebrow"><span>Co-op</span><span>2 players</span></div>
         <h1>Play together</h1>
         ${error ? `<p class="warn">${error}</p>` : ''}
-        <p>One phone hosts and gets a four-digit room code. Your partner opens this same game link, taps Co-op test, and joins with that code. You both need access to this page.</p>
+        <p>One phone hosts and gets a four-digit room code. Your partner opens the game, taps Co-op, and joins with that code. Both phones need to be online and on the same version of the game.</p>
         <p class="small">Connection: ${transportLabel}</p>
         <div class="actions"><button class="go" id="hostBtn" type="button">Host a game</button></div>
         <div class="actions joinrow"><input id="codeIn" inputmode="numeric" maxlength="4" placeholder="Code" aria-label="Room code"><button class="view coop" id="joinBtn" type="button">Join</button><button class="view coop" id="backBtn" type="button">Back</button></div>`;
@@ -61,7 +61,7 @@ export function createScreens({ view, onStart, onCoop, onLevel }) {
     /** Co-op lobby, for host or guest. */
     showLobby({ role, code, onStart, onLeave }) {
       card.innerHTML = `
-        <div class="eyebrow"><span>Co-op test · ${role === 'host' ? 'you are hosting' : 'you joined'}</span><span>Room</span></div>
+        <div class="eyebrow"><span>Co-op · ${role === 'host' ? 'you are hosting' : 'you joined'}</span><span>Room</span></div>
         <h1>Code ${code}</h1>
         <p id="lobbyStatus">${role === 'host' ? 'Waiting for your partner to join…' : 'Connecting to the host…'}</p>
         <div class="actions">${role === 'host' ? '<button class="go" id="lobbyStart" type="button" disabled>Start</button>' : ''}<button class="view coop" id="lobbyLeave" type="button">Leave</button></div>`;

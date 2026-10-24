@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { execSync } from 'node:child_process';
 import { gameDataFromXlsx } from './src/data/xlsx.js';
 import { parseCsv, byKey } from './src/data/parse.js';
 
@@ -50,10 +51,20 @@ function artFiles() {
   };
 }
 
+// The version shown on the menu and compared when two phones start co-op: the package
+// version plus the commit it was built from (so every published build has its own).
+function appVersion() {
+  const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
+  let sha = (process.env.GITHUB_SHA || '').slice(0, 7);
+  if (!sha) { try { sha = execSync('git rev-parse --short=7 HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); } catch (e) { sha = 'local'; } }
+  return `${pkg.version}-${sha}`;
+}
+
 // base './' keeps every path relative, so the built game works from any folder:
 // GitHub Pages, a Capacitor Android wrapper, or a plain web host.
 export default defineConfig({
   base: './',
+  define: { __APP_VERSION__: JSON.stringify(appVersion()) },
   plugins: [artFiles(), gameDataWorkbook()],
   build: { target: 'es2020', chunkSizeWarningLimit: 1000 }
 });

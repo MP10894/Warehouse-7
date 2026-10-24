@@ -36,6 +36,15 @@ import { createTuning } from './ui/tuning.js';
 import { getTransport } from './net/transport.js';
 import { createHostEncoder, createGuestDecoder } from './net/snapshot.js';
 
+/** This build's version (package version + commit), shown on the menu and checked in co-op. */
+export const VERSION = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev';
+
+// As a website (GitHub Pages / the home-screen app), keep a copy for offline play and pick up
+// new versions: see public/sw.js. Not inside claude.ai, and not while developing.
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !window.claude && !import.meta.env.DEV) {
+  addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(() => {}); });
+}
+
 const S = DATA.settings;
 const STEP = 1 / S.world.fixed_step_hz;
 const $ = id => document.getElementById(id);
@@ -190,6 +199,16 @@ if (!view) {
     screens.showMenu(world);
   }
 
+  /** Plain-language message for a failed online connection. */
+  function coopError(e, code) {
+    const type = e && e.type;
+    if (type === 'peer-unavailable') return `No game found with code ${code}. Check the code, and that your partner is on the Host screen.`;
+    if (type === 'network' || type === 'server-error' || type === 'socket-error' || type === 'socket-closed')
+      return 'Could not reach the online service. Check your internet connection and try again.';
+    if (type === 'browser-incompatible') return 'This browser can’t make phone-to-phone connections. Try Chrome or Safari.';
+    return 'The connection failed. Try again.';
+  }
+
   handlers.coop = async () => {
     audio.init();
     screens.showCoop({ transportLabel: 'connecting…', onHost: () => {}, onJoin: () => {}, onBack: () => screens.showMenu(world) });
@@ -201,21 +220,31 @@ if (!view) {
       onBack: () => screens.showMenu(world),
       onHost: async () => {
         if (!t) return;
-        net.code = String(1000 + Math.floor(Math.random() * 9000));
-        net.session = await t.join(net.code);
+        // (online: if someone else is already using that code, pick another)
+        for (let tries = 0; ; tries++) {
+          net.code = String(1000 + Math.floor(Math.random() * 9000));
+          try { net.session = await t.join(net.code, 'host'); break; } catch (e) {
+            if (e && e.type === 'unavailable-id' && tries < 5) continue;
+            screens.showCoop({ transportLabel: t.label, error: coopError(e), onHost: () => handlers.coop(), onJoin: () => handlers.coop(), onBack: () => screens.showMenu(world) });
+            return;
+          }
+        }
         role = 'host'; localId = 'p1'; mode = 'lobby';
-        net.session.set({ app: 'w7', role: 'host', run: net.run, started: 0 });
+        net.session.set({ app: 'w7', role: 'host', run: net.run, started: 0, v: VERSION });
         screens.showLobby({ role: 'host', code: net.code, onStart: hostStart, onLeave: leaveCoop });
       },
       onJoin: async code => {
         if (!t) return;
         net.code = code;
-        net.session = await t.join(code);
+        try { net.session = await t.join(code, 'guest'); } catch (e) {
+          screens.showCoop({ transportLabel: t.label, error: coopError(e, code), onHost: () => handlers.coop(), onJoin: () => handlers.coop(), onBack: () => screens.showMenu(world) });
+          return;
+        }
         role = 'guest'; localId = 'p2'; mode = 'lobby';
         net.decoder.reset();
         net.run = -1;
         net.edges = { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0 };
-        net.session.set({ app: 'w7', role: 'guest', run: -1 });
+        net.session.set({ app: 'w7', role: 'guest', run: -1, v: VERSION });
         screens.showLobby({ role: 'guest', code, onLeave: leaveCoop });
       }
     });
@@ -273,7 +302,11 @@ if (!view) {
       const st = partner && partner.state;
       if (partner) net.lostAt = 0; else if (!net.lostAt) net.lostAt = now;
       const lost = net.lostAt && now - net.lostAt > 3000;
-      if (mode === 'lobby') {
+      // both phones must run the same version of the game
+      const otherV = st && st.v, mismatch = !!(otherV && otherV !== VERSION);
+      if (mode === 'lobby' && mismatch) {
+        screens.setLobbyStatus(`Your partner has a different version of the game (theirs: ${otherV}, yours: ${VERSION}). Close the game on both phones and open it again while online to update, then try again.`, false);
+      } else if (mode === 'lobby') {
         if (role === 'host') screens.setLobbyStatus(st && st.role === 'guest' ? 'Partner connected. Start when ready.' : 'Waiting for your partner to join…', !!(st && st.role === 'guest'));
         else {
           screens.setLobbyStatus(st && st.role === 'host' ? 'Connected. Waiting for the host to start…' : 'Looking for the host…');

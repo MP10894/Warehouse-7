@@ -26,12 +26,35 @@ Other commands:
 | `npm run preview` | Plays the built version from `dist/` |
 | `npm run test:sim` | Checks the game rules still work (no graphics needed) |
 
-## Co-op test
+## The game on the web (GitHub Pages) and on phones
 
-On the start screen, **Co-op test** lets one player host (they get a four-digit code) and
-the other join with that code. Both open the same game link; the partner needs access to
-it (share it from the page's Share menu). On one computer, two tabs of the same browser
-also work. Details in `DESIGN.md` → "How co-op works".
+Every push to `main` publishes the game to **https://mp10894.github.io/Warehouse-7/**
+(`.github/workflows/pages.yml`): the game checks run first, and if any fail the website keeps
+the previous version. You can follow each run on the repository's **Actions** tab.
+
+- **Install on a phone:** open the address in Chrome (Android) or Safari (iPhone), then
+  *Add to Home Screen* (Android: ⋮ menu → *Add to Home screen* / *Install app*; iPhone: the
+  Share button → *Add to Home Screen*). It opens full screen with its own icon.
+- **Updates:** nothing to reinstall. Each time the game is opened while online it loads the
+  newest version; offline it starts from the copy saved on the phone (`public/sw.js`).
+- **Version:** shown at the top of the start screen (e.g. `v0.2.0-5edf676`: the version in
+  `package.json` and the commit it was built from).
+
+## Co-op
+
+On the start screen, **Co-op** lets one player host (they get a four-digit code) and the other
+join with that code.
+
+- **On the website / installed app:** the two phones connect directly to each other
+  ("online (phone to phone)"); a free public service only introduces them. Both need to be
+  online and on the same version — if they aren't, the lobby says so and asks both to reopen
+  the game while online. Some mobile data networks block direct connections; if that happens
+  a lot, the fix is a small relay server.
+- **From the claude.ai play link:** the platform's live room is used instead; the partner
+  needs access to the link (share it from the page's Share menu).
+- **Testing on one computer:** two tabs, with `?tabs` added to the address.
+
+Details in `DESIGN.md` → "How co-op works".
 
 ## What you can change without touching code
 

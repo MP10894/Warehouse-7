@@ -261,9 +261,13 @@ Starting values, to be tuned after play-testing:
 
 1. One player hosts and gets a four-digit room code; the partner opens the same game
    link and joins with it.
-2. Connection: the platform's live "room" for the play link (each player's state is
-   their room presence: latest value wins, about 30 updates a second, 4 KB limit). Two
-   tabs of one browser also work, for testing on one computer. No server of our own.
+2. Connection: on the website / installed app, the phones connect directly (WebRTC
+   data channel; the free public PeerJS service only introduces them: the host registers
+   "w7-<code>", the guest connects to it). From the claude.ai play link, the platform's
+   live "room" (each player's state is their room presence: latest value wins, about 30
+   updates a second, 4 KB limit). Two tabs of one browser also work, for testing on one
+   computer. No server of our own. Both players must run the same version of the game:
+   the lobby compares them and won't start if they differ.
 3. The host runs the game rules for both players and publishes a compact snapshot of
    everything that changes (people, bullets, pickups, broken walls, base walls, clock,
    recent events) every frame. The guest builds the same level from the same seed and
@@ -429,6 +433,7 @@ tag `warehouse-prototype`.
 | 2026-10-24 | FAL drawn: classic wooden furniture, full wooden stock (the sheet drew a skeleton stock), aperture rear sight; its magazine rocks in like the M14's |
 | 2026-10-24 | Mini Uzi drawn, without a stock (the sheet's wire stock left out); its magazine drops out of the grip and a fresh one is pushed up on a reload, like the pistol's |
 | 2026-10-24 | Galil drawn: classic AR with a brown wooden handguard and the real folding tube stock; AK-style magazine rocks in. Every weapon now has drawn art |
+| 2026-10-24 | The game is published as a website (GitHub Pages, on every push to main after the checks pass), installable to a phone's home screen, starting offline from a saved copy and loading new versions when online. Online co-op connects the two phones directly (WebRTC via the free PeerJS service); the claude.ai room stays for the play link; both players must run the same version |
 
 ## Open questions
 
