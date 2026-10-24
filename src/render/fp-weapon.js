@@ -7,6 +7,8 @@ import { ART, cloneArt } from './assets.js';
 import { makeCanvas, pixelTexture } from './textures.js';
 
 const HIP = new THREE.Vector3(0.2, -0.21, -0.5);
+// a long weapon whose back end would fill the screen at the hip sits further out to the right
+const HIP_OF = { rpg7: new THREE.Vector3(0.27, -0.17, -0.5) };
 // with drawn art, the weapon's `sight` point is placed this far in front of the eye
 const SIGHT_DISTANCE = 0.4;
 const HOLDER_SCALE = 0.85;
@@ -141,6 +143,9 @@ export function createFpWeapon() {
     v: new THREE.Vector3(), w: new THREE.Vector3(), q: new THREE.Quaternion(), e: new THREE.Euler()
   };
   function setupMagReload() {
+    // RPG-7: the loaded rocket's warhead (hidden once fired, slid back in on a reload)
+    R.war = gun && gun.getObjectByName('warhead');
+    if (R.war) { R.warPos = R.war.position.clone(); R.handL0 = hands.L.position.clone(); }
     R.mag = gun && gun.getObjectByName('magazine');
     R.ch = gun && gun.getObjectByName('charging_handle');
     R.slide = gun && gun.getObjectByName('slide');
@@ -216,6 +221,29 @@ export function createFpWeapon() {
       R.ch.position.z = R.chPos.z + 0.09 * pull;
       if (u > 0.7 && u < 0.92) holder.rotation.z -= 0.12 * Math.sin(span(u, 0.7, 0.92) * Math.PI);
     }
+  }
+  /**
+   * RPG-7: the launcher tips its muzzle up; the left hand brings a fresh rocket up from below,
+   * lines it up in front of the muzzle and slides it in until it seats.
+   */
+  // the launcher comes in a little closer and turns its muzzle towards the middle of the view
+  const ROCKET_TILT = { rz: -0.25, ry: 0.3, rx: 0.12, py: 0.0, px: -0.1, pz: 0.18 };
+  const ROCKET_FROM = new THREE.Vector3(-0.15, -0.35, 0.05), ROCKET_LINED = new THREE.Vector3(0, 0, -0.26);
+  const ROCKET_GRAB = new THREE.Vector3(-0.045, -0.015, -0.2);   // where the left hand holds the rocket, from the warhead's pivot
+  function rocketReload(u) {
+    const v = R.v, w = R.w, L = hands.L.position;
+    tiltFor(u, ROCKET_TILT);
+    let visible = true;
+    if (u < 0.22) { visible = false; v.copy(R.warPos).add(ROCKET_FROM); }
+    else if (u < 0.5) lerp3(v, w.copy(R.warPos).add(ROCKET_FROM), R.w.copy(R.warPos).add(ROCKET_LINED), span(u, 0.22, 0.5));
+    else lerp3(v, w.copy(R.warPos).add(ROCKET_LINED), R.warPos, span(u, 0.52, 0.78));
+    R.war.visible = visible;
+    R.war.position.copy(v);
+    if (u > 0.76 && u < 0.82) holder.position.y += Math.sin((u - 0.76) / 0.06 * Math.PI) * 0.01;   // it seats
+    const hold = w.copy(v).add(ROCKET_GRAB);
+    if (u < 0.22) lerp3(L, R.handL0, R.v.copy(R.warPos).add(ROCKET_FROM).add(ROCKET_GRAB), span(u, 0.04, 0.2));
+    else if (u < 0.8) L.copy(hold);
+    else lerp3(L, hold.copy(R.warPos).add(ROCKET_GRAB), R.handL0, span(u, 0.8, 0.94));
   }
   /** Pistol: the magazine drops out of the grip; a fresh one goes in from below. */
   function dropReload(u, empty) {
@@ -313,13 +341,17 @@ export function createFpWeapon() {
       heldGrenade.visible = false;
       if (player.moving) st.bob += dt * 9;
       const adsPos = adsTarget || ADS[gunId] || ADS.m4a1;
-      holder.position.lerpVectors(HIP, adsPos, st.ads);
+      holder.position.lerpVectors(HIP_OF[gunId] || HIP, adsPos, st.ads);
       const sway = (1 - st.ads * 0.85) * (player.moving ? 1 : 0.2);
       holder.position.x += Math.sin(st.bob * 0.5) * 0.012 * sway;
       holder.position.y += -Math.abs(Math.cos(st.bob * 0.5)) * 0.012 * sway;
       holder.position.z += st.kick * 0.05;
       holder.rotation.set(st.kick * 0.12, 0, 0);
-      if (R.mag) {
+      if (R.war) {
+        // an empty launcher shows no warhead
+        R.war.position.copy(R.warPos); R.war.visible = slot.mag > 0;
+        if (st.reload > 0) rocketReload(1 - st.reload / st.reloadDur);
+      } else if (R.mag) {
         restMag(slot.mag === 0);
         if (st.reload > 0) magReload(1 - st.reload / st.reloadDur, st.reloadEmpty);
       } else if (st.reload > 0) {

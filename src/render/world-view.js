@@ -97,7 +97,7 @@ export function createWorldView(scene, tex, initialLocalId) {
           if (!r) { r = rocketModel(); scene.add(r); rockets.set(pr.id, r); }
           r.position.set(pr.x, pr.y, pr.z);
           r.lookAt(pr.x + pr.vx, pr.y + pr.vy, pr.z + pr.vz);
-          r.rotateX(Math.PI / 2);
+          if (!r.userData.art) r.rotateX(Math.PI / 2);   // (the code-drawn cone is built along y)
           continue;
         }
         if (n >= MAX_TRACERS) continue;

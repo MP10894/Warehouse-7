@@ -107,11 +107,20 @@ export const handLeftOf = id => (ART.weapons[id] && ART.weapons[id].handLeft) ||
 export function rocketModel() {
   // the group's +z faces the flight direction (the renderer uses lookAt)
   const g = new THREE.Group();
+  if (ART.items.pg7v) {
+    // the whole PG-7V (warhead, motor, fins); drawn pointing −z, origin where the motor starts
+    const r = ART.items.pg7v.clone(true);
+    r.rotation.set(0, Math.PI, 0);
+    g.add(r);
+    g.userData.art = true;
+    return g;
+  }
   const w = ART.weapons.rpg7;
   if (w && w.warhead) {
     const r = w.warhead.clone(true);
     r.position.set(0, 0, 0); r.rotation.set(0, Math.PI, 0); // drawn pointing −z
     g.add(r);
+    g.userData.art = true;
     return g;
   }
   const head = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.26, 6), lambert(0x4e5a3a));
