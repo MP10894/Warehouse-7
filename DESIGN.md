@@ -423,6 +423,7 @@ tag `warehouse-prototype`.
 | 2026-10-23 | Weapon triangle budget raised from 300 to 400 for every gun. MP5 reworked: grip at its real length, round front sight hood, drum rear sight you look through (the post sits in the hood's ring) |
 | 2026-10-23 | M4A1 drawn from its OpenArt sheet: flat-top with a railed handguard and a flip-up rear aperture (as the sheet drew it, not the carry handle), A-frame front sight, tan barrel, half-extended stock. Every gun now has drawn art |
 | 2026-10-23 | A cleared base stays cleared: defenders never respawn once all are dead (even before the base is claimed), and nothing spawns within 8 m of a cleared or claimed base |
+| 2026-10-24 | Workbook update (Martial): Mini Uzi (militia), FAL (insurgents) and Galil (heavy insurgents, who no longer carry the AK-47) added; enemies see less far and aim less well; heavy insurgents drop 30 armour; P320 and RPK carry less spare ammunition. New guns use simple stand-in shapes until drawn |
 
 ## Open questions
 

@@ -58,6 +58,30 @@ export function weaponModel(id) {
     head.rotation.x = -Math.PI / 2; head.position.set(0, 0.07, -0.65); g.add(head);
     box(0.04, 0.1, 0.04, wood, 0, -0.01, -0.15, g);
     box(0.04, 0.1, 0.04, wood, 0, -0.01, 0.08, g);
+  } else if (id === 'mini_uzi') {
+    // compact and boxy: the magazine goes up through the grip, short barrel stub, folded stock
+    box(0.045, 0.07, 0.24, black, 0, 0.05, -0.08, g);
+    box(0.016, 0.016, 0.06, black, 0, 0.055, -0.23, g);
+    box(0.035, 0.12, 0.045, black, 0, -0.035, 0.0, g).rotation.x = 0.1;
+    box(0.025, 0.08, 0.035, grey, 0, -0.12, 0.012, g);
+    box(0.012, 0.02, 0.16, grey, 0.026, 0.06, 0.06, g);
+  } else if (id === 'galil') {
+    // AK-like layout in black, with a wooden handguard and a curved magazine
+    box(0.05, 0.075, 0.32, black, 0, 0.05, -0.08, g);
+    box(0.055, 0.055, 0.2, wood, 0, 0.045, -0.32, g);
+    box(0.016, 0.016, 0.2, black, 0, 0.065, -0.5, g);
+    box(0.04, 0.07, 0.25, black, 0, 0.03, 0.18, g);
+    box(0.03, 0.15, 0.06, black, 0, -0.06, -0.14, g).rotation.x = 0.3;
+    box(0.03, 0.08, 0.04, black, 0, -0.03, 0.0, g);
+  } else if (id === 'fal') {
+    // long battle rifle: carry handle, straight 20-round magazine, solid stock
+    box(0.05, 0.08, 0.36, black, 0, 0.05, -0.1, g);
+    box(0.05, 0.06, 0.22, grey, 0, 0.045, -0.38, g);
+    box(0.018, 0.018, 0.24, black, 0, 0.06, -0.6, g);
+    box(0.045, 0.085, 0.3, black, 0, 0.025, 0.22, g);
+    box(0.03, 0.13, 0.065, black, 0, -0.06, -0.15, g);
+    box(0.02, 0.025, 0.12, black, 0, 0.11, -0.1, g);
+    box(0.03, 0.08, 0.04, black, 0, -0.03, 0.0, g);
   } else {
     box(0.05, 0.07, 0.4, black, 0, 0.05, -0.1, g);
     if (id === 'mk14ebr') { box(0.035, 0.035, 0.2, black, 0, 0.12, -0.08, g); box(0.045, 0.045, 0.03, black, 0, 0.12, -0.19, g); }
@@ -66,12 +90,12 @@ export function weaponModel(id) {
 }
 
 /** Where the barrel ends, in the weapon model's own coordinates. */
-export const MUZZLE = { sig_p320: [0, 0.06, -0.15], m4a1: [0, 0.055, -0.6], ak47: [0, 0.065, -0.58], rpg7: [0, 0.07, -0.8] };
+export const MUZZLE = { sig_p320: [0, 0.06, -0.15], m4a1: [0, 0.055, -0.6], ak47: [0, 0.065, -0.58], rpg7: [0, 0.07, -0.8], mini_uzi: [0, 0.055, -0.26], galil: [0, 0.065, -0.6], fal: [0, 0.06, -0.72] };
 export const muzzleOf = id => (ART.weapons[id] && ART.weapons[id].muzzle) || MUZZLE[id] || [0, 0, -0.5];
 /** The aiming point (eye looks through it) of a drawn weapon, or null for placeholders. */
 export const sightOf = id => (ART.weapons[id] && ART.weapons[id].sight) || null;
 /** Where the left hand holds the weapon. */
-const HAND_LEFT = { sig_p320: [-0.03, -0.01, 0.03], m4a1: [-0.01, 0.03, -0.3], ak47: [-0.01, 0.035, -0.3], rpg7: [0, -0.02, 0.08] };
+const HAND_LEFT = { sig_p320: [-0.03, -0.01, 0.03], m4a1: [-0.01, 0.03, -0.3], ak47: [-0.01, 0.035, -0.3], rpg7: [0, -0.02, 0.08], mini_uzi: [-0.02, -0.06, -0.14], galil: [-0.01, 0.035, -0.32], fal: [-0.01, 0.03, -0.38] };
 /** Where the right hand holds a placeholder weapon (drawn weapons: their origin, the grip). */
 const HAND_RIGHT = { m4a1: [0, -0.04, -0.11], ak47: [0, -0.05, -0.12], rpg7: [0, -0.02, -0.15] };
 export const handRightOf = id => (ART.weapons[id] ? [0, 0, 0] : HAND_RIGHT[id] || [0, 0, 0.02]);

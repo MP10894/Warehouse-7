@@ -49,7 +49,7 @@ const noEnemies = w => { w.enemies = []; w.groups = []; w.waves.nextT = 1e9; };
 check(data.weapons.rpg7.calibre === '40mm' && data.calibres['5.56mm'] === data.weapons.m4a1.max_total - data.weapons.m4a1.mag_size, 'weapons loaded from the workbook, ammo caps per calibre');
 const semi = buildData({ weaponsRows: [], materialsCsv: '\uFEFFid;health;armour\r\nx;60;2,5\r\n', enemiesCsv: 'id\n', wavesCsv: 'wave\n', settings: {}, levels: {} });
 check(semi.materials.x.armour === 2.5, 'reads semicolon CSV with decimal commas (Hungarian Excel)');
-check(data.weapons.sig_p320.max_total === 102 && data.weapons.sig_p320.muzzle_velocity === 187, 'Weapons.xlsx formulas worked out (=+C4*6, =374/2)');
+check(data.weapons.sig_p320.max_total === data.weapons.sig_p320.mag_size * 5 && data.weapons.sig_p320.muzzle_velocity === 187, 'Weapons.xlsx formulas worked out (=+C4*5, =374/2)');
 
 check(gameData.enemies && data.enemies.insurgent.reaction_time > 0 && data.enemies.insurgent.burst_max === 5 && data.enemies.insurgent.ammo_drop_max === 30, 'Enemies tab read, including "2 / 5" style min / max cells');
 {
@@ -164,7 +164,8 @@ check(w0.players.length === 1 && w0.enemies.length >= 10, `level built: ${w0.ene
   const p = w.players[0];
   p.slots[0].mag = 0;
   run(w, 2.2, pl => ({ yaw: pl.yaw, pitch: 0, reload: true }));
-  check(p.slots[0].mag === 17 && p.reserve['9mm'] === 85 - 17, 'reload takes 2 s and draws from the 9mm reserve');
+  const pd = data.weapons.sig_p320;
+  check(p.slots[0].mag === pd.mag_size && p.reserve['9mm'] === pd.max_total - 2 * pd.mag_size, `reload takes ${pd.reload_time} s and draws from the 9mm reserve`);
   p.slots[1] = { w: 'm4a1', mag: 30 }; p.reserve['5.56mm'] = 0;
   stepWorld(w, { p1: { yaw: p.yaw, pitch: 0, swap: true } }, dt);
   check(p.active === 1, 'swap to second weapon');
