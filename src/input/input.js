@@ -33,14 +33,25 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
   });
   addEventListener('contextmenu', e => e.preventDefault());
 
+  // Mouse buttons are read from e.buttons (which buttons are held right now), not from single
+  // down/up events: while one button is held, pressing or releasing the other one sends no
+  // pointerdown/pointerup at all, only a pointermove. That made left-click unreliable while
+  // aiming with the right button.
+  function mouseButtons(e) {
+    if (!enabled) return;
+    const left = !!(e.buttons & 1), right = !!(e.buttons & 2);
+    if (left && !fireMouse) firePulse = true;
+    fireMouse = mouseDown = left;
+    adsMouse = right;
+  }
+
   touchEl.addEventListener('pointerdown', e => {
     if (!enabled) return;
     if (e.pointerType === 'mouse') {
       if (!locked()) {
         try { const r = touchEl.requestPointerLock(); if (r && r.catch) r.catch(() => {}); } catch (err) { /* not allowed here */ }
       }
-      if (e.button === 2) adsMouse = true;
-      else { mouseDown = true; fireMouse = true; firePulse = true; }
+      mouseButtons(e);
       return;
     }
     app.classList.add('touch');
@@ -57,6 +68,7 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
 
   touchEl.addEventListener('pointermove', e => {
     if (e.pointerType === 'mouse') {
+      mouseButtons(e);
       if (!locked() && mouseDown && enabled) { lookX += e.movementX * c.mouse_look_drag * lookScale(); lookY += e.movementY * c.mouse_look_drag * lookScale(); }
       return;
     }
@@ -76,7 +88,8 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
 
   function endPointer(e) {
     if (e.pointerType === 'mouse') {
-      if (e.button === 2) adsMouse = false; else { mouseDown = false; fireMouse = false; }
+      if (e.type === 'pointercancel') { mouseDown = fireMouse = adsMouse = false; return; }
+      mouseButtons(e);
       return;
     }
     if (e.pointerId === joy.id) { joy = { id: null, ox: 0, oy: 0, x: 0, y: 0 }; stick.style.display = 'none'; }
@@ -86,6 +99,7 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
   touchEl.addEventListener('pointercancel', endPointer);
 
   document.addEventListener('mousemove', e => {
+    if (locked()) mouseButtons(e);
     if (locked() && enabled) { lookX += e.movementX * c.mouse_look_locked * lookScale(); lookY += e.movementY * c.mouse_look_locked * lookScale(); }
   });
 
