@@ -426,6 +426,7 @@ tag `warehouse-prototype`.
 | 2026-10-24 | Workbook update (Martial): Mini Uzi (militia), FAL (insurgents) and Galil (heavy insurgents, who no longer carry the AK-47) added; enemies see less far and aim less well; heavy insurgents drop 30 armour; P320 and RPK carry less spare ammunition. New guns use simple stand-in shapes until drawn |
 | 2026-10-24 | Until a base is claimed, the "clear a base" and "clock starts" lines show for 10 s at the start and again every 2 minutes, blinking out at the end, so they don't cover the view on a phone (settings.json → hud) |
 | 2026-10-24 | RPG-7 drawn from its OpenArt sheet (olive PG-7V warhead, black tube, orange wooden heat guard, iron sights); the whole PG-7V rocket (warhead, motor, fins) is drawn in flight; the warhead disappears from the launcher when fired and a fresh rocket is slid into the muzzle on a reload. Projectiles get their own 150-triangle budget |
+| 2026-10-24 | FAL drawn: classic wooden furniture, full wooden stock (the sheet drew a skeleton stock), aperture rear sight; its magazine rocks in like the M14's |
 
 ## Open questions
 
