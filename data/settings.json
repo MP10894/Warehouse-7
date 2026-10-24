@@ -104,6 +104,11 @@
     "tank_blast_radius": 12,
     "tank_blast_damage_factor": 4
   },
+  "hud": {
+    "claim_hint_show": 10,
+    "claim_hint_every": 120,
+    "claim_hint_blink": 1.5
+  },
   "markers": {
     "spot_size": 2.2,
     "faint_opacity": 0.55,

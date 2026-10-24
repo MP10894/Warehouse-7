@@ -48,6 +48,18 @@ export function createDomHud() {
         : w.nextT !== null ? `Wave ${w.number + 1} in ${fmtTime(Math.max(0, w.nextT - world.time))}`
         : `Wave ${w.number}: ${attackers} attacker${attackers === 1 ? '' : 's'} left`);
       set('goal', el.goalLine, 'textContent', p.downed ? 'You are down — your partner can revive you' : goal(world, p));
+      // Before a base is claimed, the "clear a base" instructions only show for a few seconds
+      // (at the start, then again every couple of minutes), blinking out at the end, so they
+      // don't cover the view on a phone. settings.json → hud.
+      const hs = world.data.settings.hud || {};
+      const show = hs.claim_hint_show ?? 10, every = hs.claim_hint_every ?? 120, blink = hs.claim_hint_blink ?? 1.5;
+      let vis = 1;
+      if (!running && !p.downed) {
+        const t = every > 0 ? world.time % every : world.time;
+        vis = t >= show ? 0 : t > show - blink ? (Math.floor((t - (show - blink)) * 6) % 2 ? 0 : 1) : 1;
+      }
+      set('gvis', el.goalLine.style, 'opacity', String(vis));
+      set('wvis', el.waveLine.style, 'opacity', String(running ? 1 : vis));
       el.carry.hidden = !p.carrying;
       if (p.carrying) set('carry', el.carry, 'textContent', `Carrying: ${p.carrying.item.replace(/_/g, ' ')}`);
 
