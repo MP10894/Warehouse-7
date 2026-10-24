@@ -428,6 +428,7 @@ tag `warehouse-prototype`.
 | 2026-10-24 | RPG-7 drawn from its OpenArt sheet (olive PG-7V warhead, black tube, orange wooden heat guard, iron sights); the whole PG-7V rocket (warhead, motor, fins) is drawn in flight; the warhead disappears from the launcher when fired and a fresh rocket is slid into the muzzle on a reload. Projectiles get their own 150-triangle budget |
 | 2026-10-24 | FAL drawn: classic wooden furniture, full wooden stock (the sheet drew a skeleton stock), aperture rear sight; its magazine rocks in like the M14's |
 | 2026-10-24 | Mini Uzi drawn, without a stock (the sheet's wire stock left out); its magazine drops out of the grip and a fresh one is pushed up on a reload, like the pistol's |
+| 2026-10-24 | Galil drawn: classic AR with a brown wooden handguard and the real folding tube stock; AK-style magazine rocks in. Every weapon now has drawn art |
 
 ## Open questions
 

@@ -129,6 +129,7 @@ export function createFpWeapon() {
     mp5: { kind: 'rock', grab: [-0.012, -0.077, -0.02], out: 0.3 },        // the curved magazine tips out a little
     m4a1: { kind: 'rock', grab: [-0.012, -0.066, 0.03], out: 0.3 },
     fal: { kind: 'rock', grab: [-0.012, -0.06, 0.038], out: 0.45 },     // FAL magazines rock in, like the M14's
+    galil: { kind: 'rock', grab: [-0.012, -0.1, -0.025], out: 0.55 },   // an AK-style magazine
     mini_uzi: { kind: 'drop', grab: [-0.012, -0.12, 0.0] },             // the magazine is in the grip, like a pistol's
     sig_p320: { kind: 'drop', grab: [-0.012, -0.085, 0.012], slideBack: 0.028 }
   };
