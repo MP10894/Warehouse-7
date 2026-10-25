@@ -53,7 +53,7 @@ export function createSfx() {
      * Play a sound. dist: metres from you (0 = yours); pan: −1 left … 1 right.
      * Returns false if it can't (no file yet), so the built-in sound plays instead.
      */
-    play(id, dist = 0, pan = 0, channel = null) {
+    play(id, dist = 0, pan = 0, channel = null, maxLen = 0) {
       const s = SOUNDS[id];
       if (!s || !ctx) return false;
       const ready = s.urls.map(u => buffers.get(u)).filter(Boolean);
@@ -69,6 +69,7 @@ export function createSfx() {
       else g.connect(out);
       if (channel) { this.stop(channel); channels.set(channel, src); src.onended = () => { if (channels.get(channel) === src) channels.delete(channel); }; }
       src.start();
+      if (maxLen > 0) src.stop(ctx.currentTime + maxLen);   // cut off anything past this (e.g. a reload sound past the reload)
       last = id;
       return true;
     }

@@ -103,7 +103,8 @@ export function createAudio() {
           // left/right from where you're facing: your right is (cos yaw, −sin yaw)
           pan = ((ev.x - local.x) * Math.cos(local.yaw) - (ev.z - local.z) * Math.sin(local.yaw)) / d * 0.8;
         }
-        if (sfx.play(id, d, pan, ev.type === 'reload' ? 'reload' : null)) return;
+        // a reload sound never runs past the end of the reload
+        if (sfx.play(id, d, pan, ev.type === 'reload' ? 'reload' : null, ev.type === 'reload' ? (ev.time || 0) + 0.25 : 0)) return;
       }
       switch (ev.type) {
         case 'shot': {
