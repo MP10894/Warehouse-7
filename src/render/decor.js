@@ -526,7 +526,11 @@ export function createDecor(scene, world, settings) {
     };
     // ---- solid clutter: oil drums, termite mounds, drill rods, spoil heaps (over their blocks)
     const drawClutter = it => {
-      const q = rng(it.seed), y = it.y;
+      const q = rng(it.seed);
+      // stand on the real ground (the blocks under it are rounded to whole metres), sunk in a little
+      let y = Infinity;
+      for (const [ax, az] of [[0.2, 0.2], [it.w - 0.2, 0.2], [0.2, it.d - 0.2], [it.w - 0.2, it.d - 0.2], [it.w / 2, it.d / 2]]) y = Math.min(y, terrainHeight(world.terrain, it.x + ax, it.z + az));
+      y -= 0.15;
       if (it.model === 'drums') {
         for (let dz = 0; dz < it.d; dz++) for (let dx = 0; dx < it.w; dx++) {
           const n = 1 + Math.floor(q() * 3);
@@ -538,11 +542,19 @@ export function createDecor(scene, world, settings) {
           }
         }
       } else if (it.model === 'termite') {
-        // a lumpy red-earth spire, narrowing as it rises
-        const cx = it.x + it.w / 2, cz = it.z + it.d / 2, H = it.h + 0.5;
-        for (let k = 0; k < 6; k++) {
-          const t = k / 6, w = (it.w * 0.95) * (1 - t * 0.75), yy = y + H * t;
-          boxAt(cx + (q() - 0.5) * 0.15, yy, cz + (q() - 0.5) * 0.15, w, H / 6 + 0.05, w * (0.85 + q() * 0.3), [0.66 - t * 0.08, 0.35, 0.24], 'drift');
+        // a lumpy red-earth mound: a wide base, a tall main spire and two or three smaller ones,
+        // each built of overlapping lumps so it reads as one mass of earth
+        const cx = it.x + it.w / 2, cz = it.z + it.d / 2, H = it.h + 0.6 + q() * 0.4;
+        const earth = k => [0.6 + q() * 0.08 - k * 0.05, 0.32 + q() * 0.04, 0.22];
+        for (let k = 0; k < 3; k++) boxAt(cx + (q() - 0.5) * 0.3, y, cz + (q() - 0.5) * 0.3, 1.25 - k * 0.2, 0.55 - k * 0.1, 1.15 - k * 0.15, earth(0), 'plain');
+        const spires = [[0, 0, H], ...Array.from({ length: 2 + Math.floor(q() * 2) }, () => [(q() - 0.5) * 0.7, (q() - 0.5) * 0.7, H * (0.4 + q() * 0.3)])];
+        for (const [ox, oz, h] of spires) {
+          const n = Math.max(3, Math.round(h / 0.3));
+          for (let k = 0; k < n; k++) {
+            const t = k / n, w = (0.62 - t * 0.42) * (h / H * 0.5 + 0.5);
+            boxAt(cx + ox * (1 - t * 0.3) + (q() - 0.5) * 0.06, y + 0.3 + (h - 0.3) * t - 0.05, cz + oz * (1 - t * 0.3) + (q() - 0.5) * 0.06,
+              w, (h - 0.3) / n + 0.12, w * (0.85 + q() * 0.25), earth(t), 'plain');
+          }
         }
       } else if (it.model === 'rods') {
         const alongX = it.w >= it.d, L = alongX ? it.w : it.d;
