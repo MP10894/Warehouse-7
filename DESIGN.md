@@ -436,6 +436,7 @@ tag `warehouse-prototype`.
 | 2026-10-24 | The game is published as a website (GitHub Pages, on every push to main after the checks pass), installable to a phone's home screen, starting offline from a saved copy and loading new versions when online. Online co-op connects the two phones directly (WebRTC via the free PeerJS service); the claude.ai room stays for the play link; both players must run the same version |
 | 2026-10-24 | The game is called **Operator: Non-Permissive Environments**. It opens on a title screen (name, Start; art from `assets/ui/title.jpg` when drawn, the level slowly turning behind it until then), then the briefing menu with the level choice (Najaf only), Start and Co-op. The test slice is retired from the game (kept as a fixture for the checks) |
 | 2026-10-25 | Music: Martial's tracks from assets/audio/music, chosen by name. "Menu" on the title and menus; level music zones fade their track in and out (Najaf's city: "Najaf-Urban"); 2.5 s fades; volume on the tuning panel. Music downloads separately and is saved on the phone after it first plays; it isn't in the claude.ai play link (website only) |
+| 2026-10-25 | Sound effects from assets/audio/sfx, set up in data/sounds.csv (file, volume, range, pitch spread per moment); distant sounds fade and come from the left or right; anything without a file keeps its built-in sound. First file: AmmoPickUp for every ammunition pickup |
 
 ## Open questions
 
