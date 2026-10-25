@@ -454,6 +454,7 @@ tag `warehouse-prototype`.
 | 2026-10-25 | Level 2 is a DR Congo mining site, same size and difficulty as Najaf: mine (pit-floor base), forest (trees solid and breakable to stumps, shrubs hide but stop nothing), village (company buildings up to 2 floors, mud houses, huts, watch tower). Blasting recharges every 60 s; cut rock slabs are breakable; Martial finds the music. Plan in docs/KAMBALA_PLAN.md |
 | 2026-10-25 | Level 2 named **Kambala mine**. All attack waves come out of the forest on the west edge (A1–A8): rebels attacking the mine; the logging camp is hit first, the pit base last |
 | 2026-10-25 | Kambala stage 1 built: the map stands on a 13 m plateau so the pit can go 12 m down (terrain letters a–z above 4.5 m; level height limit 28 m; 2 m terrain spacing); four 3 m benches with unclimbable rock walls; the haul road is the way down. Cut rock slabs break (materials.csv rockslab). Levels are listed in their `order`; Kambala shows as "Level 2 · in progress" until finished |
+| 2026-10-25 | Trees and undergrowth (Kambala stage 2): a tree is a 1 × 1 m trunk of blocks with a canopy drawn on top; the stump (about 1 m) never breaks, the rest breaks like a wall (materials.csv tree) and the canopy goes. Undergrowth (2 m) is a new block nobody bumps into and bullets pass through, but it hides you from enemies and turrets unless they are within 3 m (settings.json → flora). Canopies, undergrowth and grass tufts are leaf cards drawn per 32 m region (src/render/flora.js) |
 
 ## Open questions
 

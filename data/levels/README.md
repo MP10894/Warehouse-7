@@ -69,6 +69,8 @@ Simple shapes outside buildings. `{ "type", "x", "z", "w", "d", "h", "y" }` fill
 |---|---|
 | `lowwall`, `crate`, `sandbag` | Breakable cover |
 | `rockslab` | Cut rock slabs (the mine): look like rock, but break |
+| `tree` | A tree: `{ "type": "tree", "x", "z", "h", "kind" }`, a 1 × 1 m trunk `h` m tall (default 5) with a canopy. Solid; the stump (about 1 m) never breaks, the rest breaks like a wall and the canopy goes with it. `kind`: `broadleaf` or `palm` |
+| `shrub` | Undergrowth: `{ "type": "shrub", "x", "z", "w", "d", "h", "kind" }`, `h` m tall (default 2). You walk and shoot through it, but nobody sees through it (closer than 3 m they do: settings.json → flora). `kind`: `fern` or `banana` |
 | `metal` | Steel: containers, trucks, towers, supports. Unbreakable |
 | `pipe` | Refinery pipework. Unbreakable |
 | `rock` | Boulders. Unbreakable |

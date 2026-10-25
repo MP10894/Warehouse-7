@@ -40,14 +40,12 @@ function atlas() {
       const a = rnd() * Math.PI * 2, d = Math.sqrt(rnd()) * 24;
       leaf(32 + Math.cos(a) * d, 30 + Math.sin(a) * d * 0.8, 3 + rnd() * 4, rnd() < 0.3 ? [70, 112, 46] : [44, 86, 36], 0, 0, 64, 64);
     }
-    // fern / undergrowth: arching blades from the bottom middle
-    for (let k = 0; k < 9; k++) {
-      const a = Math.PI * (0.15 + 0.7 * k / 8), len = 14 + rnd() * 12;
-      for (let t = 0; t < 1; t += 0.03) {
-        const x = 80 + Math.cos(a) * len * t * 0.55 * (k < 4.5 ? -1 : 1) * (1 - Math.abs(k - 4) / 6);
-        const y = 31 - Math.sin(a) * len * t + t * t * 6;
-        leaf(x, y, 1.6 - t, [52 + rnd() * 20, 100 + rnd() * 20, 40], 64, 0, 96, 32);
-      }
+    // undergrowth: a dense, leafy bush filling the card, ragged at the top and sides
+    for (let k = 0; k < 160; k++) {
+      const x = 64 + 3 + rnd() * 26, y = 4 + rnd() * 28;
+      const half = Math.abs(x - 80) / 16, roof = 4 + half * half * 12;   // a dome: lower at the sides
+      if (y < roof) continue;
+      leaf(x, y, 1.5 + rnd() * 2.2, rnd() < 0.25 ? [86, 128, 52] : rnd() < 0.5 ? [48, 92, 38] : [62, 108, 44], 64, 0, 96, 32);
     }
     // banana plant: a few big paddle leaves
     for (let k = 0; k < 6; k++) {
@@ -126,14 +124,13 @@ export function createFlora(scene, world) {
       if (getV(world.grid, s.x, Math.floor(s.y), s.z) !== V.AIR) continue;   // something built over it
       const big = s.kind === 'banana', r = big ? A.banana : A.fern;
       const a = hash(s.x, s.z) * Math.PI, sc = 0.85 + hash(s.x, s.z, 3) * 0.4, shade = 0.75 + hash(s.x, s.z, 4) * 0.35;
-      const w = (big ? 2.4 : 1.8) * sc, h = s.h * sc * (big ? 1.15 : 1);
-      card(s.x + 0.5, s.y, s.z + 0.5, w, h, a, r, shade);
-      card(s.x + 0.5, s.y, s.z + 0.5, w, h, a + Math.PI / 2, r, shade * 0.9);
+      const w = (big ? 2.4 : 2.2) * sc, h = (s.h + 0.2) * sc * (big ? 1.1 : 1);
+      for (let k = 0; k < 3; k++) card(s.x + 0.5, s.y - 0.1, s.z + 0.5, w, h, a + k * Math.PI / 3, r, shade * (1 - k * 0.06));
     }
     // grass tufts on open red earth and the jungle floor
     for (let z = z0; z < z0 + REGION; z += 2) for (let x = x0; x < x0 + REGION; x += 2) {
       const ty = groundType(world.ground, x + 1, z + 1);
-      const p = ty === 'j' ? 0.45 : ty === 'l' ? 0.22 : 0;
+      const p = ty === 'j' ? 0.45 : ty === 'l' ? 0.32 : 0;
       if (!p || hash(x, z, 5) > p) continue;
       const px = x + hash(x, z, 6) * 2, pz = z + hash(x, z, 7) * 2, py = terrainHeight(world.terrain, px, pz);
       if (getV(world.grid, Math.floor(px), Math.round(py), Math.floor(pz)) !== V.AIR) continue;

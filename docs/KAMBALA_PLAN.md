@@ -1,6 +1,6 @@
 # Kambala mine (Level 2): layout plan
 
-Status: **agreed 2026-10-25. Stage 1 built 2026-10-25:** ground, the pit (four 3 m benches with rock walls, haul road), buildings, bases, crates, enemies, pickups, west-edge waves. Still to come: trees and shrubs, blasting, rain and mist, art. Unlocked by winning Najaf.
+Status: **agreed 2026-10-25. Stage 1 built 2026-10-25:** ground, the pit (four 3 m benches with rock walls, haul road), buildings, bases, crates, enemies, pickups, west-edge waves. **Stage 2 built:** the forest (about 1,000 trees, about 1,000 undergrowth patches, grass), palms and banana plants in the village, scrub on the mine rim. Still to come: blasting, rain and mist, art and village dressing. Unlocked by winning Najaf.
 
 Plan: [`kambala_layout.png`](kambala_layout.png). Grid squares are 32 m, labelled A–H across
 and 1–8 down, as for Najaf ("move the sawmill to C2").
