@@ -49,8 +49,16 @@ export function buildTerrain(scene, world, tex) {
   let edgeH = 0, edgeN = 0;
   for (let k = 0; k <= size; k += 8) for (const [x, z] of [[k, 0], [k, size], [0, k], [size, k]]) { edgeH += h(x, z); edgeN++; }
   const ec = SURFACE[groundType(world.ground, 1, 1)] || SURFACE.s;
-  const skirt = new THREE.Mesh(new THREE.PlaneGeometry(size * 5, size * 5), new THREE.MeshBasicMaterial({ color: new THREE.Color(ec[0] * 0.72, ec[1] * 0.72, ec[2] * 0.72) }));
-  skirt.rotation.x = -Math.PI / 2; skirt.position.set(size / 2, edgeH / edgeN - 0.05, size / 2);
-  scene.add(skirt);
+  // (a frame round the map, never under it: under it, it would show through wherever the ground
+  // dips below the edge's height, like Kambala's pit)
+  const skirtMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(ec[0] * 0.72, ec[1] * 0.72, ec[2] * 0.72) });
+  const far = size * 2, y = edgeH / edgeN - 0.05;
+  for (const [cx, cz, w, d] of [[size / 2, -far / 2, size + far * 2, far], [size / 2, size + far / 2, size + far * 2, far],
+                                [-far / 2, size / 2, far, size], [size + far / 2, size / 2, far, size]]) {
+    const skirt = new THREE.Mesh(new THREE.PlaneGeometry(w, d), skirtMat);
+    skirt.rotation.x = -Math.PI / 2; skirt.position.set(cx, y, cz);
+    skirt.userData.blocks = true;
+    scene.add(skirt);
+  }
   return mesh;
 }
