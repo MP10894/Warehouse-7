@@ -73,6 +73,12 @@ export function weaponModel(id) {
     box(0.04, 0.07, 0.25, black, 0, 0.03, 0.18, g);
     box(0.03, 0.15, 0.06, black, 0, -0.06, -0.14, g).rotation.x = 0.3;
     box(0.03, 0.08, 0.04, black, 0, -0.03, 0.0, g);
+  } else if (id === 'machete') {
+    // a long, slightly curved blade on a dark wooden grip, held point forward
+    box(0.03, 0.035, 0.13, 0x3a2414, 0, 0, 0.02, g);                 // grip
+    box(0.035, 0.012, 0.025, 0x4a4a46, 0, 0, -0.055, g);             // bolster
+    box(0.006, 0.06, 0.42, 0x9a9a92, 0, 0.012, -0.27, g);            // blade
+    box(0.006, 0.02, 0.1, 0x9a9a92, 0, 0.03, -0.44, g).rotation.x = -0.2;   // the tip, curving up
   } else if (id === 'fal') {
     // long battle rifle: carry handle, straight 20-round magazine, solid stock
     box(0.05, 0.08, 0.36, black, 0, 0.05, -0.1, g);
@@ -296,6 +302,13 @@ export function poseSoldier(m, a) {
   m.L.sh.rotation.set(1.2 * aim + pitch * 0.6, 0, 0.55);
   m.L.el.rotation.set(0.7, 0, 0);
   m.gunMount.rotation.x = pitch * 0.6 + (a.aiming ? 0 : 0.5);
+  m.gunMount.rotation.y = 0; m.gunMount.rotation.z = 0;
+  if (a.swing > 0) {
+    // a machete swipe: the arm and blade come down and across
+    const s = Math.sin(a.swing * Math.PI);
+    m.R.sh.rotation.x += 0.9 * s - 0.4; m.R.sh.rotation.z = -0.6 * s;
+    m.gunMount.rotation.x -= 1.2 * s; m.gunMount.rotation.y = 0.9 * s;
+  }
   if (a.downed) {
     m.body.rotation.x = 0;
     m.RL.hip.rotation.x = 1.4; m.RL.knee.rotation.x = -1.6;

@@ -5,7 +5,7 @@ import { moveBody, groundAt } from './body.js';
 import { lineOfSight, hiddenByShrubs } from './ballistics.js';
 import { flowNext, nodeAt } from './nav.js';
 import { aimVector, spreadDir, spawnProjectile } from './weapons.js';
-import { emit, explode, killActor } from './damage.js';
+import { emit, explode, killActor, damageActor } from './damage.js';
 import { stormAt } from './weather.js';
 import { holdsBase, levelBases, noSpawnAreas, inArea } from './base.js';
 import { hostileTargets, aimHeight, lookHeight, turretsHear } from './turrets.js';
@@ -139,6 +139,7 @@ export function updateEnemy(world, e, dt) {
   }
   if (!e.sees) e.lostT += dt;
   if (wdef.projectile === 'grenade') { updateBomber(world, e, def, wdef, dt); return; }
+  if (wdef.projectile === 'melee') { updateMelee(world, e, def, wdef, dt); return; }
   const target = e.sees ? hostileTargets(world).find(p => p.id === e.targetId) : null;
   e.aiming = !!(target && target.alive && !target.downed);
 
@@ -239,6 +240,61 @@ function updateBomber(world, e, def, wdef, dt) {
     e.moving = walkTowards(world, e, e.home.x, e.home.z, def.move_speed * 0.4, dt) > 0;
   }
   if (e.moving) e.animT += dt * 1.4;
+}
+
+/**
+ * A melee fighter (a weapon whose projectile is "melee", like the Khat Berserker's machete):
+ * once he has noticed you he sprints at the nearest player or turret and, within reach
+ * (settings.json → enemy_ai.melee_reach, 1 m), hacks at it: bursts of swings at the weapon's
+ * rate of fire (Enemies tab: burst min / max, pause between bursts), each doing the weapon's
+ * damage. No ammunition, no reloading.
+ */
+function updateMelee(world, e, def, wdef, dt) {
+  const nav = world.cache.nav, reach = world.data.settings.enemy_ai?.melee_reach ?? 1;
+  let near = null, nd = Infinity;
+  for (const p of hostileTargets(world)) {
+    const d = Math.hypot(p.x - e.x, p.z - e.z);
+    if (Math.abs(p.y - e.y) < 1.6 && d < nd) { nd = d; near = p; }
+  }
+  e.aiming = false;
+  if (near && nd <= reach && e.alert) {
+    // in reach: face him and swing
+    e.aiming = true;
+    e.yaw = Math.atan2(-(near.x - e.x), -(near.z - e.z));
+    e.reactT -= dt;
+    if (e.reactT <= 0) {
+      if (e.burstLeft > 0) {
+        if (e.fireCd <= 0) {
+          const k = world.data.settings.difficulty.enemy_damage_factor;
+          e.fireCd = 60 / wdef.rate_of_fire;
+          e.burstLeft--;
+          if (e.burstLeft === 0) e.pauseT = rand(world, def.burst_pause_min, def.burst_pause_max);
+          emit(world, { type: 'melee', actorId: e.id, weapon: wdef.id, x: e.x, y: e.y + 1.2, z: e.z, targetId: near.id });
+          damageActor(world, near, wdef.damage_health * k, wdef.damage_armour * k, e);
+        }
+      } else {
+        e.pauseT -= dt;
+        if (e.pauseT <= 0) e.burstLeft = Math.max(1, Math.round(rand(world, def.burst_min, def.burst_max)));
+      }
+    }
+    return;
+  }
+  if (e.sees) e.alert = true;
+  if (e.alert && nav) {
+    // close by: straight at him; further: follow the paths
+    if (near && nd < 6) e.moving = walkTowards(world, e, near.x, near.z, def.move_speed, dt) > 0;
+    else {
+      const field = e.sees ? world.cache.playerField : goalField(world, e);
+      const nxt = field ? flowNext(nav, field, e.x, e.y, e.z) : null;
+      if (nxt) e.moving = walkTowards(world, e, nxt[0], nxt[2], def.move_speed, dt) > 0;
+      else if (e.lastSeen) e.moving = walkTowards(world, e, e.lastSeen.x, e.lastSeen.z, def.move_speed, dt) > 0;
+    }
+    if (!e.sees && near && nd > 6) e.reactT = def.reaction_time * world.data.settings.difficulty.enemy_reaction_factor;
+    if (!e.wave && e.lostT > world.data.settings.enemy_ai.give_up_after) { e.alert = false; e.lastSeen = null; }
+  } else if (Math.hypot(e.home.x - e.x, e.home.z - e.z) > 1) {
+    e.moving = walkTowards(world, e, e.home.x, e.home.z, def.move_speed * 0.4, dt) > 0;
+  }
+  if (e.moving) e.animT += dt * 1.3;
 }
 
 /**

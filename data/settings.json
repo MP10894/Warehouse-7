@@ -69,6 +69,7 @@
     "end_delay": 1.6
   },
   "enemy_ai": {
+    "melee_reach": 1.0,
     "give_up_after": 25,
     "respawn_min_player_distance": 28,
     "base_spawn_margin": 8

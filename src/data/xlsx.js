@@ -138,7 +138,7 @@ export const weaponId = name => String(name).toLowerCase().replace(/-/g, '').rep
 
 const projectileKind = x => {
   const t = String(x || 'bullet').toLowerCase();
-  return t.includes('rocket') ? 'rocket' : t.includes('grenade') ? 'grenade' : 'bullet';
+  return t.includes('rocket') ? 'rocket' : t.includes('grenade') ? 'grenade' : t.includes('melee') ? 'melee' : 'bullet';
 };
 
 /**

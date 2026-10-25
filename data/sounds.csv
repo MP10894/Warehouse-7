@@ -21,6 +21,7 @@ throw,,1,0,0.05,You throw a grenade
 grenade_bounce,,1,25,0.1,A grenade bounces
 explosion,,1,120,0.08,A grenade or rocket explodes or a fuel tank blows up
 blast_siren,,1,0,0,The mine's blasting siren (DETONATE): it sounds before the charges go off
+machete_swing,,1,30,0.1,A Khat Berserker swings his machete
 wall_break,,1,60,0.1,A wall or crate breaks
 wave_alarm,,1,0,0,An attack wave starts
 base_claimed,,1,0,0,You secure a base

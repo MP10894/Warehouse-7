@@ -56,6 +56,7 @@ export function createWorldView(scene, tex, initialLocalId) {
     handle(ev) {
       if (ev.type === 'hurt') { const v = actors.get(ev.targetId); if (v) v.flinch = 1; }
       if (ev.type === 'shot' && ev.team === 'turret') { const t = turrets.get(ev.actorId); if (t) t.spin = 1; }
+      if (ev.type === 'melee') { const v = actors.get(ev.actorId); if (v) v.swing = 1; }
     },
 
     sync(world, dt) {
@@ -75,9 +76,10 @@ export function createWorldView(scene, tex, initialLocalId) {
         m.root.position.set(a.x, a.y, a.z);
         m.root.rotation.y = a.yaw;
         v.flinch = Math.max(0, v.flinch - dt * 5);
+        v.swing = Math.max(0, (v.swing || 0) - dt * 7);
         poseSoldier(m, {
           moving: a.moving, animT: a.animT ?? world.time, aiming: a.kind === 'enemy' ? a.aiming : true,
-          pitch: a.pitch, dead: !a.alive, deadT: a.deadT ?? 1, downed: a.downed, flinch: v.flinch, armour: a.armour
+          pitch: a.pitch, dead: !a.alive, deadT: a.deadT ?? 1, downed: a.downed, flinch: v.flinch, armour: a.armour, swing: v.swing
         });
       }
       for (const [id, v] of actors) if (!seen.has(id)) { scene.remove(v.model.root); actors.delete(id); }

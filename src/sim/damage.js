@@ -100,6 +100,11 @@ export function killActor(world, a, source) {
     return;
   }
   const def0 = world.data.enemies[a.type];
+  // a melee weapon (the machete) stays with him: only his item drops fall
+  if (w.projectile === 'melee') {
+    for (const d of def0.drops || []) dropPickup(world, { type: d.type, amount: d.amount, x: a.x + rand(world, -0.4, 0.4), y: a.y, z: a.z + rand(world, -0.4, 0.4) });
+    return;
+  }
   // the Enemies tab's "Item drop" column (e.g. heavy insurgents' armour plates), and sometimes a grenade
   for (const d of def0.drops || []) dropPickup(world, { type: d.type, amount: d.amount, x: a.x + rand(world, -0.4, 0.4), y: a.y, z: a.z + rand(world, -0.4, 0.4) });
   const gChance = (world.data.settings.grenades?.drop_chance || {})[a.type] || 0;

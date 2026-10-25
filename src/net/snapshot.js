@@ -15,7 +15,7 @@ const SEND_RANGE = 90;
 // events the guest needs to replay for sound, effects and HUD (broken walls are rebuilt
 // from the piece list instead, so 'blocks' is not forwarded)
 const FORWARD = new Set(['shot', 'impact', 'explosion', 'hurt', 'death', 'downed', 'revived', 'pickup', 'message',
-  'wave', 'baseClaimed', 'built', 'weather', 'hitConfirm', 'reload', 'swap', 'empty', 'status', 'throw', 'beep', 'bounce', 'turret', 'siren']);
+  'wave', 'baseClaimed', 'built', 'weather', 'hitConfirm', 'reload', 'swap', 'empty', 'status', 'throw', 'beep', 'bounce', 'turret', 'siren', 'melee']);
 const EVENT_WINDOW = 45; // ticks of recent events repeated in every snapshot (drops are common)
 const MAX_EVENTS = 22;
 
