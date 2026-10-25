@@ -1,15 +1,15 @@
-# Kolwezi (Level 2): layout plan
+# Kambala mine (Level 2): layout plan
 
-Status: **proposed 2026-10-25, waiting for Martial's go-ahead.** Unlocked by winning Najaf.
+Status: **agreed 2026-10-25.** Unlocked by winning Najaf.
 
-Plan: [`kolwezi_layout.png`](kolwezi_layout.png). Grid squares are 32 m, labelled A–H across
+Plan: [`kambala_layout.png`](kambala_layout.png). Grid squares are 32 m, labelled A–H across
 and 1–8 down, as for Najaf ("move the sawmill to C2").
 
 ## Theme
 
 A company mine in the **Democratic Republic of Congo**: red laterite earth, grey cut rock,
 dark green jungle, rusting yellow mining machinery. Tropical weather instead of sandstorms.
-The name is a working title (Kolwezi is the Congo's cobalt-mining town); easy to change.
+**Name: Kambala mine.** The story: rebel fighters come out of the jungle to attack the mine.
 
 ## Size and difficulty
 
@@ -49,9 +49,17 @@ you have to go out for them.
 About 60 at the start (red dots): the pit floor (4, the workshop garrison), the benches
 and rim (about 18), the forest (about 19, many roaming among the trees), the village (about
 20, including a marksman in the watch tower and the HQ garrison). Suicide bombers in each
-zone, as in Najaf. **Attack waves** come in at six points (red arrows): down the mine's north
-access road, over the east rim, two jungle trails on the west edge, the main road from the
-south, and the village's east gate.
+zone, as in Najaf.
+
+**Attack waves always come out of the forest**: six jungle trails on the **west edge (column
+A, rows 1–8)**, red arrows. Rebels attacking the mine. This shapes the three bases:
+
+- **B · Logging camp** is in the forest, so attackers reach it first and fast, through trees
+  and shrubs.
+- **C · Company HQ** gets them after they cross the cassava fields and village streets.
+- **A · Pit-floor workshop** is furthest away (about 190 m): waves take longest to arrive, and
+  come over the west rim and down the haul road, straight into the blasting zone. That
+  balances the pit's tough position.
 
 ## Signature: blasting the mine
 
@@ -74,8 +82,8 @@ everyone sees, using the same system as Najaf's sandstorms with new rain and mis
 
 ## Music
 
-Three zones, three tracks (Martial is finding them): for example `Kolwezi-Mine`,
-`Kolwezi-Forest`, `Kolwezi-Village`, set up like Najaf's city track.
+Three zones, three tracks (Martial is finding them): for example `Kambala-Mine`,
+`Kambala-Forest`, `Kambala-Village`, set up like Najaf's city track.
 
 ## What has to be built (engine)
 
@@ -108,8 +116,9 @@ corrugated metal and thatch.
 - Blasting recharges **every 60 seconds**.
 - Cut rock slabs are **breakable**.
 - Martial finds the music.
+- Name: **Kambala mine**.
+- **All attack waves come out of the forest on the west edge (A1–A8).**
 
 ## Still open
 
-- The level's name (Kolwezi is a working title).
-- Anything to move on the plan.
+Nothing for the layout.

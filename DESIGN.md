@@ -47,12 +47,13 @@ well-defended base-building items:
 Layout plan (agreed): [docs/NAJAF_PLAN.md](docs/NAJAF_PLAN.md) (map in
 `docs/najaf_layout.png`).
 
-**Level 2: a mining site in the DR Congo (working title Kolwezi), red laterite earth.** Three
+**Level 2: Kambala mine, a mining site in the DR Congo, red laterite earth.** Three
 zones around a junction, each with a base: an open-pit mine (base on the pit floor), a
 tropical forest with solid breakable trees and hiding shrubs (logging camp), and a mining
 village with company buildings, mud houses and a watch tower (company HQ). Signature: a
-detonator that blasts the pit's bench faces every 60 s. Layout plan (proposed):
-[docs/KOLWEZI_PLAN.md](docs/KOLWEZI_PLAN.md) (map in `docs/kolwezi_layout.png`).
+detonator that blasts the pit's bench faces every 60 s. Attack waves always come out of the
+forest on the west edge (rebels attacking the mine). Layout plan (agreed):
+[docs/KAMBALA_PLAN.md](docs/KAMBALA_PLAN.md) (map in `docs/kambala_layout.png`).
 
 ## Bases and building
 
@@ -450,7 +451,8 @@ tag `warehouse-prototype`.
 | 2026-10-25 | The player character is Dima Karpov (from Martial's PMC Ltd. project), in olive drab like his reference photo; the co-op marker over a partner's head tells him from insurgents. Player model budget raised to 600 triangles (enemies stay at 300) |
 | 2026-10-25 | Explosions hit armour first, like bullets: the RPG-7 and RGD-5 do 100 health and 50 armour damage, so more than 50 armour survives a direct hit. Fuel tank blasts stay as strong as before the RPG's damage went from 80 to 100 (settings → hazards.tank_blast_damage_factor 3.2, was 4): someone 9 m from the tank survives badly hurt |
 | 2026-10-25 | Automatic turret (an M134 minigun on a tripod): a level 3 ammunition supply hands one out, one per player (upgrades.csv → unlocks "turret"). You carry it in both hands (no shooting, carry speed), see it see-through where it would go (green: good spot, red: inside a wall, too steep, too close to someone or another turret) and DROP it there; PICK UP TURRET takes it back with its damage. It never moves; it sweeps, turns to enemies it sees (120° in front, all round for 6 s after hearing shots or being hit) and fires bursts with unlimited ammunition. Its profile is the new Allies tab (100 health, 300 armour, sight and hearing 50 m, 0.5 s reaction, 2° + 2° per 10 m aim error, bursts 5–10, pauses 0.5–1 s); its gun the Weapons tab's Turret row (5.56, 20/20 damage, 1,200 rounds a minute). Enemies treat it like a player (see it, shoot it, run bombs at it). Destroyed: it drops nothing and the supply hands out another. Going down while carrying it sets it down at your feet. Its kills count for its owner. Gun 1.1 m up so it fires over 1 m low walls; it only engages enemies its bullets can reach. Handling numbers in settings.json → turret. Model budget 400 triangles |
-| 2026-10-25 | Level 2 is a DR Congo mining site, same size and difficulty as Najaf: mine (pit-floor base), forest (trees solid and breakable to stumps, shrubs hide but stop nothing), village (company buildings up to 2 floors, mud houses, huts, watch tower). Blasting recharges every 60 s; cut rock slabs are breakable; Martial finds the music. Plan in docs/KOLWEZI_PLAN.md |
+| 2026-10-25 | Level 2 is a DR Congo mining site, same size and difficulty as Najaf: mine (pit-floor base), forest (trees solid and breakable to stumps, shrubs hide but stop nothing), village (company buildings up to 2 floors, mud houses, huts, watch tower). Blasting recharges every 60 s; cut rock slabs are breakable; Martial finds the music. Plan in docs/KAMBALA_PLAN.md |
+| 2026-10-25 | Level 2 named **Kambala mine**. All attack waves come out of the forest on the west edge (A1–A8): rebels attacking the mine; the logging camp is hit first, the pit base last |
 
 ## Open questions
 

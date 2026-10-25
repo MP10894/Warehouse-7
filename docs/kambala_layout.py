@@ -1,4 +1,4 @@
-"""Draws the Level 2 (mining site, DR Congo) layout plan: docs/kolwezi_layout.png. 1 m = S pixels.
+"""Draws the Level 2 (mining site, DR Congo) layout plan: docs/kambala_layout.png. 1 m = S pixels.
 
     python3 docs/kolwezi_layout.py
 """
@@ -203,7 +203,8 @@ def arrow(x, z, dx, dz):
     d.line([P(x, z), P(x1, z1)], fill=(220, 30, 30), width=6)
     a = math.atan2(dz, dx)
     d.polygon([P(x1 + math.cos(a) * 4, z1 + math.sin(a) * 4), P(x1 + math.cos(a + 2.4) * 5, z1 + math.sin(a + 2.4) * 5), P(x1 + math.cos(a - 2.4) * 5, z1 + math.sin(a - 2.4) * 5)], fill=(220, 30, 30))
-for x, z, dx, dz in [(190, 2, 0, 1), (254, 100, -1, 0), (2, 30, 1, 0), (2, 120, 1, 0), (128, 254, 0, -1), (254, 236, -1, 0)]:
+# every attack wave: rebels coming out of the jungle on the west edge (column A, rows 1-8)
+for x, z, dx, dz in [(2, 16, 1, 0), (2, 56, 1, 0), (2, 100, 1, 0), (2, 140, 1, 0), (2, 180, 1, 0), (2, 220, 1, 0)]:
     arrow(x, z, dx, dz)
 d.ellipse(R(124, 128, 132, 136), fill=(40, 120, 240), outline=(0, 0, 0), width=3)
 d.text(P(136, 128), 'START', fill=(0, 0, 0), font=f_b)
@@ -220,7 +221,7 @@ for i in range(8):
     d.text((OX + (i * 32 + 16) * S, OY - 20), 'ABCDEFGH'[i], fill=(40, 40, 40), font=f_b, anchor='mm')
     d.text((OX - 20, OY + (i * 32 + 16) * S), str(i + 1), fill=(40, 40, 40), font=f_b, anchor='mm')
 
-d.text((M, 20), 'Level 2: Kolwezi mine (DR Congo) — plan, 256 m, squares 32 m', fill=(30, 30, 30), font=f_t)
+d.text((M, 20), 'Level 2: Kambala mine (DR Congo) — plan, 256 m, squares 32 m', fill=(30, 30, 30), font=f_t)
 
 # ---------------- legend ----------------
 LX, LY = OX + W * S + 30, OY + 10
@@ -229,7 +230,7 @@ def li(y, draw, text):
 li(0, lambda x, y: d.rectangle([x, y, x + 34, y + 20], outline=(30, 110, 230), width=5), 'Base areas A, B, C')
 li(34, lambda x, y: d.rectangle([x + 9, y, x + 27, y + 18], fill=(250, 214, 40), outline=(0, 0, 0), width=2), 'Upgrade crates')
 li(68, lambda x, y: d.ellipse([x + 10, y + 2, x + 24, y + 16], fill=(220, 30, 30)), 'Enemies (about 60)')
-li(102, lambda x, y: d.line([x, y + 10, x + 34, y + 10], fill=(220, 30, 30), width=6), 'Where attack waves come in')
+li(102, lambda x, y: d.line([x, y + 10, x + 34, y + 10], fill=(220, 30, 30), width=6), 'Attack waves: rebels out of the forest')
 li(136, lambda x, y: d.ellipse([x + 4, y, x + 30, y + 20], fill=(130, 90, 70)), 'Pit benches (darker = deeper)')
 li(170, lambda x, y: d.line([x, y + 10, x + 34, y + 10], fill=(214, 150, 110), width=12), 'Haul road into the pit')
 li(204, lambda x, y: d.rectangle([x + 6, y + 2, x + 28, y + 16], fill=(170, 160, 150), outline=(80, 70, 60), width=2), 'Cut rock slabs (breakable)')
@@ -256,5 +257,5 @@ notes = [
 for i, t in enumerate(notes):
     d.text((LX, LY + 600 + i * 26), t, fill=(30, 30, 30), font=f_m)
 
-img.save(os.path.join(os.path.dirname(__file__), 'kolwezi_layout.png'))
+img.save(os.path.join(os.path.dirname(__file__), 'kambala_layout.png'))
 print('saved')
