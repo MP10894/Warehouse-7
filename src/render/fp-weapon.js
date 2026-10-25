@@ -1,6 +1,6 @@
 // The weapon in your hands: drawn in its own small scene on top of the world so it never
 // clips into walls. Handles aiming down sights, recoil kick, reload and swap motions,
-// walking sway and the muzzle flash.
+// walking sway, the muzzle flash and the spent cases flying out of the ejection port.
 import * as THREE from 'three';
 import { weaponModel, muzzleOf, sightOf, handLeftOf, handRightOf, LEFT_HAND_UPRIGHT, box, grenadeModel } from './models.js';
 import { ART, cloneArt } from './assets.js';
@@ -17,6 +17,11 @@ const ease = t => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
 // 0 → 1 between a and b (fractions of the reload), eased
 const span = (u, a, b) => ease((u - a) / (b - a));
 const lerp3 = (out, a, b, k) => out.set(a.x + (b.x - a.x) * k, a.y + (b.y - a.y) * k, a.z + (b.z - a.z) * k);
+
+// Spent cases, by calibre: [length, width] in metres (a little larger than life, so they
+// read on a phone). A calibre not listed (rockets, grenades) throws no case.
+const CASE_SIZE = { '9mm': [0.024, 0.012], '5.56mm': [0.05, 0.011], '7.62x39mm': [0.044, 0.013], '7.62x51mm': [0.056, 0.014] };
+const CASE_LIFE = 0.6, CASE_GRAVITY = 7, CASE_MAX = 16;
 
 const ADS = { sig_p320: new THREE.Vector3(0, -0.085, -0.36), m4a1: new THREE.Vector3(0, -0.135, -0.3), ak47: new THREE.Vector3(0, -0.105, -0.3), rpg7: new THREE.Vector3(-0.09, -0.12, -0.25) };
 
@@ -84,6 +89,42 @@ export function createFpWeapon() {
   flash.scale.set(0.16, 0.16, 1);
   flash.visible = false;
   holder.add(flash);
+
+  // ---- spent cases: thrown out to the right of the gun, tumbling, gone after a moment.
+  // They live only in this view (they never land in the world), and move with your view.
+  const caseGeo = new THREE.CylinderGeometry(0.5, 0.5, 1, 6);
+  caseGeo.rotateX(Math.PI / 2);   // length along z, like the gun
+  const caseMat = new THREE.MeshLambertMaterial({ color: 0xc9a24a, emissive: 0x2a1c05 });
+  const cases = [];
+  for (let i = 0; i < CASE_MAX; i++) {
+    const m = new THREE.Mesh(caseGeo, caseMat);
+    m.visible = false; scene.add(m);
+    cases.push({ m, t: 0, v: new THREE.Vector3(), spin: new THREE.Vector3() });
+  }
+  let nextCase = 0;
+  const ejectAt = new THREE.Vector3(0.02, 0.05, -0.1);   // the ejection port, in the gun's own space
+  function throwCase(size) {
+    const c = cases[nextCase]; nextCase = (nextCase + 1) % CASE_MAX;
+    holder.updateMatrixWorld(true);
+    c.m.position.copy(holder.localToWorld(ejectAt.clone()));
+    holder.getWorldQuaternion(c.m.quaternion);
+    c.m.scale.set(size[1], size[1], size[0]);
+    // out to the right and up, a little back towards you; each one a bit different
+    c.v.set(0.5 + Math.random() * 0.25, 1.2 + Math.random() * 0.4, 0.1 + Math.random() * 0.2);
+    c.spin.set((Math.random() - 0.5) * 30, (Math.random() - 0.5) * 20, 10 + Math.random() * 15);
+    c.t = CASE_LIFE * (0.85 + Math.random() * 0.3);
+    c.m.visible = true;
+  }
+  function updateCases(dt) {
+    for (const c of cases) {
+      if (!c.m.visible) continue;
+      c.t -= dt;
+      if (c.t <= 0) { c.m.visible = false; continue; }
+      c.v.y -= CASE_GRAVITY * dt;
+      c.m.position.addScaledVector(c.v, dt);
+      c.m.rotation.x += c.spin.x * dt; c.m.rotation.y += c.spin.y * dt; c.m.rotation.z += c.spin.z * dt;
+    }
+  }
 
   const st = { ads: 0, kick: 0, flashT: 0, reload: 0, reloadDur: 1, reloadEmpty: false, swap: 0, bob: 0, throwT: 0, throwDur: 1, releaseFrac: 0.45 };
   const handLRest = new THREE.Vector3();
@@ -298,6 +339,10 @@ export function createFpWeapon() {
     R.mag = null; R.ch = null; R.slide = null;
     const m = muzzleOf(id);
     flash.position.set(m[0], m[1], m[2] - 0.05);
+    // the ejection port: just behind the magazine well, halfway up the receiver, on the right
+    const art = ART.weapons[id], magPt = art && art.root.getObjectByName('magazine');
+    if (art && magPt) ejectAt.set(0.02, (magPt.position.y + art.sight[1]) / 2, magPt.position.z + 0.035);
+    else ejectAt.set(0.02, (m[1] || 0) + 0.01, art ? -0.06 : -0.1);
     hands.R.visible = hands.L.visible = arms.R.visible = arms.L.visible = !!gun;
     const hr = handRightOf(id);
     hands.R.position.set(hr[0], hr[1], hr[2]);
@@ -324,9 +369,13 @@ export function createFpWeapon() {
     refresh() { buildHands(); const id = gunId; gunId = undefined; setWeapon(id); },
     /** For automated checks: hold the reload animation at progress u (0–1). */
     holdReload(u, empty = false) { st.reloadDur = 1e5; st.reload = (1 - u) * 1e5; st.reloadEmpty = empty; },
-    handle(ev, localId) {
+    handle(ev, localId, world) {
       if (ev.actorId !== localId) return;
-      if (ev.type === 'shot') { st.kick = 1; st.flashT = 0.05; }
+      if (ev.type === 'shot') {
+        st.kick = 1; st.flashT = 0.05;
+        const def = world && world.data.weapons[ev.weapon], size = def && CASE_SIZE[def.calibre];
+        if (size && gun) throwCase(size);
+      }
       else if (ev.type === 'reload') { st.reload = ev.time; st.reloadDur = ev.time; st.reloadEmpty = !!ev.empty; }
       else if (ev.type === 'swap') { st.swap = 0.4; st.reload = 0; }
       else if (ev.type === 'throw') { st.throwT = ev.time; st.throwDur = ev.time; st.releaseFrac = ev.release ? ev.release / ev.time : 0.45; }
@@ -335,6 +384,7 @@ export function createFpWeapon() {
       camera.aspect = aspect; camera.updateProjectionMatrix();
       const slot = player && player.alive && !player.downed ? player.slots[player.active] : null;
       setWeapon(slot ? slot.w : null);
+      updateCases(dt);
       if (!gun) return;
       st.ads += ((player.ads ? 1 : 0) - st.ads) * Math.min(1, dt * 14);
       st.kick = Math.max(0, st.kick - dt * 10);
