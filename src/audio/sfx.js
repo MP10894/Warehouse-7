@@ -6,6 +6,8 @@
 //   range          metres it carries: 0 = only your own (pickups, reloads…); otherwise it
 //                  fades out with distance and comes from the left or right
 //   pitch_spread   random pitch change each time (0.05 = ±5 %), so repeats don't sound copied
+//                  (keep it at 0 for reloads: a pitch change also changes the length, and the
+//                  sound should match the reload animation)
 // A sound with no file (or whose file is missing) keeps the game's built-in synthesised sound.
 import soundsCsv from '../../data/sounds.csv?raw';
 import { parseCsv } from '../data/parse.js';
@@ -29,6 +31,7 @@ export function createSfx() {
   let ctx = null, out = null;
   const buffers = new Map();   // url → AudioBuffer (once decoded)
   let last = null;             // for checks: the last sound played
+  const channels = new Map();  // name → the sound playing on it (so it can be cut short)
   return {
     /** Called when sound is unlocked: start decoding every file in the background. */
     attach(audioCtx, master) {
@@ -42,13 +45,15 @@ export function createSfx() {
       }
     },
     get last() { return last; },
+    /** Cut short whatever is playing on a channel (e.g. a reload, when you swap weapons). */
+    stop(channel) { const src = channels.get(channel); if (src) { try { src.stop(); } catch (e) { /* already over */ } channels.delete(channel); } },
     /** Is there a file (ready to play) for this sound? */
     has(id) { const s = SOUNDS[id]; return !!(s && s.urls.some(u => buffers.get(u))); },
     /**
      * Play a sound. dist: metres from you (0 = yours); pan: −1 left … 1 right.
      * Returns false if it can't (no file yet), so the built-in sound plays instead.
      */
-    play(id, dist = 0, pan = 0) {
+    play(id, dist = 0, pan = 0, channel = null) {
       const s = SOUNDS[id];
       if (!s || !ctx) return false;
       const ready = s.urls.map(u => buffers.get(u)).filter(Boolean);
@@ -62,6 +67,7 @@ export function createSfx() {
       src.connect(g);
       if (s.range > 0 && ctx.createStereoPanner) { const p = ctx.createStereoPanner(); p.pan.value = Math.max(-1, Math.min(1, pan)); g.connect(p); p.connect(out); }
       else g.connect(out);
+      if (channel) { this.stop(channel); channels.set(channel, src); src.onended = () => { if (channels.get(channel) === src) channels.delete(channel); }; }
       src.start();
       last = id;
       return true;

@@ -16,7 +16,7 @@ function soundFor(ev, local) {
   switch (ev.type) {
     case 'shot': return `shot_${ev.weapon}`;
     case 'pickup': return mine(ev.playerId) ? PICKUP_SOUND[ev.what] || null : null;
-    case 'reload': return mine(ev.actorId) ? 'reload' : null;
+    case 'reload': return mine(ev.actorId) ? `reload_${ev.weapon}` : null;   // each weapon has its own (no file yet → the built-in click)
     case 'swap': return mine(ev.actorId) ? 'swap' : null;
     case 'empty': return mine(ev.playerId) ? 'empty' : null;
     case 'throw': return mine(ev.actorId) ? 'throw' : null;
@@ -93,14 +93,17 @@ export function createAudio() {
       if (!ctx || !local) return;
       const d = ev.x !== undefined ? Math.hypot(ev.x - local.x, ev.z - local.z) : 0;
       // a recorded sound for this moment? (data/sounds.csv) Then that instead of the built-in one
-      const id = soundFor(ev, local);
-      if (id && sfx.has(id)) {
+      // (a reload or swap cuts short a reload sound still playing; so does going down)
+      if ((ev.type === 'swap' && ev.actorId === local.id) || ((ev.type === 'downed' || ev.type === 'death') && (ev.playerId === local.id || ev.actorId === local.id))) sfx.stop('reload');
+      const ids = [].concat(soundFor(ev, local) || []);
+      const id = ids.find(x => sfx.has(x));
+      if (id) {
         let pan = 0;
         if (ev.x !== undefined && d > 0.5) {
           // left/right from where you're facing: your right is (cos yaw, −sin yaw)
           pan = ((ev.x - local.x) * Math.cos(local.yaw) - (ev.z - local.z) * Math.sin(local.yaw)) / d * 0.8;
         }
-        if (sfx.play(id, d, pan)) return;
+        if (sfx.play(id, d, pan, ev.type === 'reload' ? 'reload' : null)) return;
       }
       switch (ev.type) {
         case 'shot': {
