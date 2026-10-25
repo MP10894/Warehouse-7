@@ -16,7 +16,7 @@ function soundFor(ev, local) {
   switch (ev.type) {
     case 'shot': return `shot_${ev.weapon}`;
     case 'pickup': return mine(ev.playerId) ? PICKUP_SOUND[ev.what] || null : null;
-    case 'reload': return mine(ev.actorId) ? [`reload_${ev.weapon}`, 'reload'] : null;   // the weapon's own, else the general one
+    case 'reload': return mine(ev.actorId) ? `reload_${ev.weapon}` : null;   // each weapon has its own (no file yet → the built-in click)
     case 'swap': return mine(ev.actorId) ? 'swap' : null;
     case 'empty': return mine(ev.playerId) ? 'empty' : null;
     case 'throw': return mine(ev.actorId) ? 'throw' : null;
