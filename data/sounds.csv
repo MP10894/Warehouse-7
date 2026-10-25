@@ -1,0 +1,32 @@
+sound,file,volume,range,pitch_spread,what_triggers_it
+ammo_pickup,AmmoPickUp,1,0,0.05,You pick up ammunition (any calibre) or an ammunition box from the supply
+armour_pickup,,1,0,0.05,You pick up armour
+health_pickup,,1,0,0.05,You pick up a first aid kit
+weapon_pickup,,1,0,0.05,You pick up a weapon
+grenade_pickup,,1,0,0.05,You pick up grenades
+crate_pickup,,1,0,0.05,You pick up an upgrade crate
+reload,,1,0,0.05,You start a reload
+swap,,1,0,0.05,You change weapons
+empty,,1,0,0,You pull the trigger on an empty gun
+throw,,1,0,0.05,You throw a grenade
+grenade_bounce,,1,25,0.1,A grenade bounces
+explosion,,1,120,0.08,A grenade or rocket explodes or a fuel tank blows up
+wall_break,,1,60,0.1,A wall or crate breaks
+wave_alarm,,1,0,0,An attack wave starts
+base_claimed,,1,0,0,You secure a base
+built,,1,0,0,An upgrade is built
+hurt,,1,0,0.08,You are hit
+enemy_death,,1,50,0.1,An enemy dies
+bomber_beep,,1,30,0,A suicide bomber's vest beeps
+downed,,1,0,0,A player goes down
+revived,,1,0,0,A player is revived
+shot_sig_p320,,1,90,0.06,A P320 fires
+shot_mp5,,1,90,0.06,An MP5 fires
+shot_mini_uzi,,1,90,0.06,A Mini Uzi fires
+shot_m4a1,,1,120,0.06,An M4A1 fires
+shot_galil,,1,120,0.06,A Galil fires
+shot_ak47,,1,120,0.06,An AK-47 fires
+shot_rpk,,1,130,0.06,An RPK fires
+shot_fal,,1,140,0.06,A FAL fires
+shot_mk14ebr,,1,140,0.06,An Mk14 EBR fires
+shot_rpg7,,1,140,0.04,An RPG-7 fires

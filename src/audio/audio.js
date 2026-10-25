@@ -1,5 +1,7 @@
-// Synthesised sound effects (no audio files yet), played in response to world events.
+// Sound effects, played in response to world events: recorded files where data/sounds.csv
+// names one (see sfx.js), otherwise the built-in synthesised sounds below.
 // Music is separate: see music.js.
+import { createSfx } from './sfx.js';
 const SHOT = {
   sig_p320: { freq: 4200, dur: 0.12, vol: 0.55, thump: 170 },
   m4a1: { freq: 3600, dur: 0.15, vol: 0.7, thump: 130 },
@@ -7,8 +9,35 @@ const SHOT = {
   rpg7: { freq: 900, dur: 0.6, vol: 0.9, thump: 60 }
 };
 
+/** Which sound (a row in data/sounds.csv) a world event makes for this player, if any. */
+const PICKUP_SOUND = { ammo: 'ammo_pickup', armour: 'armour_pickup', health: 'health_pickup', weapon: 'weapon_pickup', grenade: 'grenade_pickup', item: 'crate_pickup' };
+function soundFor(ev, local) {
+  const mine = id => id === local.id;
+  switch (ev.type) {
+    case 'shot': return `shot_${ev.weapon}`;
+    case 'pickup': return mine(ev.playerId) ? PICKUP_SOUND[ev.what] || null : null;
+    case 'reload': return mine(ev.actorId) ? 'reload' : null;
+    case 'swap': return mine(ev.actorId) ? 'swap' : null;
+    case 'empty': return mine(ev.playerId) ? 'empty' : null;
+    case 'throw': return mine(ev.actorId) ? 'throw' : null;
+    case 'bounce': return 'grenade_bounce';
+    case 'explosion': return 'explosion';
+    case 'blocks': return !ev.placed && ev.cells && ev.cells.length ? 'wall_break' : null;
+    case 'wave': return 'wave_alarm';
+    case 'baseClaimed': return 'base_claimed';
+    case 'built': return 'built';
+    case 'hurt': return mine(ev.targetId) ? 'hurt' : null;
+    case 'death': return ev.team === 'enemy' ? 'enemy_death' : null;
+    case 'beep': return 'bomber_beep';
+    case 'downed': return 'downed';
+    case 'revived': return 'revived';
+  }
+  return null;
+}
+
 export function createAudio() {
   let ctx = null, master = null, noiseBuf = null, wind = null;
+  const sfx = createSfx();
 
   function noise(dur, freq, vol, delay = 0, type = 'lowpass') {
     if (!ctx || vol <= 0.001) return;
@@ -43,9 +72,12 @@ export function createAudio() {
         const g = ctx.createGain(); g.gain.value = 0;
         src.connect(f); f.connect(g); g.connect(master); src.start();
         wind = { g, f };
+        sfx.attach(ctx, master);
       } catch (e) { ctx = null; }
     },
 
+    /** For checks: the last recorded sound played. */
+    get lastSound() { return sfx.last; },
     /** The audio context once unlocked (music plays through it too), or null. */
     context() { return ctx; },
     /** Phone switched apps / screen off: go quiet; back: carry on. */
@@ -60,6 +92,16 @@ export function createAudio() {
     handle(ev, local) {
       if (!ctx || !local) return;
       const d = ev.x !== undefined ? Math.hypot(ev.x - local.x, ev.z - local.z) : 0;
+      // a recorded sound for this moment? (data/sounds.csv) Then that instead of the built-in one
+      const id = soundFor(ev, local);
+      if (id && sfx.has(id)) {
+        let pan = 0;
+        if (ev.x !== undefined && d > 0.5) {
+          // left/right from where you're facing: your right is (cos yaw, −sin yaw)
+          pan = ((ev.x - local.x) * Math.cos(local.yaw) - (ev.z - local.z) * Math.sin(local.yaw)) / d * 0.8;
+        }
+        if (sfx.play(id, d, pan)) return;
+      }
       switch (ev.type) {
         case 'shot': {
           const s = SHOT[ev.weapon] || SHOT.ak47;

@@ -466,7 +466,7 @@ if (!view) {
 
   aim.yaw = local().yaw;
   // handle for automated browser tests
-  window.__game = { get world() { return world; }, get scenery() { return scenery; }, get music() { return music; }, aim, fp, view, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
+  window.__game = { get world() { return world; }, get scenery() { return scenery; }, get music() { return music; }, audio, aim, fp, view, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
   // the title screen first; Start leads to the briefing and level menu
   // sound can only start after a tap or key press: the first one anywhere unlocks it, so the
   // title music starts as soon as you touch the screen
