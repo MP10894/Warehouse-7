@@ -25,4 +25,4 @@ for (const [path, text] of Object.entries(files)) {
 }
 for (const id of Object.keys(levels)) if (!levels[id].json) delete levels[id];
 
-export const DATA = buildData({ weaponsRows: gameData.weapons, enemiesRows: gameData.enemies, materialsCsv, enemiesCsv, wavesCsv, upgradesCsv, settings, levels });
+export const DATA = buildData({ weaponsRows: gameData.weapons, enemiesRows: gameData.enemies, alliesRows: gameData.allies, materialsCsv, enemiesCsv, wavesCsv, upgradesCsv, settings, levels });

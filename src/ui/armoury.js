@@ -4,6 +4,7 @@
 // the panel never changes the world itself. Closes when you walk away.
 // Keys on a computer: 1–3 to pick, E or Esc to close.
 import { armouryWeapons } from '../sim/base.js';
+import { isAlly, turretOut } from '../sim/turrets.js';
 
 /** Every weapon any upgrade can unlock, with the upgrade id and level that unlocks it. */
 function offers(world) {
@@ -52,8 +53,12 @@ export function createArmoury({ root, onPick }) {
   function render(world, p) {
     const ready = armouryWeapons(world);
     const owned = new Set(p.slots.filter(Boolean).map(s => s.w));
-    items = offers(world).map(o => ({ ...o, state: owned.has(o.weapon) ? 'owned' : ready.includes(o.weapon) ? 'ready' : 'locked' }));
-    const key = items.map(i => i.weapon + i.state).join() + '|' + (p.slots[p.active]?.w || '');
+    items = offers(world).map(o => {
+      const ally = isAlly(world, o.weapon), out = ally ? turretOut(world, p, o.weapon) : null;
+      const busy = ally && !out && p.carrying;   // hands full (a crate)
+      return { ...o, ally, out, state: (ally ? out : owned.has(o.weapon)) ? 'owned' : !ready.includes(o.weapon) ? 'locked' : busy ? 'busy' : 'ready' };
+    });
+    const key = items.map(i => i.weapon + i.state + (i.out || '')).join() + '|' + (p.slots[p.active]?.w || '');
     if (key === shown) return;
     shown = key;
     const hands = p.slots[p.active] ? world.data.weapons[p.slots[p.active].w].name : '';
@@ -61,9 +66,10 @@ export function createArmoury({ root, onPick }) {
     panel.querySelector('header span').textContent = free ? 'Takes your empty slot' : `Leaves your ${hands} beside the locker`;
     list.innerHTML = items.map((it, i) => {
       const w = world.data.weapons[it.weapon];
-      const note = it.state === 'owned' ? 'CARRIED' : it.state === 'locked' ? `LOCKER LEVEL ${it.level}` : 'TAKE';
-      return `<button type="button" data-i="${i}" class="${it.state}"${it.state === 'ready' ? '' : ' disabled'}>` +
-        `<b>${w.name}</b><span>${w.calibre} · ${w.mag_size} rounds</span><em><kbd>${i + 1}</kbd>${note}</em></button>`;
+      const note = it.state === 'owned' ? (it.out === 'placed' ? 'PLACED' : 'CARRIED') : it.state === 'locked' ? `LOCKER LEVEL ${it.level}` : it.state === 'busy' ? 'HANDS FULL' : 'TAKE';
+      const line = it.ally ? `Automatic · ${w.calibre} · one per player` : `${w.calibre} · ${w.mag_size} rounds`;
+      return `<button type="button" data-i="${i}" class="${it.state === 'busy' ? 'locked' : it.state}"${it.state === 'ready' ? '' : ' disabled'}>` +
+        `<b>${w.name}</b><span>${line}</span><em><kbd>${i + 1}</kbd>${note}</em></button>`;
     }).join('');
   }
 

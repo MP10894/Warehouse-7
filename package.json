@@ -8,7 +8,7 @@
     "dev:phone": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
-    "test:sim": "node tests/sim-smoke.mjs && node tests/najaf-check.mjs && node tests/najaf-bases.mjs && node tests/combat-items.mjs && node tests/decor-check.mjs && node tests/armoury-check.mjs"
+    "test:sim": "node tests/sim-smoke.mjs && node tests/najaf-check.mjs && node tests/najaf-bases.mjs && node tests/combat-items.mjs && node tests/decor-check.mjs && node tests/armoury-check.mjs && node tests/turret-check.mjs"
   },
   "dependencies": {
     "peerjs": "^1.5.4",

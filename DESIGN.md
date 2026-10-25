@@ -242,7 +242,7 @@ Starting values, to be tuned after play-testing:
 
 ## Not in scope (first version)
 
-- Friendly NPCs (tents for allies, allied AI)
+- Friendly NPCs (tents for allies, allied AI) — except the players' own automatic turret (decision log, 2026-10-25)
 - Crouching, jumping, going prone
 - Vehicles
 - More than 2 players
@@ -442,6 +442,7 @@ tag `warehouse-prototype`.
 | 2026-10-25 | The in-game tuning panel is removed: all tuning is done in the Game Data workbook and the files in /data (values saved on a phone by the old panel are cleared). In a mission, a small ✕ under the health bars (top-left, away from both thumbs) asks "Leave the mission?" before going back to the menu; a solo game pauses while it asks, co-op carries on. The installed app's menu has an Exit button; the solo results screen has a Menu button. The frame-rate readout only shows with ?fps |
 | 2026-10-25 | The player character is Dima Karpov (from Martial's PMC Ltd. project), in olive drab like his reference photo; the co-op marker over a partner's head tells him from insurgents. Player model budget raised to 600 triangles (enemies stay at 300) |
 | 2026-10-25 | Explosions hit armour first, like bullets: the RPG-7 and RGD-5 do 100 health and 50 armour damage, so more than 50 armour survives a direct hit. Fuel tank blasts stay as strong as before the RPG's damage went from 80 to 100 (settings → hazards.tank_blast_damage_factor 3.2, was 4): someone 9 m from the tank survives badly hurt |
+| 2026-10-25 | Automatic turret (an M134 minigun on a tripod): a level 3 ammunition supply hands one out, one per player (upgrades.csv → unlocks "turret"). You carry it in both hands (no shooting, carry speed), see it see-through where it would go (green: good spot, red: inside a wall, too steep, too close to someone or another turret) and DROP it there; PICK UP TURRET takes it back with its damage. It never moves; it sweeps, turns to enemies it sees (120° in front, all round for 6 s after hearing shots or being hit) and fires bursts with unlimited ammunition. Its profile is the new Allies tab (100 health, 300 armour, sight and hearing 50 m, 0.5 s reaction, 2° + 2° per 10 m aim error, bursts 5–10, pauses 0.5–1 s); its gun the Weapons tab's Turret row (5.56, 20/20 damage, 1,200 rounds a minute). Enemies treat it like a player (see it, shoot it, run bombs at it). Destroyed: it drops nothing and the supply hands out another. Going down while carrying it sets it down at your feet. Its kills count for its owner. Gun 1.1 m up so it fires over 1 m low walls; it only engages enemies its bullets can reach. Handling numbers in settings.json → turret. Model budget 400 triangles |
 
 ## Open questions
 

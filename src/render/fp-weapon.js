@@ -382,7 +382,8 @@ export function createFpWeapon() {
     },
     update(dt, player, aspect) {
       camera.aspect = aspect; camera.updateProjectionMatrix();
-      const slot = player && player.alive && !player.downed ? player.slots[player.active] : null;
+      // carrying a turret: both hands are on it (it is shown out in front, where it would go)
+      const slot = player && player.alive && !player.downed && !(player.carrying && player.carrying.turret) ? player.slots[player.active] : null;
       setWeapon(slot ? slot.w : null);
       updateCases(dt);
       if (!gun) return;

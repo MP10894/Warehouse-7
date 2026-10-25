@@ -56,7 +56,7 @@ export function parseUpgrades(text) {
   return out;
 }
 
-export function buildData({ weaponsRows, enemiesRows = null, materialsCsv, enemiesCsv, wavesCsv, upgradesCsv = DEFAULT_UPGRADES_CSV, settings, levels }) {
+export function buildData({ weaponsRows, enemiesRows = null, alliesRows = null, materialsCsv, enemiesCsv, wavesCsv, upgradesCsv = DEFAULT_UPGRADES_CSV, settings, levels }) {
   const weapons = byKey(weaponsRows, 'id');
   // Ammunition carried per calibre: the largest (max_total − magazine) among weapons of that calibre.
   const calibres = {};
@@ -77,6 +77,8 @@ export function buildData({ weaponsRows, enemiesRows = null, materialsCsv, enemi
     calibres,
     materials: byKey(parseCsv(materialsCsv), 'id'),
     enemies: enemiesRows && enemiesRows.length ? byKey(enemiesRows, 'id') : byKey(parseCsv(enemiesCsv), 'id'),
+    // friendly units (the Allies tab of the workbook): the turret
+    allies: byKey(alliesRows || [], 'id'),
     waves: parseCsv(wavesCsv),
     upgrades: parseUpgrades(upgradesCsv),
     settings,

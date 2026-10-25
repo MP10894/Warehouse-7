@@ -8,6 +8,7 @@ import { aimVector, spreadDir, spawnProjectile } from './weapons.js';
 import { emit, explode, killActor } from './damage.js';
 import { stormAt } from './weather.js';
 import { holdsBase, levelBases, noSpawnAreas, inArea } from './base.js';
+import { hostileTargets, aimHeight, lookHeight, turretsHear } from './turrets.js';
 
 const EYE = 1.55;
 
@@ -57,10 +58,10 @@ function sightRange(world, e, p) {
   return def.sight_range * world.data.settings.difficulty.enemy_sight_factor * (1 - world.data.settings.weather.sight_reduction * storm);
 }
 
+// what an enemy fights: players still standing and the players' turrets
 function perceive(world, e) {
   let best = null, bd = Infinity;
-  for (const p of world.players) {
-    if (!p.alive || p.downed) continue;
+  for (const p of hostileTargets(world)) {
     const d = Math.hypot(p.x - e.x, p.y - e.y, p.z - e.z);
     if (d > sightRange(world, e, p) || d >= bd) continue;
     // must be roughly facing them unless already alert
@@ -69,7 +70,7 @@ function perceive(world, e) {
       a = Math.atan2(Math.sin(a), Math.cos(a));
       if (Math.abs(a) > 1.4 && d > 6) continue;
     }
-    if (!lineOfSight(world, e.x, e.y + EYE, e.z, p.x, p.y + 1.5, p.z)) continue;
+    if (!lineOfSight(world, e.x, e.y + EYE, e.z, p.x, p.y + lookHeight(p), p.z)) continue;
     best = p; bd = d;
   }
   return best;
@@ -80,7 +81,7 @@ function fireAt(world, e, target, d) {
   const wdef = world.data.weapons[e.weapon.w];
   const s = world.data.settings;
   const v = wdef.muzzle_velocity * s.ballistics.bullet_speed_factor;
-  const tx = target.x, ty = target.y + 1.25, tz = target.z;
+  const tx = target.x, ty = target.y + aimHeight(target), tz = target.z;
   const ox = e.x, oy = e.y + EYE, oz = e.z;
   const t = d / v;
   const dy = ty + 0.5 * s.ballistics.gravity * (wdef.projectile === 'rocket' ? 0.15 : 1) * t * t - oy;
@@ -93,6 +94,7 @@ function fireAt(world, e, target, d) {
   e.fireCd = 60 / wdef.rate_of_fire;
   emit(world, { type: 'shot', actorId: e.id, team: 'enemy', weapon: wdef.id, x: ox, y: oy, z: oz });
   if (e.weapon.mag <= 0) e.reloadT = wdef.reload_time;
+  turretsHear(world, ox, oz);
 }
 
 function walkTowards(world, e, tx, tz, speed, dt) {
@@ -135,13 +137,13 @@ export function updateEnemy(world, e, dt) {
   }
   if (!e.sees) e.lostT += dt;
   if (wdef.projectile === 'grenade') { updateBomber(world, e, def, wdef, dt); return; }
-  const target = e.sees ? world.players.find(p => p.id === e.targetId) : null;
+  const target = e.sees ? hostileTargets(world).find(p => p.id === e.targetId) : null;
   e.aiming = !!(target && target.alive && !target.downed);
 
   if (e.aiming) {
     const d = Math.hypot(target.x - e.x, target.y - e.y, target.z - e.z);
     e.yaw = Math.atan2(-(target.x - e.x), -(target.z - e.z));
-    e.pitch = Math.atan2(target.y + 1.2 - (e.y + EYE), Math.hypot(target.x - e.x, target.z - e.z));
+    e.pitch = Math.atan2(target.y + aimHeight(target) - (e.y + EYE), Math.hypot(target.x - e.x, target.z - e.z));
     e.reactT -= dt;
     if (e.reactT <= 0 && e.reloadT <= 0) {
       if (e.burstLeft > 0) {
@@ -206,8 +208,7 @@ export function updateEnemy(world, e, dt) {
 function updateBomber(world, e, def, wdef, dt) {
   const nav = world.cache.nav;
   let near = null, nd = Infinity;
-  for (const p of world.players) {
-    if (!p.alive || p.downed) continue;
+  for (const p of hostileTargets(world)) {
     const d = Math.hypot(p.x - e.x, p.y - e.y, p.z - e.z);
     if (d < nd) { nd = d; near = p; }
   }

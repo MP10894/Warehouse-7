@@ -6,7 +6,8 @@ const SHOT = {
   sig_p320: { freq: 4200, dur: 0.12, vol: 0.55, thump: 170 },
   m4a1: { freq: 3600, dur: 0.15, vol: 0.7, thump: 130 },
   ak47: { freq: 2600, dur: 0.18, vol: 0.8, thump: 105 },
-  rpg7: { freq: 900, dur: 0.6, vol: 0.9, thump: 60 }
+  rpg7: { freq: 900, dur: 0.6, vol: 0.9, thump: 60 },
+  turret: { freq: 3800, dur: 0.07, vol: 0.45, thump: 140 },   // short and quiet: it fires 20 a second
 };
 
 /** Which sound (a row in data/sounds.csv) a world event makes for this player, if any. */

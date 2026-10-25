@@ -6,6 +6,7 @@ import { emit, dropPickup } from './damage.js';
 import { buildSpotFor, build, buildLabel, crateWanted, crateName, armouryFor, armouryWeapons } from './base.js';
 import { blocked } from './body.js';
 import { onBuild } from './waves.js';
+import { isAlly, takeTurret, placementFor, dropTurret, turretToPickUp, pickUpTurret } from './turrets.js';
 
 export function createPlayer(world, id, spawn) {
   const s = world.data.settings.player;
@@ -125,9 +126,13 @@ function findContext(world, p) {
   const s = world.data.settings.player;
   const downed = world.players.find(o => o !== p && o.downed && Math.hypot(o.x - p.x, o.z - p.z) <= s.revive_range);
   if (downed) return { kind: 'revive', label: 'REVIVE', targetId: downed.id };
+  // carrying a turret: DROP puts it where it is shown (only on a good spot)
+  if (p.carrying && p.carrying.turret) return p.place && p.place.ok ? { kind: 'dropTurret', label: 'DROP' } : null;
   const spot = buildSpotFor(world, p);
   if (spot) return { kind: 'build', label: buildLabel(world, spot), spot };
   if (armouryFor(world, p) && armouryWeapons(world).length) return { kind: 'armoury', label: 'ARMOURY' };
+  const tur = turretToPickUp(world, p);
+  if (tur) return { kind: 'pickupTurret', label: 'PICK UP TURRET', turretId: tur.id };
   if (p.slots.every(Boolean)) {
     const pk = world.pickups.find(k => k.type === 'weapon' && !ownsWeapon(p, k.weapon) && near(p, k, s.pickup_range));
     if (pk) return { kind: 'pickup', label: `TAKE ${weaponName(world, pk.weapon).toUpperCase()}`, pickupId: pk.id };
@@ -142,6 +147,10 @@ function doContext(world, p, ctx) {
       o.downed = false; o.hp = world.data.settings.player.revive_health;
       emit(world, { type: 'revived', playerId: o.id });
     }
+  } else if (ctx.kind === 'dropTurret') {
+    dropTurret(world, p);
+  } else if (ctx.kind === 'pickupTurret') {
+    pickUpTurret(world, p, ctx.turretId);
   } else if (ctx.kind === 'build') {
     if (build(world, p, ctx.spot)) onBuild(world);
   } else if (ctx.kind === 'pickup') {
@@ -167,6 +176,8 @@ function doContext(world, p, ctx) {
 export function takeFromArmoury(world, p, weaponId) {
   const spot = armouryFor(world, p);
   if (!spot || !armouryWeapons(world).includes(weaponId) || ownsWeapon(p, weaponId)) return false;
+  // a turret (Allies tab) goes into your hands, not into a weapon slot
+  if (isAlly(world, weaponId)) return takeTurret(world, p, weaponId);
   const def = world.data.weapons[weaponId];
   const free = p.slots.findIndex(x => !x);
   const slot = free >= 0 ? free : p.active;
@@ -227,7 +238,7 @@ export function updatePlayer(world, p, cmd, dt) {
   regenerate(world, p, dt);
   if (cmd.yaw !== undefined) p.yaw = cmd.yaw;
   if (cmd.pitch !== undefined) p.pitch = Math.max(-s.controls.max_pitch, Math.min(s.controls.max_pitch, cmd.pitch));
-  p.ads = !!cmd.ads;
+  p.ads = !!cmd.ads && !(p.carrying && p.carrying.turret);
 
   if (cmd.pos) {
     // co-op guest: their own device moves them (so it feels instant) and reports where they are
@@ -248,6 +259,8 @@ export function updatePlayer(world, p, cmd, dt) {
   if (used.size) world.pickups = world.pickups.filter(k => !used.has(k));
 
   if (cmd.armoury) takeFromArmoury(world, p, cmd.armoury);
+  // where a carried turret would go (the graphics show it there, green or red)
+  p.place = p.carrying && p.carrying.turret ? placementFor(world, p) : null;
   p.context = findContext(world, p);
   if (cmd.interact && p.context && p.context.kind !== 'armoury') doContext(world, p, p.context);
 }

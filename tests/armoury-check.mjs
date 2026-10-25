@@ -17,7 +17,7 @@ const loadLevel = id => {
 };
 const gameData = gameDataFromXlsx(readFileSync(new URL('../data/Game Data.xlsx', import.meta.url)), byKey(parseCsv(read('data/enemies.csv')), 'id'));
 const data = buildData({
-  weaponsRows: gameData.weapons, enemiesRows: gameData.enemies, materialsCsv: read('data/materials.csv'),
+  weaponsRows: gameData.weapons, enemiesRows: gameData.enemies, alliesRows: gameData.allies, materialsCsv: read('data/materials.csv'),
   enemiesCsv: read('data/enemies.csv'), wavesCsv: read('data/waves.csv'), upgradesCsv: read('data/upgrades.csv'),
   settings: JSON.parse(read('data/settings.json')), levels: { najaf: loadLevel('najaf') }
 });
@@ -53,7 +53,7 @@ const mp5 = data.weapons.mp5;
 check(p.slots[1] && p.slots[1].w === 'mp5' && p.slots[1].mag === mp5.mag_size && p.active === 1 && w.pickups.every(k => before.has(k.id)),
   'with an empty slot the MP5 goes into it, fully loaded, and nothing is dropped');
 applyUpgrade(w, 'ammo', 2); applyUpgrade(w, 'ammo', 3);
-check(armouryWeapons(w).join() === 'mp5,m4a1,mk14ebr', `level 3 offers ${armouryWeapons(w).join(', ')}`);
+check(armouryWeapons(w).join() === 'mp5,m4a1,mk14ebr,turret', `level 3 offers ${armouryWeapons(w).join(', ')}`);
 step(w, { armoury: 'mk14ebr' });
 const mk = data.weapons.mk14ebr;
 const dropped = w.pickups.find(k => k.type === 'weapon' && k.weapon === 'mp5' && !before.has(k.id));

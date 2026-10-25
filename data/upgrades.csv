@@ -3,7 +3,7 @@ walls,Walls,construction_crate,1,1,,,,
 walls,Walls,construction_crate,2,2,,,,
 ammo,Ammunition supply,ammo_crate,1,,resupply,45,30,mp5
 ammo,Ammunition supply,ammo_crate,2,,resupply,35,40,m4a1
-ammo,Ammunition supply,ammo_crate,3,,resupply,25,50,mk14ebr
+ammo,Ammunition supply,ammo_crate,3,,resupply,25,50,mk14ebr turret
 medical,First aid locker,medical_crate,1,,health,45,25,
 medical,First aid locker,medical_crate,2,,health,35,40,
 medical,First aid locker,medical_crate,3,,health,25,60,

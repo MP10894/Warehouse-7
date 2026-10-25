@@ -39,3 +39,4 @@ shot_rpk,RPK_fire,1,130,0.06,An RPK fires
 shot_fal,FAL_fire,1,140,0.06,A FAL fires
 shot_mk14ebr,,1,140,0.06,An Mk14 EBR fires
 shot_rpg7,,1,140,0.04,An RPG-7 fires
+shot_turret,,0.8,140,0.05,Your turret fires

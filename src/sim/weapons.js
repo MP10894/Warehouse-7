@@ -2,6 +2,7 @@
 import { rand, randomInDisc } from './rng.js';
 import { traceSegment } from './ballistics.js';
 import { emit, damageActor, damagePiece, explode, findActor, alertEnemy } from './damage.js';
+import { turretsHear } from './turrets.js';
 
 /** Unit vector for a look direction (matches the camera: yaw 0 looks north, −z). */
 export function aimVector(yaw, pitch) {
@@ -41,7 +42,7 @@ export const grenadeMax = world => { const g = grenadeDef(world); return g ? g.m
 
 /** Can the player toss a grenade right now? */
 export function canThrow(world, p) {
-  return !!grenadeDef(world) && p.alive && !p.downed && (p.grenades || 0) > 0 && !(p.throwT > 0) && !(p.reloadT > 0) && !(p.swapT > 0);
+  return !!grenadeDef(world) && p.alive && !p.downed && (p.grenades || 0) > 0 && !(p.throwT > 0) && !(p.reloadT > 0) && !(p.swapT > 0) && !(p.carrying && p.carrying.turret);
 }
 
 /**
@@ -128,6 +129,7 @@ export function updatePlayerWeapon(world, p, cmd, dt) {
 
   const pressed = !!cmd.fire && !p.trigger;
   p.trigger = !!cmd.fire;
+  if (p.carrying && p.carrying.turret) return;   // both hands on the turret: no shooting
   const want = def.fire_mode === 'auto' ? !!cmd.fire : pressed;
   if (!want || p.reloadT > 0 || p.swapT > 0 || throwing) return;
   if (slot.mag <= 0) {
@@ -153,6 +155,7 @@ export function updatePlayerWeapon(world, p, cmd, dt) {
     kick: b.recoil_kick_at_100 * R, side: rand(world, -1, 1) * b.recoil_side_at_100 * R
   });
   hearShot(world, p, world.data.enemies.insurgent ? world.data.enemies.insurgent.hearing_range : 30);
+  turretsHear(world, p.x, p.z);
   if (slot.mag <= 0 && (p.reserve[def.calibre] || 0) > 0) startReload(world, p);
 }
 
@@ -197,7 +200,8 @@ export function updateProjectiles(world, dt) {
     if (pr.kind !== 'rocket') pr.vy -= g * dt;
     else pr.vy -= g * 0.15 * dt; // rockets are powered, they barely drop
     pr.x += pr.vx * dt; pr.y += pr.vy * dt; pr.z += pr.vz * dt;
-    const targets = pr.team === 'player' ? world.enemies : world.players;
+    // players' and turrets' bullets hit enemies; enemies' bullets hit players and turrets
+    const targets = pr.team === 'player' || pr.team === 'turret' ? world.enemies : [...world.players, ...world.turrets];
     const hit = traceSegment(world, ox, oy, oz, pr.x, pr.y, pr.z, { actors: targets.filter(a => !a.downed), ignore: pr.owner });
     if (!hit) {
       if (pr.life > 0 && pr.y > -5) keep.push(pr);

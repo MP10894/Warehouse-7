@@ -70,9 +70,11 @@ export function traceSegment(world, ax, ay, az, bx, by, bz, opts = {}) {
     for (const a of opts.actors) {
       if (!a.alive || a.id === opts.ignore) continue;
       if (Math.abs(a.x - ax) > maxLen + 2 && Math.abs(a.x - bx) > 2) continue;
-      let t = segCylinder(ax, ay, az, dx, dy, dz, maxLen, a.x, a.z, BODY_RADIUS, a.y, a.y + BODY_TOP);
+      // a turret: one squat cylinder (no head); people: body cylinder and head sphere
+      const turret = a.kind === 'turret';
+      let t = segCylinder(ax, ay, az, dx, dy, dz, maxLen, a.x, a.z, turret ? 0.45 : BODY_RADIUS, a.y, a.y + (turret ? 1.3 : BODY_TOP));
       let head = false;
-      const th = segSphere(ax, ay, az, dx, dy, dz, maxLen, a.x, a.y + HEAD_Y, a.z, HEAD_RADIUS);
+      const th = turret ? null : segSphere(ax, ay, az, dx, dy, dz, maxLen, a.x, a.y + HEAD_Y, a.z, HEAD_RADIUS);
       if (th !== null && (t === null || th < t)) { t = th; head = true; }
       if (t !== null && (!hit || t < hit.dist)) {
         hit = { kind: 'actor', dist: t, x: ax + dx * t, y: ay + dy * t, z: az + dz * t, nx: -dx, ny: -dy, nz: -dz, actor: a, head };

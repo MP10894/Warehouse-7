@@ -14,7 +14,7 @@ const SEND_RANGE = 90;
 // events the guest needs to replay for sound, effects and HUD (broken walls are rebuilt
 // from the piece list instead, so 'blocks' is not forwarded)
 const FORWARD = new Set(['shot', 'impact', 'explosion', 'hurt', 'death', 'downed', 'revived', 'pickup', 'message',
-  'wave', 'baseClaimed', 'built', 'weather', 'hitConfirm', 'reload', 'swap', 'empty', 'status', 'throw', 'beep', 'bounce']);
+  'wave', 'baseClaimed', 'built', 'weather', 'hitConfirm', 'reload', 'swap', 'empty', 'status', 'throw', 'beep', 'bounce', 'turret']);
 const EVENT_WINDOW = 45; // ticks of recent events repeated in every snapshot (drops are common)
 const MAX_EVENTS = 22;
 
@@ -62,7 +62,7 @@ export function createHostEncoder(data) {
         p.slots.map(s => (s ? `${wIdx(s.w)}:${s.mag}` : '')).join('|'),
         Object.entries(p.reserve).map(([c, n]) => `${c}=${n}`).join('|'),
         Math.round(p.reloadT * 100), Math.round(p.swapT * 100),
-        p.carrying ? p.carrying.item : '',
+        p.carrying ? (p.carrying.turret ? `turret:${p.carrying.turret}` : p.carrying.item) : '',
         p.context ? `${p.context.kind}|${p.context.label}` : '',
         Math.round(p.bloom * 1000),
         `${p.stats.shots}|${p.stats.hits}|${p.stats.kills}`,
@@ -80,6 +80,9 @@ export function createHostEncoder(data) {
       ]);
       // bullets first (they are trimmed first when the message is too big), then rockets and grenades
       const shown = [...world.projectiles.filter(pr => pr.kind === 'bullet').slice(-12), ...world.projectiles.filter(pr => pr.kind !== 'bullet').slice(-8)];
+      // the players' turrets (one each at most)
+      patch.r = world.turrets.map(t => [t.id, cm(t.x), cm(t.y), cm(t.z), mr(t.yaw), mr(t.pitch), Math.ceil(t.hp), Math.ceil(t.armour),
+        t.alive ? 1 : 0, t.owner, t.type, Math.round(t.deadT * 10)]);
       patch.b = shown.map(pr => [pr.id, cm(pr.x), cm(pr.y), cm(pr.z), Math.round(pr.vx), Math.round(pr.vy), Math.round(pr.vz),
         pr.team === 'enemy' ? 1 : 0, Math.max(0, PROJ.indexOf(pr.kind))]);
       patch.e = ring.slice(-MAX_EVENTS);
@@ -179,7 +182,8 @@ export function createGuestDecoder(data) {
         p.reserve = {};
         for (const part of reserve ? reserve.split('|') : []) { const [c, n] = part.split('='); p.reserve[c] = Number(n); }
         p.reloadT = reloadT / 100; p.swapT = swapT / 100;
-        p.carrying = carrying ? { item: carrying, origin: { x: 0, y: 0, z: 0 } } : null;
+        p.carrying = !carrying ? null : carrying.startsWith('turret:') ? { item: 'turret', turret: carrying.slice(7) }
+          : { item: carrying, origin: { x: 0, y: 0, z: 0 } };
         if (ctx) { const [kind, label] = ctx.split('|'); p.context = { kind, label }; } else p.context = null;
         p.bloom = bloom / 1000;
         const [shots, hits, k] = stats.split('|').map(Number);
@@ -199,6 +203,13 @@ export function createGuestDecoder(data) {
         e.weapon.w = weaponIds[w];
         return e;
       });
+
+      if (snap.r) {
+        world.turrets = snap.r.map(([id, x, y, z, yaw, pitch, hp, armour, alive, owner, type, deadT]) => ({
+          id, kind: 'turret', type, owner, x: x / 100, y: y / 100, z: z / 100, yaw: yaw / 1000, pitch: pitch / 1000,
+          hp, armour, alive: !!alive, downed: false, deadT: deadT / 10
+        }));
+      }
 
       world.projectiles = (snap.b || []).map(([id, x, y, z, vx, vy, vz, team, kind]) => ({
         id, x: x / 100, y: y / 100, z: z / 100, vx, vy, vz, team: team ? 'enemy' : 'player', kind: PROJ[kind] || 'bullet'

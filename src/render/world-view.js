@@ -3,7 +3,8 @@
 // world, so this works the same whether the world was simulated here or received
 // from a co-op host.
 import * as THREE from 'three';
-import { soldierModel, setSoldierWeapon, poseSoldier, pickupModel, rocketModel, grenadeModel } from './models.js';
+import { soldierModel, setSoldierWeapon, poseSoldier, pickupModel, rocketModel, grenadeModel, turretModel } from './models.js';
+import { placementFor } from '../sim/turrets.js';
 
 const MAX_TRACERS = 256;
 
@@ -12,6 +13,15 @@ export function createWorldView(scene, tex, initialLocalId) {
   const actors = new Map();   // actor id → { model, flinch }
   const pickups = new Map();  // pickup id → group
   const rockets = new Map();
+  const turrets = new Map();  // turret id → model
+  const ghosts = new Map();   // player id → see-through turret showing where theirs would go
+  // see-through: green where it can go, red where it can't
+  const ghostMat = {
+    ok: new THREE.MeshBasicMaterial({ color: 0x6fe08a, transparent: true, opacity: 0.45, depthWrite: false }),
+    bad: new THREE.MeshBasicMaterial({ color: 0xe0574a, transparent: true, opacity: 0.45, depthWrite: false })
+  };
+  const charred = new THREE.MeshLambertMaterial({ color: 0x1c1b19, flatShading: true });
+  const paint = (root, mat) => root.traverse(o => { if (o.isMesh) o.material = mat; });
 
   const tracerGeo = new THREE.BufferGeometry();
   const tracerPos = new Float32Array(MAX_TRACERS * 6);
@@ -38,11 +48,14 @@ export function createWorldView(scene, tex, initialLocalId) {
       for (const v of actors.values()) scene.remove(v.model.root);
       for (const g of pickups.values()) scene.remove(g);
       for (const r of rockets.values()) scene.remove(r);
-      actors.clear(); pickups.clear(); rockets.clear();
+      for (const t of turrets.values()) scene.remove(t.root);
+      for (const g of ghosts.values()) scene.remove(g.root);
+      actors.clear(); pickups.clear(); rockets.clear(); turrets.clear(); ghosts.clear();
     },
 
     handle(ev) {
       if (ev.type === 'hurt') { const v = actors.get(ev.targetId); if (v) v.flinch = 1; }
+      if (ev.type === 'shot' && ev.team === 'turret') { const t = turrets.get(ev.actorId); if (t) t.spin = 1; }
     },
 
     sync(world, dt) {
@@ -56,8 +69,9 @@ export function createWorldView(scene, tex, initialLocalId) {
         // a suicide bomber carries no gun (his "weapon" is the vest)
         const thrown = gun && world.data.weapons[gun] && world.data.weapons[gun].projectile === 'grenade';
         if (gun && !thrown) setSoldierWeapon(m, gun);
+        const hauling = !!(a.carrying && a.carrying.turret);   // both hands on a turret: no gun
         if (m.bombVest) { const l = m.bombVest.getObjectByName('bomb_light'); if (l) l.visible = a.alive && Math.floor(world.time * (a.moving ? 6 : 2)) % 2 === 0; }
-        if (m.gun) m.gun.visible = a.alive && !(a.kind === 'enemy' && !a.alive);
+        if (m.gun) m.gun.visible = a.alive && !hauling;
         m.root.position.set(a.x, a.y, a.z);
         m.root.rotation.y = a.yaw;
         v.flinch = Math.max(0, v.flinch - dt * 5);
@@ -67,6 +81,37 @@ export function createWorldView(scene, tex, initialLocalId) {
         });
       }
       for (const [id, v] of actors) if (!seen.has(id)) { scene.remove(v.model.root); actors.delete(id); }
+
+      // turrets: the head turns, the gun tips, the barrels spin while firing; a wreck is charred
+      const seenT = new Set();
+      for (const t of world.turrets || []) {
+        seenT.add(t.id);
+        let v = turrets.get(t.id);
+        if (!v) { v = { ...turretModel(), spin: 0, dead: false }; scene.add(v.root); turrets.set(t.id, v); }
+        v.root.position.set(t.x, t.y, t.z);
+        v.head.rotation.y = t.yaw;
+        v.gun.rotation.x = t.pitch;
+        v.spin = Math.max(0, v.spin - dt * 1.5);
+        if (v.barrels) v.barrels.rotation.z += v.spin * dt * 40;
+        if (!t.alive && !v.dead) { v.dead = true; paint(v.root, charred); }
+        if (v.dead) { const k = Math.min(1, (t.deadT || 0) * 4); v.root.rotation.z = k * 0.35; v.gun.rotation.x = -0.5 * k; }
+      }
+      for (const [id, v] of turrets) if (!seenT.has(id)) { scene.remove(v.root); turrets.delete(id); }
+
+      // a carried turret: shown see-through where DROP would put it
+      const seenG = new Set();
+      for (const p of world.players) {
+        if (!p.alive || p.downed || !p.carrying || !p.carrying.turret) continue;
+        seenG.add(p.id);
+        let g = ghosts.get(p.id);
+        if (!g) { g = { ...turretModel(), ok: null }; g.root.traverse(o => { if (o.isMesh) o.renderOrder = 2; }); scene.add(g.root); ghosts.set(p.id, g); }
+        const at = placementFor(world, p);
+        if (g.ok !== at.ok) { g.ok = at.ok; paint(g.root, at.ok ? ghostMat.ok : ghostMat.bad); }
+        g.root.position.set(at.x, at.y, at.z);
+        g.head.rotation.y = p.yaw;
+        g.gun.rotation.x = 0;
+      }
+      for (const [id, g] of ghosts) if (!seenG.has(id)) { scene.remove(g.root); ghosts.delete(id); }
 
       const seenP = new Set();
       for (const pk of world.pickups) {

@@ -193,7 +193,7 @@ export function weaponsFromSheet(cells, label = 'Weapons tab') {
 // converted here.
 const both = h => h.includes('min') && h.includes('max');
 const ENEMY_COLUMNS = [
-  ['name', h => h === 'enemy' || h === 'name' || h === 'enemy type'],
+  ['name', h => h === 'enemy' || h === 'name' || h === 'enemy type' || h === 'ally'],
   ['item_drop', h => h.includes('item') && h.includes('drop')],
   ['weapons', h => h.includes('weapon')],
   // one cell holding "min / max", e.g. "2 / 5"
@@ -219,7 +219,7 @@ const ENEMY_COLUMNS = [
 const DEG = Math.PI / 180;
 
 export function enemiesFromSheet(cells, defaults = {}, label = 'Enemies tab') {
-  return readTable(cells, ['enemy', 'name', 'enemy type'], ENEMY_COLUMNS, ['name'], label).map(({ name, v, num: single }) => {
+  return readTable(cells, ['enemy', 'name', 'enemy type', 'ally'], ENEMY_COLUMNS, ['name'], label).map(({ name, v, num: single }) => {
     const id = weaponId(name);
     const base = defaults[id] || Object.values(defaults)[0] || {};
     // "2 / 5" style cells: split into the two numbers
@@ -263,8 +263,9 @@ export function enemiesFromSheet(cells, defaults = {}, label = 'Enemies tab') {
 }
 
 /**
- * Read the whole game-data workbook: the Weapons tab (or the first tab) and, if there is
- * one, the Enemies tab. Returns { weapons, enemies } (enemies is null without a tab).
+ * Read the whole game-data workbook: the Weapons tab (or the first tab) and, if there are
+ * ones, the Enemies tab and the Allies tab (friendly units such as the turret: the same
+ * columns as the Enemies tab). Returns { weapons, enemies, allies } (null without a tab).
  */
 export function gameDataFromXlsx(buffer, enemyDefaults = {}) {
   const sheets = readSheets(buffer);
@@ -272,12 +273,14 @@ export function gameDataFromXlsx(buffer, enemyDefaults = {}) {
   const enemiesTab = sheets.find(s => /enem/i.test(s.name));
   const weapons = weaponsFromSheet(weaponsTab.cells, `Tab "${weaponsTab.name}"`);
   const enemies = enemiesTab ? enemiesFromSheet(enemiesTab.cells, enemyDefaults, `Tab "${enemiesTab.name}"`) : null;
-  for (const e of enemies || []) {
+  const alliesTab = sheets.find(s => /all(y|ies)/i.test(s.name));
+  const allies = alliesTab ? enemiesFromSheet(alliesTab.cells, enemyDefaults, `Tab "${alliesTab.name}"`) : null;
+  for (const e of [...(enemies || []), ...(allies || [])]) {
     for (const w of e.allowed_weapons || []) {
       if (!weapons.some(x => x.id === w)) throw new Error(`Enemies tab: "${e.name}" lists a weapon that isn't on the Weapons tab (${w}). Use the weapon names exactly as on the Weapons tab.`);
     }
   }
-  return { weapons, enemies };
+  return { weapons, enemies, allies };
 }
 
 /** Older name kept for the tests: weapons only. */

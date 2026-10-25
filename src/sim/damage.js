@@ -6,6 +6,7 @@ import { terrainHeight } from './terrain.js';
 import { rand } from './rng.js';
 import { markNavDirty } from './nav.js';
 import { onPieceDestroyed } from './base.js';
+import { destroyTurret, dropTurretAtFeet } from './turrets.js';
 
 export const emit = (world, ev) => world.events.push(ev);
 
@@ -28,7 +29,7 @@ export function applyHit(target, dmgHealth, dmgArmour) {
 }
 
 export function findActor(world, id) {
-  return world.players.find(p => p.id === id) || world.enemies.find(e => e.id === id) || null;
+  return world.players.find(p => p.id === id) || world.enemies.find(e => e.id === id) || (world.turrets || []).find(t => t.id === id) || null;
 }
 
 export function alertEnemy(world, e, x, y, z) {
@@ -62,7 +63,10 @@ export function dropPickup(world, p) {
 
 export function killActor(world, a, source) {
   a.hp = 0;
+  if (a.kind === 'turret') { destroyTurret(world, a); return; }
   if (a.kind === 'player') {
+    // a turret in your hands is set down where you fall (it isn't lost)
+    if (a.carrying && a.carrying.turret) dropTurretAtFeet(world, a);
     if (a.carrying) {
       dropPickup(world, { type: 'item', item: a.carrying.item, origin: a.carrying.origin, x: a.x, y: a.y, z: a.z });
       a.carrying = null;
@@ -85,6 +89,8 @@ export function killActor(world, a, source) {
   a.deadT = 0;
   world.kills++;
   if (source && source.kind === 'player') source.stats.kills++;
+  // a turret's kills count for the player who set it down
+  if (source && source.kind === 'turret') { const o = world.players.find(p => p.id === source.owner); if (o) o.stats.kills++; }
   emit(world, { type: 'death', actorId: a.id, team: 'enemy', x: a.x, y: a.y, z: a.z });
   const w = world.data.weapons[a.weapon.w];
   // a suicide bomber's vest goes off when he dies, wherever he falls; he drops nothing
@@ -150,7 +156,7 @@ export function explode(world, x, y, z, wdef, source) {
   const r = (wdef.area_of_effect || 0) * b.aoe_metres_per_point;
   emit(world, { type: 'explosion', x, y, z, r: Math.max(r, b.min_explosion_visual_radius) });
   if (r <= 0) return;
-  for (const a of [...world.players, ...world.enemies]) {
+  for (const a of [...world.players, ...world.enemies, ...(world.turrets || [])]) {
     if (!a.alive) continue;
     const d = Math.hypot(a.x - x, a.y + 0.9 - y, a.z - z);
     if (d > r) continue;
@@ -208,7 +214,7 @@ export function tankExplode(world, p, wdef, source) {
     const up = Math.max(0, y - top);
     return Math.hypot(out, up);
   };
-  for (const a of [...world.players, ...world.enemies]) {
+  for (const a of [...world.players, ...world.enemies, ...(world.turrets || [])]) {
     if (!a.alive) continue;
     const d = away(a.x, a.y + 0.9, a.z);
     if (d > R) continue;

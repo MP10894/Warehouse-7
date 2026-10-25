@@ -18,6 +18,7 @@ export function createDomHud() {
   function goal(world, p) {
     const b = world.base, goals = world.data.levels[world.levelId].goals || {};
     if (!b.claimed) return goals.claim || `Clear the ${b.name.toLowerCase()} to claim a base`;
+    if (p.carrying && p.carrying.turret) return p.context && p.context.kind === 'dropTurret' ? 'Press DROP to set the turret down where it is shown' : 'Find open, level ground for the turret (it shows green there)';
     if (p.carrying) return `Take the ${p.carrying.item.replace(/_/g, ' ')} to its build spot in your base`;
     const ups = Object.entries(b.upgrades).filter(([id]) => b.buildSpots.some(s => s.upgrade === id));
     if (ups.every(([, u]) => u.level === 0)) return goals.fetch || 'Fetch a crate and build an upgrade';
@@ -61,7 +62,7 @@ export function createDomHud() {
       set('gvis', el.goalLine.style, 'opacity', String(vis));
       set('wvis', el.waveLine.style, 'opacity', String(running ? 1 : vis));
       el.carry.hidden = !p.carrying;
-      if (p.carrying) set('carry', el.carry, 'textContent', `Carrying: ${p.carrying.item.replace(/_/g, ' ')}`);
+      if (p.carrying) set('carry', el.carry, 'textContent', p.carrying.turret ? 'Carrying: turret (no shooting)' : `Carrying: ${p.carrying.item.replace(/_/g, ' ')}`);
 
       const slot = p.slots[p.active];
       if (slot) {

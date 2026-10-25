@@ -100,6 +100,15 @@
   "decor": {
     "amount": 1
   },
+  "turret": {
+    "place_distance": 2.0,
+    "pickup_range": 1.8,
+    "field_of_view_deg": 120,
+    "alert_time": 6,
+    "sweep_deg": 50,
+    "sweep_speed_deg": 25,
+    "turn_speed_deg": 240
+  },
   "hazards": {
     "tank_blast_radius": 12,
     "tank_blast_damage_factor": 3.2

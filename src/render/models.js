@@ -103,6 +103,49 @@ export const handRightOf = id => (ART.weapons[id] ? [0, 0, 0] : HAND_RIGHT[id] |
 export const LEFT_HAND_UPRIGHT = new Set(['sig_p320', 'rpg7']);
 export const handLeftOf = id => (ART.weapons[id] && ART.weapons[id].handLeft) || HAND_LEFT[id] || [0, 0, -0.25];
 
+/**
+ * The automatic turret (a minigun on a tripod). Returns { root, head, gun, barrels }:
+ * head turns left and right (yaw), gun tips up and down (pitch), barrels spin while firing.
+ * Drawn art (items/turret.glb) needs named groups `head` and, inside it, `gun` (pivot on the
+ * gun's trunnion) and optionally `barrels`; otherwise a stand-in is built from boxes.
+ * It faces −z like the soldiers.
+ */
+export function turretModel() {
+  const art = ART.items.turret ? cloneArt(ART.items.turret) : null;
+  if (art && art.getObjectByName('head') && art.getObjectByName('gun')) {
+    const root = new THREE.Group(); root.add(art);
+    const gun = art.getObjectByName('gun');
+    return { root, head: art.getObjectByName('head'), gun, barrels: art.getObjectByName('barrels') || null };
+  }
+  const OLIVE = 0x4d5233, BLACK = 0x1b1a18, GREY = 0x3a3a36;
+  const root = new THREE.Group();
+  // tripod: three splayed legs and a post
+  for (let i = 0; i < 3; i++) {
+    const a = i * Math.PI * 2 / 3 + Math.PI / 6;
+    const leg = new THREE.Group(); leg.rotation.y = a; root.add(leg);
+    const l = box(0.05, 0.05, 0.72, OLIVE, 0, 0.36, 0.3, leg); l.rotation.x = -0.95;
+    box(0.1, 0.03, 0.12, BLACK, 0, 0.015, 0.55, leg);
+  }
+  box(0.07, 0.62, 0.07, OLIVE, 0, 0.62, 0, root);
+  const head = new THREE.Group(); head.position.y = 0.95; root.add(head);
+  box(0.16, 0.08, 0.2, BLACK, 0, 0.02, 0, head);                     // turning cradle
+  box(0.16, 0.14, 0.22, OLIVE, -0.17, 0.08, 0.02, head);             // ammunition box (left)
+  box(0.05, 0.04, 0.2, BLACK, -0.08, 0.16, 0.0, head);               // feed chute
+  const gun = new THREE.Group(); gun.position.y = 0.15; head.add(gun);
+  box(0.13, 0.13, 0.26, BLACK, 0, 0, 0.05, gun);                      // motor housing
+  box(0.17, 0.05, 0.05, GREY, 0, 0.03, 0.22, gun);                   // spade grips
+  box(0.03, 0.08, 0.03, GREY, 0.07, -0.01, 0.24, gun);
+  box(0.03, 0.08, 0.03, GREY, -0.07, -0.01, 0.24, gun);
+  const barrels = new THREE.Group(); barrels.position.set(0, 0, -0.08); gun.add(barrels);
+  for (let i = 0; i < 6; i++) {
+    const a = i * Math.PI / 3;
+    box(0.022, 0.022, 0.5, BLACK, Math.cos(a) * 0.035, Math.sin(a) * 0.035, -0.25, barrels);
+  }
+  box(0.11, 0.11, 0.03, GREY, 0, 0, -0.18, barrels);                // barrel clamps
+  box(0.11, 0.11, 0.03, GREY, 0, 0, -0.44, barrels);
+  return { root, head, gun, barrels };
+}
+
 /** A flying rocket: the RPG-7's warhead. */
 export function rocketModel() {
   // the group's +z faces the flight direction (the renderer uses lookAt)
