@@ -355,13 +355,22 @@ def ground_y(x, z):
 
 
 # ---------------------------------------------------------------- crates
-crate_spots = [('ammo_crate', 236, 124), ('construction_crate', 136, 80), ('construction_crate', 90, 36),
-               ('medical_crate', 212, 164), ('armour_crate', 238, 234)]
-base_items = []
-for item, x, z in crate_spots:
-    # the clinic's crate is upstairs (floor 1)
-    up = 3 if item == 'medical_crate' else 0
-    base_items.append({'item': item, 'x': x + 0.5, 'z': z + 0.5, 'y': ground_y(x, z) + up})
+# each base has its own five crates close by (a short walk, not a climb out of the pit); once
+# a base is claimed, the other bases' crates are taken away
+CRATES = {
+    # on the pit floor round the workshop's walls, and on the first bench above it
+    'workshop': [('construction_crate', 180, 56), ('ammo_crate', 200, 46), ('medical_crate', 214, 64),
+                 ('construction_crate', 203, 83), ('armour_crate', 216, 79)],
+    # out in the forest round the camp, about 25 m away
+    'logging_camp': [('construction_crate', 71, 67), ('ammo_crate', 62, 96), ('medical_crate', 27, 95),
+                     ('construction_crate', 25, 66), ('armour_crate', 44, 51)],
+    # inside the buildings round the HQ: the dorm, the huts north and south-west, the mud house, the clinic
+    'company_hq': [('construction_crate', 157, 179), ('ammo_crate', 194, 170), ('medical_crate', 210, 168),
+                   ('construction_crate', 149, 199), ('armour_crate', 156, 217)],
+}
+crate_spots = [(item, x, z) for spots_ in CRATES.values() for item, x, z in spots_]
+base_items = [{'item': item, 'x': x + 0.5, 'z': z + 0.5, 'y': ground_y(x, z), 'base': b}
+              for b, spots_ in CRATES.items() for item, x, z in spots_]
 
 
 # ---------------------------------------------------------------- enemies
@@ -627,7 +636,7 @@ level = {
     'briefing': [
         'You start at the junction. Pick a base: the workshop on the pit floor (mine, north-east), the logging camp (forest, west) or the company HQ (village, south-east).',
         'Clear its defenders and step inside. It becomes your base and the clock starts.',
-        'Fetch crates and build upgrades at the marked spots: construction at the sawmill and the equipment yard, ammunition at the explosives magazine, medical at the clinic, armour at the security post.',
+        'Fetch crates and build upgrades at the marked spots. Each base has its own crates close by: round the pit floor and the first bench, out in the forest round the camp, or inside the buildings round the HQ.',
         'The rebels always come out of the jungle on the west side.'
     ],
     'goals': {'claim': 'Clear a base: pit-floor workshop (mine), logging camp (forest) or company HQ (village)',

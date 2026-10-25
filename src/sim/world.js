@@ -47,7 +47,7 @@ export function createWorld({ data, levelId, seed = 7, playerIds = ['p1'] }) {
   }
   for (const it of level.base_items || []) {
     const y = groundAt(world, it.x, it.z, (it.y ?? 30) + 0.6);
-    dropPickup(world, { type: 'item', item: it.item, x: it.x, y, z: it.z, origin: { x: it.x, y, z: it.z } });
+    dropPickup(world, { type: 'item', item: it.item, x: it.x, y, z: it.z, origin: { x: it.x, y, z: it.z }, base: it.base });
   }
   return world;
 }

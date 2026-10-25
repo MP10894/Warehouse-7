@@ -110,7 +110,9 @@ claim it, and stops coming back once that base is yours. (A level with only one 
 use `"base": { … }` and `"holds_base": true` instead.)
 
 `base_items` places the crates: `{ "item": "construction_crate" | "ammo_crate" |
-"medical_crate" | "armour_crate", "x", "z", "y" }`. Used crates come back at the same spot.
+"medical_crate" | "armour_crate", "x", "z", "y", "base" }`. Used crates come back at the same spot.
+`"base"` (optional) is the id of the base the crate belongs to: once a base is claimed, the
+other bases' crates are taken away, and a lost crate comes back at the claimed base's own spot.
 
 ## Weather zones in level.json
 

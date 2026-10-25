@@ -82,6 +82,9 @@ export function claimBase(world, index, silent = false) {
   world.base.claimed = true;
   markCleared(world.base, def.id);
   world.cache.baseField = null;
+  // crates that belong to another base (level.json → base_items "base") are taken away;
+  // one already in someone's hands stays
+  world.pickups = world.pickups.filter(k => !(k.type === 'item' && k.base && k.base !== def.id));
   if (silent) return;
   emit(world, { type: 'baseClaimed', base: def.id });
   emit(world, { type: 'message', text: `${def.name.toUpperCase()} SECURED — HOLD IT UNTIL THE CLOCK RUNS OUT` });
@@ -265,7 +268,9 @@ function ensureCrate(world, item) {
   if (exists) return;
   // bring it back at the home spot nearest the base
   const a = world.base.area, bx = a ? (a.x0 + a.x1) / 2 : 0, bz = a ? (a.z0 + a.z1) / 2 : 0;
-  const home = (world.data.levels[world.levelId].base_items || []).filter(it => it.item === item)
+  const all = (world.data.levels[world.levelId].base_items || []).filter(it => it.item === item);
+  const own = all.filter(it => it.base === world.base.id);   // this base's own crate spots, if it has any
+  const home = (own.length ? own : all)
     .sort((p, q) => Math.hypot(p.x - bx, p.z - bz) - Math.hypot(q.x - bx, q.z - bz))[0];
   if (home) world.pending.push({ kind: 'respawnItem', item, x: home.x, y: groundAt(world, home.x, home.z, (home.y ?? 30) + 0.6), z: home.z, t: world.data.settings.base.item_respawn });
 }

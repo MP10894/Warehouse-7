@@ -33,16 +33,15 @@ forest, hills and the company fence round the village. None of it can be crossed
 
 ## Base-building crates
 
-As in Najaf, each sits in a defended spot outside the base areas, so whichever base you take
-you have to go out for them.
+Changed 2026-10-25 (play-testing: fetching from the rim meant climbing out of the pit and back).
+Each base now has its own five crates close by (two construction, ammunition, medical,
+armour). When you claim a base, the other bases' crates are taken away.
 
-| Crate | Where | Guarded by |
+| Base | Where its crates are | Walk from the base |
 |---|---|---|
-| Ammunition | Explosives magazine on the mine's east rim (H4) | 4 |
-| Construction | Equipment yard on the mine's west rim (E3) | 3 |
-| Construction | Sawmill, forest (C1) | 4 |
-| Medical | Village clinic (G6) | 3 |
-| Armour | Security post at the village's south-east gate (H8) | 4 |
+| Pit-floor workshop | Round the workshop walls on the pit floor (west, north, east), and on the first bench above it (south, south-east) | about 20–55 m |
+| Logging camp | Out in the forest all round the camp | about 25 m |
+| Company HQ | Inside the buildings round the HQ: the dorm, the huts to the north and south-west, the mud house, the clinic (ground floor) | about 30–60 m |
 
 ## Enemies
 

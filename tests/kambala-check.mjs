@@ -8,7 +8,7 @@ import { gameDataFromXlsx } from '../src/data/xlsx.js';
 import { createWorld } from '../src/sim/world.js';
 import { buildNav, nodeAt, flowField } from '../src/sim/nav.js';
 import { groundAt, blocked, moveBody } from '../src/sim/body.js';
-import { levelBases } from '../src/sim/base.js';
+import { levelBases, claimBase } from '../src/sim/base.js';
 import { terrainHeight } from '../src/sim/terrain.js';
 import { V, getV, isShrub } from '../src/sim/grid.js';
 import { explode, damageActor } from '../src/sim/damage.js';
@@ -62,7 +62,20 @@ for (const b of levelBases(L)) {
   check(s.length === 0, `base "${b.name}": every build spot can be walked to (${b.build_spots.length - s.length}/${b.build_spots.length})`);
 }
 const crates = world.pickups.filter(k => k.type === 'item');
-check(crates.length === 5 && crates.every(k => reach(k.x, k.z, k.y + 0.6)), `all 5 crates can be walked to (${crates.filter(k => reach(k.x, k.z, k.y + 0.6)).length}/${crates.length})`);
+check(crates.length === 15 && crates.every(k => reach(k.x, k.z, k.y + 0.6)), `all 15 crates (five per base) can be walked to (${crates.filter(k => reach(k.x, k.z, k.y + 0.6)).length}/${crates.length})`);
+// each base's crates are a short walk from it (no climbing out of the pit)
+for (const b of levelBases(L)) {
+  const a = b.area, cx = (a.x0 + a.x1) / 2, cz = (a.z0 + a.z1) / 2;
+  const f = flowField(nav, [nodeAt(nav, cx, groundAt(world, cx, cz, 30), cz)]);
+  const walk = crates.filter(k => k.base === b.id).map(k => f[nodeAt(nav, k.x, groundAt(world, k.x, k.z, k.y + 0.6), k.z)]);
+  check(walk.length === 5 && walk.every(d => d >= 0 && d <= 90), `${b.name}: its 5 crates are within a short walk (${walk.join(', ')} m)`);
+}
+{
+  const w2 = createWorld({ data, levelId: 'kambala', seed: 4 });
+  claimBase(w2, levelBases(L).findIndex(b => b.id === 'logging_camp'), true);
+  const left = w2.pickups.filter(k => k.type === 'item');
+  check(left.length === 5 && left.every(k => k.base === 'logging_camp'), `claiming a base takes the other bases' crates away (${left.length} left)`);
+}
 const loose = world.pickups.filter(k => k.type !== 'item' && !reach(k.x, k.z, k.y + 0.6));
 check(loose.length === 0, `every weapon, ammo, armour and grenade pickup can be walked to (${loose.map(k => `${k.type} ${k.x},${k.z}`).join('; ') || 'all'})`);
 const waves = L.wave_spawns.filter(w => !reach(w.x + 0.5, w.z + 0.5));
