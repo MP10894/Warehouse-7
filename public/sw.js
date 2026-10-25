@@ -34,6 +34,7 @@ async function prune(cache, html) {
     const u = new URL(req.url);
     if (u.origin === location.origin && /\/assets\//.test(u.pathname)) {   // (old game code and old music)
       const name = u.pathname.split('/').pop();
+      if (/\.(mp3|ogg|m4a|wav)$/i.test(name)) continue;   // music is named in the game code, not the page: keep it
       if (!html.includes(name)) cache.delete(req);
     }
   }

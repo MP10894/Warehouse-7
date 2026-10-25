@@ -61,6 +61,8 @@ Details in `DESIGN.md` → "How co-op works".
 | File | What it controls |
 |---|---|
 | `data/levels/najaf/` | Najaf (Level 1): building floor plans, ground heights, where everything goes ([guide](data/levels/README.md)) |
+| `assets/audio/music/` | Music, picked by file name: `Menu…` plays on the title and menus; a level's music zones (level.json → `music_zones`: track name and area) fade their track in and out as you walk in and out (Najaf: `Najaf-Urban…` in the city). .mp3 works everywhere. Volume and fade time: settings.json → `audio`, and the tuning panel |
+| `assets/audio/sfx/` | Sound effects (coming next; the game's built-in synthesised sounds play until then) |
 | `assets/` | Art files that replace the placeholders: rules in [ART_SPEC.md](ART_SPEC.md); Blockbench palette in `assets/palette/`; working `.bbmodel` files in `assets/sources/` |
 | `data/Game Data.xlsx` | The game-data workbook. **Weapons** tab: every weapon attribute (a projectile of "grenade" makes a thrown, quick-use item; a number in *Scope magnification* gives the weapon a scope, e.g. 4 = 4×). **Enemies** tab: health, speed, sight, reaction time, aim error in degrees, bursts, ammo drops, item drops (e.g. "Armour plate (15)", "Grenade (1)"), and which weapons each enemy type can carry. Edit in Excel as normal; formulas and "2 / 5" style min / max cells are fine |
 | `data/enemies.csv` | Fallback enemy values, used for anything the Enemies tab leaves out |

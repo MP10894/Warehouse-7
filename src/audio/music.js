@@ -95,6 +95,8 @@ export function createMusic(settings) {
     },
     /** The volume slider moved: apply it to the playing track. */
     refresh() { const p = current && players.get(current); if (p && ctx) fadeTo(p, true); },
-    get playing() { return current; }
+    get playing() { return current; },
+    /** For checks: each track's playback position and volume. */
+    get state() { return [...players.entries()].map(([n, p]) => p ? { track: n, time: +p.el.currentTime.toFixed(1), paused: p.el.paused, gain: +p.gain.gain.value.toFixed(2) } : { track: n, missing: true }); }
   };
 }
