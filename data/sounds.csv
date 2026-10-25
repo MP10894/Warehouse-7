@@ -34,7 +34,7 @@ shot_mp5,,1,90,0.06,An MP5 fires
 shot_mini_uzi,,1,90,0.06,A Mini Uzi fires
 shot_m4a1,,1,120,0.06,An M4A1 fires
 shot_galil,,1,120,0.06,A Galil fires
-shot_ak47,,1,120,0.06,An AK-47 fires
+shot_ak47,AK-47_fire,1,120,0.06,An AK-47 fires
 shot_rpk,,1,130,0.06,An RPK fires
 shot_fal,,1,140,0.06,A FAL fires
 shot_mk14ebr,,1,140,0.06,An Mk14 EBR fires
