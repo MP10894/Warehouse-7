@@ -5,11 +5,11 @@ health_pickup,,1,0,0.05,You pick up a first aid kit
 weapon_pickup,,1,0,0.05,You pick up a weapon
 grenade_pickup,,1,0,0.05,You pick up grenades
 crate_pickup,,1,0,0.05,You pick up an upgrade crate
-reload_sig_p320,P320_reload,2,0,0,You reload the P320
+reload_sig_p320,P320_reload,3,0,0,You reload the P320
 reload_mp5,,1,0,0,You reload the MP5
 reload_mini_uzi,,1,0,0,You reload the Mini Uzi
 reload_m4a1,,1,0,0,You reload the M4A1
-reload_galil,Galil_reload,2,0,0,You reload the Galil
+reload_galil,Galil_reload,3,0,0,You reload the Galil
 reload_ak47,AK-47_reload,1,0,0,You reload the AK-47
 reload_rpk,,1,0,0,You reload the RPK
 reload_fal,,1,0,0,You reload the FAL
@@ -29,12 +29,12 @@ enemy_death,,1,50,0.1,An enemy dies
 bomber_beep,,1,30,0,A suicide bomber's vest beeps
 downed,,1,0,0,A player goes down
 revived,,1,0,0,A player is revived
-shot_sig_p320,P320_fire,2,90,0.06,A P320 fires
+shot_sig_p320,P320_fire,3,90,0.06,A P320 fires
 shot_mp5,MP5_fire,1,90,0.06,An MP5 fires
 shot_mini_uzi,,1,90,0.06,A Mini Uzi fires
 shot_m4a1,,1,120,0.06,An M4A1 fires
 shot_galil,Galil_fire,1,120,0.06,A Galil fires
-shot_ak47,AK-47_fire,1,120,0.06,An AK-47 fires
+shot_ak47,AK-47_fire,3,120,0.06,An AK-47 fires
 shot_rpk,RPK_fire,1,130,0.06,An RPK fires
 shot_fal,FAL_fire,1,140,0.06,A FAL fires
 shot_mk14ebr,,1,140,0.06,An Mk14 EBR fires
