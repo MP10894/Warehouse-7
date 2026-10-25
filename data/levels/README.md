@@ -77,7 +77,7 @@ Simple shapes outside buildings. `{ "type", "x", "z", "w", "d", "h", "y" }` fill
 | `slab`, `column` | Concrete. Unbreakable |
 | `fence` | Chain-link: nobody can walk through it, but you can see and shoot through it |
 | `tank` | A fuel tank (always round): it blows up when a rocket hits it |
-| `wreck` | A wrecked vehicle: solid cover, unbreakable. Add `"model"`: `car` (2 × 4, h 1), `pickup` (2 × 5, h 1) or `truck` (3 × 7, h 2); the long side sets which way it points. Optional `"burnt": true`, `"colour": "army"` |
+| `wreck` | A wrecked vehicle: solid cover, unbreakable. Add `"model"`: `car` (2 × 4, h 1), `pickup` (2 × 5, h 1) or `truck` (3 × 7, h 2); the long side sets which way it points. Optional `"burnt": true`, `"colour": "army"` | Other models (solid clutter, Kambala): `drums` (oil drums, w × d, h 1), `termite` (a termite mound, 1 × 1, h 2), `rods` (stacked drill rods, 1 × 3, h 1), `spoil` (a spoil heap, w × d, h 2)
 
 Round shapes: add `"shape": "cylinder"` and give `"r"` (radius) instead of `w` and `d`; `x`
 and `z` are then the centre. Fuel tanks are always round: `{ "type": "tank", "x", "z", "r", "h" }`.
@@ -140,3 +140,9 @@ Pickups in `pickups` can also be `{ "type": "grenade", "amount": 2, "x", "z" }`.
 gets hurt), and `unstable` faces `[{ x, z, y, points: [{ x, z, y }, …] }, …]` (an explosion
 within 3 m of `x, z` brings rock down on `points`, once). Siren time, recharge (60 s), danger
 radius, damage and how much rock falls: `settings.json → blasting`.
+
+## Hand-placed decoration (`level.json → "decor"`)
+
+Looks only (nothing blocks people or bullets): `stall`, `carpet`, `palm` (Najaf); `washline`
+`{ x, z, x2, z2 }` (a washing line on two posts, clothes swinging), `fire` `{ x, z }` (a cooking
+fire with smoke), `crops` `{ x, z, w, d }` (rows of cassava).

@@ -1,7 +1,7 @@
 {
  "name": "Kambala mine",
  "title": "Kambala mine",
- "subtitle": "Level 2 \u00b7 in progress",
+ "subtitle": "Level 2 · in progress",
  "order": 2,
  "sky": "#c8ccb4",
  "summary": "A company mine in the Democratic Republic of Kambala: an open pit, a jungle and a mining village around a junction. Rebels come out of the forest to attack.",
@@ -12826,49 +12826,9 @@
   },
   {
    "type": "tree",
-   "x": 33,
-   "z": 57,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 36,
-   "z": 55,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 39,
-   "z": 57,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 48,
+   "x": 56,
    "z": 55,
    "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 51,
-   "z": 56,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 55,
-   "z": 55,
-   "h": 7,
    "kind": "broadleaf",
    "district": "forest"
   },
@@ -12876,1670 +12836,206 @@
    "type": "tree",
    "x": 59,
    "z": 56,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 65,
-   "z": 56,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 69,
-   "z": 55,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 73,
-   "z": 55,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 77,
-   "z": 55,
    "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 79,
-   "z": 57,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 87,
-   "z": 57,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 95,
-   "z": 55,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 101,
-   "z": 57,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 103,
-   "z": 56,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 108,
-   "z": 56,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 111,
-   "z": 55,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 7,
-   "z": 61,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 16,
-   "z": 59,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 19,
-   "z": 60,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 23,
-   "z": 61,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 31,
-   "z": 60,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 65,
-   "z": 59,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 67,
-   "z": 61,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 77,
-   "z": 59,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 80,
-   "z": 61,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 84,
-   "z": 59,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 91,
-   "z": 61,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 97,
-   "z": 61,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 101,
-   "z": 60,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 108,
-   "z": 59,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 113,
-   "z": 61,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 9,
-   "z": 64,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 13,
-   "z": 64,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 16,
-   "z": 65,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 21,
-   "z": 63,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 25,
-   "z": 64,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 29,
-   "z": 64,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 31,
-   "z": 65,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 61,
-   "z": 64,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 68,
-   "z": 64,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 73,
-   "z": 64,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 80,
-   "z": 64,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 84,
-   "z": 64,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 88,
-   "z": 64,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 97,
-   "z": 64,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 105,
-   "z": 63,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 107,
-   "z": 63,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 112,
-   "z": 64,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 3,
-   "z": 67,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 9,
-   "z": 68,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 11,
-   "z": 67,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 15,
-   "z": 67,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 19,
-   "z": 69,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 25,
-   "z": 67,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 28,
-   "z": 68,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 67,
-   "z": 69,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 73,
-   "z": 68,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 79,
-   "z": 69,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 84,
-   "z": 68,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 89,
-   "z": 68,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 99,
-   "z": 67,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 103,
-   "z": 69,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 109,
-   "z": 68,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 111,
-   "z": 68,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 9,
-   "z": 71,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 11,
-   "z": 73,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 16,
-   "z": 71,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 24,
-   "z": 72,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 69,
-   "z": 72,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 72,
-   "z": 72,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 76,
-   "z": 72,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 79,
-   "z": 72,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 91,
-   "z": 71,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 95,
-   "z": 72,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 101,
-   "z": 71,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 104,
-   "z": 73,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 109,
-   "z": 72,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 4,
-   "z": 77,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 8,
-   "z": 76,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 11,
-   "z": 76,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 17,
-   "z": 77,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 21,
-   "z": 75,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 25,
-   "z": 75,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 29,
-   "z": 75,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 68,
-   "z": 77,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 72,
-   "z": 77,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 77,
-   "z": 76,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 80,
-   "z": 77,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 83,
-   "z": 76,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 93,
-   "z": 76,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 95,
-   "z": 77,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 101,
-   "z": 76,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 103,
-   "z": 76,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 113,
-   "z": 76,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 4,
-   "z": 80,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 8,
-   "z": 81,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 12,
-   "z": 81,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 20,
-   "z": 81,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 24,
-   "z": 81,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 67,
-   "z": 80,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 72,
-   "z": 79,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 75,
-   "z": 81,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 79,
-   "z": 80,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 88,
-   "z": 79,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 92,
-   "z": 80,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 97,
-   "z": 79,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 100,
-   "z": 80,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 103,
-   "z": 81,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 111,
-   "z": 79,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 3,
-   "z": 83,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 8,
-   "z": 85,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 13,
-   "z": 83,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 17,
-   "z": 85,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 21,
-   "z": 85,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 25,
-   "z": 83,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 73,
-   "z": 85,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 77,
-   "z": 85,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 83,
-   "z": 84,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 88,
-   "z": 83,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 93,
-   "z": 83,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 103,
-   "z": 83,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 108,
-   "z": 84,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 4,
-   "z": 88,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 7,
-   "z": 87,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 17,
-   "z": 87,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 19,
-   "z": 87,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 24,
-   "z": 88,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 28,
-   "z": 87,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 31,
-   "z": 88,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 37,
-   "z": 89,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 40,
-   "z": 88,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 55,
-   "z": 87,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 77,
-   "z": 88,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 80,
-   "z": 87,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 87,
-   "z": 88,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 91,
-   "z": 88,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 101,
-   "z": 87,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 105,
-   "z": 88,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 108,
-   "z": 88,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 111,
-   "z": 88,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 4,
-   "z": 93,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 9,
-   "z": 93,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 12,
-   "z": 92,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 17,
-   "z": 93,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 20,
-   "z": 91,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 24,
-   "z": 93,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 31,
-   "z": 91,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 35,
-   "z": 93,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 40,
-   "z": 93,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 43,
-   "z": 92,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 53,
-   "z": 91,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 56,
-   "z": 92,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 60,
-   "z": 91,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 80,
-   "z": 93,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 83,
-   "z": 93,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 87,
-   "z": 91,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 91,
-   "z": 91,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 97,
-   "z": 93,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 100,
-   "z": 91,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 103,
-   "z": 92,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 108,
-   "z": 92,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 12,
-   "z": 97,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 17,
-   "z": 95,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 25,
-   "z": 95,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 29,
-   "z": 95,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 31,
-   "z": 95,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 36,
-   "z": 95,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 41,
-   "z": 95,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 44,
-   "z": 95,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 49,
-   "z": 97,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 53,
-   "z": 96,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 56,
-   "z": 95,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 61,
-   "z": 95,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 64,
-   "z": 97,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 88,
-   "z": 95,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 91,
-   "z": 96,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 96,
-   "z": 95,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 100,
-   "z": 97,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 108,
-   "z": 97,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 11,
-   "z": 100,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 16,
-   "z": 100,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 21,
-   "z": 99,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 24,
-   "z": 101,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 27,
-   "z": 101,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 32,
-   "z": 101,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 37,
-   "z": 99,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 47,
-   "z": 99,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 61,
-   "z": 100,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 64,
-   "z": 100,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 68,
-   "z": 101,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 91,
-   "z": 99,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 95,
-   "z": 100,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 101,
-   "z": 100,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 103,
-   "z": 99,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 107,
-   "z": 100,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 9,
-   "z": 103,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 11,
-   "z": 104,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 20,
-   "z": 104,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 23,
-   "z": 103,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 27,
-   "z": 103,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 31,
-   "z": 104,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 37,
-   "z": 105,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 40,
-   "z": 103,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 45,
-   "z": 105,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 49,
-   "z": 105,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 53,
-   "z": 105,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 57,
-   "z": 103,
-   "h": 6,
    "kind": "broadleaf",
    "district": "forest"
   },
   {
    "type": "tree",
    "x": 63,
-   "z": 104,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 68,
-   "z": 105,
+   "z": 55,
    "h": 7,
    "kind": "broadleaf",
    "district": "forest"
   },
   {
    "type": "tree",
-   "x": 91,
-   "z": 103,
+   "x": 67,
+   "z": 56,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 73,
+   "z": 56,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 77,
+   "z": 55,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 81,
+   "z": 55,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 85,
+   "z": 55,
    "h": 5,
    "kind": "broadleaf",
    "district": "forest"
   },
   {
    "type": "tree",
+   "x": 87,
+   "z": 57,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 95,
+   "z": 57,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 103,
+   "z": 55,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 109,
+   "z": 57,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 111,
+   "z": 56,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 116,
+   "z": 56,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 7,
+   "z": 61,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 12,
+   "z": 59,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 16,
+   "z": 59,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 24,
+   "z": 59,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 27,
+   "z": 60,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 31,
+   "z": 61,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 81,
+   "z": 59,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 83,
+   "z": 61,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 93,
+   "z": 59,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
    "x": 96,
-   "z": 104,
-   "h": 6,
+   "z": 61,
+   "h": 5,
    "kind": "broadleaf",
    "district": "forest"
   },
   {
    "type": "tree",
-   "x": 101,
-   "z": 104,
-   "h": 6,
+   "x": 100,
+   "z": 59,
+   "h": 7,
    "kind": "broadleaf",
    "district": "forest"
   },
   {
    "type": "tree",
-   "x": 105,
-   "z": 104,
+   "x": 107,
+   "z": 61,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 113,
+   "z": 61,
    "h": 6,
    "kind": "broadleaf",
    "district": "forest"
@@ -14547,39 +13043,143 @@
   {
    "type": "tree",
    "x": 5,
-   "z": 109,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 9,
-   "z": 109,
+   "z": 63,
    "h": 5,
    "kind": "broadleaf",
    "district": "forest"
   },
   {
    "type": "tree",
-   "x": 13,
-   "z": 109,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 16,
-   "z": 109,
+   "x": 8,
+   "z": 64,
    "h": 6,
    "kind": "broadleaf",
    "district": "forest"
   },
   {
    "type": "tree",
-   "x": 20,
-   "z": 109,
+   "x": 15,
+   "z": 64,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 25,
+   "z": 64,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 29,
+   "z": 64,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 68,
+   "z": 63,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 72,
+   "z": 64,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 75,
+   "z": 63,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 81,
+   "z": 63,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 89,
+   "z": 64,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 92,
+   "z": 65,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 100,
+   "z": 64,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 104,
+   "z": 64,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 108,
+   "z": 64,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 7,
+   "z": 69,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 11,
+   "z": 69,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 16,
+   "z": 69,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 21,
+   "z": 69,
    "h": 5,
    "kind": "broadleaf",
    "district": "forest"
@@ -14587,7 +13187,647 @@
   {
    "type": "tree",
    "x": 23,
-   "z": 108,
+   "z": 67,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 29,
+   "z": 68,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 73,
+   "z": 68,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 76,
+   "z": 68,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 80,
+   "z": 68,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 87,
+   "z": 67,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 104,
+   "z": 67,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 108,
+   "z": 68,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 113,
+   "z": 68,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 3,
+   "z": 71,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 7,
+   "z": 73,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 13,
+   "z": 72,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 15,
+   "z": 72,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 21,
+   "z": 71,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 23,
+   "z": 73,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 27,
+   "z": 72,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 73,
+   "z": 72,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 75,
+   "z": 72,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 81,
+   "z": 72,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 84,
+   "z": 71,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 87,
+   "z": 72,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 92,
+   "z": 71,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 101,
+   "z": 73,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 103,
+   "z": 71,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 109,
+   "z": 73,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 113,
+   "z": 71,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 9,
+   "z": 75,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 13,
+   "z": 75,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 17,
+   "z": 77,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 25,
+   "z": 76,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 28,
+   "z": 76,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 69,
+   "z": 75,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 71,
+   "z": 77,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 77,
+   "z": 77,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 79,
+   "z": 76,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 83,
+   "z": 75,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 87,
+   "z": 76,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 93,
+   "z": 76,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 97,
+   "z": 76,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 100,
+   "z": 77,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 103,
+   "z": 76,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 113,
+   "z": 76,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 4,
+   "z": 80,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 8,
+   "z": 79,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 12,
+   "z": 79,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 17,
+   "z": 79,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 24,
+   "z": 80,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 69,
+   "z": 79,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 73,
+   "z": 79,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 76,
+   "z": 80,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 81,
+   "z": 81,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 85,
+   "z": 79,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 89,
+   "z": 81,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 92,
+   "z": 79,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 97,
+   "z": 81,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 101,
+   "z": 81,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 103,
+   "z": 80,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 109,
+   "z": 80,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 112,
+   "z": 79,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 4,
+   "z": 83,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 9,
+   "z": 84,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 11,
+   "z": 83,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 15,
+   "z": 85,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 20,
+   "z": 83,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 25,
+   "z": 83,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 73,
+   "z": 84,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 76,
+   "z": 84,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 80,
+   "z": 83,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 84,
+   "z": 85,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 89,
+   "z": 85,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 93,
+   "z": 85,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 95,
+   "z": 85,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 101,
+   "z": 84,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 103,
+   "z": 84,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 108,
+   "z": 83,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 3,
+   "z": 87,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 7,
+   "z": 87,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 12,
+   "z": 88,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 17,
+   "z": 87,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 20,
+   "z": 89,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 25,
+   "z": 88,
    "h": 7,
    "kind": "broadleaf",
    "district": "forest"
@@ -14595,7 +13835,159 @@
   {
    "type": "tree",
    "x": 32,
-   "z": 107,
+   "z": 89,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 41,
+   "z": 89,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 48,
+   "z": 88,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 53,
+   "z": 88,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 55,
+   "z": 88,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 83,
+   "z": 87,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 88,
+   "z": 87,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 95,
+   "z": 89,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 99,
+   "z": 88,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 105,
+   "z": 88,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 107,
+   "z": 88,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 111,
+   "z": 88,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 3,
+   "z": 93,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 8,
+   "z": 92,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 11,
+   "z": 92,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 16,
+   "z": 91,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 19,
+   "z": 91,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 23,
+   "z": 93,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 27,
+   "z": 92,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 31,
+   "z": 93,
    "h": 7,
    "kind": "broadleaf",
    "district": "forest"
@@ -14603,6 +13995,614 @@
   {
    "type": "tree",
    "x": 36,
+   "z": 91,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 40,
+   "z": 93,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 47,
+   "z": 91,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 51,
+   "z": 93,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 56,
+   "z": 93,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 59,
+   "z": 92,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 80,
+   "z": 92,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 84,
+   "z": 92,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 87,
+   "z": 91,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 93,
+   "z": 93,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 95,
+   "z": 91,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 100,
+   "z": 93,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 107,
+   "z": 93,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 12,
+   "z": 96,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 16,
+   "z": 97,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 20,
+   "z": 96,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 24,
+   "z": 95,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 28,
+   "z": 97,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 33,
+   "z": 95,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 39,
+   "z": 97,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 43,
+   "z": 97,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 51,
+   "z": 96,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 57,
+   "z": 95,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 60,
+   "z": 95,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 65,
+   "z": 97,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 85,
+   "z": 97,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 88,
+   "z": 96,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 91,
+   "z": 97,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 99,
+   "z": 97,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 104,
+   "z": 96,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 108,
+   "z": 96,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 13,
+   "z": 99,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 15,
+   "z": 100,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 19,
+   "z": 100,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 24,
+   "z": 99,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 29,
+   "z": 100,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 33,
+   "z": 100,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 36,
+   "z": 99,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 41,
+   "z": 99,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 45,
+   "z": 100,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 47,
+   "z": 101,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 53,
+   "z": 101,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 56,
+   "z": 99,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 59,
+   "z": 100,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 69,
+   "z": 100,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 93,
+   "z": 101,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 96,
+   "z": 101,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 101,
+   "z": 99,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 103,
+   "z": 99,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 109,
+   "z": 100,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 12,
+   "z": 104,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 15,
+   "z": 105,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 21,
+   "z": 103,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 24,
+   "z": 105,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 28,
+   "z": 104,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 31,
+   "z": 103,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 35,
+   "z": 103,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 39,
+   "z": 104,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 45,
+   "z": 105,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 48,
+   "z": 103,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 53,
+   "z": 105,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 57,
+   "z": 105,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 61,
+   "z": 105,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 65,
+   "z": 103,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 71,
+   "z": 104,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 76,
+   "z": 105,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 103,
+   "z": 104,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 108,
+   "z": 105,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 4,
+   "z": 109,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 7,
+   "z": 108,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 11,
+   "z": 109,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 15,
+   "z": 109,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 21,
+   "z": 108,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 24,
+   "z": 109,
+   "h": 5,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 27,
+   "z": 108,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 36,
+   "z": 107,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 40,
    "z": 109,
    "h": 7,
    "kind": "broadleaf",
@@ -14610,7 +14610,7 @@
   },
   {
    "type": "tree",
-   "x": 39,
+   "x": 43,
    "z": 108,
    "h": 5,
    "kind": "broadleaf",
@@ -14618,7 +14618,7 @@
   },
   {
    "type": "tree",
-   "x": 44,
+   "x": 48,
    "z": 109,
    "h": 6,
    "kind": "broadleaf",
@@ -14626,16 +14626,8 @@
   },
   {
    "type": "tree",
-   "x": 47,
+   "x": 51,
    "z": 108,
-   "h": 6,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 64,
-   "z": 107,
    "h": 6,
    "kind": "broadleaf",
    "district": "forest"
@@ -14644,13 +14636,21 @@
    "type": "tree",
    "x": 68,
    "z": 107,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 72,
+   "z": 107,
    "h": 7,
    "kind": "broadleaf",
    "district": "forest"
   },
   {
    "type": "tree",
-   "x": 73,
+   "x": 77,
    "z": 107,
    "h": 5,
    "kind": "broadleaf",
@@ -14658,16 +14658,8 @@
   },
   {
    "type": "tree",
-   "x": 77,
-   "z": 108,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 97,
-   "z": 108,
+   "x": 101,
+   "z": 109,
    "h": 7,
    "kind": "broadleaf",
    "district": "forest"
@@ -14684,21 +14676,21 @@
    "type": "tree",
    "x": 107,
    "z": 108,
-   "h": 5,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
-   "type": "tree",
-   "x": 4,
-   "z": 112,
    "h": 6,
    "kind": "broadleaf",
    "district": "forest"
   },
   {
    "type": "tree",
-   "x": 9,
+   "x": 5,
+   "z": 113,
+   "h": 6,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 8,
    "z": 113,
    "h": 7,
    "kind": "broadleaf",
@@ -14706,9 +14698,17 @@
   },
   {
    "type": "tree",
-   "x": 13,
+   "x": 11,
    "z": 113,
-   "h": 6,
+   "h": 7,
+   "kind": "broadleaf",
+   "district": "forest"
+  },
+  {
+   "type": "tree",
+   "x": 16,
+   "z": 113,
+   "h": 5,
    "kind": "broadleaf",
    "district": "forest"
   },
@@ -18481,36 +18481,8 @@
    "district": "forest"
   },
   {
-   "type": "tree",
-   "x": 17,
-   "z": 231,
-   "h": 7,
-   "kind": "broadleaf",
-   "district": "forest"
-  },
-  {
    "type": "shrub",
-   "x": 2,
-   "z": 2,
-   "w": 2,
-   "d": 2,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 6,
-   "z": 2,
-   "w": 2,
-   "d": 1,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 59,
+   "x": 3,
    "z": 2,
    "w": 1,
    "d": 1,
@@ -18520,7 +18492,17 @@
   },
   {
    "type": "shrub",
-   "x": 87,
+   "x": 9,
+   "z": 3,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 41,
    "z": 2,
    "w": 2,
    "d": 2,
@@ -18530,7 +18512,17 @@
   },
   {
    "type": "shrub",
-   "x": 89,
+   "x": 81,
+   "z": 3,
+   "w": 2,
+   "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 90,
    "z": 2,
    "w": 2,
    "d": 2,
@@ -18550,7 +18542,7 @@
   },
   {
    "type": "shrub",
-   "x": 99,
+   "x": 102,
    "z": 2,
    "w": 2,
    "d": 1,
@@ -18560,7 +18552,7 @@
   },
   {
    "type": "shrub",
-   "x": 102,
+   "x": 105,
    "z": 2,
    "w": 2,
    "d": 1,
@@ -18572,8 +18564,8 @@
    "type": "shrub",
    "x": 113,
    "z": 3,
-   "w": 2,
-   "d": 1,
+   "w": 1,
+   "d": 2,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -19660,10 +19652,20 @@
   },
   {
    "type": "shrub",
-   "x": 63,
-   "z": 53,
-   "w": 1,
+   "x": 50,
+   "z": 54,
+   "w": 2,
    "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 69,
+   "z": 54,
+   "w": 2,
+   "d": 1,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -19740,6 +19742,16 @@
   },
   {
    "type": "shrub",
+   "x": 32,
+   "z": 57,
+   "w": 1,
+   "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
    "x": 81,
    "z": 57,
    "w": 2,
@@ -19760,20 +19772,20 @@
   },
   {
    "type": "shrub",
-   "x": 96,
+   "x": 101,
    "z": 57,
    "w": 2,
-   "d": 2,
+   "d": 1,
    "h": 2,
    "kind": "fern",
    "district": "forest"
   },
   {
    "type": "shrub",
-   "x": 116,
-   "z": 56,
+   "x": 107,
+   "z": 57,
    "w": 1,
-   "d": 1,
+   "d": 2,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -19783,6 +19795,16 @@
    "x": 14,
    "z": 60,
    "w": 1,
+   "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 20,
+   "z": 59,
+   "w": 2,
    "d": 2,
    "h": 2,
    "kind": "fern",
@@ -19800,9 +19822,9 @@
   },
   {
    "type": "shrub",
-   "x": 87,
+   "x": 77,
    "z": 59,
-   "w": 1,
+   "w": 2,
    "d": 2,
    "h": 2,
    "kind": "fern",
@@ -19810,7 +19832,7 @@
   },
   {
    "type": "shrub",
-   "x": 93,
+   "x": 87,
    "z": 59,
    "w": 1,
    "d": 2,
@@ -19830,30 +19852,20 @@
   },
   {
    "type": "shrub",
+   "x": 12,
+   "z": 62,
+   "w": 1,
+   "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
    "x": 15,
    "z": 62,
    "w": 2,
    "d": 1,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 29,
-   "z": 62,
-   "w": 2,
-   "d": 1,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 32,
-   "z": 62,
-   "w": 1,
-   "d": 2,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -19910,9 +19922,9 @@
   },
   {
    "type": "shrub",
-   "x": 105,
-   "z": 65,
-   "w": 2,
+   "x": 14,
+   "z": 66,
+   "w": 1,
    "d": 1,
    "h": 2,
    "kind": "fern",
@@ -19920,7 +19932,37 @@
   },
   {
    "type": "shrub",
-   "x": 107,
+   "x": 69,
+   "z": 65,
+   "w": 1,
+   "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 74,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 81,
+   "z": 65,
+   "w": 1,
+   "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 83,
    "z": 65,
    "w": 2,
    "d": 2,
@@ -19930,8 +19972,8 @@
   },
   {
    "type": "shrub",
-   "x": 6,
-   "z": 68,
+   "x": 96,
+   "z": 65,
    "w": 2,
    "d": 2,
    "h": 2,
@@ -19940,7 +19982,7 @@
   },
   {
    "type": "shrub",
-   "x": 75,
+   "x": 14,
    "z": 68,
    "w": 1,
    "d": 1,
@@ -19950,30 +19992,10 @@
   },
   {
    "type": "shrub",
-   "x": 113,
-   "z": 68,
+   "x": 101,
+   "z": 69,
    "w": 2,
    "d": 1,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 11,
-   "z": 71,
-   "w": 2,
-   "d": 1,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 26,
-   "z": 72,
-   "w": 2,
-   "d": 2,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -20000,10 +20022,10 @@
   },
   {
    "type": "shrub",
-   "x": 113,
-   "z": 72,
+   "x": 3,
+   "z": 75,
    "w": 2,
-   "d": 1,
+   "d": 2,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -20030,6 +20052,16 @@
   },
   {
    "type": "shrub",
+   "x": 20,
+   "z": 74,
+   "w": 1,
+   "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
    "x": 23,
    "z": 75,
    "w": 1,
@@ -20050,10 +20082,10 @@
   },
   {
    "type": "shrub",
-   "x": 69,
+   "x": 30,
    "z": 74,
    "w": 1,
-   "d": 2,
+   "d": 1,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -20080,20 +20112,10 @@
   },
   {
    "type": "shrub",
-   "x": 95,
+   "x": 104,
    "z": 74,
    "w": 2,
-   "d": 2,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 110,
-   "z": 74,
-   "w": 1,
-   "d": 2,
+   "d": 1,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -20110,17 +20132,17 @@
   },
   {
    "type": "shrub",
-   "x": 23,
+   "x": 66,
    "z": 78,
    "w": 2,
-   "d": 2,
+   "d": 1,
    "h": 2,
    "kind": "fern",
    "district": "forest"
   },
   {
    "type": "shrub",
-   "x": 62,
+   "x": 84,
    "z": 77,
    "w": 1,
    "d": 1,
@@ -20130,8 +20152,8 @@
   },
   {
    "type": "shrub",
-   "x": 86,
-   "z": 77,
+   "x": 89,
+   "z": 78,
    "w": 1,
    "d": 2,
    "h": 2,
@@ -20140,8 +20162,48 @@
   },
   {
    "type": "shrub",
+   "x": 96,
+   "z": 78,
+   "w": 2,
+   "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 98,
+   "z": 78,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
    "x": 105,
    "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 21,
+   "z": 80,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 99,
+   "z": 81,
    "w": 1,
    "d": 1,
    "h": 2,
@@ -20160,20 +20222,20 @@
   },
   {
    "type": "shrub",
-   "x": 20,
-   "z": 83,
+   "x": 87,
+   "z": 84,
    "w": 1,
-   "d": 1,
+   "d": 2,
    "h": 2,
    "kind": "fern",
    "district": "forest"
   },
   {
    "type": "shrub",
-   "x": 90,
-   "z": 84,
+   "x": 92,
+   "z": 83,
    "w": 2,
-   "d": 2,
+   "d": 1,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -20220,8 +20282,18 @@
   },
   {
    "type": "shrub",
-   "x": 83,
-   "z": 87,
+   "x": 102,
+   "z": 86,
+   "w": 2,
+   "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 5,
+   "z": 89,
    "w": 1,
    "d": 2,
    "h": 2,
@@ -20240,40 +20312,20 @@
   },
   {
    "type": "shrub",
-   "x": 33,
-   "z": 89,
-   "w": 1,
-   "d": 1,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 35,
-   "z": 89,
-   "w": 1,
-   "d": 2,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 45,
-   "z": 90,
-   "w": 2,
-   "d": 2,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
    "x": 50,
    "z": 89,
    "w": 1,
    "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 53,
+   "z": 90,
+   "w": 1,
+   "d": 1,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -20300,20 +20352,20 @@
   },
   {
    "type": "shrub",
-   "x": 93,
+   "x": 89,
    "z": 89,
    "w": 2,
-   "d": 1,
+   "d": 2,
    "h": 2,
    "kind": "fern",
    "district": "forest"
   },
   {
    "type": "shrub",
-   "x": 95,
+   "x": 102,
    "z": 90,
    "w": 1,
-   "d": 1,
+   "d": 2,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -20330,10 +20382,10 @@
   },
   {
    "type": "shrub",
-   "x": 27,
-   "z": 92,
+   "x": 5,
+   "z": 93,
    "w": 2,
-   "d": 1,
+   "d": 2,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -20344,6 +20396,16 @@
    "z": 92,
    "w": 1,
    "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 33,
+   "z": 92,
+   "w": 2,
+   "d": 1,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -20380,7 +20442,7 @@
   },
   {
    "type": "shrub",
-   "x": 105,
+   "x": 96,
    "z": 93,
    "w": 2,
    "d": 2,
@@ -20390,9 +20452,9 @@
   },
   {
    "type": "shrub",
-   "x": 15,
-   "z": 96,
-   "w": 1,
+   "x": 17,
+   "z": 95,
+   "w": 2,
    "d": 1,
    "h": 2,
    "kind": "fern",
@@ -20410,10 +20472,10 @@
   },
   {
    "type": "shrub",
-   "x": 59,
+   "x": 53,
    "z": 96,
-   "w": 1,
-   "d": 1,
+   "w": 2,
+   "d": 2,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -20430,9 +20492,9 @@
   },
   {
    "type": "shrub",
-   "x": 104,
-   "z": 95,
-   "w": 2,
+   "x": 95,
+   "z": 96,
+   "w": 1,
    "d": 1,
    "h": 2,
    "kind": "fern",
@@ -20440,37 +20502,7 @@
   },
   {
    "type": "shrub",
-   "x": 15,
-   "z": 98,
-   "w": 2,
-   "d": 1,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 23,
-   "z": 98,
-   "w": 2,
-   "d": 1,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 26,
-   "z": 98,
-   "w": 2,
-   "d": 2,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 42,
+   "x": 38,
    "z": 99,
    "w": 2,
    "d": 2,
@@ -20480,40 +20512,20 @@
   },
   {
    "type": "shrub",
-   "x": 51,
+   "x": 47,
    "z": 99,
    "w": 2,
-   "d": 2,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 56,
-   "z": 98,
-   "w": 1,
-   "d": 2,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 59,
-   "z": 98,
-   "w": 1,
-   "d": 2,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 66,
-   "z": 98,
-   "w": 1,
    "d": 1,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 63,
+   "z": 98,
+   "w": 1,
+   "d": 2,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -20530,19 +20542,9 @@
   },
   {
    "type": "shrub",
-   "x": 18,
+   "x": 26,
    "z": 101,
    "w": 2,
-   "d": 1,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 30,
-   "z": 101,
-   "w": 1,
    "d": 1,
    "h": 2,
    "kind": "fern",
@@ -20570,16 +20572,6 @@
   },
   {
    "type": "shrub",
-   "x": 92,
-   "z": 101,
-   "w": 2,
-   "d": 1,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
    "x": 99,
    "z": 101,
    "w": 1,
@@ -20590,37 +20582,7 @@
   },
   {
    "type": "shrub",
-   "x": 15,
-   "z": 104,
-   "w": 2,
-   "d": 1,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 23,
-   "z": 105,
-   "w": 2,
-   "d": 2,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 33,
-   "z": 104,
-   "w": 2,
-   "d": 2,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 59,
+   "x": 20,
    "z": 105,
    "w": 2,
    "d": 1,
@@ -20630,10 +20592,20 @@
   },
   {
    "type": "shrub",
-   "x": 66,
+   "x": 48,
+   "z": 105,
+   "w": 1,
+   "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 68,
    "z": 104,
    "w": 1,
-   "d": 1,
+   "d": 2,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -20650,20 +20622,10 @@
   },
   {
    "type": "shrub",
-   "x": 108,
+   "x": 105,
    "z": 104,
-   "w": 2,
-   "d": 1,
-   "h": 2,
-   "kind": "fern",
-   "district": "forest"
-  },
-  {
-   "type": "shrub",
-   "x": 2,
-   "z": 108,
-   "w": 2,
-   "d": 1,
+   "w": 1,
+   "d": 2,
    "h": 2,
    "kind": "fern",
    "district": "forest"
@@ -20680,8 +20642,8 @@
   },
   {
    "type": "shrub",
-   "x": 26,
-   "z": 107,
+   "x": 30,
+   "z": 108,
    "w": 1,
    "d": 1,
    "h": 2,
@@ -20690,9 +20652,19 @@
   },
   {
    "type": "shrub",
-   "x": 30,
+   "x": 33,
    "z": 108,
-   "w": 1,
+   "w": 2,
+   "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
+   "x": 48,
+   "z": 107,
+   "w": 2,
    "d": 1,
    "h": 2,
    "kind": "fern",
@@ -20710,6 +20682,16 @@
   },
   {
    "type": "shrub",
+   "x": 65,
+   "z": 108,
+   "w": 1,
+   "d": 2,
+   "h": 2,
+   "kind": "fern",
+   "district": "forest"
+  },
+  {
+   "type": "shrub",
    "x": 30,
    "z": 111,
    "w": 1,
@@ -20720,9 +20702,9 @@
   },
   {
    "type": "shrub",
-   "x": 41,
+   "x": 35,
    "z": 110,
-   "w": 2,
+   "w": 1,
    "d": 1,
    "h": 2,
    "kind": "fern",
@@ -22999,19 +22981,17 @@
    "district": "village"
   },
   {
-   "type": "shrub",
-   "x": 247,
-   "z": 238,
-   "w": 1,
-   "d": 1,
-   "h": 2,
-   "kind": "banana",
+   "type": "tree",
+   "x": 32,
+   "z": 87,
+   "h": 6,
+   "kind": "palm",
    "district": "village"
   },
   {
    "type": "shrub",
-   "x": 247,
-   "z": 241,
+   "x": 242,
+   "z": 244,
    "w": 1,
    "d": 1,
    "h": 2,
@@ -23020,10 +23000,20 @@
   },
   {
    "type": "tree",
-   "x": 234,
-   "z": 230,
+   "x": 247,
+   "z": 241,
    "h": 6,
    "kind": "palm",
+   "district": "village"
+  },
+  {
+   "type": "shrub",
+   "x": 241,
+   "z": 234,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "kind": "banana",
    "district": "village"
   },
   {
@@ -23038,7 +23028,7 @@
   },
   {
    "type": "tree",
-   "x": 193,
+   "x": 188,
    "z": 162,
    "h": 6,
    "kind": "palm",
@@ -23046,8 +23036,8 @@
   },
   {
    "type": "shrub",
-   "x": 191,
-   "z": 152,
+   "x": 184,
+   "z": 157,
    "w": 1,
    "d": 1,
    "h": 2,
@@ -23057,7 +23047,7 @@
   {
    "type": "tree",
    "x": 196,
-   "z": 155,
+   "z": 157,
    "h": 6,
    "kind": "palm",
    "district": "village"
@@ -23065,7 +23055,7 @@
   {
    "type": "shrub",
    "x": 238,
-   "z": 208,
+   "z": 207,
    "w": 1,
    "d": 1,
    "h": 2,
@@ -23074,8 +23064,8 @@
   },
   {
    "type": "shrub",
-   "x": 242,
-   "z": 204,
+   "x": 245,
+   "z": 214,
    "w": 1,
    "d": 1,
    "h": 2,
@@ -24056,6 +24046,366 @@
    "d": 1,
    "h": 1,
    "kind": "fern",
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "drums",
+   "x": 197,
+   "z": 51,
+   "w": 2,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "drums",
+   "x": 155,
+   "z": 107,
+   "w": 2,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "drums",
+   "x": 234,
+   "z": 111,
+   "w": 2,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "drums",
+   "x": 211,
+   "z": 159,
+   "w": 2,
+   "d": 1,
+   "h": 1,
+   "district": "village"
+  },
+  {
+   "type": "wreck",
+   "model": "drums",
+   "x": 149,
+   "z": 171,
+   "w": 2,
+   "d": 1,
+   "h": 1,
+   "district": "village"
+  },
+  {
+   "type": "wreck",
+   "model": "drums",
+   "x": 224,
+   "z": 203,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "village"
+  },
+  {
+   "type": "wreck",
+   "model": "drums",
+   "x": 148,
+   "z": 153,
+   "w": 2,
+   "d": 1,
+   "h": 1,
+   "district": "village"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 153,
+   "z": 207,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 47,
+   "z": 223,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 186,
+   "z": 217,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 177,
+   "z": 229,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 136,
+   "z": 31,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 205,
+   "z": 137,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 90,
+   "z": 227,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 181,
+   "z": 116,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 157,
+   "z": 101,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 186,
+   "z": 169,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 14,
+   "z": 235,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 198,
+   "z": 114,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 154,
+   "z": 133,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 237,
+   "z": 141,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 198,
+   "z": 177,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 239,
+   "z": 168,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 161,
+   "z": 243,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "termite",
+   "x": 178,
+   "z": 141,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "outskirts"
+  },
+  {
+   "type": "wreck",
+   "model": "spoil",
+   "x": 215,
+   "z": 116,
+   "w": 5,
+   "d": 3,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "spoil",
+   "x": 223,
+   "z": 111,
+   "w": 3,
+   "d": 3,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "spoil",
+   "x": 153,
+   "z": 9,
+   "w": 5,
+   "d": 3,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "spoil",
+   "x": 141,
+   "z": 9,
+   "w": 3,
+   "d": 4,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "spoil",
+   "x": 145,
+   "z": 123,
+   "w": 4,
+   "d": 3,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "spoil",
+   "x": 183,
+   "z": 128,
+   "w": 5,
+   "d": 3,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "spoil",
+   "x": 224,
+   "z": 4,
+   "w": 4,
+   "d": 3,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "rods",
+   "x": 132,
+   "z": 88,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "rods",
+   "x": 136,
+   "z": 90,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "rods",
+   "x": 240,
+   "z": 104,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "wreck",
+   "model": "rods",
+   "x": 160,
+   "z": 122,
+   "w": 3,
+   "d": 1,
+   "h": 1,
    "district": "mine"
   },
   {
@@ -25241,7 +25591,202 @@
    ]
   }
  ],
- "decor": [],
+ "decor": [
+  {
+   "type": "crops",
+   "x": 18,
+   "z": 232,
+   "w": 34,
+   "d": 18
+  },
+  {
+   "type": "crops",
+   "x": 58,
+   "z": 214,
+   "w": 26,
+   "d": 30
+  },
+  {
+   "type": "crops",
+   "x": 60,
+   "z": 246,
+   "w": 30,
+   "d": 9
+  },
+  {
+   "type": "washline",
+   "x": 27.5,
+   "z": 81.5,
+   "x2": 27.5,
+   "z2": 85.5
+  },
+  {
+   "type": "fire",
+   "x": 240,
+   "z": 245
+  },
+  {
+   "type": "washline",
+   "x": 234.5,
+   "z": 231.5,
+   "x2": 234.5,
+   "z2": 235.5
+  },
+  {
+   "type": "washline",
+   "x": 188.5,
+   "z": 152.5,
+   "x2": 192.5,
+   "z2": 152.5
+  },
+  {
+   "type": "washline",
+   "x": 137.5,
+   "z": 233.5,
+   "x2": 141.5,
+   "z2": 233.5
+  },
+  {
+   "type": "washline",
+   "x": 242.5,
+   "z": 204.5,
+   "x2": 246.5,
+   "z2": 204.5
+  },
+  {
+   "type": "washline",
+   "x": 106.5,
+   "z": 224.5,
+   "x2": 110.5,
+   "z2": 224.5
+  },
+  {
+   "type": "washline",
+   "x": 119.5,
+   "z": 235.5,
+   "x2": 119.5,
+   "z2": 239.5
+  },
+  {
+   "type": "washline",
+   "x": 213.5,
+   "z": 229.5,
+   "x2": 213.5,
+   "z2": 233.5
+  },
+  {
+   "type": "fire",
+   "x": 241,
+   "z": 184
+  },
+  {
+   "type": "washline",
+   "x": 189.5,
+   "z": 168.5,
+   "x2": 189.5,
+   "z2": 172.5
+  },
+  {
+   "type": "washline",
+   "x": 146.5,
+   "z": 205.5,
+   "x2": 150.5,
+   "z2": 205.5
+  },
+  {
+   "type": "washline",
+   "x": 134.5,
+   "z": 200.5,
+   "x2": 134.5,
+   "z2": 204.5
+  },
+  {
+   "type": "washline",
+   "x": 170.5,
+   "z": 160.5,
+   "x2": 170.5,
+   "z2": 164.5
+  },
+  {
+   "type": "washline",
+   "x": 236.5,
+   "z": 182.5,
+   "x2": 236.5,
+   "z2": 186.5
+  },
+  {
+   "type": "fire",
+   "x": 138,
+   "z": 218
+  },
+  {
+   "type": "fire",
+   "x": 112,
+   "z": 209
+  },
+  {
+   "type": "fire",
+   "x": 150,
+   "z": 189
+  },
+  {
+   "type": "washline",
+   "x": 161.5,
+   "z": 217.5,
+   "x2": 161.5,
+   "z2": 221.5
+  },
+  {
+   "type": "washline",
+   "x": 241.5,
+   "z": 167.5,
+   "x2": 245.5,
+   "z2": 167.5
+  },
+  {
+   "type": "washline",
+   "x": 147.5,
+   "z": 223.5,
+   "x2": 151.5,
+   "z2": 223.5
+  },
+  {
+   "type": "fire",
+   "x": 219,
+   "z": 149
+  },
+  {
+   "type": "fire",
+   "x": 239,
+   "z": 155
+  },
+  {
+   "type": "washline",
+   "x": 136.5,
+   "z": 170.5,
+   "x2": 140.5,
+   "z2": 170.5
+  },
+  {
+   "type": "washline",
+   "x": 139.5,
+   "z": 246.5,
+   "x2": 143.5,
+   "z2": 246.5
+  },
+  {
+   "type": "fire",
+   "x": 200,
+   "z": 247
+  },
+  {
+   "type": "washline",
+   "x": 230.5,
+   "z": 154.5,
+   "x2": 234.5,
+   "z2": 154.5
+  }
+ ],
  "music_zones": [],
  "blasting": {
   "detonator": {

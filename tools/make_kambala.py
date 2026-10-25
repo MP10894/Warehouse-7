@@ -457,12 +457,18 @@ ROADS = [(MAIN, 6), (TO_MINE, 6), (LOGGING, 4.5), (VILLAGE, 5)] + [(l, 3.5) for 
 
 def open_ground(x, z, extra=0):
     if (x, z) in used or not (2 <= x < SIZE - 2 and 2 <= z < SIZE - 2): return False
+    # nothing inside a base area (its walls and lockers go there)
+    if any(b['area']['x0'] - 1 <= x <= b['area']['x1'] + 1 and b['area']['z0'] - 1 <= z <= b['area']['z1'] + 1 for b in bases): return False
     if ring(x + 0.5, z + 0.5) or ((x - CX) / 60) ** 2 + ((z - CZ) / 50) ** 2 <= 1: return False
     if any(math.hypot(x - a, z - b) < r for a, b, r in KEEP_CLEAR): return False
     if any(near_path(x + 0.5, z + 0.5, pts, w + extra) for pts, w in ROADS): return False
     return True
 
 
+FIELDS = [(18, 232, 34, 18), (58, 214, 26, 30), (60, 246, 30, 9)]   # cassava fields: no trees
+for fx, fz, fw, fd in FIELDS:
+    for z in range(fz - 1, fz + fd + 1):
+        for x in range(fx - 1, fx + fw + 1): used.add((x, z))
 flora = []
 tree_at = []
 # forest: trees on a loose grid about 4 m apart, jittered
@@ -509,6 +515,76 @@ for _ in range(400):
     used.add((x, z))
     if sum(1 for f in flora if f['district'] == 'mine') >= 45: break
 props += flora
+
+# ---------------------------------------------------------------- dressing: clutter, washing, fires, crops
+decor = [{'type': 'crops', 'x': fx, 'z': fz, 'w': fw, 'd': fd} for fx, fz, fw, fd in FIELDS]
+clutter = []
+
+
+def free_rect(x, z, w, d, extra=1):
+    return all(open_ground(x + i, z + j, extra) and (x + i, z + j) not in used for i in range(w) for j in range(d))
+
+
+def take(x, z, w, d):
+    for j in range(z - 1, z + d + 1):
+        for i in range(x - 1, x + w + 1): used.add((i, j))
+
+
+def solid(model, x, z, w, d, h, where):
+    clutter.append({'type': 'wreck', 'model': model, 'x': x, 'z': z, 'w': w, 'd': d, 'h': h, 'district': where})
+    take(x, z, w, d)
+
+
+# village: by the huts and houses, a washing line or a cooking fire; drums by the company buildings
+for b in buildings:
+    w, d = SIZES[b['file']]
+    if b.get('turn') in (90, 270): w, d = d, w
+    if b['file'] in ('hut.txt', 'mud_house.txt'):
+        for _ in range(6):
+            side = rnd.choice('nsew')
+            if side in 'ns':
+                x, z = b['x'] + rnd.randint(-1, 1), (b['z'] - 3 if side == 'n' else b['z'] + d + 2)
+                x2, z2 = x + 4, z
+            else:
+                x, z = (b['x'] - 3 if side == 'w' else b['x'] + w + 2), b['z'] + rnd.randint(-1, 1)
+                x2, z2 = x, z + 4
+            if rnd.random() < 0.45:
+                if all(open_ground(xx, zz) and (xx, zz) not in used for xx, zz in [(x, z), (x2, z2), ((x + x2) // 2, (z + z2) // 2)]):
+                    decor.append({'type': 'washline', 'x': x + 0.5, 'z': z + 0.5, 'x2': x2 + 0.5, 'z2': z2 + 0.5})
+                    take(min(x, x2), min(z, z2), abs(x2 - x) + 1, abs(z2 - z) + 1)
+                    break
+            elif free_rect(x, z, 2, 2):
+                decor.append({'type': 'fire', 'x': x + 1.0, 'z': z + 1.0})
+                take(x, z, 2, 2)
+                break
+    elif b['file'] in ('hq.txt', 'clinic.txt', 'dorm.txt', 'store.txt', 'company_small.txt', 'office.txt', 'magazine.txt', 'workshop.txt'):
+        for _ in range(8):
+            x = b['x'] + rnd.randint(-3, w + 1)
+            z = rnd.choice([b['z'] - 3, b['z'] + d + 1])
+            ww = rnd.randint(1, 2)
+            ok = free_rect(x, z, ww, 1) if b['file'] != 'workshop.txt' else all((x + i, z) not in used and 2 <= x + i < SIZE - 2 for i in range(ww))
+            if ok:
+                solid('drums', x, z, ww, 1, 1, 'village' if b['z'] > 140 else 'mine')
+                break
+# termite mounds on open red earth
+tm = 0
+for _ in range(3000):
+    if tm >= 18: break
+    x, z = rnd.randint(6, 250), rnd.randint(6, 250)
+    if inside(FOREST, x, z) or not free_rect(x, z, 1, 1, 2): continue
+    solid('termite', x, z, 1, 1, 2, 'outskirts'); tm += 1
+# mine rim: spoil heaps on the plateau, drill rods by the yard
+sp = 0
+for _ in range(3000):
+    if sp >= 7: break
+    w, d = rnd.randint(3, 5), rnd.randint(3, 4)
+    x, z = rnd.randint(134, 250 - w), rnd.randint(4, 132 - d)
+    if ((x + w / 2 - CX) / 64) ** 2 + ((z + d / 2 - CZ) / 54) ** 2 <= 1 or not free_rect(x, z, w, d, 2): continue
+    solid('spoil', x, z, w, d, 2, 'mine'); sp += 1
+for x, z in [(132, 88), (136, 90), (240, 104), (160, 122)]:
+    if free_rect(x, z, 3, 1):
+        solid('rods', x, z, 3, 1, 1, 'mine')
+props += clutter
 
 # ---------------------------------------------------------------- blasting (the signature)
 def face_points(face, a0, a1, step=4.0):
@@ -557,7 +633,7 @@ level = {
     # every attack wave comes out of the forest on the west edge (column A)
     'wave_spawns': [{'x': 3, 'z': z} for z in (16, 56, 100, 140, 180, 220)],
     # passing downpours anywhere, mist banks in the forest
-    'pickups': pickups, 'weather_zones': [{"type": "rain", "x": 128, "z": 128, "radius": 220, "strength": 0.6, "chance_per_minute": 0.3, "min_duration": 40, "max_duration": 90}, {"type": "mist", "district": "forest", "x": 48, "z": 60, "radius": 50, "strength": 0.8, "chance_per_minute": 0.5, "min_duration": 40, "max_duration": 80}, {"type": "mist", "district": "forest", "x": 52, "z": 172, "radius": 50, "strength": 0.8, "chance_per_minute": 0.5, "min_duration": 40, "max_duration": 80}], 'bases': bases, 'decor': [], 'music_zones': [],
+    'pickups': pickups, 'weather_zones': [{"type": "rain", "x": 128, "z": 128, "radius": 220, "strength": 0.6, "chance_per_minute": 0.3, "min_duration": 40, "max_duration": 90}, {"type": "mist", "district": "forest", "x": 48, "z": 60, "radius": 50, "strength": 0.8, "chance_per_minute": 0.5, "min_duration": 40, "max_duration": 80}, {"type": "mist", "district": "forest", "x": 52, "z": 172, "radius": 50, "strength": 0.8, "chance_per_minute": 0.5, "min_duration": 40, "max_duration": 80}], 'bases': bases, 'decor': decor, 'music_zones': [],
     'blasting': blasting
 }
 

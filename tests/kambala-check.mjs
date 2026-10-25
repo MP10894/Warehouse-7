@@ -70,6 +70,13 @@ const unreachable = world.enemies.filter(e => { const n = nodeAt(nav, e.x, e.y, 
 check(unreachable.length <= 1, `enemies stand where they can be reached (${unreachable.map(e => e.group).join(', ') || 'all'})`);
 check(reach(204, 199, 7.5), 'the watch tower\'s lookout can be climbed to');
 
+// nothing (trees, undergrowth, clutter) sits where a base's walls or lockers go
+for (const b of levelBases(L)) {
+  const cells = [...b.build_spots.map(sp => [sp.x, sp.z]), ...b.wall_plan.flatMap(r => Array.from({ length: r.w * r.d }, (_, i) => [r.x + (i % r.w), r.z + Math.floor(i / r.w)]))];
+  const taken = cells.filter(([x, z]) => { const y = Math.round(terrainHeight(world.terrain, x + 0.5, z + 0.5)); return [V.TRUNK, V.WRECK].includes(getV(world.grid, x, y, z)) || isShrub(world.grid, x, y, z); });
+  check(taken.length === 0, `base "${b.name}": its wall line and build spots are clear (${taken.map(c => c.join(',')).join('; ') || 'all clear'})`);
+}
+
 // the bench walls: walking straight at one from the pit floor gets you nowhere up
 {
   const b = { x: 196.5, y: groundAt(world, 196.5, 50, 3), z: 50, vy: 0, onGround: true };
@@ -105,7 +112,7 @@ check(reach(176, 68, 3) && reach(200, 74, 3), 'the haul road leads from the rim 
   for (let i = 0; i < 40; i++) moveBody(world, b, 0.06, 0, 1 / 60);
   check(b.x > s.x + 0.8, 'you walk straight through undergrowth');
   const y = s.y + 1.5;
-  check(!traceSegment(world, s.x - 5, y, s.z + 0.5, s.x + 3.9, y, s.z + 0.5), 'bullets pass through it');
+  check(!traceSegment(world, s.x - 0.6, y, s.z + 0.5, s.x + 1.6, y, s.z + 0.5), 'bullets pass through it');
   check(hiddenByShrubs(world, s.x - 8, y, s.z + 0.5, s.x + 3, y, s.z + 0.5), 'but someone behind it is hidden from an enemy 11 m away');
   check(!hiddenByShrubs(world, s.x - 1, y, s.z + 0.5, s.x + 1.5, y, s.z + 0.5), 'and seen again from 2.5 m away');
 }

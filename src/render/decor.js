@@ -9,7 +9,10 @@
 //  - Street clutter: bullet holes, wall scorch and torn posters; rubbish, tyres, gas bottles,
 //    chairs, potted plants and produce crates by the walls; paper, broken concrete, shrubs;
 //    razor wire on low walls and sandbags.
-//  - Hand-placed (level.json → decor): market stalls, carpets, date palms.
+//  - Hand-placed (level.json → decor): market stalls, carpets, date palms; washing lines on posts
+//    ("washline": x, z to x2, z2), cooking fires with smoke ("fire"), crop rows ("crops": x, z, w, d).
+//  - Solid clutter (level.json props of type "wreck" with a model): oil drums ("drums"), termite
+//    mounds ("termite"), stacked drill rods ("rods"), spoil heaps ("spoil"). Solid like the vehicles.
 //  - Wrecked vehicles: these ARE solid (V.WRECK blocks in the simulation); this only draws
 //    the car, pickup or lorry over its blocks.
 //
@@ -171,6 +174,8 @@ const PAINT = [[0.85, 0.84, 0.8], [0.55, 0.62, 0.7], [0.66, 0.32, 0.26], [0.86, 
 const BAGS = [[0.18, 0.18, 0.19], [0.25, 0.32, 0.5], [0.85, 0.85, 0.82], [0.3, 0.3, 0.28]];
 const CHAIRS = [[0.92, 0.92, 0.9], [0.3, 0.45, 0.75], [0.75, 0.3, 0.25], [0.35, 0.6, 0.4]];
 const BOTTLES = [[0.25, 0.4, 0.7], [0.9, 0.5, 0.2], [0.55, 0.55, 0.55]];
+const CLUTTER = new Set(['drums', 'termite', 'rods', 'spoil']);   // solid clutter drawn over wreck blocks
+const DRUMS = [[0.55, 0.22, 0.16], [0.2, 0.32, 0.5], [0.3, 0.38, 0.24], [0.62, 0.52, 0.22], [0.42, 0.4, 0.38]];
 const CLOTH = [[0.95, 0.95, 0.92], [0.85, 0.3, 0.25], [0.3, 0.45, 0.8], [0.9, 0.8, 0.35], [0.4, 0.65, 0.4], [0.75, 0.5, 0.7]];
 
 function rng(seed) {
@@ -314,6 +319,8 @@ export function planDecor(world, amount = 1) {
         if (owner[Math.max(0, Math.min(g.w - 1, gx)) + Math.max(0, Math.min(g.d - 1, gz)) * g.w] >= 0) return;
         const gy = Math.round(terrainHeight(world.terrain, gx + 0.5, gz + 0.5));
         if (cell(gx, gy, gz) !== V.AIR && cell(gx, gy, gz) !== V.RUBBLE) return;
+        // only where the ground is sandy (not on Kambala's red earth or jungle floor)
+        if ('ltkj'.includes(groundType(world.ground, gx + 0.5, gz + 0.5))) return;
         add({ kind: 'drift', x, z, y: b.base, n: side.n, len: 1 + Math.floor(r() * 2), anchors: [] }, x, z);
       });
     }
@@ -390,7 +397,8 @@ export function planDecor(world, amount = 1) {
   (world.level.wrecks || []).forEach((w, i) => {
     const seed = 1000 + i * 7919, q = rng(seed);
     q();   // (flip: the same draws as drawWreck)
-    const burnt = (q() < 0.45 && !w.colour) || !!w.burnt;
+    const vehicle = !CLUTTER.has(w.model);
+    const burnt = vehicle && ((q() < 0.45 && !w.colour) || !!w.burnt);
     const r2 = rng(seed + 1); r2();
     const smoke = burnt && r2() < 0.45 * amount;
     add({ kind: 'wreck', ...w, burnt, smoke, seed, anchors: [] }, w.x + w.w / 2, w.z + w.d / 2);
@@ -406,7 +414,16 @@ export function planDecor(world, amount = 1) {
 
   // ---- hand-placed decoration from the level file: market stalls, carpets, palms ...
   (world.level.decor || []).forEach((d, i) => {
-    add({ ...d, kind: d.type, y: terrainHeight(world.terrain, d.x, d.z), seed: 5000 + i * 104729, anchors: [] }, d.x, d.z);
+    const seed = 5000 + i * 104729, y = terrainHeight(world.terrain, d.x, d.z);
+    if (d.type === 'washline') {
+      // a washing line on two posts in a yard; the clothes swing (createMoving)
+      const q = rng(seed);
+      const clothes = Array.from({ length: 4 + Math.floor(q() * 4) }, () => ({ t: 0.1 + q() * 0.8, colour: CLOTH[Math.floor(q() * CLOTH.length)], w: 0.35 + q() * 0.4, h: 0.4 + q() * 0.5 }));
+      const my = Math.min(y, terrainHeight(world.terrain, d.x2, d.z2));
+      add({ kind: 'washing', p0: [d.x, d.z], p1: [d.x2, d.z2], y: my, clothes, anchors: [] }, (d.x + d.x2) / 2, (d.z + d.z2) / 2);
+      return;
+    }
+    add({ ...d, kind: d.type === 'fire' ? 'cookfire' : d.type, y, seed, anchors: [] }, d.x, d.z);
   });
 
   // ground marks: oil, cracks, scorch, tyre tracks, dirt
@@ -507,8 +524,46 @@ export function createDecor(scene, world, settings) {
         quad([[x - cs, y + h, z - sn], [x + cs, y + h, z + sn], [x + cs, y, z + sn], [x - cs, y, z - sn]], 'bush', c, 1 - k * 0.08);
       }
     };
+    // ---- solid clutter: oil drums, termite mounds, drill rods, spoil heaps (over their blocks)
+    const drawClutter = it => {
+      const q = rng(it.seed), y = it.y;
+      if (it.model === 'drums') {
+        for (let dz = 0; dz < it.d; dz++) for (let dx = 0; dx < it.w; dx++) {
+          const n = 1 + Math.floor(q() * 3);
+          for (let k = 0; k < n; k++) {
+            const c = DRUMS[Math.floor(q() * DRUMS.length)], cx = it.x + dx + 0.28 + (k % 2) * 0.45, cz = it.z + dz + 0.28 + (k > 1 ? 0.45 : q() * 0.4);
+            boxAt(cx, y, cz, 0.5, 0.86, 0.5, c, q() < 0.5 ? 'rust' : 'plain');
+            boxAt(cx, y + 0.28, cz, 0.52, 0.04, 0.52, c.map(v => v * 0.7));          // the rolling hoops
+            boxAt(cx, y + 0.58, cz, 0.52, 0.04, 0.52, c.map(v => v * 0.7));
+          }
+        }
+      } else if (it.model === 'termite') {
+        // a lumpy red-earth spire, narrowing as it rises
+        const cx = it.x + it.w / 2, cz = it.z + it.d / 2, H = it.h + 0.5;
+        for (let k = 0; k < 6; k++) {
+          const t = k / 6, w = (it.w * 0.95) * (1 - t * 0.75), yy = y + H * t;
+          boxAt(cx + (q() - 0.5) * 0.15, yy, cz + (q() - 0.5) * 0.15, w, H / 6 + 0.05, w * (0.85 + q() * 0.3), [0.66 - t * 0.08, 0.35, 0.24], 'drift');
+        }
+      } else if (it.model === 'rods') {
+        const alongX = it.w >= it.d, L = alongX ? it.w : it.d;
+        const pt = (a, b) => alongX ? [it.x + a, it.z + b] : [it.x + b, it.z + a];
+        for (const a of [0.4, L - 0.4]) { const [px, pz] = pt(a, 0.5); boxAt(px, y, pz, alongX ? 0.18 : 0.9, 0.12, alongX ? 0.9 : 0.18, [0.4, 0.3, 0.2]); }
+        for (let row = 0; row < 3; row++) for (let k = 0; k < 6 - row; k++) {
+          const [px, pz] = pt(L / 2, 0.15 + k * 0.14 + row * 0.07);
+          boxAt(px, y + 0.12 + row * 0.13, pz, alongX ? L - 0.1 : 0.12, 0.12, alongX ? 0.12 : L - 0.1, [0.5, 0.5, 0.48].map(v => v * (0.8 + q() * 0.3)), 'rust');
+        }
+      } else if (it.model === 'spoil') {
+        // a heap of broken rock and red earth, stepped
+        for (let k = 0; k < 4; k++) {
+          const t = k / 4, sx = it.w * (1 - t * 0.6), sz = it.d * (1 - t * 0.6);
+          boxAt(it.x + it.w / 2 + (q() - 0.5) * 0.4, y + it.h * t, it.z + it.d / 2 + (q() - 0.5) * 0.4, sx, it.h / 4 + 0.1, sz,
+            k % 2 ? [0.56, 0.45, 0.4] : [0.62, 0.36, 0.26], 'drift');
+        }
+      }
+    };
     // ---- a burnt-out car, pickup or lorry, filling its blocks
     const drawWreck = it => {
+      if (CLUTTER.has(it.model)) { drawClutter(it); return; }
       const q = rng(it.seed);
       const alongX = it.w >= it.d, Lg = alongX ? it.w : it.d, W = alongX ? it.d : it.w;
       const flip = q() < 0.5;
@@ -836,6 +891,27 @@ export function createDecor(scene, world, settings) {
           break;
         }
         case 'palm': drawPalm(it); break;
+        case 'cookfire': {
+          // a ring of stones, crossed logs and glowing embers (its smoke: createMoving)
+          const q = rng(it.seed);
+          flat(it.x, it.y + 0.004, it.z, 1.5, 1.5, 0.3, 'scorch', [1, 1, 1]);
+          for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; boxAt(it.x + Math.cos(a) * 0.5, it.y, it.z + Math.sin(a) * 0.5, 0.18, 0.12, 0.18, [0.45, 0.42, 0.4]); }
+          boxAt(it.x, it.y + 0.03, it.z, 0.7, 0.08, 0.1, [0.3, 0.2, 0.12]);
+          boxAt(it.x, it.y + 0.08, it.z, 0.1, 0.08, 0.7, [0.3, 0.2, 0.12]);
+          boxAt(it.x, it.y, it.z, 0.32, 0.1, 0.32, [1, 0.45, 0.12]);
+          if (q() < 0.7) { boxAt(it.x + 0.9, it.y, it.z + 0.2, 0.36, 0.3, 0.36, [0.25, 0.25, 0.24]); }   // a cooking pot nearby
+          break;
+        }
+        case 'crops': {
+          // rows of small leafy plants (cassava): looks only
+          const q = rng(it.seed), alongX = (it.w || 1) >= (it.d || 1);
+          for (let a = 0.5; a < (alongX ? it.w : it.d); a += 1.1) for (let b = 0.5; b < (alongX ? it.d : it.w); b += 1.4) {
+            const px = it.x + (alongX ? a : b) + (q() - 0.5) * 0.2, pz = it.z + (alongX ? b : a) + (q() - 0.5) * 0.2;
+            const py = terrainHeight(world.terrain, px, pz);
+            bush(px, py - 0.05, pz, 0.9 + q() * 0.3, 0.8 + q() * 0.4, [0.55 + q() * 0.15, 0.75, 0.45], q() * 3);
+          }
+          break;
+        }
         case 'wreck': drawWreck(it); break;
         case 'mark': {
           const c = Math.cos(it.turn) * it.size / 2, s = Math.sin(it.turn) * it.size / 2, y = it.y + 0.025;
@@ -949,6 +1025,7 @@ function createMoving(scene, world, items, decorMat) {
   for (const it of items) {
     if (it.kind === 'wreck' && it.smoke) sources.push({ x: it.x + it.w / 2, y: it.y + it.h * 0.9, z: it.z + it.d / 2, size: it.model === 'truck' ? 1.4 : 1, dark: 0.32, rate: 0.11 });
     if (it.kind === 'trash' && it.fire) sources.push({ x: it.x, y: it.y + 0.2, z: it.z, size: 0.6, dark: 0.55, rate: 0.14 });
+    if (it.kind === 'cookfire') sources.push({ x: it.x, y: it.y + 0.2, z: it.z, size: 0.55, dark: 0.7, rate: 0.12 });   // pale wood smoke
   }
   const PER = 14, smokeQuads = sources.length * PER;
   let smokeGeo = null, smokeMesh = null;
