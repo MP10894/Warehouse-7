@@ -161,4 +161,19 @@ check(PLATE > 0, `heavy insurgents drop a ${PLATE}-point armour plate (Item drop
   check(types.includes('suicide_bomber') && !first.includes('suicide_bomber'), `attack waves bring suicide bombers, but not the first wave (${types.filter(t => t === 'suicide_bomber').length} in 6 waves)`);
 }
 
+// explosions hit armour first, like bullets: enough armour soaks a direct rocket or grenade hit
+{
+  const w = createWorld({ data, levelId: 'najaf', seed: 3 });
+  const pl = w.players[0];
+  for (const id of ['rpg7', 'rgd5']) {
+    const def = data.weapons[id];
+    pl.alive = true; pl.downed = false; pl.hp = 100; pl.armour = def.damage_armour + 10;
+    damageActor(w, pl, def.damage_health, def.damage_armour, null);
+    check(pl.hp === 100 && pl.armour === 10, `a direct ${def.name} hit is soaked by ${def.damage_armour + 10} armour (health ${Math.round(pl.hp)}, armour ${Math.round(pl.armour)})`);
+    pl.hp = 100; pl.armour = 0;
+    damageActor(w, pl, def.damage_health * 0.5, def.damage_armour * 0.5, null);
+    check(pl.hp < 100, `without armour, a ${def.name} blast hurts (health ${Math.round(pl.hp)})`);
+  }
+}
+
 process.exit(failures ? 1 : 0);

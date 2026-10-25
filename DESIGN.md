@@ -441,6 +441,7 @@ tag `warehouse-prototype`.
 | 2026-10-25 | Every gun throws a brass case out of its ejection port on each shot (size by calibre; none for the RPG-7). Only in your own first-person view: cases never land in the world and aren't seen on other players or enemies |
 | 2026-10-25 | The in-game tuning panel is removed: all tuning is done in the Game Data workbook and the files in /data (values saved on a phone by the old panel are cleared). In a mission, a small ✕ under the health bars (top-left, away from both thumbs) asks "Leave the mission?" before going back to the menu; a solo game pauses while it asks, co-op carries on. The installed app's menu has an Exit button; the solo results screen has a Menu button. The frame-rate readout only shows with ?fps |
 | 2026-10-25 | The player character is Dima Karpov (from Martial's PMC Ltd. project), in olive drab like his reference photo; the co-op marker over a partner's head tells him from insurgents. Player model budget raised to 600 triangles (enemies stay at 300) |
+| 2026-10-25 | Explosions hit armour first, like bullets: the RPG-7 and RGD-5 do 100 health and 50 armour damage, so more than 50 armour survives a direct hit. Fuel tank blasts stay as strong as before the RPG's damage went from 80 to 100 (settings → hazards.tank_blast_damage_factor 3.2, was 4): someone 9 m from the tank survives badly hurt |
 
 ## Open questions
 

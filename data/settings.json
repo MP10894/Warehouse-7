@@ -102,7 +102,7 @@
   },
   "hazards": {
     "tank_blast_radius": 12,
-    "tank_blast_damage_factor": 4
+    "tank_blast_damage_factor": 3.2
   },
   "audio": {
     "music_volume": 0.40,
