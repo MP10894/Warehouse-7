@@ -2,6 +2,7 @@
  "name": "Najaf",
  "title": "Najaf",
  "subtitle": "Level 1",
+  "order": 1,
  "summary": "Three districts around a crossroads: a ruined city, an oil refinery and the desert outskirts. Each has a place you can take as your base.",
  "briefing": [
   "You start at the crossroads. Pick a base: the police station (city, north-west), the truck stop (outskirts, south-west) or the control building (refinery, east).",

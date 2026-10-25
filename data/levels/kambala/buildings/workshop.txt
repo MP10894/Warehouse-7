@@ -1,0 +1,26 @@
+# Kambala: pit-floor workshop (base A)
+# Symbol guide: data/levels/README.md
+
+floor 0
+Xw##w##wd#w##w#X
+w.>>>..........w
+#..............#
+X..............X
+................
+................
+X..............X
+w..............w
+#..............#
+Xw##w##w##w##w#X
+
+floor 1
+llllllllllllllll
+l..............l
+l..............l
+l..............l
+l..............l
+l..............l
+l..............l
+l..............l
+l..............l
+llllllllllllllll

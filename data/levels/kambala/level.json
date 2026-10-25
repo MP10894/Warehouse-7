@@ -1,0 +1,11704 @@
+{
+ "name": "Kambala mine",
+ "title": "Kambala mine",
+ "subtitle": "Level 2 · in progress",
+ "order": 2,
+ "summary": "A company mine in the DR Congo: an open pit, a jungle and a mining village around a junction. Rebels come out of the forest to attack.",
+ "briefing": [
+  "You start at the junction. Pick a base: the workshop on the pit floor (mine, north-east), the logging camp (forest, west) or the company HQ (village, south-east).",
+  "Clear its defenders and step inside. It becomes your base and the clock starts.",
+  "Fetch crates and build upgrades at the marked spots: construction at the sawmill and the equipment yard, ammunition at the explosives magazine, medical at the clinic, armour at the security post.",
+  "The rebels always come out of the jungle on the west side."
+ ],
+ "goals": {
+  "claim": "Clear a base: pit-floor workshop (mine), logging camp (forest) or company HQ (village)",
+  "fetch": "Fetch a crate and build an upgrade at a marked spot in your base"
+ },
+ "size": 256,
+ "max_height": 28,
+ "time_limit": 900,
+ "terrain_spacing": 2,
+ "player_spawns": [
+  {
+   "x": 126,
+   "z": 134,
+   "facing": 30
+  },
+  {
+   "x": 130,
+   "z": 135,
+   "facing": 30
+  }
+ ],
+ "buildings": [
+  {
+   "file": "workshop.txt",
+   "x": 188,
+   "z": 54
+  },
+  {
+   "file": "office.txt",
+   "x": 150,
+   "z": 110
+  },
+  {
+   "file": "magazine.txt",
+   "x": 234,
+   "z": 114
+  },
+  {
+   "file": "camp_hut.txt",
+   "x": 40,
+   "z": 64
+  },
+  {
+   "file": "hut.txt",
+   "x": 30,
+   "z": 80
+  },
+  {
+   "file": "sawmill.txt",
+   "x": 84,
+   "z": 24
+  },
+  {
+   "file": "hunters.txt",
+   "x": 12,
+   "z": 148
+  },
+  {
+   "file": "hq.txt",
+   "x": 176,
+   "z": 190
+  },
+  {
+   "file": "tower.txt",
+   "x": 202,
+   "z": 196
+  },
+  {
+   "file": "clinic.txt",
+   "x": 204,
+   "z": 162
+  },
+  {
+   "file": "dorm.txt",
+   "x": 148,
+   "z": 174
+  },
+  {
+   "file": "store.txt",
+   "x": 222,
+   "z": 206
+  },
+  {
+   "file": "company_small.txt",
+   "x": 138,
+   "z": 156
+  },
+  {
+   "file": "hut.txt",
+   "x": 240,
+   "z": 237,
+   "turn": 270
+  },
+  {
+   "file": "mud_house.txt",
+   "x": 225,
+   "z": 230,
+   "turn": 180
+  },
+  {
+   "file": "mud_house.txt",
+   "x": 187,
+   "z": 155,
+   "turn": 180
+  },
+  {
+   "file": "mud_house.txt",
+   "x": 136,
+   "z": 226,
+   "turn": 180
+  },
+  {
+   "file": "hut.txt",
+   "x": 241,
+   "z": 207
+  },
+  {
+   "file": "mud_house.txt",
+   "x": 106,
+   "z": 217
+  },
+  {
+   "file": "hut.txt",
+   "x": 112,
+   "z": 234
+  },
+  {
+   "file": "hut.txt",
+   "x": 216,
+   "z": 230,
+   "turn": 270
+  },
+  {
+   "file": "hut.txt",
+   "x": 239,
+   "z": 176,
+   "turn": 270
+  },
+  {
+   "file": "hut.txt",
+   "x": 192,
+   "z": 169,
+   "turn": 180
+  },
+  {
+   "file": "mud_house.txt",
+   "x": 146,
+   "z": 198,
+   "turn": 180
+  },
+  {
+   "file": "hut.txt",
+   "x": 137,
+   "z": 201
+  },
+  {
+   "file": "hut.txt",
+   "x": 163,
+   "z": 159
+  },
+  {
+   "file": "hut.txt",
+   "x": 229,
+   "z": 181
+  },
+  {
+   "file": "mud_house.txt",
+   "x": 138,
+   "z": 210
+  },
+  {
+   "file": "mud_house.txt",
+   "x": 112,
+   "z": 201
+  },
+  {
+   "file": "mud_house.txt",
+   "x": 140,
+   "z": 189
+  },
+  {
+   "file": "hut.txt",
+   "x": 154,
+   "z": 216,
+   "turn": 180
+  },
+  {
+   "file": "hut.txt",
+   "x": 242,
+   "z": 160
+  },
+  {
+   "file": "mud_house.txt",
+   "x": 147,
+   "z": 226
+  },
+  {
+   "file": "hut.txt",
+   "x": 211,
+   "z": 147,
+   "turn": 180
+  },
+  {
+   "file": "mud_house.txt",
+   "x": 238,
+   "z": 147,
+   "turn": 180
+  },
+  {
+   "file": "hut.txt",
+   "x": 137,
+   "z": 173
+  },
+  {
+   "file": "mud_house.txt",
+   "x": 138,
+   "z": 239,
+   "turn": 180
+  },
+  {
+   "file": "hut.txt",
+   "x": 192,
+   "z": 245,
+   "turn": 90
+  },
+  {
+   "file": "hut.txt",
+   "x": 230,
+   "z": 157
+  }
+ ],
+ "props": [
+  {
+   "type": "rock",
+   "x": 182,
+   "z": 12,
+   "w": 28,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 230,
+   "z": 12,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 181,
+   "z": 13,
+   "w": 30,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 14,
+   "w": 7,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 181,
+   "z": 14,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 182,
+   "z": 14,
+   "w": 6,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 204,
+   "z": 14,
+   "w": 6,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 210,
+   "z": 14,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 211,
+   "z": 14,
+   "w": 7,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 15,
+   "w": 8,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 181,
+   "z": 15,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 210,
+   "z": 15,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 211,
+   "z": 15,
+   "w": 8,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 16,
+   "w": 5,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 16,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 16,
+   "w": 4,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 214,
+   "z": 16,
+   "w": 4,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 218,
+   "z": 16,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 16,
+   "w": 5,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 167,
+   "z": 17,
+   "w": 6,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 17,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 217,
+   "z": 17,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 17,
+   "w": 6,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 164,
+   "z": 18,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 167,
+   "z": 18,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 18,
+   "w": 4,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 220,
+   "z": 18,
+   "w": 4,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 224,
+   "z": 18,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 225,
+   "z": 18,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 19,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 167,
+   "z": 19,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 189,
+   "z": 19,
+   "w": 5,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 19,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 225,
+   "z": 19,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 20,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 20,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 164,
+   "z": 20,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 225,
+   "z": 20,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 228,
+   "z": 20,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 229,
+   "z": 20,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 21,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 21,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 203,
+   "z": 21,
+   "w": 4,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 227,
+   "z": 21,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 229,
+   "z": 21,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 22,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 22,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 22,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 207,
+   "z": 22,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 213,
+   "z": 22,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 228,
+   "z": 22,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 230,
+   "z": 22,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 231,
+   "z": 22,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 157,
+   "z": 23,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 23,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 210,
+   "z": 23,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 213,
+   "z": 23,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 230,
+   "z": 23,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 231,
+   "z": 23,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 156,
+   "z": 24,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 157,
+   "z": 24,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 24,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 212,
+   "z": 24,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 215,
+   "z": 24,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 217,
+   "z": 24,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 232,
+   "z": 24,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 24,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 24,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 155,
+   "z": 25,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 157,
+   "z": 25,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 215,
+   "z": 25,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 233,
+   "z": 25,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 25,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 154,
+   "z": 26,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 155,
+   "z": 26,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 156,
+   "z": 26,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 217,
+   "z": 26,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 218,
+   "z": 26,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 26,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 26,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 236,
+   "z": 26,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 26,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 153,
+   "z": 27,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 155,
+   "z": 27,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 218,
+   "z": 27,
+   "w": 5,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 236,
+   "z": 27,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 27,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 152,
+   "z": 28,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 153,
+   "z": 28,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 154,
+   "z": 28,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 220,
+   "z": 28,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 28,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 28,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 28,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 238,
+   "z": 28,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 28,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 151,
+   "z": 29,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 153,
+   "z": 29,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 29,
+   "w": 5,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 238,
+   "z": 29,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 29,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 30,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 151,
+   "z": 30,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 152,
+   "z": 30,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 184,
+   "z": 30,
+   "w": 22,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 224,
+   "z": 30,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 226,
+   "z": 30,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 227,
+   "z": 30,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 30,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 30,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 30,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 31,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 151,
+   "z": 31,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 183,
+   "z": 31,
+   "w": 25,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 208,
+   "z": 31,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 225,
+   "z": 31,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 227,
+   "z": 31,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 31,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 31,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 148,
+   "z": 32,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 32,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 32,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 178,
+   "z": 32,
+   "w": 5,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 183,
+   "z": 32,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 184,
+   "z": 32,
+   "w": 5,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 203,
+   "z": 32,
+   "w": 5,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 208,
+   "z": 32,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 209,
+   "z": 32,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 227,
+   "z": 32,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 228,
+   "z": 32,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 229,
+   "z": 32,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 32,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 32,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 32,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 147,
+   "z": 33,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 33,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 33,
+   "w": 6,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 183,
+   "z": 33,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 208,
+   "z": 33,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 209,
+   "z": 33,
+   "w": 5,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 214,
+   "z": 33,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 228,
+   "z": 33,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 229,
+   "z": 33,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 33,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 33,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 146,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 147,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 148,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 34,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 178,
+   "z": 34,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 211,
+   "z": 34,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 214,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 215,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 229,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 230,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 231,
+   "z": 34,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 244,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 245,
+   "z": 34,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 145,
+   "z": 35,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 147,
+   "z": 35,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 35,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 35,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 213,
+   "z": 35,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 215,
+   "z": 35,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 216,
+   "z": 35,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 230,
+   "z": 35,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 231,
+   "z": 35,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 35,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 245,
+   "z": 35,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 144,
+   "z": 36,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 145,
+   "z": 36,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 146,
+   "z": 36,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 36,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 36,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 36,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 216,
+   "z": 36,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 217,
+   "z": 36,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 232,
+   "z": 36,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 36,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 36,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 244,
+   "z": 36,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 246,
+   "z": 36,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 247,
+   "z": 36,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 144,
+   "z": 37,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 145,
+   "z": 37,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 146,
+   "z": 37,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 37,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 37,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 217,
+   "z": 37,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 233,
+   "z": 37,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 37,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 37,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 245,
+   "z": 37,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 246,
+   "z": 37,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 247,
+   "z": 37,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 144,
+   "z": 38,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 145,
+   "z": 38,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 38,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 38,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 38,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 186,
+   "z": 38,
+   "w": 20,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 38,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 220,
+   "z": 38,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 233,
+   "z": 38,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 38,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 38,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 246,
+   "z": 38,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 247,
+   "z": 38,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 143,
+   "z": 39,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 145,
+   "z": 39,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 167,
+   "z": 39,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 39,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 185,
+   "z": 39,
+   "w": 22,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 221,
+   "z": 39,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 39,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 39,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 246,
+   "z": 39,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 247,
+   "z": 39,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 142,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 143,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 144,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 166,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 167,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 40,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 180,
+   "z": 40,
+   "w": 5,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 185,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 186,
+   "z": 40,
+   "w": 4,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 202,
+   "z": 40,
+   "w": 4,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 206,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 207,
+   "z": 40,
+   "w": 5,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 236,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 247,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 248,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 249,
+   "z": 40,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 142,
+   "z": 41,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 143,
+   "z": 41,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 144,
+   "z": 41,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 165,
+   "z": 41,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 167,
+   "z": 41,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 179,
+   "z": 41,
+   "w": 6,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 185,
+   "z": 41,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 206,
+   "z": 41,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 207,
+   "z": 41,
+   "w": 6,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 236,
+   "z": 41,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 41,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 247,
+   "z": 41,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 248,
+   "z": 41,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 249,
+   "z": 41,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 142,
+   "z": 42,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 143,
+   "z": 42,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 164,
+   "z": 42,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 165,
+   "z": 42,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 166,
+   "z": 42,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 178,
+   "z": 42,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 179,
+   "z": 42,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 180,
+   "z": 42,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 209,
+   "z": 42,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 212,
+   "z": 42,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 213,
+   "z": 42,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 42,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 238,
+   "z": 42,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 42,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 248,
+   "z": 42,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 249,
+   "z": 42,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 141,
+   "z": 43,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 143,
+   "z": 43,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 43,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 165,
+   "z": 43,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 43,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 179,
+   "z": 43,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 211,
+   "z": 43,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 213,
+   "z": 43,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 43,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 238,
+   "z": 43,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 43,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 248,
+   "z": 43,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 249,
+   "z": 43,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 140,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 141,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 142,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 164,
+   "z": 44,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 176,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 178,
+   "z": 44,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 212,
+   "z": 44,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 214,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 215,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 238,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 249,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 250,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 44,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 140,
+   "z": 45,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 141,
+   "z": 45,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 142,
+   "z": 45,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 45,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 45,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 164,
+   "z": 45,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 175,
+   "z": 45,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 45,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 214,
+   "z": 45,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 215,
+   "z": 45,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 238,
+   "z": 45,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 45,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 249,
+   "z": 45,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 250,
+   "z": 45,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 45,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 140,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 141,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 175,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 176,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 215,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 216,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 217,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 250,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 46,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 47,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 141,
+   "z": 47,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 47,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 47,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 47,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 175,
+   "z": 47,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 216,
+   "z": 47,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 217,
+   "z": 47,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 47,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 47,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 47,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 250,
+   "z": 47,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 47,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 140,
+   "z": 48,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 160,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 172,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 217,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 218,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 250,
+   "z": 48,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 48,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 49,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 49,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 140,
+   "z": 49,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 151,
+   "z": 49,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 160,
+   "z": 49,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 49,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 49,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 171,
+   "z": 49,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 49,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 218,
+   "z": 49,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 49,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 49,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 49,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 49,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 49,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 49,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 140,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 151,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 160,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 171,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 172,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 220,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 221,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 50,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 50,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 140,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 51,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 51,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 171,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 220,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 221,
+   "z": 51,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 51,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 140,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 160,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 52,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 220,
+   "z": 52,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 52,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 140,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 160,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 221,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 53,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 160,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 221,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 54,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 221,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 55,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 56,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 56,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 56,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 56,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 56,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 56,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 56,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 56,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 56,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 56,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 56,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 56,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 56,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 236,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 57,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 236,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 58,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 236,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 59,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 236,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 60,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 236,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 61,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 62,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 63,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 63,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 63,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 63,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 63,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 63,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 63,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 63,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 63,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 63,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 63,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 63,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 63,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 221,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 64,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 160,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 221,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 65,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 140,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 160,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 221,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 66,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 140,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 160,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 220,
+   "z": 67,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 67,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 68,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 68,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 68,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 68,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 159,
+   "z": 68,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 68,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 68,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 220,
+   "z": 68,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 221,
+   "z": 68,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 233,
+   "z": 68,
+   "w": 2,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 68,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 68,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 68,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 68,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 68,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 68,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 69,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 69,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 160,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 171,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 220,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 221,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 233,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 69,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 69,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 70,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 149,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 151,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 160,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 171,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 218,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 70,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 232,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 70,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 70,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 138,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 71,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 141,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 151,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 160,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 171,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 217,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 218,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 250,
+   "z": 71,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 252,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 253,
+   "z": 71,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 139,
+   "z": 72,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 141,
+   "z": 72,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 72,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 151,
+   "z": 72,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 152,
+   "z": 72,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 72,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 72,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 171,
+   "z": 72,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 216,
+   "z": 72,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 217,
+   "z": 72,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 72,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 72,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 72,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 250,
+   "z": 72,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 72,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 140,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 150,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 151,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 152,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 172,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 215,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 216,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 217,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 230,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 250,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 73,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 141,
+   "z": 74,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 151,
+   "z": 74,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 153,
+   "z": 74,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 74,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 74,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 164,
+   "z": 74,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 74,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 214,
+   "z": 74,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 215,
+   "z": 74,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 229,
+   "z": 74,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 230,
+   "z": 74,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 238,
+   "z": 74,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 74,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 249,
+   "z": 74,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 250,
+   "z": 74,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 74,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 141,
+   "z": 75,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 152,
+   "z": 75,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 153,
+   "z": 75,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 75,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 75,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 164,
+   "z": 75,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 75,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 212,
+   "z": 75,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 214,
+   "z": 75,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 215,
+   "z": 75,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 229,
+   "z": 75,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 238,
+   "z": 75,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 75,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 249,
+   "z": 75,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 250,
+   "z": 75,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 251,
+   "z": 75,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 141,
+   "z": 76,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 152,
+   "z": 76,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 153,
+   "z": 76,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 154,
+   "z": 76,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 76,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 165,
+   "z": 76,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 76,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 211,
+   "z": 76,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 213,
+   "z": 76,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 228,
+   "z": 76,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 76,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 238,
+   "z": 76,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 76,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 248,
+   "z": 76,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 249,
+   "z": 76,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 142,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 152,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 153,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 154,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 164,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 165,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 166,
+   "z": 77,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 175,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 209,
+   "z": 77,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 212,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 213,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 227,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 238,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 248,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 249,
+   "z": 77,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 153,
+   "z": 78,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 155,
+   "z": 78,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 165,
+   "z": 78,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 167,
+   "z": 78,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 175,
+   "z": 78,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 176,
+   "z": 78,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 206,
+   "z": 78,
+   "w": 6,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 226,
+   "z": 78,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 236,
+   "z": 78,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 78,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 247,
+   "z": 78,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 248,
+   "z": 78,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 249,
+   "z": 78,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 154,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 155,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 156,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 166,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 167,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 79,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 176,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 202,
+   "z": 79,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 204,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 205,
+   "z": 79,
+   "w": 4,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 224,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 225,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 236,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 247,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 248,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 249,
+   "z": 79,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 155,
+   "z": 80,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 157,
+   "z": 80,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 167,
+   "z": 80,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 80,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 80,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 178,
+   "z": 80,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 197,
+   "z": 80,
+   "w": 7,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 80,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 224,
+   "z": 80,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 80,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 80,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 246,
+   "z": 80,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 247,
+   "z": 80,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 156,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 157,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 81,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 180,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 221,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 233,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 246,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 247,
+   "z": 81,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 156,
+   "z": 82,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 157,
+   "z": 82,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 82,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 82,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 82,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 181,
+   "z": 82,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 220,
+   "z": 82,
+   "w": 3,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 233,
+   "z": 82,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 82,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 82,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 245,
+   "z": 82,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 246,
+   "z": 82,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 247,
+   "z": 82,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 156,
+   "z": 83,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 157,
+   "z": 83,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 83,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 83,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 83,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 83,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 182,
+   "z": 83,
+   "w": 2,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 218,
+   "z": 83,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 83,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 232,
+   "z": 83,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 83,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 83,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 244,
+   "z": 83,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 246,
+   "z": 83,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 247,
+   "z": 83,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 157,
+   "z": 84,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 84,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 84,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 84,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 183,
+   "z": 84,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 216,
+   "z": 84,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 218,
+   "z": 84,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 230,
+   "z": 84,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 231,
+   "z": 84,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 84,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 245,
+   "z": 84,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 85,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 85,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 85,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 85,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 85,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 178,
+   "z": 85,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 213,
+   "z": 85,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 214,
+   "z": 85,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 215,
+   "z": 85,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 229,
+   "z": 85,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 230,
+   "z": 85,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 231,
+   "z": 85,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 85,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 244,
+   "z": 85,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 245,
+   "z": 85,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 86,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 86,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 86,
+   "w": 6,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 183,
+   "z": 86,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 190,
+   "z": 86,
+   "w": 2,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 209,
+   "z": 86,
+   "w": 6,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 228,
+   "z": 86,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 229,
+   "z": 86,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 86,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 86,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 87,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 87,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 164,
+   "z": 87,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 178,
+   "z": 87,
+   "w": 5,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 183,
+   "z": 87,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 184,
+   "z": 87,
+   "w": 5,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 203,
+   "z": 87,
+   "w": 5,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 208,
+   "z": 87,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 209,
+   "z": 87,
+   "w": 5,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 227,
+   "z": 87,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 228,
+   "z": 87,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 229,
+   "z": 87,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 87,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 242,
+   "z": 87,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 243,
+   "z": 87,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 88,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 165,
+   "z": 88,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 183,
+   "z": 88,
+   "w": 26,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 225,
+   "z": 88,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 227,
+   "z": 88,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 88,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 88,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 151,
+   "z": 89,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 164,
+   "z": 89,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 165,
+   "z": 89,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 166,
+   "z": 89,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 184,
+   "z": 89,
+   "w": 24,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 224,
+   "z": 89,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 226,
+   "z": 89,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 227,
+   "z": 89,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 89,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 240,
+   "z": 89,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 241,
+   "z": 89,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 151,
+   "z": 90,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 153,
+   "z": 90,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 165,
+   "z": 90,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 90,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 90,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 90,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 238,
+   "z": 90,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 90,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 152,
+   "z": 91,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 153,
+   "z": 91,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 154,
+   "z": 91,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 166,
+   "z": 91,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 91,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 91,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 220,
+   "z": 91,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 222,
+   "z": 91,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 91,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 91,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 238,
+   "z": 91,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 239,
+   "z": 91,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 153,
+   "z": 92,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 155,
+   "z": 92,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 169,
+   "z": 92,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 92,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 218,
+   "z": 92,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 92,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 236,
+   "z": 92,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 92,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 154,
+   "z": 93,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 155,
+   "z": 93,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 156,
+   "z": 93,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 170,
+   "z": 93,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 93,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 93,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 216,
+   "z": 93,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 218,
+   "z": 93,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 93,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 93,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 236,
+   "z": 93,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 237,
+   "z": 93,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 155,
+   "z": 94,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 157,
+   "z": 94,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 94,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 94,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 213,
+   "z": 94,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 215,
+   "z": 94,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 233,
+   "z": 94,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 94,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 156,
+   "z": 95,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 157,
+   "z": 95,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 95,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 95,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 95,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 178,
+   "z": 95,
+   "w": 5,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 209,
+   "z": 95,
+   "w": 5,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 214,
+   "z": 95,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 215,
+   "z": 95,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 232,
+   "z": 95,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 234,
+   "z": 95,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 235,
+   "z": 95,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 157,
+   "z": 96,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 96,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 177,
+   "z": 96,
+   "w": 10,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 187,
+   "z": 96,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 204,
+   "z": 96,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 205,
+   "z": 96,
+   "w": 10,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 230,
+   "z": 96,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 231,
+   "z": 96,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 158,
+   "z": 97,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 97,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 97,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 178,
+   "z": 97,
+   "w": 9,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 187,
+   "z": 97,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 188,
+   "z": 97,
+   "w": 16,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 204,
+   "z": 97,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 205,
+   "z": 97,
+   "w": 9,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 228,
+   "z": 97,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 230,
+   "z": 97,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 231,
+   "z": 97,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 161,
+   "z": 98,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 98,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 187,
+   "z": 98,
+   "w": 18,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 227,
+   "z": 98,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 229,
+   "z": 98,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 162,
+   "z": 99,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 99,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 164,
+   "z": 99,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 188,
+   "z": 99,
+   "w": 16,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 225,
+   "z": 99,
+   "w": 3,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 228,
+   "z": 99,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 229,
+   "z": 99,
+   "w": 1,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 163,
+   "z": 100,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 167,
+   "z": 100,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 223,
+   "z": 100,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 225,
+   "z": 100,
+   "w": 4,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 164,
+   "z": 101,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 167,
+   "z": 101,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 101,
+   "w": 4,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 220,
+   "z": 101,
+   "w": 4,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 224,
+   "z": 101,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 225,
+   "z": 101,
+   "w": 3,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 167,
+   "z": 102,
+   "w": 6,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 102,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 217,
+   "z": 102,
+   "w": 2,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 102,
+   "w": 6,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 168,
+   "z": 103,
+   "w": 5,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 103,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 103,
+   "w": 4,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 214,
+   "z": 103,
+   "w": 4,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 218,
+   "z": 103,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 219,
+   "z": 103,
+   "w": 5,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 173,
+   "z": 104,
+   "w": 8,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 181,
+   "z": 104,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 210,
+   "z": 104,
+   "w": 1,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 211,
+   "z": 104,
+   "w": 8,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 174,
+   "z": 105,
+   "w": 7,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 181,
+   "z": 105,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 182,
+   "z": 105,
+   "w": 6,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 204,
+   "z": 105,
+   "w": 6,
+   "d": 1,
+   "h": 3,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 210,
+   "z": 105,
+   "w": 1,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 211,
+   "z": 105,
+   "w": 7,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 181,
+   "z": 106,
+   "w": 30,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rock",
+   "x": 182,
+   "z": 107,
+   "w": 28,
+   "d": 1,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 182,
+   "z": 74,
+   "w": 3,
+   "d": 2,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 210,
+   "z": 50,
+   "w": 2,
+   "d": 3,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 176,
+   "z": 58,
+   "w": 3,
+   "d": 2,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 214,
+   "z": 66,
+   "w": 3,
+   "d": 2,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 198,
+   "z": 76,
+   "w": 2,
+   "d": 2,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 168,
+   "z": 64,
+   "w": 2,
+   "d": 3,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 224,
+   "z": 44,
+   "w": 3,
+   "d": 2,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 204,
+   "z": 34,
+   "w": 3,
+   "d": 2,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 160,
+   "z": 50,
+   "w": 2,
+   "d": 3,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 230,
+   "z": 72,
+   "w": 3,
+   "d": 2,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 186,
+   "z": 44,
+   "w": 2,
+   "d": 2,
+   "h": 1,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 172,
+   "z": 78,
+   "w": 2,
+   "d": 2,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 220,
+   "z": 84,
+   "w": 3,
+   "d": 2,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 150,
+   "z": 64,
+   "w": 2,
+   "d": 2,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "rockslab",
+   "x": 240,
+   "z": 58,
+   "w": 2,
+   "d": 3,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "metal",
+   "x": 166,
+   "z": 96,
+   "w": 4,
+   "d": 8,
+   "h": 3,
+   "district": "mine",
+   "note": "haul truck"
+  },
+  {
+   "type": "metal",
+   "x": 206,
+   "z": 68,
+   "w": 3,
+   "d": 5,
+   "h": 2,
+   "district": "mine",
+   "note": "excavator"
+  },
+  {
+   "type": "metal",
+   "x": 232,
+   "z": 50,
+   "w": 3,
+   "d": 4,
+   "h": 2,
+   "district": "mine",
+   "note": "bulldozer"
+  },
+  {
+   "type": "metal",
+   "x": 174,
+   "z": 20,
+   "w": 3,
+   "d": 3,
+   "h": 3,
+   "district": "mine",
+   "note": "drill rig"
+  },
+  {
+   "type": "metal",
+   "x": 146,
+   "z": 88,
+   "w": 3,
+   "d": 6,
+   "h": 2,
+   "district": "mine",
+   "note": "loader"
+  },
+  {
+   "type": "column",
+   "x": 190,
+   "z": 39,
+   "w": 1,
+   "d": 1,
+   "h": 4,
+   "district": "mine",
+   "note": "tunnel post"
+  },
+  {
+   "type": "column",
+   "x": 201,
+   "z": 39,
+   "w": 1,
+   "d": 1,
+   "h": 4,
+   "district": "mine",
+   "note": "tunnel post"
+  },
+  {
+   "type": "metal",
+   "x": 191,
+   "z": 39,
+   "w": 10,
+   "d": 1,
+   "h": 4,
+   "district": "mine",
+   "note": "tunnel gate"
+  },
+  {
+   "type": "rock",
+   "x": 189,
+   "z": 40,
+   "w": 14,
+   "d": 1,
+   "h": 1,
+   "district": "mine",
+   "note": "cave-in"
+  },
+  {
+   "type": "fence",
+   "x": 130,
+   "z": 70,
+   "w": 16,
+   "d": 1,
+   "district": "mine"
+  },
+  {
+   "type": "fence",
+   "x": 130,
+   "z": 70,
+   "w": 1,
+   "d": 14,
+   "district": "mine"
+  },
+  {
+   "type": "fence",
+   "x": 130,
+   "z": 84,
+   "w": 16,
+   "d": 1,
+   "district": "mine"
+  },
+  {
+   "type": "crate",
+   "x": 134,
+   "z": 74,
+   "w": 2,
+   "d": 1,
+   "h": 2,
+   "district": "mine"
+  },
+  {
+   "type": "crate",
+   "x": 140,
+   "z": 78,
+   "w": 1,
+   "d": 2,
+   "district": "mine"
+  },
+  {
+   "type": "lowwall",
+   "x": 56,
+   "z": 66,
+   "w": 1,
+   "d": 10,
+   "district": "forest",
+   "note": "log stack"
+  },
+  {
+   "type": "lowwall",
+   "x": 59,
+   "z": 66,
+   "w": 1,
+   "d": 10,
+   "district": "forest",
+   "note": "log stack"
+  },
+  {
+   "type": "lowwall",
+   "x": 62,
+   "z": 66,
+   "w": 1,
+   "d": 10,
+   "district": "forest",
+   "note": "log stack"
+  },
+  {
+   "type": "lowwall",
+   "x": 65,
+   "z": 66,
+   "w": 1,
+   "d": 10,
+   "district": "forest",
+   "note": "log stack"
+  },
+  {
+   "type": "lowwall",
+   "x": 174,
+   "z": 188,
+   "w": 12,
+   "d": 1,
+   "district": "village"
+  },
+  {
+   "type": "sandbag",
+   "x": 236,
+   "z": 230,
+   "w": 6,
+   "d": 1,
+   "district": "village"
+  },
+  {
+   "type": "sandbag",
+   "x": 236,
+   "z": 230,
+   "w": 1,
+   "d": 6,
+   "district": "village"
+  },
+  {
+   "type": "wreck",
+   "model": "car",
+   "x": 108,
+   "z": 140,
+   "w": 2,
+   "d": 4,
+   "h": 1,
+   "burnt": true,
+   "district": "village"
+  }
+ ],
+ "base_items": [
+  {
+   "item": "ammo_crate",
+   "x": 236.5,
+   "z": 124.5,
+   "y": 12.5
+  },
+  {
+   "item": "construction_crate",
+   "x": 136.5,
+   "z": 80.5,
+   "y": 13
+  },
+  {
+   "item": "construction_crate",
+   "x": 90.5,
+   "z": 36.5,
+   "y": 12.5
+  },
+  {
+   "item": "medical_crate",
+   "x": 212.5,
+   "z": 164.5,
+   "y": 16
+  },
+  {
+   "item": "armour_crate",
+   "x": 238.5,
+   "z": 234.5,
+   "y": 12.5
+  }
+ ],
+ "enemy_groups": [
+  {
+   "id": "pit_floor",
+   "type": "heavy_insurgent",
+   "behaviour": "guard",
+   "respawn": 60,
+   "spawns": [
+    {
+     "x": 199,
+     "z": 64,
+     "y": 1
+    },
+    {
+     "x": 195,
+     "z": 64,
+     "y": 1
+    },
+    {
+     "x": 194,
+     "z": 61,
+     "y": 1
+    },
+    {
+     "x": 197,
+     "z": 60,
+     "y": 1
+    }
+   ],
+   "weapons": {
+    "galil": 2,
+    "rpk": 1
+   },
+   "armour_chance": 0.3,
+   "armour": 50,
+   "holds_base": "workshop"
+  },
+  {
+   "id": "haul_road",
+   "behaviour": "guard",
+   "respawn": 55,
+   "spawns": [
+    {
+     "x": 189,
+     "z": 87,
+     "y": 3.8125
+    },
+    {
+     "x": 183,
+     "z": 89,
+     "y": 6.4375
+    },
+    {
+     "x": 186,
+     "z": 84,
+     "y": 2.875
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.2,
+   "armour": 50
+  },
+  {
+   "id": "east_bench",
+   "behaviour": "guard",
+   "respawn": 55,
+   "spawns": [
+    {
+     "x": 230,
+     "z": 43,
+     "y": 7
+    },
+    {
+     "x": 226,
+     "z": 41,
+     "y": 7
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.2,
+   "armour": 50
+  },
+  {
+   "id": "west_bench",
+   "behaviour": "guard",
+   "respawn": 55,
+   "spawns": [
+    {
+     "x": 162,
+     "z": 43,
+     "y": 6.5
+    },
+    {
+     "x": 158,
+     "z": 44,
+     "y": 7
+    },
+    {
+     "x": 159,
+     "z": 40,
+     "y": 8
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.2,
+   "armour": 50
+  },
+  {
+   "id": "magazine",
+   "type": "heavy_insurgent",
+   "behaviour": "guard",
+   "respawn": 60,
+   "spawns": [
+    {
+     "x": 240,
+     "z": 123,
+     "y": 12.5
+    },
+    {
+     "x": 237,
+     "z": 124,
+     "y": 12.5
+    },
+    {
+     "x": 237,
+     "z": 122,
+     "y": 13
+    },
+    {
+     "x": 239,
+     "z": 120,
+     "y": 12.5
+    }
+   ],
+   "weapons": {
+    "galil": 2,
+    "rpk": 1
+   },
+   "armour_chance": 0.4,
+   "armour": 50
+  },
+  {
+   "id": "site_office",
+   "type": "militia",
+   "behaviour": "roam",
+   "respawn": 55,
+   "spawns": [
+    {
+     "x": 156,
+     "z": 121,
+     "y": 12.5
+    },
+    {
+     "x": 152,
+     "z": 122,
+     "y": 12.5
+    },
+    {
+     "x": 153,
+     "z": 118,
+     "y": 12.5
+    }
+   ],
+   "weapons": {
+    "ak47": 2,
+    "mini_uzi": 1
+   },
+   "armour_chance": 0.1,
+   "armour": 50,
+   "radius": 10
+  },
+  {
+   "id": "yard",
+   "behaviour": "guard",
+   "respawn": 55,
+   "spawns": [
+    {
+     "x": 141,
+     "z": 79,
+     "y": 13
+    },
+    {
+     "x": 136,
+     "z": 80,
+     "y": 13
+    },
+    {
+     "x": 137,
+     "z": 76,
+     "y": 13
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.2,
+   "armour": 50
+  },
+  {
+   "id": "drill_rig",
+   "type": "militia",
+   "behaviour": "guard",
+   "respawn": 60,
+   "spawns": [
+    {
+     "x": 180,
+     "z": 27,
+     "y": 9.5
+    },
+    {
+     "x": 176,
+     "z": 25,
+     "y": 10
+    }
+   ],
+   "weapons": {
+    "ak47": 2,
+    "mini_uzi": 1
+   },
+   "armour_chance": 0,
+   "armour": 50
+  },
+  {
+   "id": "logging_camp",
+   "behaviour": "guard",
+   "respawn": 45,
+   "spawns": [
+    {
+     "x": 50,
+     "z": 75,
+     "y": 13
+    },
+    {
+     "x": 47,
+     "z": 76,
+     "y": 13.5
+    },
+    {
+     "x": 46,
+     "z": 73,
+     "y": 13.5
+    },
+    {
+     "x": 49,
+     "z": 72,
+     "y": 13.5
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.2,
+   "armour": 50,
+   "holds_base": "logging_camp"
+  },
+  {
+   "id": "sawmill",
+   "type": "heavy_insurgent",
+   "behaviour": "guard",
+   "respawn": 60,
+   "spawns": [
+    {
+     "x": 92,
+     "z": 31,
+     "y": 12.5
+    },
+    {
+     "x": 89,
+     "z": 32,
+     "y": 12.5
+    },
+    {
+     "x": 88,
+     "z": 29,
+     "y": 13
+    },
+    {
+     "x": 91,
+     "z": 28,
+     "y": 13
+    }
+   ],
+   "weapons": {
+    "galil": 2,
+    "rpk": 1
+   },
+   "armour_chance": 0.3,
+   "armour": 50
+  },
+  {
+   "id": "north_trail",
+   "type": "militia",
+   "behaviour": "roam",
+   "respawn": 55,
+   "spawns": [
+    {
+     "x": 26,
+     "z": 41,
+     "y": 13
+    },
+    {
+     "x": 22,
+     "z": 39,
+     "y": 13
+    }
+   ],
+   "weapons": {
+    "ak47": 2,
+    "mini_uzi": 1
+   },
+   "armour_chance": 0,
+   "armour": 50,
+   "radius": 14
+  },
+  {
+   "id": "forest_patrol",
+   "behaviour": "roam",
+   "respawn": 50,
+   "spawns": [
+    {
+     "x": 62,
+     "z": 129,
+     "y": 12.5
+    },
+    {
+     "x": 58,
+     "z": 130,
+     "y": 12.5
+    },
+    {
+     "x": 59,
+     "z": 126,
+     "y": 12.5
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.15,
+   "armour": 50,
+   "radius": 16
+  },
+  {
+   "id": "hunters",
+   "type": "militia",
+   "behaviour": "guard",
+   "respawn": 60,
+   "spawns": [
+    {
+     "x": 18,
+     "z": 157,
+     "y": 13
+    },
+    {
+     "x": 15,
+     "z": 156,
+     "y": 13
+    }
+   ],
+   "weapons": {
+    "ak47": 2,
+    "mini_uzi": 1
+   },
+   "armour_chance": 0,
+   "armour": 50
+  },
+  {
+   "id": "creek",
+   "type": "militia",
+   "behaviour": "roam",
+   "respawn": 55,
+   "spawns": [
+    {
+     "x": 98,
+     "z": 71,
+     "y": 12.5
+    },
+    {
+     "x": 94,
+     "z": 69,
+     "y": 12.5
+    }
+   ],
+   "weapons": {
+    "ak47": 2,
+    "mini_uzi": 1
+   },
+   "armour_chance": 0,
+   "armour": 50,
+   "radius": 12
+  },
+  {
+   "id": "south_trail",
+   "behaviour": "roam",
+   "respawn": 60,
+   "spawns": [
+    {
+     "x": 42,
+     "z": 197,
+     "y": 13
+    },
+    {
+     "x": 38,
+     "z": 195,
+     "y": 13
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.1,
+   "armour": 50,
+   "radius": 12
+  },
+  {
+   "id": "company_hq",
+   "behaviour": "guard",
+   "respawn": 45,
+   "spawns": [
+    {
+     "x": 188,
+     "z": 201,
+     "y": 13.5
+    },
+    {
+     "x": 185,
+     "z": 202,
+     "y": 13.5
+    },
+    {
+     "x": 184,
+     "z": 199,
+     "y": 13
+    },
+    {
+     "x": 187,
+     "z": 198,
+     "y": 13
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.2,
+   "armour": 50,
+   "holds_base": "company_hq"
+  },
+  {
+   "id": "tower",
+   "behaviour": "guard",
+   "respawn": 90,
+   "spawns": [
+    {
+     "x": 206,
+     "z": 199,
+     "y": 19
+    }
+   ],
+   "weapons": {
+    "fal": 1
+   },
+   "armour_chance": 0,
+   "armour": 50
+  },
+  {
+   "id": "clinic",
+   "behaviour": "guard",
+   "respawn": 55,
+   "spawns": [
+    {
+     "x": 214,
+     "z": 169,
+     "y": 13.5
+    },
+    {
+     "x": 210,
+     "z": 170,
+     "y": 13
+    },
+    {
+     "x": 211,
+     "z": 166,
+     "y": 13
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.2,
+   "armour": 50
+  },
+  {
+   "id": "security_post",
+   "type": "heavy_insurgent",
+   "behaviour": "guard",
+   "respawn": 60,
+   "spawns": [
+    {
+     "x": 242,
+     "z": 235,
+     "y": 12.5
+    },
+    {
+     "x": 239,
+     "z": 236,
+     "y": 12.5
+    },
+    {
+     "x": 238,
+     "z": 233,
+     "y": 12.5
+    },
+    {
+     "x": 241,
+     "z": 232,
+     "y": 12.5
+    }
+   ],
+   "weapons": {
+    "galil": 2,
+    "rpk": 1
+   },
+   "armour_chance": 0.35,
+   "armour": 50
+  },
+  {
+   "id": "dorm",
+   "type": "militia",
+   "behaviour": "guard",
+   "respawn": 55,
+   "spawns": [
+    {
+     "x": 158,
+     "z": 187,
+     "y": 13
+    },
+    {
+     "x": 154,
+     "z": 188,
+     "y": 13
+    },
+    {
+     "x": 155,
+     "z": 184,
+     "y": 13
+    }
+   ],
+   "weapons": {
+    "ak47": 2,
+    "mini_uzi": 1
+   },
+   "armour_chance": 0,
+   "armour": 50
+  },
+  {
+   "id": "pitch",
+   "type": "militia",
+   "behaviour": "roam",
+   "respawn": 60,
+   "spawns": [
+    {
+     "x": 152,
+     "z": 237,
+     "y": 12.5
+    },
+    {
+     "x": 148,
+     "z": 235,
+     "y": 12.5
+    }
+   ],
+   "weapons": {
+    "ak47": 2,
+    "mini_uzi": 1
+   },
+   "armour_chance": 0,
+   "armour": 50,
+   "radius": 12
+  },
+  {
+   "id": "market",
+   "behaviour": "roam",
+   "respawn": 55,
+   "spawns": [
+    {
+     "x": 230,
+     "z": 193,
+     "y": 12.5
+    },
+    {
+     "x": 226,
+     "z": 191,
+     "y": 12.5
+    }
+   ],
+   "weapons": {
+    "ak47": 3,
+    "rpg7": 1
+   },
+   "armour_chance": 0.1,
+   "armour": 50,
+   "radius": 10
+  },
+  {
+   "id": "fields",
+   "type": "militia",
+   "behaviour": "roam",
+   "respawn": 60,
+   "spawns": [
+    {
+     "x": 78,
+     "z": 237,
+     "y": 13
+    },
+    {
+     "x": 74,
+     "z": 235,
+     "y": 13
+    }
+   ],
+   "weapons": {
+    "ak47": 2,
+    "mini_uzi": 1
+   },
+   "armour_chance": 0,
+   "armour": 50,
+   "radius": 14
+  },
+  {
+   "id": "bombers_mine",
+   "type": "suicide_bomber",
+   "behaviour": "guard",
+   "respawn": 120,
+   "spawns": [
+    {
+     "x": 172,
+     "z": 109,
+     "y": 13
+    },
+    {
+     "x": 168,
+     "z": 107,
+     "y": 13
+    }
+   ],
+   "weapons": {
+    "rgd5": 1
+   },
+   "armour_chance": 0,
+   "armour": 50
+  },
+  {
+   "id": "bombers_forest",
+   "type": "suicide_bomber",
+   "behaviour": "guard",
+   "respawn": 120,
+   "spawns": [
+    {
+     "x": 72,
+     "z": 151,
+     "y": 13
+    },
+    {
+     "x": 68,
+     "z": 149,
+     "y": 13.5
+    }
+   ],
+   "weapons": {
+    "rgd5": 1
+   },
+   "armour_chance": 0,
+   "armour": 50
+  },
+  {
+   "id": "bombers_village",
+   "type": "suicide_bomber",
+   "behaviour": "guard",
+   "respawn": 120,
+   "spawns": [
+    {
+     "x": 142,
+     "z": 215,
+     "y": 13
+    }
+   ],
+   "weapons": {
+    "rgd5": 1
+   },
+   "armour_chance": 0,
+   "armour": 50
+  }
+ ],
+ "wave_spawns": [
+  {
+   "x": 3,
+   "z": 16
+  },
+  {
+   "x": 3,
+   "z": 56
+  },
+  {
+   "x": 3,
+   "z": 100
+  },
+  {
+   "x": 3,
+   "z": 140
+  },
+  {
+   "x": 3,
+   "z": 180
+  },
+  {
+   "x": 3,
+   "z": 220
+  }
+ ],
+ "pickups": [
+  {
+   "type": "weapon",
+   "x": 124.5,
+   "z": 128.5,
+   "y": 13,
+   "weapon": "ak47"
+  },
+  {
+   "type": "ammo",
+   "x": 125.5,
+   "z": 129.5,
+   "y": 13,
+   "calibre": "7.62x39mm",
+   "amount": 60
+  },
+  {
+   "type": "armour",
+   "x": 132.5,
+   "z": 136.5,
+   "y": 13,
+   "amount": 50
+  },
+  {
+   "type": "weapon",
+   "x": 62.5,
+   "z": 120.5,
+   "y": 12.5,
+   "weapon": "mp5"
+  },
+  {
+   "type": "ammo",
+   "x": 63.5,
+   "z": 121.5,
+   "y": 12.5,
+   "calibre": "9mm",
+   "amount": 60
+  },
+  {
+   "type": "weapon",
+   "x": 20.5,
+   "z": 150.5,
+   "y": 13,
+   "weapon": "mini_uzi"
+  },
+  {
+   "type": "ammo",
+   "x": 21.5,
+   "z": 151.5,
+   "y": 13,
+   "calibre": "9mm",
+   "amount": 60
+  },
+  {
+   "type": "grenade",
+   "x": 46.5,
+   "z": 84.5,
+   "y": 13,
+   "amount": 2
+  },
+  {
+   "type": "armour",
+   "x": 92.5,
+   "z": 40.5,
+   "y": 12.5,
+   "amount": 50
+  },
+  {
+   "type": "weapon",
+   "x": 152.5,
+   "z": 118.5,
+   "y": 12.5,
+   "weapon": "mk14ebr"
+  },
+  {
+   "type": "ammo",
+   "x": 153.5,
+   "z": 119.5,
+   "y": 12.5,
+   "calibre": "7.62x51mm",
+   "amount": 40
+  },
+  {
+   "type": "weapon",
+   "x": 230.5,
+   "z": 118.5,
+   "y": 12.5,
+   "weapon": "rpk"
+  },
+  {
+   "type": "ammo",
+   "x": 231.5,
+   "z": 119.5,
+   "y": 12.5,
+   "calibre": "7.62x39mm",
+   "amount": 75
+  },
+  {
+   "type": "weapon",
+   "x": 170.5,
+   "z": 46.5,
+   "y": 4,
+   "weapon": "rpg7"
+  },
+  {
+   "type": "ammo",
+   "x": 171.5,
+   "z": 47.5,
+   "y": 4,
+   "calibre": "40mm",
+   "amount": 3
+  },
+  {
+   "type": "grenade",
+   "x": 200.5,
+   "z": 70.5,
+   "y": 1,
+   "amount": 2
+  },
+  {
+   "type": "grenade",
+   "x": 140.5,
+   "z": 76.5,
+   "y": 12.5,
+   "amount": 2
+  },
+  {
+   "type": "armour",
+   "x": 214.5,
+   "z": 40.5,
+   "y": 4,
+   "amount": 50
+  },
+  {
+   "type": "weapon",
+   "x": 160.5,
+   "z": 190.5,
+   "y": 13,
+   "weapon": "m4a1"
+  },
+  {
+   "type": "ammo",
+   "x": 161.5,
+   "z": 191.5,
+   "y": 13.5,
+   "calibre": "5.56mm",
+   "amount": 60
+  },
+  {
+   "type": "weapon",
+   "x": 230.5,
+   "z": 200.5,
+   "y": 12.5,
+   "weapon": "rpg7"
+  },
+  {
+   "type": "ammo",
+   "x": 231.5,
+   "z": 201.5,
+   "y": 13,
+   "calibre": "40mm",
+   "amount": 3
+  },
+  {
+   "type": "weapon",
+   "x": 214.5,
+   "z": 176.5,
+   "y": 13.5,
+   "weapon": "galil"
+  },
+  {
+   "type": "ammo",
+   "x": 215.5,
+   "z": 177.5,
+   "y": 13.5,
+   "calibre": "5.56mm",
+   "amount": 60
+  },
+  {
+   "type": "grenade",
+   "x": 190.5,
+   "z": 214.5,
+   "y": 13.5,
+   "amount": 2
+  },
+  {
+   "type": "grenade",
+   "x": 120.5,
+   "z": 214.5,
+   "y": 12.5,
+   "amount": 2
+  },
+  {
+   "type": "armour",
+   "x": 236.5,
+   "z": 226.5,
+   "y": 12.5,
+   "amount": 100
+  }
+ ],
+ "weather_zones": [],
+ "bases": [
+  {
+   "id": "workshop",
+   "name": "Pit-floor workshop",
+   "district": "mine",
+   "area": {
+    "x0": 182,
+    "z0": 48,
+    "x1": 212,
+    "z1": 72
+   },
+   "build_spots": [
+    {
+     "x": 192,
+     "z": 66,
+     "upgrade": "walls",
+     "needs": "construction_crate"
+    },
+    {
+     "x": 196,
+     "z": 66,
+     "upgrade": "ammo",
+     "needs": "ammo_crate"
+    },
+    {
+     "x": 192,
+     "z": 70,
+     "upgrade": "medical",
+     "needs": "medical_crate"
+    },
+    {
+     "x": 196,
+     "z": 70,
+     "upgrade": "armour",
+     "needs": "armour_crate"
+    }
+   ],
+   "wall_plan": [
+    {
+     "x": 183,
+     "z": 49,
+     "w": 1,
+     "d": 22
+    },
+    {
+     "x": 211,
+     "z": 49,
+     "w": 1,
+     "d": 22
+    },
+    {
+     "x": 184,
+     "z": 71,
+     "w": 26,
+     "d": 1
+    }
+   ]
+  },
+  {
+   "id": "logging_camp",
+   "name": "Logging camp",
+   "district": "forest",
+   "area": {
+    "x0": 34,
+    "z0": 58,
+    "x1": 64,
+    "z1": 86
+   },
+   "build_spots": [
+    {
+     "x": 44,
+     "z": 74,
+     "upgrade": "walls",
+     "needs": "construction_crate"
+    },
+    {
+     "x": 48,
+     "z": 74,
+     "upgrade": "ammo",
+     "needs": "ammo_crate"
+    },
+    {
+     "x": 44,
+     "z": 78,
+     "upgrade": "medical",
+     "needs": "medical_crate"
+    },
+    {
+     "x": 48,
+     "z": 78,
+     "upgrade": "armour",
+     "needs": "armour_crate"
+    }
+   ],
+   "wall_plan": [
+    {
+     "x": 35,
+     "z": 59,
+     "w": 28,
+     "d": 1
+    },
+    {
+     "x": 35,
+     "z": 85,
+     "w": 28,
+     "d": 1
+    },
+    {
+     "x": 35,
+     "z": 60,
+     "w": 1,
+     "d": 25
+    }
+   ]
+  },
+  {
+   "id": "company_hq",
+   "name": "Company HQ",
+   "district": "village",
+   "area": {
+    "x0": 170,
+    "z0": 186,
+    "x1": 208,
+    "z1": 212
+   },
+   "build_spots": [
+    {
+     "x": 180,
+     "z": 207,
+     "upgrade": "walls",
+     "needs": "construction_crate"
+    },
+    {
+     "x": 184,
+     "z": 207,
+     "upgrade": "ammo",
+     "needs": "ammo_crate"
+    },
+    {
+     "x": 180,
+     "z": 211,
+     "upgrade": "medical",
+     "needs": "medical_crate"
+    },
+    {
+     "x": 184,
+     "z": 211,
+     "upgrade": "armour",
+     "needs": "armour_crate"
+    }
+   ],
+   "wall_plan": [
+    {
+     "x": 171,
+     "z": 211,
+     "w": 36,
+     "d": 1
+    },
+    {
+     "x": 207,
+     "z": 187,
+     "w": 1,
+     "d": 24
+    },
+    {
+     "x": 171,
+     "z": 187,
+     "w": 1,
+     "d": 24
+    }
+   ]
+  }
+ ],
+ "decor": [],
+ "music_zones": []
+}

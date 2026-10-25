@@ -47,7 +47,7 @@ export function createScreens({ view, onStart, onCoop, onLevel }) {
 
     showMenu(world) {
       const lv = world.data.levels[world.levelId];
-      const picks = Object.entries(world.data.levels)
+      const picks = Object.entries(world.data.levels).sort((a, b) => (a[1].order ?? 99) - (b[1].order ?? 99))
         .map(([id, l]) => `<button class="lvl${id === world.levelId ? ' on' : ''}" type="button" data-level="${id}" aria-pressed="${id === world.levelId}">${l.title || l.name}</button>`).join('');
       card.innerHTML = `
         <div class="eyebrow"><span>${lv.subtitle || ''}</span><span>Operator · v${typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev'}</span></div>

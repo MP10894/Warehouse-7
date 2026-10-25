@@ -1,5 +1,6 @@
-// The ground: a smooth height field from terrain.txt (digits = height in half metres,
-// one point every `spacing` metres), plus a coarse surface-type map from ground.txt.
+// The ground: a smooth height field from terrain.txt (one point every `spacing` metres), plus a
+// coarse surface-type map from ground.txt. Heights in half metres: digits 0–9 are 0–4.5 m,
+// letters a–z carry on from 5 m to 17.5 m (a = 5, b = 5.5 … z = 17.5), for deep ground like a pit.
 
 export function parseTerrain(text, spacing) {
   const rows = text.replace(/^﻿/, '').split(/\r?\n/).map(r => r.trim()).filter(Boolean);
@@ -9,7 +10,7 @@ export function parseTerrain(text, spacing) {
   rows.forEach((r, j) => {
     for (let i = 0; i < m; i++) {
       const c = r[i] ?? '0';
-      h[i + j * m] = /[0-9]/.test(c) ? Number(c) * 0.5 : 0;
+      h[i + j * m] = /[0-9]/.test(c) ? Number(c) * 0.5 : /[a-z]/.test(c) ? 5 + (c.charCodeAt(0) - 97) * 0.5 : 0;
     }
   });
   return { cols: m, rows: n, spacing, h: Array.from(h) };

@@ -1,0 +1,26 @@
+# Kambala: watch tower, stairs inside, lookout on top
+# Symbol guide: data/levels/README.md
+
+floor 0
+X....X
+.>>>..
+......
+......
+......
+X....X
+
+floor 1
+X....X
+......
+......
+......
+..<<<.
+X....X
+
+floor 2
+llllll
+l....l
+l....l
+l....l
+l....l
+llllll

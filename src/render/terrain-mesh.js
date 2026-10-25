@@ -9,7 +9,11 @@ const SURFACE = {
   p: [0.66, 0.62, 0.56], // paving
   g: [0.6, 0.55, 0.48],  // gravel
   c: [0.6, 0.6, 0.57],   // concrete (refinery)
-  d: [0.74, 0.6, 0.42]   // dirt track
+  d: [0.74, 0.6, 0.42],  // dirt track
+  l: [0.66, 0.34, 0.22], // laterite (red earth)
+  t: [0.74, 0.46, 0.32], // packed red earth (village, haul roads)
+  k: [0.52, 0.46, 0.42], // cut rock (mine pit)
+  j: [0.36, 0.33, 0.2]   // jungle floor
 };
 export const SUN = new THREE.Vector3(-0.45, 0.8, 0.35).normalize();
 
@@ -41,9 +45,12 @@ export function buildTerrain(scene, world, tex) {
   const mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: tex.ground, vertexColors: true }));
   scene.add(mesh);
 
-  // a sand-coloured skirt beyond the edges so the world doesn't end in a cliff
-  const skirt = new THREE.Mesh(new THREE.PlaneGeometry(size * 5, size * 5), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.62, 0.52, 0.37) }));
-  skirt.rotation.x = -Math.PI / 2; skirt.position.set(size / 2, -0.05, size / 2);
+  // a skirt beyond the edges, at the edge's own height and colour, so the world doesn't end in a cliff
+  let edgeH = 0, edgeN = 0;
+  for (let k = 0; k <= size; k += 8) for (const [x, z] of [[k, 0], [k, size], [0, k], [size, k]]) { edgeH += h(x, z); edgeN++; }
+  const ec = SURFACE[groundType(world.ground, 1, 1)] || SURFACE.s;
+  const skirt = new THREE.Mesh(new THREE.PlaneGeometry(size * 5, size * 5), new THREE.MeshBasicMaterial({ color: new THREE.Color(ec[0] * 0.72, ec[1] * 0.72, ec[2] * 0.72) }));
+  skirt.rotation.x = -Math.PI / 2; skirt.position.set(size / 2, edgeH / edgeN - 0.05, size / 2);
   scene.add(skirt);
   return mesh;
 }

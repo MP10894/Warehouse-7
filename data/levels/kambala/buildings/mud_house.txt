@@ -1,0 +1,16 @@
+# Kambala: mud house, ground floor only
+# Symbol guide: data/levels/README.md
+
+floor 0
+Xw##w#X
+w.....w
+#.....#
+#.....#
+Xw#dw#X
+
+floor 1
+.......
+.......
+.......
+.......
+.......

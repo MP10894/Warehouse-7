@@ -138,7 +138,8 @@ function stampBuilding(world, text, ox, oz, turn = 0, mirror = false, file = '')
 const PROP = {
   crate: [V.CRATE, 'crate'], lowwall: [V.LOWWALL, 'lowwall'], sandbag: [V.SANDBAG, 'sandbags'],
   metal: [V.METAL, null], pipe: [V.PIPE, null], rock: [V.ROCK, null], fence: [V.FENCE, null],
-  slab: [V.SLAB, null], column: [V.COLUMN, null], tank: [V.TANK, 'tank'], wreck: [V.WRECK, null]
+  slab: [V.SLAB, null], column: [V.COLUMN, null], tank: [V.TANK, 'tank'], wreck: [V.WRECK, null],
+  rockslab: [V.ROCK, 'rockslab']   // cut rock: looks like rock, but breaks
 };
 
 /**

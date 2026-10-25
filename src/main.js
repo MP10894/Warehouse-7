@@ -70,7 +70,7 @@ if (!view) {
   // the chosen level is remembered on this device; the host's choice decides in co-op
   let levelId = S.level;
   try { const saved = localStorage.getItem('w7-level'); if (saved && DATA.levels[saved]) levelId = saved; } catch (e) { /* storage unavailable */ }
-  if (!DATA.levels[levelId]) levelId = Object.keys(DATA.levels)[0];
+  if (!DATA.levels[levelId]) levelId = Object.keys(DATA.levels).sort((a, b) => (DATA.levels[a].order ?? 99) - (DATA.levels[b].order ?? 99))[0];
   const newWorld = (seed, ids) => createWorld({ data: DATA, levelId, seed, playerIds: ids });
   let world = newWorld((Math.random() * 1e9) | 0, ['p1']);
 

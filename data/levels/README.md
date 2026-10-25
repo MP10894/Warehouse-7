@@ -5,14 +5,15 @@ Each level is a folder in `data/levels/` with:
 | File | What it is |
 |---|---|
 | `level.json` | Where everything goes: buildings, props, bases, enemies, pickups, crates, weather, timer |
-| `terrain.txt` | Ground height. One digit per point, points 4 m apart. Height = digit × 0.5 m (0–9 → 0–4.5 m) |
-| `ground.txt` | Ground surface per 4 × 4 m square: `s` sand, `r` road, `p` paving, `g` gravel, `c` concrete, `d` dirt track |
+| `terrain.txt` | Ground height. One character per point, points `terrain_spacing` metres apart (Najaf 4, Kambala 2). Height in half metres: digits `0`–`9` are 0–4.5 m, letters `a`–`z` carry on from 5 m to 17.5 m (`a` = 5, `q` = 13) |
+| `ground.txt` | Ground surface per 4 × 4 m square: `s` sand, `r` road, `p` paving, `g` gravel, `c` concrete, `d` dirt track, `l` laterite (red earth), `t` packed red earth, `k` cut rock, `j` jungle floor |
 | `buildings/*.txt` | Building floor plans, one text grid per floor |
 
 Coordinates are in metres: **x** runs west → east (left → right in the text files),
 **z** runs north → south (top → bottom). Najaf is 256 × 256 m.
 
-Najaf's city was first drafted by `tools/make_najaf.py`, the refinery and outskirts by
+Kambala mine was first drafted by `tools/make_kambala.py` (then `node tools/settle_spawns.mjs kambala`
+moves any enemy that landed in a wall); edit its files directly from now on. Najaf's city was first drafted by `tools/make_najaf.py`, the refinery and outskirts by
 `tools/make_najaf_districts.py`. Edit the files here directly from now on. (Running
 `make_najaf.py` again would overwrite everything; `make_najaf_districts.py` only replaces
 the entries tagged `"district": "refinery"` or `"outskirts"` and the ground outside the city.)
@@ -67,6 +68,7 @@ Simple shapes outside buildings. `{ "type", "x", "z", "w", "d", "h", "y" }` fill
 | `type` | What it is |
 |---|---|
 | `lowwall`, `crate`, `sandbag` | Breakable cover |
+| `rockslab` | Cut rock slabs (the mine): look like rock, but break |
 | `metal` | Steel: containers, trucks, towers, supports. Unbreakable |
 | `pipe` | Refinery pipework. Unbreakable |
 | `rock` | Boulders. Unbreakable |

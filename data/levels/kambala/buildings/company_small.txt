@@ -1,0 +1,22 @@
+# Kambala: company building, 10 x 8 m, 1 floor(s) + roof
+# Symbol guide: data/levels/README.md
+
+floor 0
+Xw##w##w#X
+w.>>>....w
+#........#
+#........#
+w........w
+#........#
+#........#
+Xw##wd#w#X
+
+floor 1
+llllllllll
+l........l
+l........l
+l........l
+l........l
+l........l
+l........l
+llllllllll

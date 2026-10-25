@@ -1,0 +1,16 @@
+# Kambala: thatched hut, ground floor only
+# Symbol guide: data/levels/README.md
+
+floor 0
+X###X
+#...#
+#...#
+#...#
+X#d#X
+
+floor 1
+.....
+.....
+.....
+.....
+.....

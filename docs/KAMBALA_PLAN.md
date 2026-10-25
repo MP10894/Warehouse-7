@@ -1,6 +1,6 @@
 # Kambala mine (Level 2): layout plan
 
-Status: **agreed 2026-10-25.** Unlocked by winning Najaf.
+Status: **agreed 2026-10-25. Stage 1 built 2026-10-25:** ground, the pit (four 3 m benches with rock walls, haul road), buildings, bases, crates, enemies, pickups, west-edge waves. Still to come: trees and shrubs, blasting, rain and mist, art. Unlocked by winning Najaf.
 
 Plan: [`kambala_layout.png`](kambala_layout.png). Grid squares are 32 m, labelled A–H across
 and 1–8 down, as for Najaf ("move the sawmill to C2").
@@ -24,7 +24,7 @@ towards the mine, the forest and the village, each 60–100 m away.
 
 | Zone | Where | Feel | Its base area |
 |---|---|---|---|
-| **The mine** | north-east (E1–H4) | An open pit about 110 × 90 m, **four benches of 2.5 m down to a floor 10 m deep**. A **haul road** spirals down from the south-west rim; a few stairs are cut into the bench faces as short cuts. Cut rock slabs (breakable) as cover on the benches and the floor. A haul truck, an excavator, a bulldozer and a drill rig (solid cover). On the rim: the site office, the equipment yard and the explosives magazine. At the bottom of the north wall, the **tunnel portal, blocked** by a cave-in and a steel gate. Height and long sight lines. | **A · Pit-floor workshop** (F2–G2): deep in the pit, overlooked by every bench. The hardest base to hold; the detonator is right next to it. |
+| **The mine** | north-east (E1–H4) | An open pit about 110 × 90 m, **four benches of 3 m down to a floor 12 m deep** (3 m keeps the bench walls block-aligned). A **haul road** spirals down from the south-west rim; a few stairs are cut into the bench faces as short cuts. Cut rock slabs (breakable) as cover on the benches and the floor. A haul truck, an excavator, a bulldozer and a drill rig (solid cover). On the rim: the site office, the equipment yard and the explosives magazine. At the bottom of the north wall, the **tunnel portal, blocked** by a cave-in and a steel gate. Height and long sight lines. | **A · Pit-floor workshop** (F2–G2): deep in the pit, overlooked by every bench. The hardest base to hold; the detonator is right next to it. |
 | **The forest** | west (A1–D7) | Tropical jungle. **Trees are solid**: they stop people and bullets, and break under fire or explosions, leaving a **stump** (low cover). **Shrubs everywhere hide you** from enemy eyes but stop nothing (you can walk and shoot through them). A logging road, a sawmill, a hunters' camp. Short range: the MP5 and Mini Uzi are found here. Mist banks drift through. | **B · Logging camp** (B2–B3): huts and log stacks in a clearing. Enemies can creep up through the trees and shrubs. |
 | **The village** | south and south-east (D5–H8) | Company buildings (ground floor and one upper floor): HQ, clinic, workers' dormitory, store. Around them about 25 **mud houses and thatched huts** (ground floor only), a football pitch, cassava fields towards the forest. A **watch tower** you can climb (stairs inside), a sniper's perch before you clear it and a lookout after. | **C · Company HQ** (F6–G7): the two-floor building beside the tower. Open streets all round. |
 
