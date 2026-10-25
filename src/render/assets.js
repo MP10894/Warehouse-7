@@ -19,7 +19,7 @@ const BLOCKS = {
 };
 const CHARACTER_PARTS = ['body', 'torso', 'vest', 'head', 'upper_arm_R', 'lower_arm_R', 'upper_arm_L', 'lower_arm_L',
   'upper_leg_R', 'lower_leg_R', 'upper_leg_L', 'lower_leg_L', 'gun_mount'];
-const BUDGET = { character: 300, weapon: 400, item: 60, upgrade: 150, hands: 300, projectile: 150 };
+const BUDGET = { character: 300, player: 600, weapon: 400, item: 60, upgrade: 150, hands: 300, projectile: 150 };
 // weapon length in metres, from the placeholders (a model may be 50% shorter or longer)
 const WEAPON_LENGTH = { sig_p320: 0.2, m4a1: 0.85, ak47: 0.88, mk14ebr: 0.93, mp5: 0.68, rpg7: 1.3, mini_uzi: 0.36, galil: 0.98, fal: 1.09 };
 
@@ -170,7 +170,9 @@ export async function loadArt(tex) {
       if (kind === 'characters') {
         const missing = CHARACTER_PARTS.filter(n => !root.getObjectByName(n));
         if (missing.length) { skip(path, `missing named parts: ${missing.join(', ')}`); continue; }
-        if (tris > BUDGET.character) { skip(path, `${tris} triangles, budget ${BUDGET.character}`); continue; }
+        // the player character (Dima Karpov) is seen up close in co-op: twice the enemies' budget
+        const cap = name.startsWith('player') ? BUDGET.player : BUDGET.character;
+        if (tris > cap) { skip(path, `${tris} triangles, budget ${cap}`); continue; }
         if (sz.y < 1.5 || sz.y > 2.1) { skip(path, `is ${sz.y.toFixed(2)} m tall, should be about 1.75–1.80 m (check the export scale is 32)`); continue; }
         ART.characters[name] = root;
         ok(path, `${tris} triangles, ${sz.y.toFixed(2)} m tall`);

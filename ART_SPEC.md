@@ -74,7 +74,9 @@ the boxes inside a group move with it. There is no skeleton and no skinning, so 
 be simple: overlapping ends hide the gaps.
 
 **Budget: 300 triangles or fewer for the whole character, gun not included** (a box is
-12 triangles, so 25 boxes). The draft insurgent uses 228.
+12 triangles, so 25 boxes). The draft insurgent uses 228. **The player (`player.glb`, Dima
+Karpov) may use 600** (about 50 boxes): he's the one character seen up close, by your co-op
+partner. Reference photo: `assets/sources/reference/player_dima_karpov_photo.png`.
 
 The groups must have exactly these names and be nested like this (boxes inside them can
 have any name):
@@ -111,10 +113,9 @@ north/−Z).
 - **Colour variants** (several insurgent outfits, partner colours in co-op) will be
   separate textures for the same model: `enemy_insurgent_2.png`, `player_p2.png`, and so on.
   (Not read by the game yet.)
-- The player team must be **easy to tell apart from enemies at 40 m**: different
-  overall value (lighter or darker) as well as hue, because the screen is low resolution.
-  The palette's *Team blue* ramp is for the players; *Khaki cloth* and *Army green* for
-  insurgents.
+- The player is **Dima Karpov in olive drab** (as in his reference photo), even though it is
+  close to the insurgents' colours: in co-op the marker over your partner's head tells him
+  apart. *Khaki cloth* and *Army green* stay the insurgents' colours.
 
 ## 5. Weapons and hands
 
@@ -326,7 +327,7 @@ references in `assets/sources/reference/`.
 
 1. Pixel density **32 px per metre**; terrain 16.
 2. Tool: **Blockbench**.
-3. Triangle budgets: characters **300**, weapons **400** (300 until 2026-10-23), carried crates and pickups **60**,
+3. Triangle budgets: characters **300** (the player **600**), weapons **400** (300 until 2026-10-23), carried crates and pickups **60**,
    base upgrades **150**, first-person hands and forearms **300** (raised from 100 on 2026-10-22
    so the hands read as hands).
 4. **Simple gloved hands** in first person.

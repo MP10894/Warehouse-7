@@ -440,6 +440,7 @@ tag `warehouse-prototype`.
 | 2026-10-25 | Each weapon can have its own reload sound (reload_<weapon> rows in sounds.csv); there is no general reload sound any more; a weapon without a file keeps the built-in reload click. The sound stops if you swap weapons or go down mid-reload. Pitch spread stays 0 for reloads so the sound keeps matching the animation. First: AK-47_reload |
 | 2026-10-25 | Every gun throws a brass case out of its ejection port on each shot (size by calibre; none for the RPG-7). Only in your own first-person view: cases never land in the world and aren't seen on other players or enemies |
 | 2026-10-25 | The in-game tuning panel is removed: all tuning is done in the Game Data workbook and the files in /data (values saved on a phone by the old panel are cleared). In a mission, a small ✕ under the health bars (top-left, away from both thumbs) asks "Leave the mission?" before going back to the menu; a solo game pauses while it asks, co-op carries on. The installed app's menu has an Exit button; the solo results screen has a Menu button. The frame-rate readout only shows with ?fps |
+| 2026-10-25 | The player character is Dima Karpov (from Martial's PMC Ltd. project), in olive drab like his reference photo; the co-op marker over a partner's head tells him from insurgents. Player model budget raised to 600 triangles (enemies stay at 300) |
 
 ## Open questions
 
