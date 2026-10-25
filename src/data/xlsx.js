@@ -275,10 +275,15 @@ export function gameDataFromXlsx(buffer, enemyDefaults = {}) {
   const enemies = enemiesTab ? enemiesFromSheet(enemiesTab.cells, enemyDefaults, `Tab "${enemiesTab.name}"`) : null;
   const alliesTab = sheets.find(s => /all(y|ies)/i.test(s.name));
   const allies = alliesTab ? enemiesFromSheet(alliesTab.cells, enemyDefaults, `Tab "${alliesTab.name}"`) : null;
+  // weapon names in the Enemies / Allies tabs: spaces, hyphens and capitals don't matter
+  // ("Mini-Uzi", "mini uzi" and "MiniUzi" all mean the Weapons tab's "Mini Uzi")
+  const loose = id => String(id).toLowerCase().replace(/[^a-z0-9]/g, '');
   for (const e of [...(enemies || []), ...(allies || [])]) {
-    for (const w of e.allowed_weapons || []) {
-      if (!weapons.some(x => x.id === w)) throw new Error(`Enemies tab: "${e.name}" lists a weapon that isn't on the Weapons tab (${w}). Use the weapon names exactly as on the Weapons tab.`);
-    }
+    e.allowed_weapons = e.allowed_weapons && e.allowed_weapons.map(w => {
+      const hit = weapons.find(x => x.id === w) || weapons.find(x => loose(x.id) === loose(w));
+      if (!hit) throw new Error(`Enemies tab: "${e.name}" lists a weapon that isn't on the Weapons tab (${w}). Use the weapon names as on the Weapons tab.`);
+      return hit.id;
+    });
   }
   return { weapons, enemies, allies };
 }
