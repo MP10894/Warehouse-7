@@ -61,7 +61,7 @@ Details in `DESIGN.md` → "How co-op works".
 | File | What it controls |
 |---|---|
 | `data/levels/najaf/` | Najaf (Level 1): building floor plans, ground heights, where everything goes ([guide](data/levels/README.md)) |
-| `assets/audio/music/` | Music, picked by file name: `Menu…` plays on the title and menus; a level's music zones (level.json → `music_zones`: track name and area) fade their track in and out as you walk in and out (Najaf: `Najaf-Urban…` in the city). .mp3 works everywhere. Volume and fade time: settings.json → `audio`, and the tuning panel |
+| `assets/audio/music/` | Music, picked by file name: `Menu…` plays on the title and menus; a level's music zones (level.json → `music_zones`: track name and area) fade their track in and out as you walk in and out (Najaf: `Najaf-Urban…` in the city). .mp3 works everywhere. Volume and fade time: settings.json → `audio` |
 | `assets/audio/sfx/` + `data/sounds.csv` | Sound effects. `sounds.csv` (Excel) lists every moment that makes a sound (ammo pickup, each weapon's shot, explosions…) with the file to use (name without extension; takes named `File_1`, `File_2`… are picked at random), its volume, how far it carries (0 = only your own) and a random pitch change. A row with no file keeps the built-in synthesised sound. Each weapon has its own `reload_<weapon>` row; while a row has no file, that weapon keeps the built-in reload click |
 | `assets/` | Art files that replace the placeholders: rules in [ART_SPEC.md](ART_SPEC.md); Blockbench palette in `assets/palette/`; working `.bbmodel` files in `assets/sources/` |
 | `data/Game Data.xlsx` | The game-data workbook. **Weapons** tab: every weapon attribute (a projectile of "grenade" makes a thrown, quick-use item; a number in *Scope magnification* gives the weapon a scope, e.g. 4 = 4×). **Enemies** tab: health, speed, sight, reaction time, aim error in degrees, bursts, ammo drops, item drops (e.g. "Armour plate (15)", "Grenade (1)"), and which weapons each enemy type can carry. Edit in Excel as normal; formulas and "2 / 5" style min / max cells are fine |
@@ -71,11 +71,9 @@ Details in `DESIGN.md` → "How co-op works".
 | `data/materials.csv` | How tough each breakable wall, crate and sandbag is |
 | `data/settings.json` | Player speed, look sensitivity, field of view, recoil and bloom feel, wave timing, weather |
 
-**While playing**, the **TUNE** button (or `T` on a keyboard) opens a tuning panel: sliders
-for look sensitivity, field of view, detail, recoil, spread, enemy difficulty and wave
-timing. The game pauses while it's open, changes apply instantly and are remembered on
-that device, and **Copy values** gives a short list to send back so the numbers can be
-written into `settings.json` for everyone. It also shows the frame rate.
+**While playing**, the small **✕** under the health bars (or `Esc` on a keyboard) asks
+whether to leave the mission and go back to the menu. On the menu of the installed app,
+**Exit** closes the game. Add `?fps` to the address to show the frame rate while testing.
 
 The CSV files open in Excel. Save them as CSV; both comma and semicolon formats work.
 
@@ -110,7 +108,7 @@ src/
   render/          everything you see (Three.js)
   input/           touch, mouse, keyboard
   audio/           sound effects
-  ui/              menus, the HUD text and the tuning panel
+  ui/              menus, the HUD text, the armoury and leave-mission panels
   net/             co-op: snapshots and the connection between two players
 tests/             rule checks that run without a browser
 ```

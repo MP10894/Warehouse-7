@@ -32,8 +32,8 @@ import { createAudio } from './audio/audio.js';
 import { createMusic } from './audio/music.js';
 import { createDomHud } from './ui/dom-hud.js';
 import { createArmoury } from './ui/armoury.js';
+import { createLeave } from './ui/leave.js';
 import { createScreens } from './ui/screens.js';
-import { createTuning } from './ui/tuning.js';
 import { getTransport } from './net/transport.js';
 import { createHostEncoder, createGuestDecoder } from './net/snapshot.js';
 
@@ -47,6 +47,7 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !wind
 }
 
 const S = DATA.settings;
+const SHOW_FPS = /[?&]fps\b/.test(location.search);
 const STEP = 1 / S.world.fixed_step_hz;
 const $ = id => document.getElementById(id);
 
@@ -58,14 +59,9 @@ const screens = createScreens({ view, onStart: () => handlers.start && handlers.
 if (!view) {
   screens.showError('No WebGL', 'This browser could not start WebGL, which the game needs.');
 } else {
-  // tuning first: values saved on this device must be in place before the world is made
-  let paused = false;
-  const tuning = createTuning({
-    settings: S,
-    onOpen: () => { if (role === 'solo') paused = true; input.setEnabled(false); },
-    onClose: () => { paused = false; acc = 0; if (mode === 'playing') input.setEnabled(true); },
-    onChange: path => { if (path.startsWith('camera.')) view.resize(); if (path.startsWith('decor.') && scenery.decor) scenery.decor.rebuild(); if (path.startsWith('audio.')) music.refresh(); }
-  });
+  // (the old tuning panel kept slider values on the phone: they no longer apply, so clear them)
+  try { localStorage.removeItem('w7-tuning'); } catch (e) { /* storage unavailable */ }
+  let paused = false;       // solo game paused (the leave-mission question is showing)
   view.resize();
 
   let role = 'solo';          // 'solo' | 'host' | 'guest'
@@ -95,7 +91,6 @@ if (!view) {
   // drawn art replaces placeholders as soon as it has loaded (usually before you press Start)
   loadArt(tex).then(art => {
     worldView.reset(); fp.refresh();
-    tuning.setArtReport(art.report);
     console.log('[art]\n' + art.report.join('\n'));
   });
   const weatherFx = createWeatherFx(view.scene, S);
@@ -129,6 +124,7 @@ if (!view) {
     recoil.kick(aim.pitch - before, ev.side, S.ballistics.recoil_return ?? 1);
   };
   let fpsT = 0, fpsFrames = 0, prevFrame = 0;
+  // the frame-rate readout, for testing: add ?fps to the address
   const fpsEl = $('fps'), partnerEl = $('partner'), tagEl = $('partnerTag'), tagText = tagEl.querySelector('span');
   const tagPos = new THREE.Vector3();
   const local = () => world.players.find(p => p.id === localId) || world.players[0];
@@ -157,7 +153,7 @@ if (!view) {
     mode = 'playing';
     screens.hide();
     input.setEnabled(true);
-    tuning.setAvailable(true);
+    leave.setAvailable(true);
     domHud.toast(role === 'solo' ? 'SURVIVE — CLAIM A BASE' : 'CO-OP — STICK TOGETHER');
     setTimeout(() => { $('hint').hidden = true; }, 12000);
     $('hint').hidden = false;
@@ -195,11 +191,30 @@ if (!view) {
     partnerEl.hidden = true;
     mode = 'menu';
     input.setEnabled(false);
-    tuning.setAvailable(false);
+    leave.setAvailable(false);
     world = newWorld((Math.random() * 1e9) | 0, ['p1']);
     buildScenery(); worldView.reset(); worldView.setLocal('p1');
     screens.showMenu(world);
   }
+
+  /** Back to the level menu from a solo game (mission abandoned, or from the results). */
+  function toMenu() {
+    paused = false;
+    mode = 'menu';
+    input.setEnabled(false);
+    leave.setAvailable(false);
+    world = newWorld((Math.random() * 1e9) | 0, ['p1']);
+    buildScenery(); worldView.reset(); worldView.setLocal('p1');
+    screens.showMenu(world);
+  }
+
+  // the small ✕ in the top-left corner: asks before you leave the mission
+  const leave = createLeave({
+    onOpen: () => { if (role === 'solo') paused = true; input.setEnabled(false); armoury.close(); },
+    onStay: () => { paused = false; acc = 0; if (mode === 'playing') input.setEnabled(true); },
+    onLeave: () => (role === 'solo' ? toMenu() : leaveCoop()),
+    coop: () => role !== 'solo'
+  });
 
   /** Plain-language message for a failed online connection. */
   function coopError(e, code) {
@@ -286,8 +301,8 @@ if (!view) {
       if (ev.type === 'status' && mode === 'playing') {
         mode = ev.status;
         input.setEnabled(false);
-        tuning.setAvailable(false);
-        screens.showResults(world, p, role === 'solo' ? null : { role, onLeave: leaveCoop });
+        leave.setAvailable(false);
+        screens.showResults(world, p, role === 'solo' ? null : { role, onLeave: leaveCoop }, toMenu);
       }
     }
   }
@@ -403,7 +418,7 @@ if (!view) {
       // while aiming down sights, help settle the crosshair on a nearby visible enemy
       assist.update(aim, dt, world, local(), S);
     } else if (mode === 'playing' && role === 'host' && net.session) {
-      // host's tuning panel is open: the game keeps running for the guest
+      // (a paused host: the game keeps running for the guest)
       acc += dt;
       while (acc >= STEP) { stepWorld(world, { p1: {}, p2: guestCommand(true) }, STEP); acc -= STEP; }
       net.encoder.record(world, world.events);
@@ -457,7 +472,7 @@ if (!view) {
     fpsFrames++; fpsT += dt;
     if (fpsT >= 0.5) {
       const fps = Math.round(fpsFrames / fpsT);
-      fpsEl.hidden = !tuning.showFps || mode !== 'playing';
+      fpsEl.hidden = !SHOW_FPS || mode !== 'playing';
       fpsEl.textContent = `${fps} fps · ${view.W}×${view.H}`;
       fpsEl.classList.toggle('slow', fps < 40);
       fpsT = 0; fpsFrames = 0;

@@ -1,6 +1,10 @@
 // Briefing screen and after-action report.
 import { fmtTime } from './dom-hud.js';
 
+// opened as an installed app (from the home screen), not in a browser tab: only then is
+// there an Exit button (a browser tab is closed the browser's own way)
+const INSTALLED = (() => { try { return matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches || navigator.standalone === true; } catch (e) { return false; } })();
+
 export function createScreens({ view, onStart, onCoop, onLevel }) {
   const screen = document.getElementById('screen');
   const card = document.getElementById('card');
@@ -12,6 +16,12 @@ export function createScreens({ view, onStart, onCoop, onLevel }) {
     for (const b of document.querySelectorAll('.lvl')) b.addEventListener('click', () => onLevel && onLevel(b.dataset.level));
     const vb = document.getElementById('viewBtn');
     if (vb) vb.addEventListener('click', () => { vb.textContent = view.cycleViewPref(); });
+    const ex = document.getElementById('exitBtn');
+    if (ex) ex.addEventListener('click', () => {
+      // an app opened from the home screen may close itself; if the phone refuses, say how
+      try { window.close(); } catch (e) { /* not allowed */ }
+      setTimeout(() => { const n = document.getElementById('exitNote'); if (n) n.hidden = false; }, 400);
+    });
   }
   const viewButton = () => `<button class="view" id="viewBtn" type="button">${view.viewLabel()}</button>`;
 
@@ -43,7 +53,8 @@ export function createScreens({ view, onStart, onCoop, onLevel }) {
         <div class="eyebrow"><span>${lv.subtitle || ''}</span><span>Operator · v${typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev'}</span></div>
         <h1>${lv.title || lv.name}</h1>
         <div class="levels" role="group" aria-label="Level">${picks}</div>
-        <div class="actions"><button class="go" id="go" type="button">Start</button><button class="view coop" id="coopBtn" type="button">Co-op</button>${viewButton()}</div>
+        <div class="actions"><button class="go" id="go" type="button">Start</button><button class="view coop" id="coopBtn" type="button">Co-op</button>${viewButton()}${INSTALLED ? '<button class="view exit" id="exitBtn" type="button">Exit</button>' : ''}</div>
+        <p class="small" id="exitNote" hidden>Your phone didn't let the game close itself: swipe up from the bottom edge (or use the back gesture) to leave it.</p>
         <p>Secure a base, then hold it for ${fmtTime(world.timeLeft)} against the attack waves. The clock and the waves only start once you have a base. ${lv.summary || ''}</p>
         <ol class="steps">${(lv.briefing || []).map(b => `<li>${b}</li>`).join('')}</ol>
         <div class="ctrl">
@@ -94,7 +105,7 @@ export function createScreens({ view, onStart, onCoop, onLevel }) {
       if (st) st.disabled = !canStart;
     },
 
-    showResults(world, player, coop = null) {
+    showResults(world, player, coop = null, onMenu = null) {
       const won = world.status === 'won';
       const acc = player.stats.shots ? Math.round(player.stats.hits / player.stats.shots * 100) : 0;
       const survived = world.time;
@@ -109,12 +120,14 @@ export function createScreens({ view, onStart, onCoop, onLevel }) {
           <div><span>Waves</span><b>${world.waves.number}</b></div>
         </div>
         ${coop && coop.role === 'guest' ? '<p class="small">The host can start the next run.</p>' : ''}
-        <div class="actions">${coop && coop.role === 'guest' ? '' : `<button class="go" id="go" type="button">${won ? 'Play again' : 'Retry'}</button>`}${coop ? '<button class="view coop" id="leaveCoop" type="button">Leave co-op</button>' : ''}${viewButton()}</div>`;
+        <div class="actions">${coop && coop.role === 'guest' ? '' : `<button class="go" id="go" type="button">${won ? 'Play again' : 'Retry'}</button>`}${coop ? '<button class="view coop" id="leaveCoop" type="button">Leave co-op</button>' : onMenu ? '<button class="view coop" id="toMenu" type="button">Menu</button>' : ''}${viewButton()}</div>`;
       screen.hidden = false;
       const go = document.getElementById('go');
       if (go) go.addEventListener('click', onStart);
       const lc = document.getElementById('leaveCoop');
       if (lc && coop) lc.addEventListener('click', coop.onLeave);
+      const tm = document.getElementById('toMenu');
+      if (tm && onMenu) tm.addEventListener('click', onMenu);
       for (const b of document.querySelectorAll('.lvl')) b.addEventListener('click', () => onLevel && onLevel(b.dataset.level));
     const vb = document.getElementById('viewBtn');
       if (vb) vb.addEventListener('click', () => { vb.textContent = view.cycleViewPref(); });

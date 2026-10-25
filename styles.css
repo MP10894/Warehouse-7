@@ -168,12 +168,23 @@ canvas.layer {
 #app.rotated .ctrl { grid-template-columns: 1fr 1fr; }
 #app.rotated .results { grid-template-columns: repeat(4, 1fr); }
 
-/* ---- tuning panel and frame-rate readout ---- */
-#tuneBtn {
-  position: absolute; top: calc(env(safe-area-inset-top, 0px) + 114px); right: max(12px, env(safe-area-inset-right, 0px));
-  width: 100px; height: 28px; border: 1px solid rgba(255, 255, 255, .3); background: rgba(20, 18, 14, .45);
-  color: var(--muted); font-family: var(--hud); font-size: 18px; letter-spacing: .14em; padding: 0;
+/* ---- leave the mission: a small ✕ in the top-left corner, under the health bars ---- */
+#leaveBtn {
+  position: absolute; top: calc(env(safe-area-inset-top, 0px) + 62px); left: max(12px, env(safe-area-inset-left, 0px));
+  width: 30px; height: 30px; padding: 0; border: 1px solid rgba(255, 255, 255, .28); background: rgba(20, 18, 14, .45);
+  color: var(--muted); font-size: 15px; line-height: 1; cursor: pointer; touch-action: none;
 }
+#leaveBtn[hidden] { display: none; }
+#leave {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(360px, calc(100% - 32px));
+  background: rgba(20, 18, 14, .95); border: 1px solid var(--line); padding: 16px 18px; display: grid; gap: 10px; z-index: 5;
+}
+#leave[hidden] { display: none; }
+#leave b { font-family: var(--display); font-weight: 400; font-size: 22px; color: var(--amber); letter-spacing: .04em; }
+#leave p { margin: 0; color: var(--muted); font-size: 14px; }
+#leave div { display: flex; gap: 10px; flex-wrap: wrap; }
+#leave .view { display: inline-block; }
+#leaveBtn:focus-visible, #leave button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 /* grenade: a quick-use button under the map, shown while you have grenades */
 #grenade {
   position: absolute; top: calc(env(safe-area-inset-top, 0px) + 150px); right: max(30px, calc(env(safe-area-inset-right, 0px) + 18px));
@@ -187,45 +198,14 @@ canvas.layer {
 #grenade.on { background: rgba(240, 162, 58, .45); }
 #grenade.wait { opacity: .45; }
 #fps {
-  position: absolute; top: calc(env(safe-area-inset-top, 0px) + 60px); left: max(12px, env(safe-area-inset-left, 0px));
+  position: absolute; top: calc(env(safe-area-inset-top, 0px) + 98px); left: max(12px, env(safe-area-inset-left, 0px));
   font-family: var(--hud); font-size: 16px; color: var(--muted); text-shadow: 0 1px 0 #000; pointer-events: none;
   font-variant-numeric: tabular-nums;
 }
 #fps.slow { color: var(--red); }
-#tune {
-  position: absolute; top: 0; bottom: 0; right: 0; width: min(560px, 100%); background: rgba(20, 18, 14, .94);
-  border-left: 1px solid var(--line); display: flex; flex-direction: column; font-size: 14px;
-  padding-top: calc(env(safe-area-inset-top, 0px) + 8px); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
-  padding-left: 14px; padding-right: max(14px, env(safe-area-inset-right, 0px));
-}
-.thead { display: flex; align-items: center; gap: 12px; }
-.thead b { font-family: var(--display); font-weight: 400; font-size: 20px; color: var(--amber); letter-spacing: .04em; }
-.thead span { flex: 1; color: var(--muted); font-size: 13px; min-width: 0; }
-.tclose, .tfoot button {
-  font-family: var(--body); font-size: 14px; color: var(--ink); background: transparent; border: 1px solid var(--line);
-  padding: 7px 14px; cursor: pointer;
-}
-.tclose { background: var(--amber); color: #1a140a; border-color: var(--amber); font-weight: 600; }
-.ttabs { display: flex; gap: 6px; margin: 8px 0 6px; }
-.ttab { flex: 1; min-width: 0; font-family: var(--body); font-size: 13px; padding: 7px 2px; background: transparent; color: var(--muted);
-  border: 1px solid var(--line); cursor: pointer; }
-.ttab.on { color: var(--ink); border-color: var(--amber); background: rgba(240, 162, 58, .15); }
-.trows { flex: 1; display: grid; align-content: start; gap: 4px; min-height: 0; overflow: auto; }
-.trow { display: grid; grid-template-columns: minmax(0, 1fr) 34px minmax(90px, 1.1fr) 34px 52px; align-items: center; gap: 6px; }
-.trow label { color: var(--ink); font-size: 13px; line-height: 1.15; }
-.trow.changed label { color: var(--amber); }
-.trow input[type=range] { width: 100%; accent-color: var(--amber); }
-.trow output { font-family: var(--hud); font-size: 18px; text-align: right; font-variant-numeric: tabular-nums; }
-.tstep { height: 30px; font-size: 18px; line-height: 1; color: var(--ink); background: rgba(255, 255, 255, .06);
-  border: 1px solid var(--line); padding: 0; cursor: pointer; }
-.tfoot { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
-.tchk { margin-right: auto; color: var(--muted); display: flex; gap: 6px; align-items: center; }
-#tOut { margin-top: 6px; height: 52px; background: #0e0d0a; color: var(--ink); border: 1px solid var(--line);
-  font-family: var(--hud); font-size: 15px; -webkit-user-select: text; user-select: text; resize: none; }
-.tclose:focus-visible, .tfoot button:focus-visible, .ttab:focus-visible, .tstep:focus-visible, #tuneBtn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-
 /* ---- co-op lobby ---- */
-.view.coop { display: inline-block; }
+.view.coop, .view.exit { display: inline-block; }
+.view.exit { margin-left: auto; color: var(--muted); }
 .card p.small { font-size: 13px; color: var(--muted); }
 .card p.warn { color: var(--red); }
 .joinrow input {
@@ -248,9 +228,6 @@ canvas.layer {
 #partnerTag span { font-size: 14px; letter-spacing: .08em; order: -1; }
 #partnerTag b { font-weight: 400; font-size: 14px; }
 
-.tart { font-size: 13px; line-height: 1.35; color: var(--ink); margin: 0; }
-p.tart { color: var(--muted); }
-.tart.bad { color: var(--red); }
 
 /* ---- armoury panel (at a built ammunition supply) ---- */
 #armoury {

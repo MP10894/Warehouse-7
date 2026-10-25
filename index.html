@@ -36,7 +36,6 @@
       <div id="carry" hidden>Carrying: construction crate</div>
     </div>
     <canvas id="minimap" width="100" height="100"></canvas>
-    <button id="tuneBtn" type="button" hidden>TUNE</button>
     <button id="grenade" type="button" hidden aria-label="Throw grenade">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h5v2h1.5l2-1.5 1 1.3-2 1.6.6 1.1A7 7 0 1 1 9 7.2V4z"/></svg>
       <b id="grenadeN">0</b>
@@ -58,7 +57,12 @@
     <button id="ads" class="btn mid" type="button">AIM</button>
     <button id="fire" class="btn big" type="button" aria-label="Fire">FIRE</button>
 
-    <section id="tune" hidden></section>
+    <button id="leaveBtn" type="button" hidden aria-label="Leave the mission">✕</button>
+    <section id="leave" hidden role="dialog" aria-label="Leave the mission?">
+      <b>Leave the mission?</b>
+      <p></p>
+      <div><button type="button" class="go" data-stay>Keep fighting</button><button type="button" class="view" data-leave>Leave</button></div>
+    </section>
 
     <!-- title screen: shown once when the game opens (art: assets/ui/title.jpg, optional) -->
     <section id="title" hidden>

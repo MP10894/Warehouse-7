@@ -3,7 +3,7 @@
 // follows them a little as they move. It changes where you look, never the rules: the
 // shot still goes where the crosshair is, with normal spread.
 //
-// Settings (data/settings.json → controls, also on the tuning panel's Controls tab):
+// Settings (data/settings.json → controls):
 //   aim_assist            strength, 0 = off, 1 = full
 //   aim_assist_angle_deg  how far from the crosshair (degrees) an enemy can be to count
 //   aim_assist_range      metres; enemies further away are ignored

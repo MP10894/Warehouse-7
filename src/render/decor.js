@@ -16,7 +16,7 @@
 // Everything is placed by rules from the level itself (the same every run and on both co-op
 // phones) and drawn in 32 × 32 m regions, one mesh per region plus one for wires, so it adds
 // few draw calls. Each piece hangs on the wall or roof cells it is fixed to: when those break,
-// the piece goes with them. How much is placed: settings.json → decor.amount (tuning panel).
+// the piece goes with them. How much is placed: settings.json → decor.amount.
 import * as THREE from 'three';
 import { V, isFull, cellXYZ } from '../sim/grid.js';
 import { terrainHeight, groundType } from '../sim/terrain.js';

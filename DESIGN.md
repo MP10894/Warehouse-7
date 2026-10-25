@@ -109,7 +109,7 @@ Starting values, to be tuned after play-testing:
   (every attacker killed) before a **20-second break**, then the next, bigger wave comes.
   Building something during a break brings the next wave sooner.
 - At most **20 attackers** are on the map at once; the rest of a big wave wait at the edge
-  and come in as others fall. (Both numbers are in settings.json and on the tuning panel.)
+  and come in as others fall. (Both numbers are in settings.json.)
 - Waves get harder over time, and **build progress speeds up the escalation**.
 - For now, difficulty varies only by **number of enemies, their weapons, and whether
   they wear armour**. A full enemy roster will come later (Enemies tab of the workbook).
@@ -157,7 +157,7 @@ Starting values, to be tuned after play-testing:
   scope magnification (empty = iron sights).
 - **Scopes** (the Mk14 EBR, 4×): aiming down sights looks through the scope: a black ring
   round the lens, a thin crosshair, the gun out of sight. Look speed drops (0.3 of normal),
-  and the aim drifts slightly, three times as much while walking. All on the tuning panel.
+  and the aim drifts slightly, three times as much while walking. All in settings.json.
 - **Grenades (RGD-5)** are a quick-use item, not a weapon slot. While you have any, a
   grenade button with the count shows under the map (desktop: G). A toss takes 0.7 s: the
   rifle dips, the left hand throws, and you can't fire, reload or swap meanwhile. The
@@ -210,7 +210,7 @@ Starting values, to be tuned after play-testing:
   streets; on the ground oil stains, cracks, scorch marks, tyre tracks and sand blown
   against walls. All of it is decoration only (like rubble: no collision, no effect on
   bullets or path-finding), placed by rules the same way every run, and it disappears with
-  the wall it hangs on. Amount: settings.json → decor.amount, also on the tuning panel.
+  the wall it hangs on. Amount: settings.json → decor.amount.
 - **Street clutter (decoration):** bullet holes (many on damaged and ruined buildings),
   scorch on walls and torn posters (pictures only, no writing); rubbish bags, tyre stacks,
   gas bottles, plastic chairs, potted plants by doors and produce crates in front of shops;
@@ -439,6 +439,7 @@ tag `warehouse-prototype`.
 | 2026-10-25 | Sound effects from assets/audio/sfx, set up in data/sounds.csv (file, volume, range, pitch spread per moment); distant sounds fade and come from the left or right; anything without a file keeps its built-in sound. First file: AmmoPickUp for every ammunition pickup |
 | 2026-10-25 | Each weapon can have its own reload sound (reload_<weapon> rows in sounds.csv); there is no general reload sound any more; a weapon without a file keeps the built-in reload click. The sound stops if you swap weapons or go down mid-reload. Pitch spread stays 0 for reloads so the sound keeps matching the animation. First: AK-47_reload |
 | 2026-10-25 | Every gun throws a brass case out of its ejection port on each shot (size by calibre; none for the RPG-7). Only in your own first-person view: cases never land in the world and aren't seen on other players or enemies |
+| 2026-10-25 | The in-game tuning panel is removed: all tuning is done in the Game Data workbook and the files in /data (values saved on a phone by the old panel are cleared). In a mission, a small ✕ under the health bars (top-left, away from both thumbs) asks "Leave the mission?" before going back to the menu; a solo game pauses while it asks, co-op carries on. The installed app's menu has an Exit button; the solo results screen has a Menu button. The frame-rate readout only shows with ?fps |
 
 ## Open questions
 

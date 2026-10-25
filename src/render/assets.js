@@ -1,6 +1,6 @@
 // Art files from /assets replace the code-drawn placeholders (see ART_SPEC.md).
 // Every file is checked against the art spec; anything that breaks a rule is skipped and
-// its placeholder stays, and the reason is listed on the Art tab of the tuning panel.
+// its placeholder stays, and the reason is listed in the browser console ([art]).
 // Files are packed into the game when it's built, so the single-file play link works.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
