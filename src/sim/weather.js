@@ -1,6 +1,7 @@
-// Weather zones. Sandstorms start at random, last a random time, fade in and out, and cut
-// how far enemies can see and how well they aim. Smoke zones (the refinery's flare stack)
-// are always there and do the same within their radius.
+// Weather zones. Sandstorms, downpours ("rain") and mist banks ("mist") start at random, last a
+// random time, fade in and out, and cut how far enemies can see and how well they aim. Smoke
+// zones (the refinery's flare stack) are always there and do the same within their radius.
+// A zone's "strength" (default 1) scales how much it cuts sight: rain is lighter than a sandstorm.
 import { rand } from './rng.js';
 
 export function createWeather(level) {
@@ -35,7 +36,7 @@ export function stormAt(world, x, z, kind = null) {
     if (!w.active || w.intensity <= 0 || (kind && w.type !== kind)) continue;
     const d = Math.hypot(x - w.x, z - w.z);
     const edge = Math.max(0, Math.min(1, (w.radius - d) / 8));
-    best = Math.max(best, w.intensity * edge);
+    best = Math.max(best, w.intensity * edge * (kind ? 1 : (w.strength ?? 1)));
   }
   return best;
 }

@@ -541,7 +541,7 @@ props.append({'type': 'metal', 'x': DETONATOR['x'], 'z': DETONATOR['z'], 'w': 1,
 blasting = {'detonator': DETONATOR, 'charges': charges, 'unstable': unstable}
 
 level = {
-    'name': 'Kambala mine', 'title': 'Kambala mine', 'subtitle': 'Level 2 · in progress', 'order': 2,
+    'name': 'Kambala mine', 'title': 'Kambala mine', 'subtitle': 'Level 2 · in progress', 'order': 2, 'sky': '#c8ccb4',
     'summary': 'A company mine in the Democratic Republic of Kambala: an open pit, a jungle and a mining village around a junction. Rebels come out of the forest to attack.',
     'briefing': [
         'You start at the junction. Pick a base: the workshop on the pit floor (mine, north-east), the logging camp (forest, west) or the company HQ (village, south-east).',
@@ -556,7 +556,8 @@ level = {
     'buildings': buildings, 'props': props, 'base_items': base_items, 'enemy_groups': groups,
     # every attack wave comes out of the forest on the west edge (column A)
     'wave_spawns': [{'x': 3, 'z': z} for z in (16, 56, 100, 140, 180, 220)],
-    'pickups': pickups, 'weather_zones': [], 'bases': bases, 'decor': [], 'music_zones': [],
+    # passing downpours anywhere, mist banks in the forest
+    'pickups': pickups, 'weather_zones': [{"type": "rain", "x": 128, "z": 128, "radius": 220, "strength": 0.6, "chance_per_minute": 0.3, "min_duration": 40, "max_duration": 90}, {"type": "mist", "district": "forest", "x": 48, "z": 60, "radius": 50, "strength": 0.8, "chance_per_minute": 0.5, "min_duration": 40, "max_duration": 80}, {"type": "mist", "district": "forest", "x": 52, "z": 172, "radius": 50, "strength": 0.8, "chance_per_minute": 0.5, "min_duration": 40, "max_duration": 80}], 'bases': bases, 'decor': [], 'music_zones': [],
     'blasting': blasting
 }
 

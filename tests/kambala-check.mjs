@@ -17,6 +17,7 @@ import { stepWorld } from '../src/sim/step.js';
 import { spawnEnemy } from '../src/sim/enemies.js';
 import { createHostEncoder, createGuestDecoder } from '../src/net/snapshot.js';
 import { detonate } from '../src/sim/blasting.js';
+import { stormAt } from '../src/sim/weather.js';
 
 const read = p => readFileSync(new URL('../' + p, import.meta.url), 'utf8');
 const loadLevel = id => {
@@ -156,6 +157,18 @@ check(reach(176, 68, 3) && reach(200, 74, 3), 'the haul road leads from the rim 
   createGuestDecoder(data).apply(guest, snap, 'p2');
   const same = guest.pieces.length === w.pieces.length && w.pieces.slice(rocks0).every((p, i) => guest.pieces[rocks0 + i] && guest.pieces[rocks0 + i].cells.join() === p.cells.join());
   check(same, `co-op: the partner sees exactly the same fallen rock (${guest.pieces.length - rocks0} of ${w.pieces.length - rocks0} slabs)`);
+}
+
+// weather: downpours anywhere, mist banks in the forest
+{
+  const rain = world.weather.find(z => z.type === 'rain'), mist = world.weather.filter(z => z.type === 'mist');
+  check(rain && mist.length === 2, 'Kambala has passing downpours and two mist zones');
+  rain.active = true; rain.intensity = 1;
+  check(stormAt(world, 20, 20) > 0.5 && stormAt(world, 230, 230) > 0.5 && stormAt(world, 20, 20) < 0.7, `a downpour covers the whole map and cuts sight less than a sandstorm (${stormAt(world, 20, 20).toFixed(2)})`);
+  rain.active = false; rain.intensity = 0;
+  for (const m of mist) { m.active = true; m.intensity = 1; }
+  check(stormAt(world, 50, 60) > 0.7 && stormAt(world, 200, 200) === 0 && stormAt(world, 200, 60) === 0, 'mist settles in the forest, not on the mine or the village');
+  for (const m of mist) { m.active = false; m.intensity = 0; }
 }
 
 process.exit(failures ? 1 : 0);

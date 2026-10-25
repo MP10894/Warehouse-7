@@ -1,8 +1,9 @@
 {
  "name": "Kambala mine",
  "title": "Kambala mine",
- "subtitle": "Level 2 · in progress",
+ "subtitle": "Level 2 \u00b7 in progress",
  "order": 2,
+ "sky": "#c8ccb4",
  "summary": "A company mine in the Democratic Republic of Kambala: an open pit, a jungle and a mining village around a junction. Rebels come out of the forest to attack.",
  "briefing": [
   "You start at the junction. Pick a base: the workshop on the pit floor (mine, north-east), the logging camp (forest, west) or the company HQ (village, south-east).",
@@ -25033,7 +25034,40 @@
    "amount": 100
   }
  ],
- "weather_zones": [],
+ "weather_zones": [
+  {
+   "type": "rain",
+   "x": 128,
+   "z": 128,
+   "radius": 220,
+   "strength": 0.6,
+   "chance_per_minute": 0.3,
+   "min_duration": 40,
+   "max_duration": 90
+  },
+  {
+   "type": "mist",
+   "district": "forest",
+   "x": 48,
+   "z": 60,
+   "radius": 50,
+   "strength": 0.8,
+   "chance_per_minute": 0.5,
+   "min_duration": 40,
+   "max_duration": 80
+  },
+  {
+   "type": "mist",
+   "district": "forest",
+   "x": 52,
+   "z": 172,
+   "radius": 50,
+   "strength": 0.8,
+   "chance_per_minute": 0.5,
+   "min_duration": 40,
+   "max_duration": 80
+  }
+ ],
  "bases": [
   {
    "id": "workshop",
