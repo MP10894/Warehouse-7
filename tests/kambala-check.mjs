@@ -10,6 +10,9 @@ import { buildNav, nodeAt, flowField } from '../src/sim/nav.js';
 import { groundAt, blocked, moveBody } from '../src/sim/body.js';
 import { levelBases } from '../src/sim/base.js';
 import { terrainHeight } from '../src/sim/terrain.js';
+import { V, getV, isShrub } from '../src/sim/grid.js';
+import { explode } from '../src/sim/damage.js';
+import { hiddenByShrubs, traceSegment } from '../src/sim/ballistics.js';
 
 const read = p => readFileSync(new URL('../' + p, import.meta.url), 'utf8');
 const loadLevel = id => {
@@ -71,5 +74,35 @@ check(reach(204, 199, 7.5), 'the watch tower\'s lookout can be climbed to');
 }
 // the haul road: the floor connects to the rim
 check(reach(176, 68, 3) && reach(200, 74, 3), 'the haul road leads from the rim down to the pit floor');
+
+// trees: solid; an RPG brings one down, leaving its stump; its canopy is gone with it
+{
+  const trees = world.level.trees.filter(t => t.kind === 'broadleaf');
+  check(trees.length > 500 && world.level.shrubs.length > 400, `a forest: ${trees.length} trees, ${world.level.shrubs.length} undergrowth patches`);
+  const t = trees[Math.floor(trees.length / 2)];
+  const b = { x: t.x - 1.5, y: groundAt(world, t.x - 1.5, t.z + 0.5, 30), z: t.z + 0.5, vy: 0, onGround: true };
+  for (let i = 0; i < 60; i++) moveBody(world, b, 0.05, 0, 1 / 60);
+  check(b.x < t.x, 'a tree trunk is solid: you can\'t walk through it');
+  const hit = traceSegment(world, t.x - 5, t.y + 1.5, t.z + 0.5, t.x + 5, t.y + 1.5, t.z + 0.5);
+  check(hit && hit.kind === 'block' && Math.floor(hit.x) === t.x, 'and it stops bullets');
+  explode(world, t.x - 0.5, t.y + 1.5, t.z + 0.5, data.weapons.rpg7, null);
+  explode(world, t.x - 0.5, t.y + 1.5, t.z + 0.5, data.weapons.rpg7, null);
+  const piece = world.pieces[t.piece - 1];
+  const left = t.stump - terrainHeight(world.terrain, t.x + 0.5, t.z + 0.5);
+  check(!piece.alive && getV(world.grid, t.x, t.stump - 1, t.z) === V.TRUNK && getV(world.grid, t.x, t.stump, t.z) === V.AIR && left >= 0.9 && left <= 1.6,
+    `rockets bring a tree down, leaving a stump ${left.toFixed(1)} m tall (low cover)`);
+}
+
+// undergrowth: walk and shoot through it, but it hides you (unless close)
+{
+  const s = world.level.shrubs.find(q => q.kind === 'fern' && q.h === 2 && getV(world.grid, q.x - 6, q.y, q.z) === V.AIR && isShrub(world.grid, q.x, q.y + 1, q.z) && !isShrub(world.grid, q.x - 6, q.y + 1, q.z) && !isShrub(world.grid, q.x + 4, q.y + 1, q.z));
+  const b = { x: s.x - 1, y: groundAt(world, s.x - 1, s.z + 0.5, 30), z: s.z + 0.5, vy: 0, onGround: true };
+  for (let i = 0; i < 40; i++) moveBody(world, b, 0.06, 0, 1 / 60);
+  check(b.x > s.x + 0.8, 'you walk straight through undergrowth');
+  const y = s.y + 1.5;
+  check(!traceSegment(world, s.x - 5, y, s.z + 0.5, s.x + 3.9, y, s.z + 0.5), 'bullets pass through it');
+  check(hiddenByShrubs(world, s.x - 8, y, s.z + 0.5, s.x + 3, y, s.z + 0.5), 'but someone behind it is hidden from an enemy 11 m away');
+  check(!hiddenByShrubs(world, s.x - 1, y, s.z + 0.5, s.x + 1.5, y, s.z + 0.5), 'and seen again from 2.5 m away');
+}
 
 process.exit(failures ? 1 : 0);

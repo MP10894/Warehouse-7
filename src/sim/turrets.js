@@ -11,7 +11,7 @@
 // - Destroyed, it is gone, drops nothing, and the armoury hands out a new one.
 import { rand } from './rng.js';
 import { groundAt, blocked } from './body.js';
-import { lineOfSight } from './ballistics.js';
+import { lineOfSight, hiddenByShrubs } from './ballistics.js';
 import { spreadDir, spawnProjectile } from './weapons.js';
 import { emit, alertEnemy } from './damage.js';
 import { stormAt } from './weather.js';
@@ -153,6 +153,7 @@ function perceive(world, t) {
     }
     // only someone its bullets can reach: the line from the gun to where it aims must be clear
     if (!lineOfSight(world, t.x, t.y + TURRET_GUN_Y, t.z, e.x, e.y + AIM_Y, e.z)) continue;
+    if (hiddenByShrubs(world, t.x, t.y + TURRET_GUN_Y, t.z, e.x, e.y + 1.4, e.z, world.data.settings.flora?.shrub_see_within ?? 3)) continue;
     best = e; bd = d;
   }
   return best;

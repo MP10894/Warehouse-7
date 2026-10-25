@@ -6,3 +6,4 @@ sandbags,Sandbag wall,120,60,yes
 tank,Fuel tank,100000,100000,no
 locker,Upgrade locker,150,60,no
 rockslab,Cut rock slab,150,60,yes
+tree,Tree trunk,120,0,no

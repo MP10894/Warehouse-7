@@ -21,6 +21,7 @@ import { createAimAssist } from './input/aim-assist.js';
 import { buildTerrain } from './render/terrain-mesh.js';
 import { createBlockMeshes } from './render/blocks-mesh.js';
 import { createDecor } from './render/decor.js';
+import { createFlora } from './render/flora.js';
 import { createWorldView } from './render/world-view.js';
 import { createEffects } from './render/effects.js';
 import { createFpWeapon } from './render/fp-weapon.js';
@@ -83,6 +84,7 @@ if (!view) {
     scenery.terrain = buildTerrain(view.scene, world, tex);
     scenery.blocks = createBlockMeshes(view.scene, world, tex);
     scenery.decor = createDecor(view.scene, world, S);
+    scenery.flora = createFlora(view.scene, world);
   }
   buildScenery();
   const worldView = createWorldView(view.scene, tex, localId);
@@ -295,7 +297,7 @@ if (!view) {
       hud.handle(ev, p);
       audio.handle(ev, p);
       domHud.handle(ev, localId);
-      if (ev.type === 'blocks') { scenery.blocks.update(ev.cells || [], !!ev.rebuild); scenery.decor.update(ev.cells || []); }
+      if (ev.type === 'blocks') { scenery.blocks.update(ev.cells || [], !!ev.rebuild); scenery.decor.update(ev.cells || []); scenery.flora.update(ev.cells || []); }
       if (ev.type === 'explosion') shake = Math.max(shake, Math.max(0, 1 - Math.hypot(ev.x - p.x, ev.z - p.z) / 25));
       if (ev.type === 'hurt' && ev.targetId === localId) shake = Math.max(shake, 0.25);
       if (ev.type === 'status' && mode === 'playing') {

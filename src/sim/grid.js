@@ -21,7 +21,9 @@ export const V = {
   ROCK: 15,     // natural rock; indestructible
   FENCE: 16,    // chain-link fence: you can't walk through it, but you can see and shoot through it
   LOCKER: 17,   // a base upgrade (ammunition, first aid or armour locker), destructible
-  WRECK: 18     // a wrecked car or truck: solid cover, unbreakable; drawn as a vehicle model
+  WRECK: 18,    // a wrecked car or truck: solid cover, unbreakable; drawn as a vehicle model
+  TRUNK: 19,    // a tree trunk: solid; above its stump it breaks (materials.csv "tree"), and the canopy goes with it
+  SHRUB: 20     // undergrowth: nothing bumps into it and bullets pass, but nobody sees through it (drawn as leaves)
 };
 
 /** Per block type: does it fill the whole cell, and which materials.csv row it uses (null = unbreakable). */
@@ -43,7 +45,9 @@ export const V_INFO = {
   [V.ROCK]: { full: true, material: null },
   [V.FENCE]: { full: true, seeThrough: true, material: null },
   [V.LOCKER]: { full: true, material: 'locker' },
-  [V.WRECK]: { full: true, material: null }
+  [V.WRECK]: { full: true, material: null },
+  [V.TRUNK]: { full: true, material: 'tree' },
+  [V.SHRUB]: { full: false, material: null }
 };
 
 export const isRamp = t => t >= V.RAMP_E && t <= V.RAMP_S;
@@ -56,12 +60,15 @@ export function createGrid(w, h, d) {
 export const gidx = (g, x, y, z) => x + z * g.w + y * g.w * g.d;
 export const inGrid = (g, x, y, z) => x >= 0 && y >= 0 && z >= 0 && x < g.w && y < g.h && z < g.d;
 // What the game rules see in a cell. Rubble is decoration only (drawn, but nothing stands
-// on it, bumps into it or is stopped by it), so to the rules it is air.
+// on it, bumps into it or is stopped by it), and so is undergrowth (it only blocks sight:
+// see isShrub), so to the rules both are air.
 export const getV = (g, x, y, z) => {
   if (!inGrid(g, x, y, z)) return V.AIR;
   const t = g.cells[gidx(g, x, y, z)];
-  return t === V.RUBBLE ? V.AIR : t;
+  return t === V.RUBBLE || t === V.SHRUB ? V.AIR : t;
 };
+/** Is this cell undergrowth (hides whoever is behind it)? */
+export const isShrub = (g, x, y, z) => inGrid(g, x, y, z) && g.cells[gidx(g, x, y, z)] === V.SHRUB;
 /** What is drawn in a cell, rubble included. */
 export const getDrawn = (g, x, y, z) => inGrid(g, x, y, z) ? g.cells[gidx(g, x, y, z)] : V.AIR;
 export function setV(g, x, y, z, t) { if (inGrid(g, x, y, z)) g.cells[gidx(g, x, y, z)] = t; }

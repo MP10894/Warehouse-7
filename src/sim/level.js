@@ -150,7 +150,45 @@ const PROP = {
  * A "wreck" is a burnt-out vehicle: { type: "wreck", model: "car" | "pickup" | "truck", x, z,
  * w, d, h }: solid cover that never breaks; the graphics draw the vehicle over its blocks.
  */
+/**
+ * Trees and undergrowth:
+ *   tree:  { type: "tree", x, z, h, kind }  a 1 × 1 m trunk h blocks tall (default 5). Its bottom
+ *          metre is the stump and never breaks; the rest breaks like a wall (materials.csv
+ *          "tree"), and the canopy (drawn by the graphics) goes with it. kind: "broadleaf" or "palm".
+ *   shrub: { type: "shrub", x, z, w, d, h, kind }  undergrowth h blocks tall (default 2): you
+ *          walk and shoot through it, but nobody can see through it. kind: "fern", "banana"…
+ */
+function stampFlora(world, p) {
+  const g = world.grid;
+  if (p.type === 'tree') {
+    // the trunk goes down into the ground (no gap under it on a slope); the stump is whatever
+    // stands less than 0.9 m above the ground, so 1–1.5 m of it is left when the tree falls
+    const ground = terrainHeight(world.terrain, p.x + 0.5, p.z + 0.5);
+    const y0 = Math.max(0, Math.floor(ground));
+    const top = Math.round(ground) + (p.h || 5);
+    const cells = [];
+    let stump = y0;
+    for (let y = y0; y < top; y++) {
+      if (!inGrid(g, p.x, y, p.z) || getV(g, p.x, y, p.z) !== V.AIR) continue;
+      setV(g, p.x, y, p.z, V.TRUNK);
+      if (y < ground + 0.9) stump = y + 1; else cells.push(gidx(g, p.x, y, p.z));
+    }
+    const piece = cells.length ? addPiece(world, 'tree', cells) : 0;
+    world.level.trees.push({ x: p.x, z: p.z, y: y0, h: top - y0, stump, kind: p.kind || 'broadleaf', piece });
+    return;
+  }
+  // shrub
+  for (let dz = 0; dz < (p.d || 1); dz++) for (let dx = 0; dx < (p.w || 1); dx++) {
+    const x = p.x + dx, z = p.z + dz;
+    const ground = terrainHeight(world.terrain, x + 0.5, z + 0.5);
+    const y0 = Math.max(0, Math.floor(ground));
+    for (let y = y0; y < Math.round(ground) + (p.h || 2); y++) if (inGrid(g, x, y, z) && getV(g, x, y, z) === V.AIR) setV(g, x, y, z, V.SHRUB);
+    world.level.shrubs.push({ x, z, y: ground, h: p.h || 2, kind: p.kind || 'fern' });
+  }
+}
+
 function stampProp(world, p) {
+  if (p.type === 'tree' || p.type === 'shrub') { stampFlora(world, p); return; }
   const g = world.grid;
   const [type, material] = PROP[p.type] || PROP.lowwall;
   const cyl = p.shape === 'cylinder' || p.type === 'tank';
@@ -196,7 +234,7 @@ export function buildLevel(world, level) {
   world.pieces = [];
   world.terrain = parseTerrain(level.terrainText, level.terrain_spacing || 4);
   world.ground = parseGround(level.groundText || '');
-  world.level = { name: level.name, size, decals: [], buildings: [], wrecks: [],
+  world.level = { name: level.name, size, decals: [], buildings: [], wrecks: [], trees: [], shrubs: [],
     decor: (level.decor || []).map(d => ({ ...d })) };   // hand-placed decoration (market stalls, carpets, palms)
   for (const b of level.buildings || []) {
     const text = level.buildingTexts[b.file];

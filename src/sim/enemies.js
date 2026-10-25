@@ -2,7 +2,7 @@
 // Every enemy targets the nearest living player, so this works unchanged in co-op.
 import { rand, weightedPick } from './rng.js';
 import { moveBody, groundAt } from './body.js';
-import { lineOfSight } from './ballistics.js';
+import { lineOfSight, hiddenByShrubs } from './ballistics.js';
 import { flowNext, nodeAt } from './nav.js';
 import { aimVector, spreadDir, spawnProjectile } from './weapons.js';
 import { emit, explode, killActor } from './damage.js';
@@ -71,6 +71,8 @@ function perceive(world, e) {
       if (Math.abs(a) > 1.4 && d > 6) continue;
     }
     if (!lineOfSight(world, e.x, e.y + EYE, e.z, p.x, p.y + lookHeight(p), p.z)) continue;
+    // in the undergrowth: hidden (unless close)
+    if (hiddenByShrubs(world, e.x, e.y + EYE, e.z, p.x, p.y + lookHeight(p), p.z, world.data.settings.flora?.shrub_see_within ?? 3)) continue;
     best = p; bd = d;
   }
   return best;

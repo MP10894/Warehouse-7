@@ -100,6 +100,9 @@
   "decor": {
     "amount": 1
   },
+  "flora": {
+    "shrub_see_within": 3
+  },
   "turret": {
     "place_distance": 2.0,
     "pickup_range": 1.8,

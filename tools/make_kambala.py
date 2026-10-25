@@ -437,6 +437,79 @@ pickups = [
     pk('grenade', 190, 214, amount=2), pk('grenade', 120, 214, amount=2), pk('armour', 236, 226, amount=100),
 ]
 
+# ---------------------------------------------------------------- trees and undergrowth
+# cells already used by buildings and props (plus a margin), so plants keep out of them
+used = set()
+for b in buildings:
+    w, d = SIZES[b['file']]
+    if b.get('turn') in (90, 270): w, d = d, w
+    for z in range(b['z'] - 2, b['z'] + d + 2):
+        for x in range(b['x'] - 2, b['x'] + w + 2): used.add((x, z))
+for pr in props:
+    for z in range(pr['z'] - 1, pr['z'] + pr.get('d', 1) + 1):
+        for x in range(pr['x'] - 1, pr['x'] + pr.get('w', 1) + 1): used.add((x, z))
+KEEP_CLEAR = [(128, 134, 12), (46, 72, 16), (196, 60, 20)]   # junction, logging camp clearing, pit floor
+# and a ring round every pickup, crate, enemy and attack-wave entry, so none is boxed in by trees
+KEEP_CLEAR += [(k['x'], k['z'], 3) for k in pickups] + [(x, z, 3) for _, x, z in crate_spots]
+KEEP_CLEAR += [(sp['x'], sp['z'], 2.5) for g in groups for sp in g['spawns']] + [(3, z, 6) for z in (16, 56, 100, 140, 180, 220)]
+ROADS = [(MAIN, 6), (TO_MINE, 6), (LOGGING, 4.5), (VILLAGE, 5)] + [(l, 3.5) for l in LANES]
+
+
+def open_ground(x, z, extra=0):
+    if (x, z) in used or not (2 <= x < SIZE - 2 and 2 <= z < SIZE - 2): return False
+    if ring(x + 0.5, z + 0.5) or ((x - CX) / 60) ** 2 + ((z - CZ) / 50) ** 2 <= 1: return False
+    if any(math.hypot(x - a, z - b) < r for a, b, r in KEEP_CLEAR): return False
+    if any(near_path(x + 0.5, z + 0.5, pts, w + extra) for pts, w in ROADS): return False
+    return True
+
+
+flora = []
+tree_at = []
+# forest: trees on a loose grid about 4 m apart, jittered
+for gz in range(4, SIZE - 4, 4):
+    for gx in range(4, 128, 4):
+        x, z = gx + rnd.randint(-1, 1), gz + rnd.randint(-1, 1)
+        if not inside(FOREST, x, z) or not open_ground(x, z, 1) or rnd.random() < 0.18: continue
+        flora.append({'type': 'tree', 'x': x, 'z': z, 'h': rnd.randint(5, 7), 'kind': 'broadleaf', 'district': 'forest'})
+        tree_at.append((x, z))
+        for zz in range(z - 1, z + 2):
+            for xx in range(x - 1, x + 2): used.add((xx, zz))
+# forest: patches of undergrowth, about a quarter of the open floor
+for gz in range(2, SIZE - 2, 3):
+    for gx in range(2, 128, 3):
+        x, z = gx + rnd.randint(0, 1), gz + rnd.randint(0, 1)
+        if not inside(FOREST, x, z) or rnd.random() > 0.42: continue
+        w, d = rnd.randint(1, 2), rnd.randint(1, 2)
+        if all(open_ground(x + i, z + j) for i in range(w) for j in range(d)):
+            flora.append({'type': 'shrub', 'x': x, 'z': z, 'w': w, 'd': d, 'h': 2, 'kind': 'fern', 'district': 'forest'})
+            for i in range(w):
+                for j in range(d): used.add((x + i, z + j))
+# village: palms and banana plants beside the huts and houses
+for b in buildings:
+    if b['file'] not in ('hut.txt', 'mud_house.txt'): continue
+    w, d = SIZES[b['file']]
+    for _ in range(3):
+        side = rnd.choice(['n', 's', 'e', 'w'])
+        x = b['x'] + (rnd.randint(0, w - 1) if side in 'ns' else (-3 if side == 'w' else w + 2))
+        z = b['z'] + (rnd.randint(0, d - 1) if side in 'ew' else (-3 if side == 'n' else d + 2))
+        if not (2 <= x < SIZE - 2 and 2 <= z < SIZE - 2) or (x, z) in used or not open_ground(x, z, 1) and (x, z) in used: continue
+        if any(near_path(x + 0.5, z + 0.5, pts, ww) for pts, ww in ROADS): continue
+        if rnd.random() < 0.35:
+            flora.append({'type': 'tree', 'x': x, 'z': z, 'h': 6, 'kind': 'palm', 'district': 'village'})
+            for zz in range(z - 1, z + 2):
+                for xx in range(x - 1, x + 2): used.add((xx, zz))
+        else:
+            flora.append({'type': 'shrub', 'x': x, 'z': z, 'w': 1, 'd': 1, 'h': 2, 'kind': 'banana', 'district': 'village'})
+            used.add((x, z))
+# the mine rim: a little scrub on the plateau round the pit
+for _ in range(400):
+    x, z = rnd.randint(132, 252), rnd.randint(4, 136)
+    if ((x - CX) / 62) ** 2 + ((z - CZ) / 52) ** 2 <= 1 or not open_ground(x, z, 1): continue
+    flora.append({'type': 'shrub', 'x': x, 'z': z, 'w': 1, 'd': 1, 'h': 1, 'kind': 'fern', 'district': 'mine'})
+    used.add((x, z))
+    if sum(1 for f in flora if f['district'] == 'mine') >= 45: break
+props += flora
+
 level = {
     'name': 'Kambala mine', 'title': 'Kambala mine', 'subtitle': 'Level 2 · in progress', 'order': 2,
     'summary': 'A company mine in the DR Congo: an open pit, a jungle and a mining village around a junction. Rebels come out of the forest to attack.',

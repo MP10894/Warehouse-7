@@ -1,6 +1,6 @@
 // Bullets and rockets as real objects: they fly, drop under gravity and hit whatever is
 // in their path (ground, blocks, people). Also used for line-of-sight checks.
-import { solidAt, gidx } from './grid.js';
+import { solidAt, gidx, isShrub } from './grid.js';
 import { terrainHeight } from './terrain.js';
 
 // Hit volumes for people, relative to their feet, in metres.
@@ -82,6 +82,21 @@ export function traceSegment(world, ax, ay, az, bx, by, bz, opts = {}) {
     }
   }
   return hit;
+}
+
+/**
+ * Is b hidden from a by undergrowth? True when the line between them passes through a shrub,
+ * unless they are within `near` metres of each other (close up, leaves don't hide you).
+ */
+export function hiddenByShrubs(world, ax, ay, az, bx, by, bz, near = 3) {
+  const dx = bx - ax, dy = by - ay, dz = bz - az, len = Math.hypot(dx, dy, dz);
+  if (len <= near) return false;
+  const n = Math.ceil(len / 0.5), g = world.grid;
+  for (let k = 1; k < n; k++) {
+    const t = k / n;
+    if (isShrub(g, Math.floor(ax + dx * t), Math.floor(ay + dy * t), Math.floor(az + dz * t))) return true;
+  }
+  return false;
 }
 
 /** Can a see b? (eye to eye, blocks and ground only) */

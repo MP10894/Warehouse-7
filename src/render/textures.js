@@ -96,6 +96,8 @@ export function makeTextures() {
     return c;
   });
   T.rock = noiseTex(16, [138, 120, 98], 40, (x, y, c) => (rnd() < 0.08 ? c.map(v => v - 30) : c));
+  // tree bark: dark grey-brown with vertical fissures
+  T.bark = noiseTex(16, [92, 78, 62], 18, (x, y, c) => ((x * 5 + Math.floor(y / 3)) % 7 === 0 ? c.map(v => v - 30) : x % 4 === 1 ? c.map(v => v + 10) : c));
   T.locker = noiseTex(16, [86, 98, 70], 12, (x, y, c) => {
     if (y < 2) return [214, 170, 48];                       // yellow band
     if (x === 0 || x === 15 || y === 15) return c.map(v => v - 30);

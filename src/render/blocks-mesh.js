@@ -23,7 +23,8 @@ const LOOK = {
   [V.TANK]: { tex: 'tank', scale: 0.25 },
   [V.ROCK]: { tex: 'rock', scale: 0.5 },
   [V.FENCE]: { tex: 'fence', scale: 1 },
-  [V.LOCKER]: { tex: 'locker', scale: 1 }
+  [V.LOCKER]: { tex: 'locker', scale: 1 },
+  [V.TRUNK]: { tex: 'bark', scale: 1 }
 };
 const SUN_H = new THREE.Vector2(SUN.x, SUN.z).normalize();
 
@@ -104,7 +105,8 @@ export function createBlockMeshes(scene, world, tex) {
       for (let x = ci * CHUNK; x < Math.min(g.w, (ci + 1) * CHUNK); x++) {
         for (let y = 0; y < g.h; y++) {
           const t = cell(x, y, z);
-          if (t === V.AIR || t === V.WRECK) continue;   // wrecks are drawn as vehicle models (decor.js)
+          // wrecks are drawn as vehicle models (decor.js), undergrowth as leaves (flora.js)
+          if (t === V.AIR || t === V.WRECK || t === V.SHRUB) continue;
           const L = LOOK[t], k = L.tex, s = L.scale;
           if (t === V.FENCE) {
             // one chain-link panel down the middle of the cell, along the fence line
