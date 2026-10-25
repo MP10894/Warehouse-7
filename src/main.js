@@ -276,7 +276,7 @@ if (!view) {
       if (ev.type === 'shot' && ev.actorId === localId && role === 'guest') applyKick(ev);
       effects.handle(ev, world);
       worldView.handle(ev);
-      fp.handle(ev, localId);
+      fp.handle(ev, localId, world);
       hud.handle(ev, p);
       audio.handle(ev, p);
       domHud.handle(ev, localId);
