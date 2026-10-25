@@ -1,6 +1,6 @@
 """Draws the Level 2 (mining site, DR Congo) layout plan: docs/kambala_layout.png. 1 m = S pixels.
 
-    python3 docs/kolwezi_layout.py
+    python3 docs/kambala_layout.py
 """
 import math, random, os
 from PIL import Image, ImageDraw, ImageFont
