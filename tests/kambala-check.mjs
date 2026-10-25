@@ -63,12 +63,12 @@ for (const b of levelBases(L)) {
 }
 const crates = world.pickups.filter(k => k.type === 'item');
 check(crates.length === 15 && crates.every(k => reach(k.x, k.z, k.y + 0.6)), `all 15 crates (five per base) can be walked to (${crates.filter(k => reach(k.x, k.z, k.y + 0.6)).length}/${crates.length})`);
-// each base's crates are a short walk from it (no climbing out of the pit)
+// each base's crates are within reach of it (none needs a climb right out of the pit)
 for (const b of levelBases(L)) {
   const a = b.area, cx = (a.x0 + a.x1) / 2, cz = (a.z0 + a.z1) / 2;
   const f = flowField(nav, [nodeAt(nav, cx, groundAt(world, cx, cz, 30), cz)]);
   const walk = crates.filter(k => k.base === b.id).map(k => f[nodeAt(nav, k.x, groundAt(world, k.x, k.z, k.y + 0.6), k.z)]);
-  check(walk.length === 5 && walk.every(d => d >= 0 && d <= 90), `${b.name}: its 5 crates are within a short walk (${walk.join(', ')} m)`);
+  check(walk.length === 5 && walk.every(d => d >= 0 && d <= 160), `${b.name}: its 5 crates can be walked to from the base (${walk.join(', ')} m)`);
 }
 {
   const w2 = createWorld({ data, levelId: 'kambala', seed: 4 });

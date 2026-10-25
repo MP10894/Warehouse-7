@@ -34,14 +34,14 @@ forest, hills and the company fence round the village. None of it can be crossed
 ## Base-building crates
 
 Changed 2026-10-25 (play-testing: fetching from the rim meant climbing out of the pit and back).
-Each base now has its own five crates close by (two construction, ammunition, medical,
+Each base now has its own five crates nearby (squares chosen by Martial) (two construction, ammunition, medical,
 armour). When you claim a base, the other bases' crates are taken away.
 
 | Base | Where its crates are | Walk from the base |
 |---|---|---|
-| Pit-floor workshop | Round the workshop walls on the pit floor (west, north, east), and on the first bench above it (south, south-east) | about 20–55 m |
-| Logging camp | Out in the forest all round the camp | about 25 m |
-| Company HQ | Inside the buildings round the HQ: the dorm, the huts to the north and south-west, the mud house, the clinic (ground floor) | about 30–60 m |
+| Pit-floor workshop | On the benches round the pit: G1, H2, G3 (first bench), F3 (pit floor), E3 | about 25–155 m |
+| Logging camp | Out in the forest in A2, B2, B4 and C4, and inside the sawmill (C1) | about 30–50 m |
+| Company HQ | Inside buildings: the hut in G5, the store (H7), the hut in E7, the dorm (E6), the company building in E5 | about 60–95 m |
 
 ## Enemies
 

@@ -358,15 +358,16 @@ def ground_y(x, z):
 # each base has its own five crates close by (a short walk, not a climb out of the pit); once
 # a base is claimed, the other bases' crates are taken away
 CRATES = {
-    # on the pit floor round the workshop's walls, and on the first bench above it
-    'workshop': [('construction_crate', 180, 56), ('ammo_crate', 200, 46), ('medical_crate', 214, 64),
-                 ('construction_crate', 203, 83), ('armour_crate', 216, 79)],
-    # out in the forest round the camp, about 25 m away
-    'logging_camp': [('construction_crate', 71, 67), ('ammo_crate', 62, 96), ('medical_crate', 27, 95),
-                     ('construction_crate', 25, 66), ('armour_crate', 44, 51)],
-    # inside the buildings round the HQ: the dorm, the huts north and south-west, the mud house, the clinic
-    'company_hq': [('construction_crate', 157, 179), ('ammo_crate', 194, 170), ('medical_crate', 210, 168),
-                   ('construction_crate', 149, 199), ('armour_crate', 156, 217)],
+    # round the pit on the benches (grid squares G1, H2, G3, F3, E3)
+    'workshop': [('ammo_crate', 205, 23), ('armour_crate', 238, 49), ('medical_crate', 207, 80),
+                 ('construction_crate', 176, 71), ('construction_crate', 155, 74)],
+    # out in the forest (A2, B2, B4, C4) and inside the sawmill (C1)
+    'logging_camp': [('construction_crate', 16, 47), ('ammo_crate', 48, 46), ('medical_crate', 47, 113),
+                     ('armour_crate', 80, 110), ('construction_crate', 84, 28)],
+    # inside buildings round the HQ: the hut in G5, the store (H7), the hut south-west (E7),
+    # the dorm (E6) and the company building in E5
+    'company_hq': [('ammo_crate', 213, 148), ('armour_crate', 229, 207), ('construction_crate', 156, 217),
+                   ('construction_crate', 156, 181), ('medical_crate', 142, 158)],
 }
 crate_spots = [(item, x, z) for spots_ in CRATES.values() for item, x, z in spots_]
 base_items = [{'item': item, 'x': x + 0.5, 'z': z + 0.5, 'y': ground_y(x, z), 'base': b}
@@ -636,7 +637,7 @@ level = {
     'briefing': [
         'You start at the junction. Pick a base: the workshop on the pit floor (mine, north-east), the logging camp (forest, west) or the company HQ (village, south-east).',
         'Clear its defenders and step inside. It becomes your base and the clock starts.',
-        'Fetch crates and build upgrades at the marked spots. Each base has its own crates close by: round the pit floor and the first bench, out in the forest round the camp, or inside the buildings round the HQ.',
+        'Fetch crates and build upgrades at the marked spots. Each base has its own crates nearby: on the benches round the pit, out in the forest round the camp, or inside the buildings round the HQ.',
         'The rebels always come out of the jungle on the west side.'
     ],
     'goals': {'claim': 'Clear a base: pit-floor workshop (mine), logging camp (forest) or company HQ (village)',
