@@ -510,6 +510,36 @@ for _ in range(400):
     if sum(1 for f in flora if f['district'] == 'mine') >= 45: break
 props += flora
 
+# ---------------------------------------------------------------- blasting (the signature)
+def face_points(face, a0, a1, step=4.0):
+    """Points along the foot of bench wall `face` (0 = rim wall … 3 = the wall above the floor),
+    on the bench below it, from angle a0 to a1 (degrees, anticlockwise from east, z up the page)."""
+    rx, rz = RINGS[face]
+    pts, a = [], a0
+    while a <= a1:
+        r = math.radians(a)
+        # just inside the wall: on the lower bench, 2 m from its foot
+        x = CX + math.cos(r) * (rx - 2.0)
+        z = CZ - math.sin(r) * (rz - 2.0)
+        xi, zi = int(x), int(z)
+        if ring(xi + 0.5, zi + 0.5) == face + 1:
+            pts.append({'x': xi, 'z': zi, 'y': LEVELS[face + 1]})
+        a += math.degrees(step / max(rx, rz))
+    return pts
+
+
+charges = face_points(2, 200, 250) + face_points(1, 290, 340) + face_points(2, 20, 70)
+unstable = []
+for face, ang in [(1, 160), (0, 340), (0, 100)]:
+    pts = face_points(face, ang - 6, ang + 6, 3.0)
+    mid = pts[len(pts) // 2]
+    # the cracked face itself sits on the wall above the points
+    r = math.radians(ang)
+    unstable.append({'x': int(CX + math.cos(r) * RINGS[face][0]), 'z': int(CZ - math.sin(r) * RINGS[face][1]), 'y': LEVELS[face], 'points': pts})
+DETONATOR = {'x': 207, 'z': 62}
+props.append({'type': 'metal', 'x': DETONATOR['x'], 'z': DETONATOR['z'], 'w': 1, 'd': 1, 'h': 1, 'district': 'mine', 'note': 'detonator'})
+blasting = {'detonator': DETONATOR, 'charges': charges, 'unstable': unstable}
+
 level = {
     'name': 'Kambala mine', 'title': 'Kambala mine', 'subtitle': 'Level 2 · in progress', 'order': 2,
     'summary': 'A company mine in the DR Congo: an open pit, a jungle and a mining village around a junction. Rebels come out of the forest to attack.',
@@ -526,7 +556,8 @@ level = {
     'buildings': buildings, 'props': props, 'base_items': base_items, 'enemy_groups': groups,
     # every attack wave comes out of the forest on the west edge (column A)
     'wave_spawns': [{'x': 3, 'z': z} for z in (16, 56, 100, 140, 180, 220)],
-    'pickups': pickups, 'weather_zones': [], 'bases': bases, 'decor': [], 'music_zones': []
+    'pickups': pickups, 'weather_zones': [], 'bases': bases, 'decor': [], 'music_zones': [],
+    'blasting': blasting
 }
 
 os.makedirs(os.path.join(OUT, 'buildings'), exist_ok=True)

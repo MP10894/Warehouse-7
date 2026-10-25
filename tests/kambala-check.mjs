@@ -13,6 +13,10 @@ import { terrainHeight } from '../src/sim/terrain.js';
 import { V, getV, isShrub } from '../src/sim/grid.js';
 import { explode } from '../src/sim/damage.js';
 import { hiddenByShrubs, traceSegment } from '../src/sim/ballistics.js';
+import { stepWorld } from '../src/sim/step.js';
+import { spawnEnemy } from '../src/sim/enemies.js';
+import { createHostEncoder, createGuestDecoder } from '../src/net/snapshot.js';
+import { detonate } from '../src/sim/blasting.js';
 
 const read = p => readFileSync(new URL('../' + p, import.meta.url), 'utf8');
 const loadLevel = id => {
@@ -103,6 +107,55 @@ check(reach(176, 68, 3) && reach(200, 74, 3), 'the haul road leads from the rim 
   check(!traceSegment(world, s.x - 5, y, s.z + 0.5, s.x + 3.9, y, s.z + 0.5), 'bullets pass through it');
   check(hiddenByShrubs(world, s.x - 8, y, s.z + 0.5, s.x + 3, y, s.z + 0.5), 'but someone behind it is hidden from an enemy 11 m away');
   check(!hiddenByShrubs(world, s.x - 1, y, s.z + 0.5, s.x + 1.5, y, s.z + 0.5), 'and seen again from 2.5 m away');
+}
+
+// blasting: DETONATE, a siren, then the charges bring rock down on the benches below
+{
+  const w = createWorld({ data, levelId: 'kambala', seed: 9, playerIds: ['p1', 'p2'] });
+  const guest = createWorld({ data, levelId: 'kambala', seed: 9, playerIds: ['p1', 'p2'] });
+  w.enemies = []; w.groups = []; w.waves.nextT = 1e9;
+  const B = L.blasting, q = w.players[0], q2 = w.players[1];
+  const step = (cmd = {}, n = 1) => { for (let i = 0; i < n; i++) { stepWorld(w, { p1: cmd, p2: {} }, 1 / 60); w.events.length = 0; } };
+  const detonateNow = ww => { detonate(ww, ww.players[0]); ww.blast.sirenT = 0; stepWorld(ww, { p1: {}, p2: {} }, 1 / 60); ww.events.length = 0; };
+  const place = (a, x, z) => { a.x = x; a.z = z; a.y = groundAt(w, x, z, 30); };
+  check(B && B.charges.length >= 15 && B.unstable.length === 3, `the pit has a detonator, ${B.charges.length} charges on its bench walls and ${B.unstable.length} unstable faces`);
+  place(q, B.detonator.x - 0.6, B.detonator.z + 0.5);
+  place(q2, 130, 130);
+  step();
+  check(q.context && q.context.kind === 'detonate' && q.context.label === 'DETONATE', 'next to the detonator: DETONATE');
+  // someone standing at a charge, and how much rock there is before
+  const c = B.charges[Math.floor(B.charges.length / 2)];
+  const e = spawnEnemy(w, { x: c.x + 0.5, y: c.y, z: c.z + 0.5, weapon: 'ak47', type: 'insurgent' });
+  const rocks0 = w.pieces.length;
+  const evs = [];
+  stepWorld(w, { p1: { interact: true }, p2: {} }, 1 / 60); evs.push(...w.events); w.events.length = 0;
+  check(w.blast.state === 'siren' && evs.some(v => v.type === 'siren'), 'pressing it sounds the siren');
+  step({}, 60 * 4);
+  check(w.pieces.length === rocks0 && e.alive, 'nothing happens for the first seconds (time to get clear)');
+  step({}, 70);
+  check(w.pieces.length > rocks0 + 10, `then the charges go off and rock comes down (${w.pieces.length - rocks0} slabs)`);
+  check(!e.alive || e.hp < 40, `someone standing below a charge is killed or badly hurt (${e.alive ? Math.round(e.hp) + ' health' : 'killed'})`);
+  step();
+  check(q.context && q.context.kind === 'blastWait' && /DETONATOR \d+ s/.test(q.context.label), `then it recharges (${q.context && q.context.label})`);
+  step({ interact: true }, 1);
+  check(w.blast.state === 'idle', 'and can\'t be pressed again yet');
+  step({}, 60 * 61);
+  check(q.context && q.context.kind === 'detonate', 'a minute later it is ready again');
+  // an RPG next to an unstable face brings it down
+  const u = B.unstable[0], before = w.pieces.length;
+  explode(w, u.x + 0.5, u.y - 1.5, u.z + 0.5, data.weapons.rpg7, q);
+  check(w.blast.collapsed.includes(0) && w.pieces.length > before, `a rocket at an unstable face brings it down (${w.pieces.length - before} slabs)`);
+  // ten blasts later, the haul road still leads down to the floor
+  for (let n = 0; n < 10; n++) { w.blast.readyAt = 0; w.blast.state = 'idle'; detonateNow(w); }
+  const nav2 = buildNav(w);
+  const f2 = flowField(nav2, [nodeAt(nav2, 128, groundAt(w, 128, 134, 30), 134)]);
+  const r2 = (x, z) => { const n = nodeAt(nav2, x, groundAt(w, x, z, 3), z); return n >= 0 && f2[n] >= 0; };
+  check(r2(176, 68) && r2(196, 74), 'after ten blasts the haul road still leads down to the pit floor');
+  // co-op: the partner's phone drops the same rocks
+  const snap = createHostEncoder(data).encode(w);
+  createGuestDecoder(data).apply(guest, snap, 'p2');
+  const same = guest.pieces.length === w.pieces.length && w.pieces.slice(rocks0).every((p, i) => guest.pieces[rocks0 + i] && guest.pieces[rocks0 + i].cells.join() === p.cells.join());
+  check(same, `co-op: the partner sees exactly the same fallen rock (${guest.pieces.length - rocks0} of ${w.pieces.length - rocks0} slabs)`);
 }
 
 process.exit(failures ? 1 : 0);

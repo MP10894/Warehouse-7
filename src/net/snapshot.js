@@ -4,6 +4,7 @@
 // things travel: people, bullets, pickups, broken walls, base walls, clock, events.
 import { destroyPiece } from '../sim/damage.js';
 import { claimBase, applyUpgrade } from '../sim/base.js';
+import { replayBlast } from '../sim/blasting.js';
 
 const STATES = ['idle', 'chase', 'aim', 'fire', 'pain', 'dead'];
 const STATUS = ['playing', 'won', 'lost'];
@@ -14,7 +15,7 @@ const SEND_RANGE = 90;
 // events the guest needs to replay for sound, effects and HUD (broken walls are rebuilt
 // from the piece list instead, so 'blocks' is not forwarded)
 const FORWARD = new Set(['shot', 'impact', 'explosion', 'hurt', 'death', 'downed', 'revived', 'pickup', 'message',
-  'wave', 'baseClaimed', 'built', 'weather', 'hitConfirm', 'reload', 'swap', 'empty', 'status', 'throw', 'beep', 'bounce', 'turret']);
+  'wave', 'baseClaimed', 'built', 'weather', 'hitConfirm', 'reload', 'swap', 'empty', 'status', 'throw', 'beep', 'bounce', 'turret', 'siren']);
 const EVENT_WINDOW = 45; // ticks of recent events repeated in every snapshot (drops are common)
 const MAX_EVENTS = 22;
 
@@ -80,6 +81,8 @@ export function createHostEncoder(data) {
       ]);
       // bullets first (they are trimmed first when the message is too big), then rockets and grenades
       const shown = [...world.projectiles.filter(pr => pr.kind === 'bullet').slice(-12), ...world.projectiles.filter(pr => pr.kind !== 'bullet').slice(-8)];
+      // the mine's detonator: siren sounding, and when it is ready again
+      if (world.blast) patch.x = [world.blast.state === 'siren' ? 1 : 0, cm(world.blast.readyAt)];
       // the players' turrets (one each at most)
       patch.r = world.turrets.map(t => [t.id, cm(t.x), cm(t.y), cm(t.z), mr(t.yaw), mr(t.pitch), Math.ceil(t.hp), Math.ceil(t.armour),
         t.alive ? 1 : 0, t.owner, t.type, Math.round(t.deadT * 10)]);
@@ -204,6 +207,7 @@ export function createGuestDecoder(data) {
         return e;
       });
 
+      if (snap.x && world.blast) { world.blast.state = snap.x[0] ? 'siren' : 'idle'; world.blast.readyAt = snap.x[1] / 100; }
       if (snap.r) {
         world.turrets = snap.r.map(([id, x, y, z, yaw, pitch, hp, armour, alive, owner, type, deadT]) => ({
           id, kind: 'turret', type, owner, x: x / 100, y: y / 100, z: z / 100, yaw: yaw / 1000, pitch: pitch / 1000,
@@ -230,11 +234,12 @@ export function createGuestDecoder(data) {
       // breakages first, then the host's builds and base breakages in their order, then
       // breakages again (pieces that were built and broken since)
       if (snap.d) applyBroken(world, snap.d);
-      if (typeof snap.u === 'string' && world.base.claimed) {
+      if (typeof snap.u === 'string') {
         const log = snap.u ? snap.u.split(',') : [];
         for (; applied < log.length; applied++) {
           const tok = log[applied];
-          if (tok[0] === '-') {
+          if (tok[0] === 'b' || tok[0] === 'u') replayBlast(world, tok);   // mine blasts and rockfalls
+          else if (tok[0] === '-') {
             const p = world.pieces[world.basePieceCount + Number(tok.slice(1)) - 1];
             if (p && p.alive) destroyPiece(world, p);
           } else {

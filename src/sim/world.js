@@ -8,6 +8,7 @@ import { createBase } from './base.js';
 import { createWaves } from './waves.js';
 import { createWeather } from './weather.js';
 import { dropPickup } from './damage.js';
+import { createBlasting } from './blasting.js';
 
 export function createWorld({ data, levelId, seed = 7, playerIds = ['p1'] }) {
   levelId = levelId || data.settings.level;
@@ -28,6 +29,7 @@ export function createWorld({ data, levelId, seed = 7, playerIds = ['p1'] }) {
   world.base = createBase(level, data.upgrades);
   world.waves = createWaves();
   world.weather = createWeather(level);
+  world.blast = createBlasting();
 
   world.players = playerIds.map((id, i) => createPlayer(world, id, level.player_spawns[i] || level.player_spawns[0]));
 

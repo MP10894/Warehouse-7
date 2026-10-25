@@ -7,6 +7,7 @@ import { buildSpotFor, build, buildLabel, crateWanted, crateName, armouryFor, ar
 import { blocked } from './body.js';
 import { onBuild } from './waves.js';
 import { isAlly, takeTurret, placementFor, dropTurret, turretToPickUp, pickUpTurret } from './turrets.js';
+import { detonatorFor, detonate, blastWait } from './blasting.js';
 
 export function createPlayer(world, id, spawn) {
   const s = world.data.settings.player;
@@ -131,6 +132,12 @@ function findContext(world, p) {
   const spot = buildSpotFor(world, p);
   if (spot) return { kind: 'build', label: buildLabel(world, spot), spot };
   if (armouryFor(world, p) && armouryWeapons(world).length) return { kind: 'armoury', label: 'ARMOURY' };
+  // the mine's detonator: DETONATE when ready, otherwise how long until it is
+  if (detonatorFor(world, p)) {
+    if (world.blast.state === 'siren') return { kind: 'blastWait', label: 'BLASTING…' };
+    const wait = blastWait(world);
+    return wait > 0 ? { kind: 'blastWait', label: `DETONATOR ${Math.ceil(wait)} s` } : { kind: 'detonate', label: 'DETONATE' };
+  }
   const tur = turretToPickUp(world, p);
   if (tur) return { kind: 'pickupTurret', label: 'PICK UP TURRET', turretId: tur.id };
   if (p.slots.every(Boolean)) {
@@ -147,6 +154,8 @@ function doContext(world, p, ctx) {
       o.downed = false; o.hp = world.data.settings.player.revive_health;
       emit(world, { type: 'revived', playerId: o.id });
     }
+  } else if (ctx.kind === 'detonate') {
+    detonate(world, p);
   } else if (ctx.kind === 'dropTurret') {
     dropTurret(world, p);
   } else if (ctx.kind === 'pickupTurret') {

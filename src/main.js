@@ -22,6 +22,7 @@ import { buildTerrain } from './render/terrain-mesh.js';
 import { createBlockMeshes } from './render/blocks-mesh.js';
 import { createDecor } from './render/decor.js';
 import { createFlora } from './render/flora.js';
+import { createBlastMarkers } from './render/blast-markers.js';
 import { createWorldView } from './render/world-view.js';
 import { createEffects } from './render/effects.js';
 import { createFpWeapon } from './render/fp-weapon.js';
@@ -85,6 +86,7 @@ if (!view) {
     scenery.blocks = createBlockMeshes(view.scene, world, tex);
     scenery.decor = createDecor(view.scene, world, S);
     scenery.flora = createFlora(view.scene, world);
+    scenery.blast = createBlastMarkers(view.scene, world);
   }
   buildScenery();
   const worldView = createWorldView(view.scene, tex, localId);
@@ -446,6 +448,7 @@ if (!view) {
     effects.update(dt);
     weatherFx.update(dt, world, view.camera);
     if (scenery.decor) scenery.decor.tick(dt, view.camera);
+    if (scenery.blast) scenery.blast.update(world);
     markers.update(world, mode === 'playing' ? p : null, dt);
     audio.setStorm(weatherFx.level);
     music.update(dt, { menu: mode !== 'playing', world, player: mode === 'playing' ? p : null });

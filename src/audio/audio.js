@@ -23,6 +23,7 @@ function soundFor(ev, local) {
     case 'throw': return mine(ev.actorId) ? 'throw' : null;
     case 'bounce': return 'grenade_bounce';
     case 'explosion': return 'explosion';
+    case 'siren': return 'blast_siren';
     case 'blocks': return !ev.placed && ev.cells && ev.cells.length ? 'wall_break' : null;
     case 'wave': return 'wave_alarm';
     case 'baseClaimed': return 'base_claimed';
@@ -118,6 +119,8 @@ export function createAudio() {
           break;
         }
         case 'explosion': { const v = 1.3 * Math.max(0.15, fade(d)); noise(1.2, 500, v); tone('sine', 70, 25, 0.8, v); break; }
+        // the mine's blasting siren: a wail rising and falling for as long as it sounds
+        case 'siren': { const n = Math.max(1, Math.round(ev.time || 5)); for (let i = 0; i < n; i++) { tone('sawtooth', 420, 880, 0.5, 0.12, i); tone('sawtooth', 880, 420, 0.5, 0.12, i + 0.5); } break; }
         case 'impact': if (d < 6 && ev.kind !== 'flesh') noise(0.05, 5000, 0.12, 0, 'highpass'); break;
         case 'hurt':
           if (ev.targetId === local.id) tone('square', 220, 100, 0.16, 0.16);

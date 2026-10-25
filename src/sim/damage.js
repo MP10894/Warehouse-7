@@ -7,6 +7,7 @@ import { rand } from './rng.js';
 import { markNavDirty } from './nav.js';
 import { onPieceDestroyed } from './base.js';
 import { destroyTurret, dropTurretAtFeet } from './turrets.js';
+import { checkUnstable } from './blasting.js';
 
 export const emit = (world, ev) => world.events.push(ev);
 
@@ -176,6 +177,8 @@ export function explode(world, x, y, z, wdef, source) {
         }
     for (const pid of hit) damagePiece(world, pid, wdef.damage_environment);
   }
+  // an explosion next to an unstable rock face (the mine) brings it down
+  if (r > 0) checkUnstable(world, x, y, z, source);
   // a rocket that bursts against a fuel tank sets the whole tank off
   if (wdef.projectile === 'rocket') {
     const tank = tankNear(world, x, y, z, 1.5);

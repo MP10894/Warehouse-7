@@ -7,6 +7,7 @@ import { updatePlayer } from './players.js';
 import { updateProjectiles } from './weapons.js';
 import { updateEnemy, updateGroups } from './enemies.js';
 import { updateTurrets } from './turrets.js';
+import { updateBlasting } from './blasting.js';
 import { updateBase, respawnItem } from './base.js';
 import { updateWaves } from './waves.js';
 import { updateWeather } from './weather.js';
@@ -59,6 +60,7 @@ export function stepWorld(world, commands, dt) {
   }
   for (const e of world.enemies) updateEnemy(world, e, dt);
   updateTurrets(world, dt);
+  updateBlasting(world, dt);
   // forget long-dead bodies so the world doesn't fill up
   if (world.tick % 60 === 0) world.enemies = world.enemies.filter(e => e.alive || e.deadT < 30);
   updateBase(world);

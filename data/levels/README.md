@@ -132,3 +132,11 @@ doesn't mention gets weight 1, and weight 0 rules a weapon out). A group of suic
 `"type": "suicide_bomber"` with `"weapons": { "rgd5": 1 }`.
 
 Pickups in `pickups` can also be `{ "type": "grenade", "amount": 2, "x", "z" }`.
+
+## Blasting (Kambala)
+
+`level.json → "blasting"`: `detonator` `{ x, z }` (stand within 2 m: **DETONATE**), `charges`
+`[{ x, z, y }, …]` (the foot of a bench wall, on the bench below it: where rock lands and who
+gets hurt), and `unstable` faces `[{ x, z, y, points: [{ x, z, y }, …] }, …]` (an explosion
+within 3 m of `x, z` brings rock down on `points`, once). Siren time, recharge (60 s), danger
+radius, damage and how much rock falls: `settings.json → blasting`.
