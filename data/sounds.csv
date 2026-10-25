@@ -29,13 +29,13 @@ enemy_death,,1,50,0.1,An enemy dies
 bomber_beep,,1,30,0,A suicide bomber's vest beeps
 downed,,1,0,0,A player goes down
 revived,,1,0,0,A player is revived
-shot_sig_p320,,1,90,0.06,A P320 fires
+shot_sig_p320,P320_fire,1,90,0.06,A P320 fires
 shot_mp5,,1,90,0.06,An MP5 fires
 shot_mini_uzi,,1,90,0.06,A Mini Uzi fires
 shot_m4a1,,1,120,0.06,An M4A1 fires
 shot_galil,,1,120,0.06,A Galil fires
 shot_ak47,AK-47_fire,1,120,0.06,An AK-47 fires
 shot_rpk,,1,130,0.06,An RPK fires
-shot_fal,,1,140,0.06,A FAL fires
+shot_fal,FAL_fire,1,140,0.06,A FAL fires
 shot_mk14ebr,,1,140,0.06,An Mk14 EBR fires
 shot_rpg7,,1,140,0.04,An RPG-7 fires
