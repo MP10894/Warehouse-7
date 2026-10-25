@@ -11,7 +11,8 @@ import { groundAt, blocked, moveBody } from '../src/sim/body.js';
 import { levelBases } from '../src/sim/base.js';
 import { terrainHeight } from '../src/sim/terrain.js';
 import { V, getV, isShrub } from '../src/sim/grid.js';
-import { explode } from '../src/sim/damage.js';
+import { explode, damageActor } from '../src/sim/damage.js';
+import { spawnWave } from '../src/sim/waves.js';
 import { hiddenByShrubs, traceSegment } from '../src/sim/ballistics.js';
 import { stepWorld } from '../src/sim/step.js';
 import { spawnEnemy } from '../src/sim/enemies.js';
@@ -176,6 +177,57 @@ check(reach(176, 68, 3) && reach(200, 74, 3), 'the haul road leads from the rim 
   for (const m of mist) { m.active = true; m.intensity = 1; }
   check(stormAt(world, 50, 60) > 0.7 && stormAt(world, 200, 200) === 0 && stormAt(world, 200, 60) === 0, 'mist settles in the forest, not on the mine or the village');
   for (const m of mist) { m.active = false; m.intensity = 0; }
+}
+
+// Kambala's own fighters: the groups and the attack waves use the four Kambala types
+{
+  const types = new Set(world.enemies.map(e => e.type));
+  const want = ['kambala_militant', 'khat_addict', 'khat_berserker', 'kambala_mercenary'];
+  check(want.every(t => types.has(t)) && types.size === 4, `the garrisons are Kambala militants, mercenaries and Khat addicts and berserkers (${[...types].join(', ')})`);
+  check(world.enemies.filter(e => e.type === 'kambala_mercenary').every(e => e.armour >= 30), 'every Kambala mercenary wears at least 30 armour');
+  check(world.enemies.filter(e => e.type === 'khat_berserker').every(e => e.weapon.w === 'machete'), 'Khat berserkers carry machetes');
+  const w = createWorld({ data, levelId: 'kambala', seed: 11 });
+  const before = w.enemies.length;
+  for (let n = 0; n < 6; n++) spawnWave(w);
+  const wave = w.enemies.slice(before), wt = new Set(wave.map(e => e.type));
+  check(wave.length > 0 && [...wt].every(t => want.includes(t)), `the attack waves bring Kambala's fighters, not Najaf's (${[...wt].join(', ')})`);
+  const badKit = wave.filter(e => (e.type === 'khat_berserker') !== (e.weapon.w === 'machete'));
+  check(badKit.length === 0, `only berserkers come at you with machetes (${badKit.map(e => e.type + ':' + e.weapon.w).join('; ') || 'all right'})`);
+}
+
+// the machete: a berserker only cuts you within 1 m, and leaves no machete behind
+{
+  const w = createWorld({ data, levelId: 'kambala', seed: 12 });
+  for (const e of w.enemies) e.alive = false;
+  w.enemies.length = 0;
+  w.waves.started = false;
+  const p = w.players[0];
+  const e = spawnEnemy(w, { x: p.x + 1.5, y: p.y, z: p.z, weapon: 'machete', type: 'khat_berserker' });
+  e.alert = true; e.sees = true;
+  const life = () => p.hp + p.armour;
+  const hold = (dist, secs) => {
+    for (let i = 0; i < secs * 60; i++) {
+      e.x = p.x + dist; e.z = p.z; e.y = p.y;
+      stepWorld(w, { [p.id]: {} }, 1 / 60); w.events.length = 0;
+    }
+  };
+  const l0 = life();
+  hold(1.5, 3);
+  check(life() === l0, `a berserker 1.5 m away can't reach you (${l0} → ${life()})`);
+  hold(0.8, 3);
+  check(life() < l0, `a berserker within 1 m hacks you down (${l0} → ${life()})`);
+  // a machete fighter never leaves a machete to pick up
+  const pk0 = w.pickups.length;
+  e.hp = 1; damageActor(w, e, 100, 0, p);
+  check(!e.alive && !w.pickups.slice(pk0).some(k => k.weapon === 'machete' || k.type === 'weapon'), 'a dead berserker drops no machete');
+  // and he runs at you from further away
+  const w2 = createWorld({ data, levelId: 'kambala', seed: 13 });
+  w2.enemies.length = 0; w2.waves.started = false;
+  const p2 = w2.players[0];
+  const e2 = spawnEnemy(w2, { x: p2.x + 5, y: p2.y, z: p2.z, weapon: 'machete', type: 'khat_berserker' });
+  e2.alert = true;
+  for (let i = 0; i < 60; i++) { stepWorld(w2, { [p2.id]: {} }, 1 / 60); w2.events.length = 0; }
+  check(Math.hypot(e2.x - p2.x, e2.z - p2.z) < 2, `a berserker charges straight at you (5 m → ${Math.hypot(e2.x - p2.x, e2.z - p2.z).toFixed(1)} m away)`);
 }
 
 process.exit(failures ? 1 : 0);

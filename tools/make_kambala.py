@@ -378,39 +378,44 @@ def grp(id, x, z, n, type=None, behaviour='guard', respawn=55, weapons=None, arm
     return g
 
 
-MIL = {'ak47': 2, 'mini_uzi': 1}
-HEAVY = {'galil': 2, 'rpk': 1}
+# Kambala's own fighters (Enemies tab): militants hold the garrisons, mercenaries guard the
+# crates, Khat addicts roam with Uzis, Khat berserkers charge with machetes
+MILITANT = {'ak47': 2, 'galil': 1, 'fal': 1}
+MERC = {'ak47': 1, 'galil': 1, 'fal': 1, 'rpk': 1}
+UZI = {'mini_uzi': 1}
+MACHETE = {'machete': 1}
+M, MC, KA, KB = 'kambala_militant', 'kambala_mercenary', 'khat_addict', 'khat_berserker'
 groups = [
     # mine
-    grp('pit_floor', 196, 62, 4, 'heavy_insurgent', respawn=60, weapons=HEAVY, armour_chance=0.3, holds='workshop'),
-    grp('haul_road', 186, 86, 3, respawn=55),
-    grp('east_bench', 228, 42, 2, respawn=55),
-    grp('west_bench', 160, 42, 3, respawn=55),
-    grp('magazine', 238, 122, 4, 'heavy_insurgent', respawn=60, weapons=HEAVY, armour_chance=0.4),
-    grp('site_office', 154, 120, 3, 'militia', 'roam', 55, MIL, 0.1, radius=10),
-    grp('yard', 138, 78, 3, respawn=55),
-    grp('drill_rig', 178, 26, 2, 'militia', respawn=60, weapons=MIL, armour_chance=0),
+    grp('pit_floor', 196, 62, 4, M, respawn=60, weapons=MILITANT, armour_chance=0.2, holds='workshop'),
+    grp('haul_road', 186, 86, 3, MC, respawn=55, weapons=MERC, armour_chance=0.2),
+    grp('east_bench', 228, 42, 2, M, respawn=55, weapons=MILITANT),
+    grp('west_bench', 160, 42, 3, M, respawn=55, weapons=MILITANT),
+    grp('magazine', 238, 122, 4, MC, respawn=60, weapons=MERC, armour_chance=0.3),
+    grp('site_office', 154, 120, 3, KA, 'roam', 55, UZI, 0, radius=10),
+    grp('yard', 138, 78, 3, M, respawn=55, weapons=MILITANT),
+    grp('drill_rig', 178, 26, 2, KA, respawn=60, weapons=UZI, armour_chance=0),
     # forest
-    grp('logging_camp', 48, 74, 4, respawn=45, holds='logging_camp'),
-    grp('sawmill', 90, 30, 4, 'heavy_insurgent', respawn=60, weapons=HEAVY, armour_chance=0.3),
-    grp('north_trail', 24, 40, 2, 'militia', 'roam', 55, MIL, 0, radius=14),
-    grp('forest_patrol', 60, 128, 3, None, 'roam', 50, None, 0.15, radius=16),
-    grp('hunters', 16, 156, 2, 'militia', respawn=60, weapons=MIL, armour_chance=0),
-    grp('creek', 96, 70, 2, 'militia', 'roam', 55, MIL, 0, radius=12),
-    grp('south_trail', 40, 196, 2, None, 'roam', 60, None, 0.1, radius=12),
+    grp('logging_camp', 48, 74, 4, M, respawn=45, weapons=MILITANT, holds='logging_camp'),
+    grp('sawmill', 90, 30, 4, MC, respawn=60, weapons=MERC, armour_chance=0.3),
+    grp('north_trail', 24, 40, 2, KA, 'roam', 55, UZI, 0, radius=14),
+    grp('forest_patrol', 60, 128, 3, KB, 'roam', 50, MACHETE, 0, radius=16),
+    grp('hunters', 16, 156, 2, KA, respawn=60, weapons=UZI, armour_chance=0),
+    grp('creek', 96, 70, 2, KB, 'roam', 55, MACHETE, 0, radius=12),
+    grp('south_trail', 40, 196, 2, KA, 'roam', 60, UZI, 0, radius=12),
     # village
-    grp('company_hq', 186, 200, 4, respawn=45, holds='company_hq'),
-    grp('tower', 204, 198, 1, respawn=90, weapons={'fal': 1}, armour_chance=0, up=6),
-    grp('clinic', 212, 168, 3, respawn=55),
-    grp('security_post', 240, 234, 4, 'heavy_insurgent', respawn=60, weapons=HEAVY, armour_chance=0.35),
-    grp('dorm', 156, 186, 3, 'militia', respawn=55, weapons=MIL, armour_chance=0),
-    grp('pitch', 150, 236, 2, 'militia', 'roam', 60, MIL, 0, radius=12),
-    grp('market', 228, 192, 2, None, 'roam', 55, None, 0.1, radius=10),
-    grp('fields', 76, 236, 2, 'militia', 'roam', 60, MIL, 0, radius=14),
-    # suicide bombers, one or two in each zone
-    grp('bombers_mine', 170, 108, 2, 'suicide_bomber', respawn=120, weapons={'rgd5': 1}, armour_chance=0),
-    grp('bombers_forest', 70, 150, 2, 'suicide_bomber', respawn=120, weapons={'rgd5': 1}, armour_chance=0),
-    grp('bombers_village', 140, 214, 1, 'suicide_bomber', respawn=120, weapons={'rgd5': 1}, armour_chance=0),
+    grp('company_hq', 186, 200, 4, M, respawn=45, weapons=MILITANT, holds='company_hq'),
+    grp('tower', 204, 198, 1, M, respawn=90, weapons={'fal': 1}, armour_chance=0, up=6),
+    grp('clinic', 212, 168, 3, M, respawn=55, weapons=MILITANT),
+    grp('security_post', 240, 234, 4, MC, respawn=60, weapons=MERC, armour_chance=0.35),
+    grp('dorm', 156, 186, 3, KA, respawn=55, weapons=UZI, armour_chance=0),
+    grp('pitch', 150, 236, 2, KA, 'roam', 60, UZI, 0, radius=12),
+    grp('market', 228, 192, 2, M, 'roam', 55, MILITANT, 0.1, radius=10),
+    grp('fields', 76, 236, 2, KB, 'roam', 60, MACHETE, 0, radius=14),
+    # khat berserkers lying in wait in each zone (where Najaf has suicide bombers)
+    grp('berserkers_mine', 170, 108, 2, KB, respawn=90, weapons=MACHETE, armour_chance=0),
+    grp('berserkers_forest', 70, 150, 2, KB, respawn=90, weapons=MACHETE, armour_chance=0),
+    grp('berserkers_village', 140, 214, 1, KB, respawn=90, weapons=MACHETE, armour_chance=0),
 ]
 
 # ---------------------------------------------------------------- pickups
@@ -630,6 +635,8 @@ level = {
     'size': SIZE, 'max_height': 28, 'time_limit': 900, 'terrain_spacing': SP,
     'player_spawns': [{'x': 126, 'z': 134, 'facing': 30}, {'x': 130, 'z': 135, 'facing': 30}],
     'buildings': buildings, 'props': props, 'base_items': base_items, 'enemy_groups': groups,
+    # attack waves use Kambala's fighters in place of waves.csv's types
+    'wave_types': {'insurgent': M, 'militia': KA, 'heavy_insurgent': MC, 'suicide_bomber': KB},
     # every attack wave comes out of the forest on the west edge (column A)
     'wave_spawns': [{'x': 3, 'z': z} for z in (16, 56, 100, 140, 180, 220)],
     # passing downpours anywhere, mist banks in the forest

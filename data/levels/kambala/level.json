@@ -24454,7 +24454,7 @@
  "enemy_groups": [
   {
    "id": "pit_floor",
-   "type": "heavy_insurgent",
+   "type": "kambala_militant",
    "behaviour": "guard",
    "respawn": 60,
    "spawns": [
@@ -24480,15 +24480,17 @@
     }
    ],
    "weapons": {
-    "galil": 2,
-    "rpk": 1
+    "ak47": 2,
+    "galil": 1,
+    "fal": 1
    },
-   "armour_chance": 0.3,
+   "armour_chance": 0.2,
    "armour": 50,
    "holds_base": "workshop"
   },
   {
    "id": "haul_road",
+   "type": "kambala_mercenary",
    "behaviour": "guard",
    "respawn": 55,
    "spawns": [
@@ -24509,14 +24511,17 @@
     }
    ],
    "weapons": {
-    "ak47": 3,
-    "rpg7": 1
+    "ak47": 1,
+    "galil": 1,
+    "fal": 1,
+    "rpk": 1
    },
    "armour_chance": 0.2,
    "armour": 50
   },
   {
    "id": "east_bench",
+   "type": "kambala_militant",
    "behaviour": "guard",
    "respawn": 55,
    "spawns": [
@@ -24532,14 +24537,16 @@
     }
    ],
    "weapons": {
-    "ak47": 3,
-    "rpg7": 1
+    "ak47": 2,
+    "galil": 1,
+    "fal": 1
    },
    "armour_chance": 0.2,
    "armour": 50
   },
   {
    "id": "west_bench",
+   "type": "kambala_militant",
    "behaviour": "guard",
    "respawn": 55,
    "spawns": [
@@ -24560,15 +24567,16 @@
     }
    ],
    "weapons": {
-    "ak47": 3,
-    "rpg7": 1
+    "ak47": 2,
+    "galil": 1,
+    "fal": 1
    },
    "armour_chance": 0.2,
    "armour": 50
   },
   {
    "id": "magazine",
-   "type": "heavy_insurgent",
+   "type": "kambala_mercenary",
    "behaviour": "guard",
    "respawn": 60,
    "spawns": [
@@ -24594,15 +24602,17 @@
     }
    ],
    "weapons": {
-    "galil": 2,
+    "ak47": 1,
+    "galil": 1,
+    "fal": 1,
     "rpk": 1
    },
-   "armour_chance": 0.4,
+   "armour_chance": 0.3,
    "armour": 50
   },
   {
    "id": "site_office",
-   "type": "militia",
+   "type": "khat_addict",
    "behaviour": "roam",
    "respawn": 55,
    "spawns": [
@@ -24623,15 +24633,15 @@
     }
    ],
    "weapons": {
-    "ak47": 2,
     "mini_uzi": 1
    },
-   "armour_chance": 0.1,
+   "armour_chance": 0,
    "armour": 50,
    "radius": 10
   },
   {
    "id": "yard",
+   "type": "kambala_militant",
    "behaviour": "guard",
    "respawn": 55,
    "spawns": [
@@ -24652,15 +24662,16 @@
     }
    ],
    "weapons": {
-    "ak47": 3,
-    "rpg7": 1
+    "ak47": 2,
+    "galil": 1,
+    "fal": 1
    },
    "armour_chance": 0.2,
    "armour": 50
   },
   {
    "id": "drill_rig",
-   "type": "militia",
+   "type": "khat_addict",
    "behaviour": "guard",
    "respawn": 60,
    "spawns": [
@@ -24676,7 +24687,6 @@
     }
    ],
    "weapons": {
-    "ak47": 2,
     "mini_uzi": 1
    },
    "armour_chance": 0,
@@ -24684,6 +24694,7 @@
   },
   {
    "id": "logging_camp",
+   "type": "kambala_militant",
    "behaviour": "guard",
    "respawn": 45,
    "spawns": [
@@ -24709,8 +24720,9 @@
     }
    ],
    "weapons": {
-    "ak47": 3,
-    "rpg7": 1
+    "ak47": 2,
+    "galil": 1,
+    "fal": 1
    },
    "armour_chance": 0.2,
    "armour": 50,
@@ -24718,7 +24730,7 @@
   },
   {
    "id": "sawmill",
-   "type": "heavy_insurgent",
+   "type": "kambala_mercenary",
    "behaviour": "guard",
    "respawn": 60,
    "spawns": [
@@ -24744,7 +24756,9 @@
     }
    ],
    "weapons": {
-    "galil": 2,
+    "ak47": 1,
+    "galil": 1,
+    "fal": 1,
     "rpk": 1
    },
    "armour_chance": 0.3,
@@ -24752,7 +24766,7 @@
   },
   {
    "id": "north_trail",
-   "type": "militia",
+   "type": "khat_addict",
    "behaviour": "roam",
    "respawn": 55,
    "spawns": [
@@ -24768,7 +24782,6 @@
     }
    ],
    "weapons": {
-    "ak47": 2,
     "mini_uzi": 1
    },
    "armour_chance": 0,
@@ -24777,6 +24790,7 @@
   },
   {
    "id": "forest_patrol",
+   "type": "khat_berserker",
    "behaviour": "roam",
    "respawn": 50,
    "spawns": [
@@ -24797,16 +24811,15 @@
     }
    ],
    "weapons": {
-    "ak47": 3,
-    "rpg7": 1
+    "machete": 1
    },
-   "armour_chance": 0.15,
+   "armour_chance": 0,
    "armour": 50,
    "radius": 16
   },
   {
    "id": "hunters",
-   "type": "militia",
+   "type": "khat_addict",
    "behaviour": "guard",
    "respawn": 60,
    "spawns": [
@@ -24822,7 +24835,6 @@
     }
    ],
    "weapons": {
-    "ak47": 2,
     "mini_uzi": 1
    },
    "armour_chance": 0,
@@ -24830,7 +24842,7 @@
   },
   {
    "id": "creek",
-   "type": "militia",
+   "type": "khat_berserker",
    "behaviour": "roam",
    "respawn": 55,
    "spawns": [
@@ -24846,8 +24858,7 @@
     }
    ],
    "weapons": {
-    "ak47": 2,
-    "mini_uzi": 1
+    "machete": 1
    },
    "armour_chance": 0,
    "armour": 50,
@@ -24855,6 +24866,7 @@
   },
   {
    "id": "south_trail",
+   "type": "khat_addict",
    "behaviour": "roam",
    "respawn": 60,
    "spawns": [
@@ -24870,15 +24882,15 @@
     }
    ],
    "weapons": {
-    "ak47": 3,
-    "rpg7": 1
+    "mini_uzi": 1
    },
-   "armour_chance": 0.1,
+   "armour_chance": 0,
    "armour": 50,
    "radius": 12
   },
   {
    "id": "company_hq",
+   "type": "kambala_militant",
    "behaviour": "guard",
    "respawn": 45,
    "spawns": [
@@ -24904,8 +24916,9 @@
     }
    ],
    "weapons": {
-    "ak47": 3,
-    "rpg7": 1
+    "ak47": 2,
+    "galil": 1,
+    "fal": 1
    },
    "armour_chance": 0.2,
    "armour": 50,
@@ -24913,6 +24926,7 @@
   },
   {
    "id": "tower",
+   "type": "kambala_militant",
    "behaviour": "guard",
    "respawn": 90,
    "spawns": [
@@ -24930,6 +24944,7 @@
   },
   {
    "id": "clinic",
+   "type": "kambala_militant",
    "behaviour": "guard",
    "respawn": 55,
    "spawns": [
@@ -24950,15 +24965,16 @@
     }
    ],
    "weapons": {
-    "ak47": 3,
-    "rpg7": 1
+    "ak47": 2,
+    "galil": 1,
+    "fal": 1
    },
    "armour_chance": 0.2,
    "armour": 50
   },
   {
    "id": "security_post",
-   "type": "heavy_insurgent",
+   "type": "kambala_mercenary",
    "behaviour": "guard",
    "respawn": 60,
    "spawns": [
@@ -24984,7 +25000,9 @@
     }
    ],
    "weapons": {
-    "galil": 2,
+    "ak47": 1,
+    "galil": 1,
+    "fal": 1,
     "rpk": 1
    },
    "armour_chance": 0.35,
@@ -24992,7 +25010,7 @@
   },
   {
    "id": "dorm",
-   "type": "militia",
+   "type": "khat_addict",
    "behaviour": "guard",
    "respawn": 55,
    "spawns": [
@@ -25013,7 +25031,6 @@
     }
    ],
    "weapons": {
-    "ak47": 2,
     "mini_uzi": 1
    },
    "armour_chance": 0,
@@ -25021,7 +25038,7 @@
   },
   {
    "id": "pitch",
-   "type": "militia",
+   "type": "khat_addict",
    "behaviour": "roam",
    "respawn": 60,
    "spawns": [
@@ -25037,7 +25054,6 @@
     }
    ],
    "weapons": {
-    "ak47": 2,
     "mini_uzi": 1
    },
    "armour_chance": 0,
@@ -25046,6 +25062,7 @@
   },
   {
    "id": "market",
+   "type": "kambala_militant",
    "behaviour": "roam",
    "respawn": 55,
    "spawns": [
@@ -25061,8 +25078,9 @@
     }
    ],
    "weapons": {
-    "ak47": 3,
-    "rpg7": 1
+    "ak47": 2,
+    "galil": 1,
+    "fal": 1
    },
    "armour_chance": 0.1,
    "armour": 50,
@@ -25070,7 +25088,7 @@
   },
   {
    "id": "fields",
-   "type": "militia",
+   "type": "khat_berserker",
    "behaviour": "roam",
    "respawn": 60,
    "spawns": [
@@ -25086,18 +25104,17 @@
     }
    ],
    "weapons": {
-    "ak47": 2,
-    "mini_uzi": 1
+    "machete": 1
    },
    "armour_chance": 0,
    "armour": 50,
    "radius": 14
   },
   {
-   "id": "bombers_mine",
-   "type": "suicide_bomber",
+   "id": "berserkers_mine",
+   "type": "khat_berserker",
    "behaviour": "guard",
-   "respawn": 120,
+   "respawn": 90,
    "spawns": [
     {
      "x": 172,
@@ -25111,16 +25128,16 @@
     }
    ],
    "weapons": {
-    "rgd5": 1
+    "machete": 1
    },
    "armour_chance": 0,
    "armour": 50
   },
   {
-   "id": "bombers_forest",
-   "type": "suicide_bomber",
+   "id": "berserkers_forest",
+   "type": "khat_berserker",
    "behaviour": "guard",
-   "respawn": 120,
+   "respawn": 90,
    "spawns": [
     {
      "x": 72,
@@ -25134,16 +25151,16 @@
     }
    ],
    "weapons": {
-    "rgd5": 1
+    "machete": 1
    },
    "armour_chance": 0,
    "armour": 50
   },
   {
-   "id": "bombers_village",
-   "type": "suicide_bomber",
+   "id": "berserkers_village",
+   "type": "khat_berserker",
    "behaviour": "guard",
-   "respawn": 120,
+   "respawn": 90,
    "spawns": [
     {
      "x": 142,
@@ -25152,12 +25169,18 @@
     }
    ],
    "weapons": {
-    "rgd5": 1
+    "machete": 1
    },
    "armour_chance": 0,
    "armour": 50
   }
  ],
+ "wave_types": {
+  "insurgent": "kambala_militant",
+  "militia": "khat_addict",
+  "heavy_insurgent": "kambala_mercenary",
+  "suicide_bomber": "khat_berserker"
+ },
  "wave_spawns": [
   {
    "x": 3,

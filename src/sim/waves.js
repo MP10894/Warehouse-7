@@ -56,7 +56,11 @@ export function spawnWave(world) {
     .sort((a, b) => Math.hypot(a.x - bx, a.z - bz) - Math.hypot(b.x - bx, b.z - bz)).slice(0, 2);
   for (let i = 0; i < row.count; i++) {
     const sp = pts[i % pts.length];
-    const type = weightedPick(world, row.types) || 'insurgent';
+    // a level can swap the wave mix's enemy types for its own (level.json → wave_types,
+    // e.g. Kambala: insurgents → Kambala Militants); waves.csv stays shared between levels
+    const picked = weightedPick(world, row.types) || 'insurgent';
+    const sub = level.wave_types && level.wave_types[picked];
+    const type = sub && world.data.enemies[sub] ? sub : picked;
     w.queue.push({
       type, weapon: pickEnemyWeapon(world, row.weights, type),
       armour: rand(world) < row.armourChance ? row.armour : 0,

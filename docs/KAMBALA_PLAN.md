@@ -14,8 +14,8 @@ dark green jungle, rusting yellow mining machinery. Tropical weather instead of 
 ## Size and difficulty
 
 **256 × 256 m**, the same as Najaf (about a minute to walk across, kind to phones).
-Difficulty like Najaf: about **60 enemies** in about 23 groups, the same enemy types and
-weapons, six attack-wave entry points, **15 minutes** to hold once a base is claimed.
+Difficulty like Najaf: about **60 enemies** in about 26 groups, with Kambala's own fighters (see
+below), six attack-wave entry points, **15 minutes** to hold once a base is claimed.
 
 ## Three zones around a junction
 
@@ -48,8 +48,15 @@ you have to go out for them.
 
 About 60 at the start (red dots): the pit floor (4, the workshop garrison), the benches
 and rim (about 18), the forest (about 19, many roaming among the trees), the village (about
-20, including a marksman in the watch tower and the HQ garrison). Suicide bombers in each
-zone, as in Najaf.
+20, including a marksman in the watch tower and the HQ garrison). Khat berserkers wait in each
+zone where Najaf has suicide bombers.
+
+**Kambala's fighters (Enemies tab):** Kambala Militants hold the garrisons (AK-47, Galil,
+FAL); Kambala Mercenaries (30 armour, RPK too) guard the haul road, the explosives magazine,
+the sawmill and the security post; Khat Addicts roam with Mini Uzis; Khat Berserkers roam
+the forest and fields with machetes, sprint at you and cut only within 1 m. Attack waves
+use the same four (level.json `wave_types` swaps waves.csv's insurgent / militia / heavy /
+bomber for militant / addict / mercenary / berserker).
 
 **Attack waves always come out of the forest**: six jungle trails on the **west edge (column
 A, rows 1–8)**, red arrows. Rebels attacking the mine. This shapes the three bases:

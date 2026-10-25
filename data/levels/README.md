@@ -121,6 +121,10 @@ always there (the flare stack's smoke); `source` is where the plume and flame ar
 `wave_spawns` are the map-edge points attack waves come in from: the two nearest your base
 that are at least 60 m from any player are used.
 
+`wave_types` (optional) swaps the enemy types in `waves.csv` for this level's own, e.g.
+`{"insurgent": "kambala_militant", "suicide_bomber": "khat_berserker"}`. Types not listed
+stay as they are.
+
 ## Enemy groups in level.json
 
 Each group in `enemy_groups` places a few enemies that guard or roam an area and come back
