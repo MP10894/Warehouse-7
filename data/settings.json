@@ -104,6 +104,11 @@
     "tank_blast_radius": 12,
     "tank_blast_damage_factor": 4
   },
+  "audio": {
+    "music_volume": 0.55,
+    "music_fade": 2.5,
+    "zone_slack": 3
+  },
   "hud": {
     "claim_hint_show": 10,
     "claim_hint_every": 120,

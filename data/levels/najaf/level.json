@@ -5373,5 +5373,14 @@
    "z": 160.5,
    "district": "outskirts"
   }
+ ],
+ "music_zones": [
+  {
+   "track": "najaf-urban",
+   "x0": 0,
+   "z0": 0,
+   "x1": 136,
+   "z1": 136
+  }
  ]
 }

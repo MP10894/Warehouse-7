@@ -547,6 +547,8 @@ level['pickups'] += pickups
 level['base_items'] += items
 level['bases'] += [BASE_B, BASE_C]
 level['weather_zones'] += [{'type': 'smoke', 'district': R, 'x': 228, 'z': 42, 'radius': 16, 'source': FLARE}]
+# music: the city's own track while you're in the urban district (x and z under CITY)
+level['music_zones'] = [{'track': 'najaf-urban', 'x0': 0, 'z0': 0, 'x1': CITY, 'z1': CITY}]
 # wave entry points: city north and west edges (in streets), refinery east edge (inside the
 # fence, clear of the security post), outskirts east, south and south-west
 level['wave_spawns'] = [{'x': 98, 'z': 3}, {'x': 3, 'z': 108}, {'x': 250, 'z': 45}, {'x': 252, 'z': 176}, {'x': 200, 'z': 252}, {'x': 8, 'z': 250}]

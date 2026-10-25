@@ -29,6 +29,7 @@ import { createBaseMarkers } from './render/base-markers.js';
 import { createHud, createMinimap } from './render/hud.js';
 import { createInput } from './input/input.js';
 import { createAudio } from './audio/audio.js';
+import { createMusic } from './audio/music.js';
 import { createDomHud } from './ui/dom-hud.js';
 import { createArmoury } from './ui/armoury.js';
 import { createScreens } from './ui/screens.js';
@@ -63,7 +64,7 @@ if (!view) {
     settings: S,
     onOpen: () => { if (role === 'solo') paused = true; input.setEnabled(false); },
     onClose: () => { paused = false; acc = 0; if (mode === 'playing') input.setEnabled(true); },
-    onChange: path => { if (path.startsWith('camera.')) view.resize(); if (path.startsWith('decor.') && scenery.decor) scenery.decor.rebuild(); }
+    onChange: path => { if (path.startsWith('camera.')) view.resize(); if (path.startsWith('decor.') && scenery.decor) scenery.decor.rebuild(); if (path.startsWith('audio.')) music.refresh(); }
   });
   view.resize();
 
@@ -102,6 +103,7 @@ if (!view) {
   const hud = createHud();
   const minimap = createMinimap($('minimap'));
   const audio = createAudio();
+  const music = createMusic(S);
   const domHud = createDomHud();
   const buttons = { fire: $('fire'), ads: $('ads'), reload: $('reload'), swap: $('swap'), context: $('context'), grenade: $('grenade') };
   const input = createInput({ app, touchEl: $('touch'), stick: $('stick'), knob: $('knob'), buttons, view, settings: S });
@@ -429,6 +431,7 @@ if (!view) {
     if (scenery.decor) scenery.decor.tick(dt, view.camera);
     markers.update(world, mode === 'playing' ? p : null, dt);
     audio.setStorm(weatherFx.level);
+    music.update(dt, { menu: mode !== 'playing', world, player: mode === 'playing' ? p : null });
     fp.update(dt, p, view.W / view.H);
     // looking through the scope: the gun is out of sight, the scope picture covers the view
     view.render(mode === 'playing' && scopeK < 0.6 ? fp : null);
@@ -463,8 +466,14 @@ if (!view) {
 
   aim.yaw = local().yaw;
   // handle for automated browser tests
-  window.__game = { get world() { return world; }, get scenery() { return scenery; }, aim, fp, view, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
+  window.__game = { get world() { return world; }, get scenery() { return scenery; }, get music() { return music; }, aim, fp, view, get role() { return role; }, get mode() { return mode; }, get code() { return net.code; } };
   // the title screen first; Start leads to the briefing and level menu
-  screens.showTitle(() => { audio.init(); screens.showMenu(world); });
+  // sound can only start after a tap or key press: the first one anywhere unlocks it, so the
+  // title music starts as soon as you touch the screen
+  const unlock = () => { audio.init(); music.attach(audio.context()); };
+  addEventListener('pointerdown', unlock, true);
+  addEventListener('keydown', unlock, true);
+  document.addEventListener('visibilitychange', () => audio.pause(document.hidden));
+  screens.showTitle(() => { unlock(); screens.showMenu(world); });
   requestAnimationFrame(frame);
 }

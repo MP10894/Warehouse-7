@@ -1,4 +1,5 @@
 // Synthesised sound effects (no audio files yet), played in response to world events.
+// Music is separate: see music.js.
 const SHOT = {
   sig_p320: { freq: 4200, dur: 0.12, vol: 0.55, thump: 170 },
   m4a1: { freq: 3600, dur: 0.15, vol: 0.7, thump: 130 },
@@ -44,6 +45,11 @@ export function createAudio() {
         wind = { g, f };
       } catch (e) { ctx = null; }
     },
+
+    /** The audio context once unlocked (music plays through it too), or null. */
+    context() { return ctx; },
+    /** Phone switched apps / screen off: go quiet; back: carry on. */
+    pause(on) { if (!ctx) return; if (on) ctx.suspend().catch(() => {}); else ctx.resume().catch(() => {}); },
 
     setStorm(level) {
       if (!wind) return;
