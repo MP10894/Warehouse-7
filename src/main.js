@@ -25,6 +25,7 @@ import { createFlora } from './render/flora.js';
 import { createBlastMarkers } from './render/blast-markers.js';
 import { createWorldView } from './render/world-view.js';
 import { createEffects } from './render/effects.js';
+import { createGunshipView } from './render/gunship-view.js';
 import { createFpWeapon } from './render/fp-weapon.js';
 import { createWeatherFx } from './render/weather-fx.js';
 import { createBaseMarkers } from './render/base-markers.js';
@@ -104,6 +105,10 @@ if (!view) {
   const audio = createAudio();
   const music = createMusic(S);
   const domHud = createDomHud();
+  // PROTOTYPE: the gunship kill streak's camera, from the GUNSHIP TEST button (see gunship-view.js)
+  const gunship = createGunshipView({ view, settings: S, canvas: $('view') });
+  const gunshipBtn = $('gunshipTest');
+  $('gunshipTest').addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); if (mode === 'playing' && !gunship.active) { gunship.start(world, local()); worldView.setGunship(true); } });
   const buttons = { fire: $('fire'), ads: $('ads'), reload: $('reload'), swap: $('swap'), context: $('context'), grenade: $('grenade'), strike: $('strike') };
   const input = createInput({ app, touchEl: $('touch'), stick: $('stick'), knob: $('knob'), buttons, view, settings: S });
   const aim = { yaw: 0, pitch: 0 };
@@ -352,6 +357,12 @@ if (!view) {
 
     if (mode === 'playing' && !paused) {
       const inp = input.sample();
+      if (gunship.active) {
+        // up in the gunship: looking moves its camera; your body on the ground stands still
+        gunship.look(inp.lookX + inp.turn * 0.04, inp.lookY, inp.ads);
+        inp.lookX = inp.lookY = inp.turn = 0; inp.moveX = inp.moveY = 0; inp.fire = false; inp.ads = false;
+        inp.reload = inp.swap = inp.interact = inp.grenade = inp.strike = false;
+      }
       aim.yaw += -inp.lookX + inp.turn * 2.4 * dt;
       aim.pitch = Math.max(-S.controls.max_pitch, Math.min(S.controls.max_pitch, aim.pitch - inp.lookY));
       // through a scope the aim drifts a little (more while walking): it moves where you shoot too
@@ -446,9 +457,11 @@ if (!view) {
     if (screens.titleShowing && !screens.hasTitleArt) { aim.yaw += dt * 0.05; aim.pitch = 0.04; }
     if (mode !== 'playing') { aimOut.yaw = aim.yaw; aimOut.pitch = aim.pitch; }
     view.follow(p, scopeK > 0 ? aimOut : aim, zoom, shake, dt);
+    if (gunship.active && (mode !== 'playing' || !gunship.update(dt))) { gunship.stop(); worldView.setGunship(false); }
     worldView.sync(world, dt);
     effects.update(dt, world);
     weatherFx.update(dt, world, view.camera);
+    if (gunship.active) { view.scene.fog.near = 400; view.scene.fog.far = 650; }
     if (scenery.decor) scenery.decor.tick(dt, view.camera);
     if (scenery.blast) scenery.blast.update(world);
     markers.update(world, mode === 'playing' ? p : null, dt);
@@ -456,8 +469,9 @@ if (!view) {
     music.update(dt, { menu: mode !== 'playing', world, player: mode === 'playing' ? p : null });
     fp.update(dt, p, view.W / view.H);
     // looking through the scope: the gun is out of sight, the scope picture covers the view
-    view.render(mode === 'playing' && scopeK < 0.6 ? fp : null);
+    view.render(mode === 'playing' && scopeK < 0.6 && !gunship.active ? fp : null);
     hud.draw(view.hud, view.W, view.H, mode === 'playing' ? p : null, world, dt, scopeK);
+    if (gunship.active) gunship.draw(view.hud, view.W, view.H, world, localId, now / 1000);
     minimap.draw(world, p, now);
     domHud.frame(dt, world, p, weatherFx.level * 0.8);
 
@@ -476,10 +490,12 @@ if (!view) {
     }
     tagEl.hidden = !showTag;
 
+    gunshipBtn.hidden = mode !== 'playing' || gunship.active;
+    app.classList.toggle('gunship', gunship.active);
     fpsFrames++; fpsT += dt;
     if (fpsT >= 0.5) {
       const fps = Math.round(fpsFrames / fpsT);
-      fpsEl.hidden = !SHOW_FPS || mode !== 'playing';
+      fpsEl.hidden = !(SHOW_FPS || gunship.active) || mode !== 'playing';
       fpsEl.textContent = `${fps} fps · ${view.W}×${view.H}`;
       fpsEl.classList.toggle('slow', fps < 40);
       fpsT = 0; fpsFrames = 0;

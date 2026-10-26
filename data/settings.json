@@ -161,6 +161,7 @@
   "killstreaks": {
     "shell_drop_height": 70,
     "shell_fall_speed": 45,
-    "laser_max_range": 150
+    "laser_max_range": 150,
+    "gunship": { "altitude": 150, "orbit_radius": 90, "orbit_seconds": 45, "duration": 30, "fov": 24, "zoom_fov": 10 }
   }
 }

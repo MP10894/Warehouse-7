@@ -11,6 +11,10 @@ const MAX_TRACERS = 256;
 
 export function createWorldView(scene, tex, initialLocalId) {
   let localId = initialLocalId;
+  let showSelf = false, thermal = false;
+  // the thermal camera (gunship): people glow white
+  const hot = new THREE.MeshBasicMaterial({ color: 0xffffff, fog: false });
+  const setHot = (root, on) => root.traverse(o => { if (!o.isMesh) return; if (on) { if (!o.userData.cold) o.userData.cold = o.material; o.material = hot; } else if (o.userData.cold) { o.material = o.userData.cold; delete o.userData.cold; } });
   const actors = new Map();   // actor id → { model, flinch }
   const pickups = new Map();  // pickup id → group
   const rockets = new Map();
@@ -60,6 +64,7 @@ export function createWorldView(scene, tex, initialLocalId) {
     if (!v) {
       v = { model: soldierModel(a.kind === 'player' ? 'player' : 'enemy', a.type), flinch: 0 };
       scene.add(v.model.root);
+      if (thermal) setHot(v.model.root, true);
       actors.set(a.id, v);
     }
     return v;
@@ -67,6 +72,13 @@ export function createWorldView(scene, tex, initialLocalId) {
 
   return {
     setLocal(id) { localId = id; },
+    /** Gunship view: you see your own body from above, and people glow (thermal). */
+    setGunship(on) {
+      showSelf = on;
+      if (thermal === on) return;
+      thermal = on;
+      for (const v of actors.values()) setHot(v.model.root, on);
+    },
     reset() {
       for (const v of actors.values()) scene.remove(v.model.root);
       for (const g of pickups.values()) scene.remove(g);
@@ -85,7 +97,8 @@ export function createWorldView(scene, tex, initialLocalId) {
     sync(world, dt) {
       const seen = new Set();
       for (const a of [...world.enemies, ...world.players]) {
-        if (a.id === localId) continue; // you don't see your own body
+        if (a.id === localId && !showSelf) { const v = actors.get(a.id); if (v) v.model.root.visible = false; continue; } // you don't see your own body
+        if (a.id === localId) actorView(a).model.root.visible = true;
         seen.add(a.id);
         const v = actorView(a);
         const m = v.model;
