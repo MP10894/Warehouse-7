@@ -46,3 +46,4 @@ mortar_whistle,,1,200,0.08,A mortar shell (kill streak) whistles down; plays for
 mortar_launch,,1,0,0,You or your partner call in a mortar strike: the tubes firing in the distance
 designator_on,,1,0,0,You raise the laser designator (kill streak button)
 killstreak_ready,,1,0,0,You reach a kill streak (MORTAR STRIKE AVAILABLE!)
+shot_gunship_gun,,0.8,250,0.08,The gunship's gun fires (kill streak; heard from the sky)

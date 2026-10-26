@@ -13,6 +13,7 @@ import { groundAt } from '../src/sim/body.js';
 import { killActor, damageActor } from '../src/sim/damage.js';
 import { spawnEnemy } from '../src/sim/enemies.js';
 import { strikeFor, laserPoint, streakProgress } from '../src/sim/killstreaks.js';
+import { gunshipPos } from '../src/sim/gunship.js';
 import { createHostEncoder, createGuestDecoder } from '../src/net/snapshot.js';
 import { terrainHeight } from '../src/sim/terrain.js';
 
@@ -72,7 +73,7 @@ const killOne = (w, source) => {
   killOne(w, p); killOne(w, p);
   check(p.streak === 12 && strikeFor(w, p).id === 'mortar', 'the count keeps climbing past 10 (strikes don\'t stack: still one mortar strike)');
   const pr = streakProgress(w, p);
-  check(pr && pr.top, 'the HUD bar knows the mortar is the best streak there is for now');
+  check(pr && !pr.top && pr.from === 10 && pr.need === 20, `the HUD bar fills from 10 towards the gunship at 20 (${pr && pr.from} → ${pr && pr.need})`);
 }
 
 // ---- the designator
@@ -186,6 +187,83 @@ const killOne = (w, source) => {
   dec.apply(guest, enc.encode(w), 'p2');
   const gp = guest.players[0];
   check(gp.streak === 11 && gp.designating && guest.projectiles.some(r => r.kind === 'mortar'), `co-op: the partner's phone has the count, the designator and the falling shells (${gp.streak}, ${gp.designating}, ${guest.projectiles.map(r => r.kind)})`);
+}
+
+// ---- the gunship
+{
+  const GG = data.weapons.gunship_gun, KG = data.killstreaks.find(k => k.id === 'gunship');
+  check(GG && GG.rate_of_fire === 1200 && GG.calibre === '7.62x51mm' && GG.damage_health === data.weapons.fal.damage_health && GG.damage_armour === data.weapons.fal.damage_armour,
+    `Weapons tab "Gunship gun": ${GG && GG.rate_of_fire} rounds a minute, ${GG && GG.calibre}, ${GG && GG.damage_health}/${GG && GG.damage_armour} damage (the FAL's)`);
+  check(KG && KG.kills === 20 && KG.rounds === 600 && KG.duration === 30 && KG.secondary === 'rpg7' && KG.secondary_rounds === 4,
+    `killstreaks.csv: gunship at ${KG && KG.kills} kills, ${KG && KG.rounds} rounds, ${KG && KG.duration} s, ${KG && KG.secondary_rounds} × ${KG && KG.secondary}`);
+  const aimAt = (w, p, x, y, z) => { const [gx, gy, gz] = gunshipPos(w, p.gunship); const dx = x - gx, dy = y - gy, dz = z - gz; return { yaw: Math.atan2(-dx, -dz), pitch: Math.atan2(dy, Math.hypot(dx, dz)) }; };
+
+  const w = fresh(['p1', 'p2']), p = w.players[0], q = w.players[1];
+  for (let i = 0; i < 20; i++) killOne(w, p);
+  check(strikeFor(w, p).id === 'gunship', '20 kills: the gunship replaces the mortar strike on offer');
+  const body = [p.x, p.z, p.yaw];
+  tick(w, { p1: { strike: true } });
+  check(!!p.gunship && p.streak === 0 && p.gunship.ammo === 600 && p.gunship.rockets === 4, 'the streak button sends you up: 600 rounds and 4 rockets, count back to 0');
+  const [gx, gy, gz] = gunshipPos(w, p.gunship);
+  const gs0 = p.gunship;
+  check(gy - p.y > 149 && Math.abs(Math.hypot(gx - gs0.cx, gz - gs0.cz) - 90) < 0.5 && Math.abs(Math.hypot(gs0.cx - p.x, gs0.cz - p.z) - 30) < 0.5,
+    `the gunship circles ${Math.round(gy - p.y)} m up, 90 m round a spot ${Math.round(Math.hypot(gs0.cx - p.x, gs0.cz - p.z))} m ahead of you`);
+  // an enemy 25 m away: the gun cuts him down (and it counts)
+  q.x = p.x + 200; q.z = p.z + 200; q.y = groundAt(w, q.x, q.z, 30);   // partner well away for now
+  const e = spawnEnemy(w, { x: p.x + 25, z: p.z, weapon: 'ak47' }); e.seeT = 1e9; e.alert = false;
+  for (let i = 0; i < 60 && e.alive; i++) { const a = aimAt(w, p, e.x, e.y + 1, e.z); tick(w, { p1: { ...a, fire: true, move: { x: 1, y: -1 } } }); }
+  check(!e.alive && p.streak === 1, `the gun kills an enemy below (${600 - p.gunship.ammo} rounds), and it counts (count ${p.streak})`);
+  check(p.x === body[0] && p.z === body[1] && p.yaw === body[2], 'meanwhile your body stays exactly where it was');
+  tick(w, { p1: { fire: false } }, 2);
+  // the gun at 1,200 a minute: half a second is about 10 rounds
+  const a0 = p.gunship.ammo;
+  tick(w, { p1: { ...aimAt(w, p, p.x + 30, p.y, p.z), fire: true } }, 30);
+  check(Math.abs(a0 - p.gunship.ammo - 10) <= 1, `half a second of fire: ${a0 - p.gunship.ammo} rounds`);
+  tick(w, { p1: { fire: false } }, 2);
+  // SWAP: rockets, one per press
+  tick(w, { p1: { swap: true } }); tick(w, {}, 20);
+  check(p.gunship.sel === 1, 'SWAP changes to the rockets');
+  const evs = [];
+  for (let i = 0; i < 4; i++) { tick(w, { p1: { ...aimAt(w, p, p.x + 30 + i * 3, p.y, p.z + 20), fire: true } }, 1, evs); tick(w, { p1: { fire: false } }, 40, evs); }
+  tick(w, {}, 120, evs);
+  check(p.gunship.rockets === 0 && evs.filter(v => v.type === "explosion").length >= 4, `4 rockets fired and burst (${evs.filter(v => v.type === "explosion").length} explosions, ${p.gunship.rockets} left, shots ${evs.filter(v => v.type === "gunshipShot").length})`);
+  check(p.gunship.sel === 0, 'out of rockets: back to the gun by itself');
+  // friendly fire: the partner below gets hit
+  q.x = p.x - 20; q.z = p.z; q.y = groundAt(w, q.x, q.z, 30); q.hp = 1e5;
+  const ffe = [];
+  for (let i = 0; i < 40; i++) tick(w, { p1: { ...aimAt(w, p, q.x, q.y + 1, q.z), fire: true } }, 1, ffe);   // (the gunship moves: keep the aim on him)
+  tick(w, { p1: { fire: false } }, 40, ffe);
+  check(q.hp < 1e5, `friendly fire: the partner on the ground is hit (${Math.round(1e5 - q.hp)} damage)`);
+  // time: 30 s and it's over
+  const ev2 = [];
+  tick(w, {}, 60 * 31, ev2);
+  check(!p.gunship && ev2.some(v => v.type === 'message' && v.text === 'GUNSHIP LEAVING'), 'after 30 seconds the gunship leaves and you are back on the ground');
+
+  // out of both: over at once
+  const w2 = fresh(), a = w2.players[0];
+  tick(w2, { p1: { gunshipTest: true } });
+  check(!!a.gunship && a.streak === 0, 'GUNSHIP TEST: up there without earning it');
+  a.gunship.ammo = 3; a.gunship.rockets = 1;
+  tick(w2, { p1: { ...aimAt(w2, a, a.x + 20, a.y, a.z), fire: true } }, 20);
+  tick(w2, { p1: { swap: true } }); tick(w2, {}, 20);
+  tick(w2, { p1: { ...aimAt(w2, a, a.x + 20, a.y, a.z), fire: true } }, 2);
+  check(!a.gunship, 'out of rounds and rockets: the gunship leaves straight away');
+
+  // your body goes down: the gunship is lost
+  const w3 = fresh(['p1', 'p2']), b = w3.players[0];
+  for (let i = 0; i < 20; i++) killOne(w3, b);
+  tick(w3, { p1: { strike: true } });
+  damageActor(w3, b, 1e4, 1e4, null);
+  check(b.downed && !b.gunship && b.streak === 0, 'your body goes down while you are up there: the gunship is lost at once');
+
+  // co-op: the partner's phone knows your gunship
+  const w4 = fresh(['p1', 'p2']), guest = fresh(['p1', 'p2']);
+  tick(w4, { p1: { gunshipTest: true } });
+  w4.enemies = []; w4.events.length = 0;
+  const enc = createHostEncoder(data), dec = createGuestDecoder(data);
+  dec.apply(guest, enc.encode(w4), 'p2'); w4.tick++; dec.apply(guest, enc.encode(w4), 'p2');
+  const gg = guest.players[0].gunship;
+  check(gg && gg.ammo === 600 && gg.rockets === 4 && Math.abs(gg.cx - w4.players[0].gunship.cx) < 0.02, 'co-op: the gunship (ammunition, where it circles) reaches the partner\'s phone');
 }
 
 process.exit(failures ? 1 : 0);

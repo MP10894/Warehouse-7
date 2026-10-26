@@ -1,2 +1,3 @@
-id,name,kills,weapon,rounds,duration,scatter,countdown,range
-mortar,Mortar strike,10,mortar,5,3,8,5,150
+id,name,kills,weapon,rounds,duration,scatter,countdown,range,secondary,secondary_rounds
+mortar,Mortar strike,10,mortar,5,3,8,5,150,,
+gunship,Gunship,20,gunship_gun,600,30,,,,rpg7,4

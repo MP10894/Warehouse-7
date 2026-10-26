@@ -11,6 +11,17 @@ export const HEAD_RADIUS = 0.17;
 
 function segCylinder(ax, ay, az, dx, dy, dz, len, cx, cz, r, y0, y1) {
   const px = ax - cx, pz = az - cz;
+  // coming down from above (a gunship, a rooftop): in through the top
+  let top = null;
+  if (dy < -1e-6 && ay > y1) {
+    const t = (y1 - ay) / dy;
+    if (t >= 0 && t <= len && (px + dx * t) ** 2 + (pz + dz * t) ** 2 <= r * r) top = t;
+  }
+  const side = segSide(px, ay, pz, dx, dy, dz, len, r, y0, y1);
+  return top !== null && (side === null || top < side) ? top : side;
+}
+
+function segSide(px, ay, pz, dx, dy, dz, len, r, y0, y1) {
   const a = dx * dx + dz * dz;
   if (a < 1e-12) return null;
   const b = 2 * (px * dx + pz * dz), c = px * px + pz * pz - r * r;

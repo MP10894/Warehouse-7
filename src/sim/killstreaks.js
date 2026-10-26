@@ -20,6 +20,7 @@ import { aimVector } from './weapons.js';
 import { traceSegment } from './ballistics.js';
 import { getV, V } from './grid.js';
 import { terrainHeight } from './terrain.js';
+import { startGunship, endGunship } from './gunship.js';
 
 const table = world => world.data.killstreaks || [];
 const conf = world => world.data.settings.killstreaks || {};
@@ -58,6 +59,7 @@ export function countKill(world, p) {
 export function loseStreak(world, p) {
   p.streak = 0;
   p.designating = false;
+  if (p.gunship) endGunship(world, p, 'GUNSHIP LOST');   // the body went down: the gunship goes too
 }
 
 /**
@@ -90,7 +92,9 @@ function topAt(world, x, z) {
 /** The streak button: designator in hand, or (with it in hand) call the strike in. */
 export function strikeButton(world, p) {
   const k = strikeFor(world, p);
-  if (!k) return;
+  if (!k || p.gunship) return;
+  // the gunship: straight up into it (gunship.js)
+  if (k.id === 'gunship') { startGunship(world, p, k); return; }
   if (!p.designating) {
     if (p.carrying && p.carrying.turret) return;   // both hands on the turret
     p.designating = true;

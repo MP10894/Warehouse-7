@@ -26,6 +26,7 @@ function soundFor(ev, local) {
     case 'siren': return 'blast_siren';
     case 'melee': return 'machete_swing';
     case 'shellIncoming': return 'mortar_whistle';
+    case 'gunshipShot': return `shot_${ev.weapon}`;
     case 'strikeCalled': return 'mortar_launch';
     case 'designate': return mine(ev.actorId) && ev.on ? 'designator_on' : null;
     case 'streakReady': return mine(ev.playerId) ? 'killstreak_ready' : null;
@@ -126,6 +127,14 @@ export function createAudio() {
         case 'explosion': { const v = 1.3 * Math.max(0.15, fade(d)); noise(1.2, 500, v); tone('sine', 70, 25, 0.8, v); break; }
         // a machete swipe: a quick whoosh, and a dull chop
         case 'melee': { const v = 0.6 * Math.max(0.1, fade(d)); noise(0.12, 2600, v, 0, 'highpass'); noise(0.08, 400, v * 0.8, 0.07); break; }
+        // the gunship's guns, from up there (to the gunner, close by)
+        case 'gunshipShot': {
+          const s = ev.weapon === 'rpg7' ? SHOT.rpg7 || SHOT.ak47 : SHOT.fal || SHOT.ak47;
+          const mine = ev.playerId === local.id, v = mine ? s.vol * 0.6 : s.vol * 0.35;
+          noise(s.dur, s.freq * 0.7, v); tone('sine', s.thump, 35, s.dur, v * 0.9);
+          if (ev.weapon === 'rpg7') noise(0.9, 1500, v * 0.5, 0.05, 'bandpass');
+          break;
+        }
         // kill streaks: a mortar shell whistling down (falling pitch, until it lands)
         case 'shellIncoming': { const t = Math.max(0.5, ev.time || 1.5), v = 0.22 * Math.max(0.3, 1 - d / 200); tone('sine', 2100, 650, t, v); tone('sine', 2160, 680, t, v * 0.4); break; }
         // ... and the tubes firing, far away, when the strike is called in

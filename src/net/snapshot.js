@@ -16,7 +16,7 @@ const SEND_RANGE = 90;
 // from the piece list instead, so 'blocks' is not forwarded)
 const FORWARD = new Set(['shot', 'impact', 'explosion', 'hurt', 'death', 'downed', 'revived', 'pickup', 'message',
   'wave', 'baseClaimed', 'built', 'weather', 'hitConfirm', 'reload', 'swap', 'empty', 'status', 'throw', 'beep', 'bounce', 'turret', 'siren', 'melee',
-  'designate', 'streakReady', 'strikeCalled', 'shellIncoming']);
+  'designate', 'streakReady', 'strikeCalled', 'shellIncoming', 'gunship', 'gunshipShot']);
 const EVENT_WINDOW = 45; // ticks of recent events repeated in every snapshot (drops are common)
 const MAX_EVENTS = 22;
 
@@ -69,7 +69,8 @@ export function createHostEncoder(data) {
         Math.round(p.bloom * 1000),
         `${p.stats.shots}|${p.stats.hits}|${p.stats.kills}`,
         p.grenades || 0, Math.round((p.throwT || 0) * 100),
-        p.streak || 0, p.designating ? 1 : 0
+        p.streak || 0, p.designating ? 1 : 0,
+        p.gunship ? [Math.round(p.gunship.t * 10), p.gunship.ammo, p.gunship.rockets, p.gunship.sel, cm(p.gunship.cx), cm(p.gunship.cz), cm(p.gunship.gy), mr(p.gunship.ang), p.gunship.primary, p.gunship.secondary || ''] : 0
       ]);
       const near = (e, r) => world.players.some(p => Math.abs(p.x - e.x) < r && Math.abs(p.z - e.z) < r);
       const sent = world.enemies.filter(e => (e.alive && (e.wave || near(e, SEND_RANGE))) || (!e.alive && e.deadT < 12 && near(e, 60)));
@@ -169,7 +170,7 @@ export function createGuestDecoder(data) {
       });
 
       for (const row of snap.p || []) {
-        const [id, x, y, z, yaw, pitch, hp, armour, flags, downT, active, slots, reserve, reloadT, swapT, carrying, ctx, bloom, stats, grenades, throwT, streak, designating] = row;
+        const [id, x, y, z, yaw, pitch, hp, armour, flags, downT, active, slots, reserve, reloadT, swapT, carrying, ctx, bloom, stats, grenades, throwT, streak, designating, gunship] = row;
         const p = world.players.find(q => q.id === id);
         if (!p) continue;
         const mine = id === localId;
@@ -195,6 +196,10 @@ export function createGuestDecoder(data) {
         p.stats = { shots, hits, kills: k };
         p.grenades = grenades || 0; p.throwT = (throwT || 0) / 100;
         p.streak = streak || 0; p.designating = !!designating;
+        p.gunship = Array.isArray(gunship) ? {
+          t: gunship[0] / 10, ammo: gunship[1], rockets: gunship[2], sel: gunship[3], cx: gunship[4] / 100, cz: gunship[5] / 100,
+          gy: gunship[6] / 100, ang: gunship[7] / 1000, primary: gunship[8], secondary: gunship[9] || null
+        } : null;
       }
 
       const byId = new Map(world.enemies.map(e => [e.id, e]));

@@ -162,6 +162,6 @@
     "shell_drop_height": 70,
     "shell_fall_speed": 45,
     "laser_max_range": 150,
-    "gunship": { "altitude": 150, "orbit_radius": 90, "orbit_seconds": 45, "duration": 30, "fov": 24, "zoom_fov": 10 }
+    "gunship": { "altitude": 150, "orbit_radius": 90, "orbit_seconds": 45, "ahead": 30, "fov": 24, "zoom_fov": 10, "gun_spread": 0.003, "rocket_spread": 0.004, "rocket_interval": 0.6 }
   }
 }

@@ -205,12 +205,14 @@ export function updateProjectiles(world, dt) {
     if (pr.kind === 'grenade') { if (moveGrenade(world, pr, dt)) keep.push(pr); continue; }
     pr.life -= dt;
     const ox = pr.x, oy = pr.y, oz = pr.z;
-    if (pr.kind !== 'rocket') pr.vy -= g * dt;
+    if (pr.nograv) { /* (the gunship's gun: straight to where it's aimed) */ }
+    else if (pr.kind !== 'rocket') pr.vy -= g * dt;
     else pr.vy -= g * 0.15 * dt; // rockets are powered, they barely drop
     pr.x += pr.vx * dt; pr.y += pr.vy * dt; pr.z += pr.vz * dt;
     // players' and turrets' bullets hit enemies; enemies' bullets hit players and turrets
-    const targets = pr.team === 'player' || pr.team === 'turret' ? world.enemies : [...world.players, ...world.turrets];
-    const hit = traceSegment(world, ox, oy, oz, pr.x, pr.y, pr.z, { actors: targets.filter(a => !a.downed), ignore: pr.owner });
+    // (the gunship's fire, `ff`, hits everyone: friendly fire, your own body included)
+    const targets = pr.ff ? [...world.enemies, ...world.players, ...world.turrets] : pr.team === 'player' || pr.team === 'turret' ? world.enemies : [...world.players, ...world.turrets];
+    const hit = traceSegment(world, ox, oy, oz, pr.x, pr.y, pr.z, { actors: targets.filter(a => !a.downed && a.alive !== false), ignore: pr.ff ? null : pr.owner });
     if (!hit) {
       if (pr.life > 0 && pr.y > -5) keep.push(pr);
       else if (pr.kind === 'rocket' || pr.kind === 'mortar') explode(world, pr.x, pr.y, pr.z, world.data.weapons[pr.weapon], findActor(world, pr.owner));
