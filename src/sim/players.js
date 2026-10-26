@@ -8,6 +8,7 @@ import { blocked } from './body.js';
 import { onBuild } from './waves.js';
 import { isAlly, takeTurret, placementFor, dropTurret, turretToPickUp, pickUpTurret } from './turrets.js';
 import { detonatorFor, detonate, blastWait } from './blasting.js';
+import { strikeButton } from './killstreaks.js';
 
 export function createPlayer(world, id, spawn) {
   const s = world.data.settings.player;
@@ -21,6 +22,7 @@ export function createPlayer(world, id, spawn) {
     reserve: { [w.calibre]: w.max_total - w.mag_size },
     reloadT: 0, swapT: 0, fireCd: 0, bloom: 0, trigger: false, ads: false, moving: false,
     carrying: null, context: null, lastHurtAt: 0, regenRate: 0,
+    streak: 0, designating: false,
     grenades: Math.min(world.data.settings.grenades?.start ?? 0, grenadeMax(world)), throwT: 0, releaseT: 0,
     stats: { shots: 0, hits: 0, kills: 0 }
   };
@@ -247,7 +249,7 @@ export function updatePlayer(world, p, cmd, dt) {
   regenerate(world, p, dt);
   if (cmd.yaw !== undefined) p.yaw = cmd.yaw;
   if (cmd.pitch !== undefined) p.pitch = Math.max(-s.controls.max_pitch, Math.min(s.controls.max_pitch, cmd.pitch));
-  p.ads = !!cmd.ads && !(p.carrying && p.carrying.turret);
+  p.ads = !!cmd.ads && !(p.carrying && p.carrying.turret) && !p.designating;
 
   if (cmd.pos) {
     // co-op guest: their own device moves them (so it feels instant) and reports where they are
@@ -257,7 +259,10 @@ export function updatePlayer(world, p, cmd, dt) {
     walkPlayer(world, p, cmd.move, dt);
   }
 
+  if (p.carrying && p.carrying.turret) p.designating = false;   // both hands on the turret
+  if (cmd.strike) strikeButton(world, p);
   updatePlayerWeapon(world, p, cmd, dt);
+  if (p.callStrike) { p.callStrike = false; if (p.designating) strikeButton(world, p); }
 
   // automatic pickups
   const range = s.player.pickup_range * 0.8;

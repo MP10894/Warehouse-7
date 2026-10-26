@@ -9,13 +9,14 @@ import { replayBlast } from '../sim/blasting.js';
 const STATES = ['idle', 'chase', 'aim', 'fire', 'pain', 'dead'];
 const STATUS = ['playing', 'won', 'lost'];
 const PICKUP_TYPES = ['weapon', 'ammo', 'armour', 'item', 'health', 'resupply', 'grenade'];
-const PROJ = ['bullet', 'rocket', 'grenade'];
+const PROJ = ['bullet', 'rocket', 'grenade', 'mortar'];
 // enemies further than this from both players are not sent (the guest can't see that far)
 const SEND_RANGE = 90;
 // events the guest needs to replay for sound, effects and HUD (broken walls are rebuilt
 // from the piece list instead, so 'blocks' is not forwarded)
 const FORWARD = new Set(['shot', 'impact', 'explosion', 'hurt', 'death', 'downed', 'revived', 'pickup', 'message',
-  'wave', 'baseClaimed', 'built', 'weather', 'hitConfirm', 'reload', 'swap', 'empty', 'status', 'throw', 'beep', 'bounce', 'turret', 'siren', 'melee']);
+  'wave', 'baseClaimed', 'built', 'weather', 'hitConfirm', 'reload', 'swap', 'empty', 'status', 'throw', 'beep', 'bounce', 'turret', 'siren', 'melee',
+  'designate', 'streakReady', 'strikeCalled', 'shellIncoming']);
 const EVENT_WINDOW = 45; // ticks of recent events repeated in every snapshot (drops are common)
 const MAX_EVENTS = 22;
 
@@ -67,7 +68,8 @@ export function createHostEncoder(data) {
         p.context ? `${p.context.kind}|${p.context.label}` : '',
         Math.round(p.bloom * 1000),
         `${p.stats.shots}|${p.stats.hits}|${p.stats.kills}`,
-        p.grenades || 0, Math.round((p.throwT || 0) * 100)
+        p.grenades || 0, Math.round((p.throwT || 0) * 100),
+        p.streak || 0, p.designating ? 1 : 0
       ]);
       const near = (e, r) => world.players.some(p => Math.abs(p.x - e.x) < r && Math.abs(p.z - e.z) < r);
       const sent = world.enemies.filter(e => (e.alive && (e.wave || near(e, SEND_RANGE))) || (!e.alive && e.deadT < 12 && near(e, 60)));
@@ -167,7 +169,7 @@ export function createGuestDecoder(data) {
       });
 
       for (const row of snap.p || []) {
-        const [id, x, y, z, yaw, pitch, hp, armour, flags, downT, active, slots, reserve, reloadT, swapT, carrying, ctx, bloom, stats, grenades, throwT] = row;
+        const [id, x, y, z, yaw, pitch, hp, armour, flags, downT, active, slots, reserve, reloadT, swapT, carrying, ctx, bloom, stats, grenades, throwT, streak, designating] = row;
         const p = world.players.find(q => q.id === id);
         if (!p) continue;
         const mine = id === localId;
@@ -192,6 +194,7 @@ export function createGuestDecoder(data) {
         const [shots, hits, k] = stats.split('|').map(Number);
         p.stats = { shots, hits, kills: k };
         p.grenades = grenades || 0; p.throwT = (throwT || 0) / 100;
+        p.streak = streak || 0; p.designating = !!designating;
       }
 
       const byId = new Map(world.enemies.map(e => [e.id, e]));

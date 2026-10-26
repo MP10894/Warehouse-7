@@ -25,6 +25,10 @@ function soundFor(ev, local) {
     case 'explosion': return 'explosion';
     case 'siren': return 'blast_siren';
     case 'melee': return 'machete_swing';
+    case 'shellIncoming': return 'mortar_whistle';
+    case 'strikeCalled': return 'mortar_launch';
+    case 'designate': return mine(ev.actorId) && ev.on ? 'designator_on' : null;
+    case 'streakReady': return mine(ev.playerId) ? 'killstreak_ready' : null;
     case 'blocks': return !ev.placed && ev.cells && ev.cells.length ? 'wall_break' : null;
     case 'wave': return 'wave_alarm';
     case 'baseClaimed': return 'base_claimed';
@@ -122,6 +126,12 @@ export function createAudio() {
         case 'explosion': { const v = 1.3 * Math.max(0.15, fade(d)); noise(1.2, 500, v); tone('sine', 70, 25, 0.8, v); break; }
         // a machete swipe: a quick whoosh, and a dull chop
         case 'melee': { const v = 0.6 * Math.max(0.1, fade(d)); noise(0.12, 2600, v, 0, 'highpass'); noise(0.08, 400, v * 0.8, 0.07); break; }
+        // kill streaks: a mortar shell whistling down (falling pitch, until it lands)
+        case 'shellIncoming': { const t = Math.max(0.5, ev.time || 1.5), v = 0.22 * Math.max(0.3, 1 - d / 200); tone('sine', 2100, 650, t, v); tone('sine', 2160, 680, t, v * 0.4); break; }
+        // ... and the tubes firing, far away, when the strike is called in
+        case 'strikeCalled': for (let i = 0; i < 3; i++) tone('sine', 95, 38, 0.35, 0.35, 0.3 + i * 0.45); break;
+        case 'designate': if (ev.actorId === local.id && ev.on) { tone('square', 1500, 1500, 0.05, 0.06); tone('square', 2200, 2200, 0.06, 0.06, 0.07); } break;
+        case 'streakReady': if (ev.playerId === local.id) [784, 988, 1175, 1568].forEach((f, i) => tone('triangle', f, f, 0.16, 0.12, i * 0.09)); break;
         // the mine's blasting siren: a wail rising and falling for as long as it sounds
         case 'siren': { const n = Math.max(1, Math.round(ev.time || 5)); for (let i = 0; i < n; i++) { tone('sawtooth', 420, 880, 0.5, 0.12, i); tone('sawtooth', 880, 420, 0.5, 0.12, i + 0.5); } break; }
         case 'impact': if (d < 6 && ev.kind !== 'flesh') noise(0.05, 5000, 0.12, 0, 'highpass'); break;

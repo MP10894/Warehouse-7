@@ -79,6 +79,16 @@ export function weaponModel(id) {
     box(0.035, 0.012, 0.025, 0x4a4a46, 0, 0, -0.055, g);             // bolster
     box(0.006, 0.06, 0.42, 0x9a9a92, 0, 0.012, -0.27, g);            // blade
     box(0.006, 0.02, 0.1, 0x9a9a92, 0, 0.03, -0.44, g).rotation.x = -0.2;   // the tip, curving up
+  } else if (id === 'designator') {
+    // a handheld laser designator (kill streak): a squat tan body, two lenses at the front,
+    // a pistol grip underneath and the green laser's emitter between the lenses
+    box(0.11, 0.07, 0.15, 0x8c7a58, 0, 0.06, -0.06, g);               // body
+    box(0.035, 0.035, 0.03, 0x2a2a28, -0.028, 0.065, -0.145, g);      // lens, left
+    box(0.035, 0.035, 0.03, 0x2a2a28, 0.028, 0.065, -0.145, g);       // lens, right
+    const em = box(0.016, 0.016, 0.02, 0x2a2a28, 0, 0.035, -0.14, g); // the laser emitter
+    em.material = new THREE.MeshBasicMaterial({ color: 0x40ff60 });
+    box(0.07, 0.025, 0.06, 0x4d5233, 0, 0.105, -0.04, g);             // eyepiece hood on top
+    box(0.03, 0.1, 0.045, 0x2a2a28, 0, -0.02, 0.0, g).rotation.x = 0.2;   // grip
   } else if (id === 'fal') {
     // long battle rifle: carry handle, straight 20-round magazine, solid stock
     box(0.05, 0.08, 0.36, black, 0, 0.05, -0.1, g);
@@ -96,17 +106,17 @@ export function weaponModel(id) {
 }
 
 /** Where the barrel ends, in the weapon model's own coordinates. */
-export const MUZZLE = { sig_p320: [0, 0.06, -0.15], m4a1: [0, 0.055, -0.6], ak47: [0, 0.065, -0.58], rpg7: [0, 0.07, -0.8], mini_uzi: [0, 0.055, -0.26], galil: [0, 0.065, -0.6], fal: [0, 0.06, -0.72] };
+export const MUZZLE = { designator: [0, 0.035, -0.16], sig_p320: [0, 0.06, -0.15], m4a1: [0, 0.055, -0.6], ak47: [0, 0.065, -0.58], rpg7: [0, 0.07, -0.8], mini_uzi: [0, 0.055, -0.26], galil: [0, 0.065, -0.6], fal: [0, 0.06, -0.72] };
 export const muzzleOf = id => (ART.weapons[id] && ART.weapons[id].muzzle) || MUZZLE[id] || [0, 0, -0.5];
 /** The aiming point (eye looks through it) of a drawn weapon, or null for placeholders. */
 export const sightOf = id => (ART.weapons[id] && ART.weapons[id].sight) || null;
 /** Where the left hand holds the weapon. */
-const HAND_LEFT = { sig_p320: [-0.03, -0.01, 0.03], m4a1: [-0.01, 0.03, -0.3], ak47: [-0.01, 0.035, -0.3], rpg7: [0, -0.02, 0.08], mini_uzi: [-0.02, -0.06, -0.14], galil: [-0.01, 0.035, -0.32], fal: [-0.01, 0.03, -0.38] };
+const HAND_LEFT = { designator: [-0.07, 0.05, -0.05], sig_p320: [-0.03, -0.01, 0.03], m4a1: [-0.01, 0.03, -0.3], ak47: [-0.01, 0.035, -0.3], rpg7: [0, -0.02, 0.08], mini_uzi: [-0.02, -0.06, -0.14], galil: [-0.01, 0.035, -0.32], fal: [-0.01, 0.03, -0.38] };
 /** Where the right hand holds a placeholder weapon (drawn weapons: their origin, the grip). */
 const HAND_RIGHT = { m4a1: [0, -0.04, -0.11], ak47: [0, -0.05, -0.12], rpg7: [0, -0.02, -0.15] };
 export const handRightOf = id => (ART.weapons[id] ? [0, 0, 0] : HAND_RIGHT[id] || [0, 0, 0.02]);
 /** Weapons whose left hand also holds an upright grip (rather than a handguard). */
-export const LEFT_HAND_UPRIGHT = new Set(['sig_p320', 'rpg7']);
+export const LEFT_HAND_UPRIGHT = new Set(['sig_p320', 'rpg7', 'designator']);
 export const handLeftOf = id => (ART.weapons[id] && ART.weapons[id].handLeft) || HAND_LEFT[id] || [0, 0, -0.25];
 
 /**
@@ -175,6 +185,19 @@ export function rocketModel() {
   const head = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.26, 6), lambert(0x4e5a3a));
   head.rotation.x = Math.PI / 2;
   g.add(head);
+  return g;
+}
+
+/** A mortar shell falling nose first: the group's +z faces the flight direction (lookAt). */
+export function mortarShellModel() {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.04, 0.32, 8), lambert(0x4d5233));
+  body.rotation.x = Math.PI / 2; g.add(body);
+  const nose = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.12, 8), lambert(0x6a7448));
+  nose.rotation.x = Math.PI / 2; nose.position.z = 0.22; g.add(nose);
+  for (const r of [0, Math.PI / 2]) {   // tail fins
+    const f = box(0.16, 0.004, 0.08, 0x3e4130, 0, 0, -0.2, g); f.rotation.z = r;
+  }
   return g;
 }
 

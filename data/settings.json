@@ -95,7 +95,10 @@
     "bounce": 0.35,
     "friction": 0.55,
     "supply_gives": 1,
-    "drop_chance": { "insurgent": 0.2, "heavy_insurgent": 0.3 },
+    "drop_chance": {
+      "insurgent": 0.2,
+      "heavy_insurgent": 0.3
+    },
     "bomber_beep_range": 25
   },
   "decor": {
@@ -130,7 +133,7 @@
     "tank_blast_damage_factor": 3.2
   },
   "audio": {
-    "music_volume": 0.30,
+    "music_volume": 0.3,
     "music_fade": 2.5,
     "zone_slack": 3
   },
@@ -154,5 +157,10 @@
     "enemy_reaction_factor": 1.0,
     "enemy_sight_factor": 1.0,
     "enemy_damage_factor": 1.0
+  },
+  "killstreaks": {
+    "shell_drop_height": 70,
+    "shell_fall_speed": 45,
+    "laser_max_range": 150
   }
 }

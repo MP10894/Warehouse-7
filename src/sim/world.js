@@ -19,7 +19,7 @@ export function createWorld({ data, levelId, seed = 7, playerIds = ['p1'] }) {
     rng: { s: seed },
     tick: 0, time: 0, timeLeft: level.time_limit,
     nextId: 1,
-    players: [], enemies: [], turrets: [], projectiles: [], pickups: [], groups: [],
+    players: [], enemies: [], turrets: [], projectiles: [], strikes: [], pickups: [], groups: [],
     pending: [], events: [],
     status: 'playing', outcome: null, endT: 0, kills: 0,
     cache: {} // derived data (navigation); rebuilt on demand, never sent over a network

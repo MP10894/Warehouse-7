@@ -8,6 +8,7 @@ import { markNavDirty } from './nav.js';
 import { onPieceDestroyed } from './base.js';
 import { destroyTurret, dropTurretAtFeet } from './turrets.js';
 import { checkUnstable } from './blasting.js';
+import { countKill, loseStreak } from './killstreaks.js';
 
 export const emit = (world, ev) => world.events.push(ev);
 
@@ -66,6 +67,7 @@ export function killActor(world, a, source) {
   a.hp = 0;
   if (a.kind === 'turret') { destroyTurret(world, a); return; }
   if (a.kind === 'player') {
+    loseStreak(world, a);   // going down loses the kill count and any streak held
     // a turret in your hands is set down where you fall (it isn't lost)
     if (a.carrying && a.carrying.turret) dropTurretAtFeet(world, a);
     if (a.carrying) {
@@ -89,7 +91,7 @@ export function killActor(world, a, source) {
   a.state = 'dead';
   a.deadT = 0;
   world.kills++;
-  if (source && source.kind === 'player') source.stats.kills++;
+  if (source && source.kind === 'player') { source.stats.kills++; countKill(world, source); }
   // a turret's kills count for the player who set it down
   if (source && source.kind === 'turret') { const o = world.players.find(p => p.id === source.owner); if (o) o.stats.kills++; }
   emit(world, { type: 'death', actorId: a.id, team: 'enemy', x: a.x, y: a.y, z: a.z });

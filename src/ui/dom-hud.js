@@ -1,6 +1,7 @@
 // The text parts of the HUD: health and armour, clock and waves, objective, weapon and
 // ammunition, carried item, the context button label, pop-up messages and screen tints.
 // Reads the world; never changes it.
+import { strikeFor, streakProgress } from '../sim/killstreaks.js';
 export const fmtTime = t => `${Math.floor(Math.max(0, t) / 60)}:${String(Math.floor(Math.max(0, t) % 60)).padStart(2, '0')}`;
 
 export function createDomHud() {
@@ -9,7 +10,8 @@ export function createDomHud() {
     hpFill: $('hpFill'), hpNum: $('hpNum'), arFill: $('arFill'), arNum: $('arNum'), hpBar: $('hpFill').parentElement.parentElement,
     clock: $('clock'), waveLine: $('waveLine'), goalLine: $('goalLine'), carry: $('carry'),
     wName: $('wName'), wMag: $('wMag'), wRes: $('wRes'), wAmmo: $('wAmmo'), wOther: $('wOther'),
-    ctx: $('context'), hurt: $('hurt'), storm: $('storm'), toast: $('toast'), gren: $('grenade'), grenN: $('grenadeN')
+    ctx: $('context'), hurt: $('hurt'), storm: $('storm'), toast: $('toast'), gren: $('grenade'), grenN: $('grenadeN'),
+    strike: $('strike'), streak: $('streak'), streakFill: $('streakFill')
   };
   let toastT = 0, hurtA = 0;
   const cache = {};
@@ -65,7 +67,12 @@ export function createDomHud() {
       if (p.carrying) set('carry', el.carry, 'textContent', p.carrying.turret ? 'Carrying: turret (no shooting)' : `Carrying: ${p.carrying.item.replace(/_/g, ' ')}`);
 
       const slot = p.slots[p.active];
-      if (slot) {
+      if (p.designating) {
+        set('wn', el.wName, 'textContent', 'Laser designator');
+        set('wm', el.wMag, 'textContent', '');
+        set('wr', el.wRes, 'textContent', 'aim · FIRE to call it in');
+        el.wAmmo.classList.remove('empty');
+      } else if (slot) {
         const def = world.data.weapons[slot.w];
         set('wn', el.wName, 'textContent', p.reloadT > 0 ? `${def.name} — reloading` : `${def.name} · ${def.fire_mode === 'auto' ? 'auto' : 'semi'}`);
         set('wm', el.wMag, 'textContent', String(slot.mag));
@@ -81,6 +88,19 @@ export function createDomHud() {
       if (gn > 0) {
         set('gn', el.grenN, 'textContent', String(gn));
         el.gren.classList.toggle('wait', p.throwT > 0 || p.reloadT > 0 || p.swapT > 0);
+      }
+
+      // kill streaks: the button (a mortar round) while one is on offer, lit while the designator
+      // is up; and a thin bar beside the grenade button filling towards the next streak
+      const k = strikeFor(world, p);
+      el.strike.hidden = !k;
+      if (k) { el.strike.classList.toggle('active', !!p.designating); set('sk', el.strike, 'title', k.name); }
+      const pr = p.alive ? streakProgress(world, p) : null;
+      el.streak.hidden = !pr;
+      if (pr) {
+        const f = pr.top && pr.have >= pr.need ? 1 : Math.max(0, Math.min(1, (pr.have - pr.from) / Math.max(1, pr.need - pr.from)));
+        set('skf', el.streakFill.style, 'height', `${Math.round(f * 100)}%`);
+        el.streak.classList.toggle('ready', !!k);
       }
 
       const ctx = p.context;

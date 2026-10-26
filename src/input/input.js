@@ -1,5 +1,5 @@
 // Turns touches, mouse and keyboard into one simple per-frame sample:
-//   { moveX, moveY, lookX, lookY, turn, fire, ads, reload, swap, interact }
+//   { moveX, moveY, lookX, lookY, turn, fire, ads, reload, swap, interact, grenade, strike }
 // reload / swap / interact are "pressed since last frame". main.js turns the sample into
 // a player command for the simulation.
 export function createInput({ app, touchEl, stick, knob, buttons, view, settings }) {
@@ -8,7 +8,7 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
   let enabled = false;
   let firePulse = false, fireKey = false, fireMouse = false, fireTouch = false, adsMouse = false, adsToggle = false, mouseDown = false;
   let lookX = 0, lookY = 0;
-  let pressed = { reload: false, swap: false, interact: false, grenade: false };
+  let pressed = { reload: false, swap: false, interact: false, grenade: false, strike: false };
   let joy = { id: null, ox: 0, oy: 0, x: 0, y: 0 };
   let look = { id: null, lx: 0, ly: 0 };
   const locked = () => document.pointerLockElement === touchEl;
@@ -23,6 +23,7 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
       if (e.code === 'KeyQ' || e.code === 'Digit1' || e.code === 'Digit2') pressed.swap = true;
       if (e.code === 'KeyE' || e.code === 'KeyF') pressed.interact = true;
       if (e.code === 'KeyG') pressed.grenade = true;
+      if (e.code === 'KeyT') pressed.strike = true;
     }
     keys[e.code] = true;
     if (e.code === 'Space') { fireKey = true; firePulse = true; e.preventDefault(); }
@@ -138,6 +139,16 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
       g.classList.add('on'); setTimeout(() => g.classList.remove('on'), 150);
     });
   }
+  // the kill streak button (the mortar round): same, or press T
+  if (buttons.strike) {
+    const k = buttons.strike;
+    k.addEventListener('pointerdown', e => {
+      e.preventDefault(); e.stopPropagation();
+      if (!enabled) return;
+      pressed.strike = true;
+      k.classList.add('on'); setTimeout(() => k.classList.remove('on'), 150);
+    });
+  }
 
   if (matchMedia('(pointer:coarse)').matches) app.classList.add('touch');
 
@@ -172,7 +183,7 @@ export function createInput({ app, touchEl, stick, knob, buttons, view, settings
         ...pressed
       };
       lookX = 0; lookY = 0; firePulse = false;
-      pressed = { reload: false, swap: false, interact: false, grenade: false };
+      pressed = { reload: false, swap: false, interact: false, grenade: false, strike: false };
       return out;
     }
   };

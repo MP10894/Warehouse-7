@@ -3,6 +3,7 @@ import { rand, randomInDisc } from './rng.js';
 import { traceSegment } from './ballistics.js';
 import { emit, damageActor, damagePiece, explode, findActor, alertEnemy } from './damage.js';
 import { turretsHear } from './turrets.js';
+import { stowDesignator } from './killstreaks.js';
 
 /** Unit vector for a look direction (matches the camera: yaw 0 looks north, −z). */
 export function aimVector(yaw, pitch) {
@@ -42,7 +43,7 @@ export const grenadeMax = world => { const g = grenadeDef(world); return g ? g.m
 
 /** Can the player toss a grenade right now? */
 export function canThrow(world, p) {
-  return !!grenadeDef(world) && p.alive && !p.downed && (p.grenades || 0) > 0 && !(p.throwT > 0) && !(p.reloadT > 0) && !(p.swapT > 0) && !(p.carrying && p.carrying.turret);
+  return !!grenadeDef(world) && p.alive && !p.downed && (p.grenades || 0) > 0 && !(p.throwT > 0) && !(p.reloadT > 0) && !(p.swapT > 0) && !(p.carrying && p.carrying.turret) && !p.designating;
 }
 
 /**
@@ -124,11 +125,18 @@ export function updatePlayerWeapon(world, p, cmd, dt) {
     }
   }
   const throwing = p.throwT > 0;
+  const pressed = !!cmd.fire && !p.trigger;
+  p.trigger = !!cmd.fire;
+  // the laser designator in hand (a kill streak): SWAP puts it away and brings the gun back;
+  // the trigger calls the strike in, like the streak button (see killstreaks.js)
+  if (p.designating) {
+    if (cmd.swap) stowDesignator(world, p);
+    else if (pressed) p.callStrike = true;
+    return;
+  }
   if (cmd.reload && !throwing) startReload(world, p);
   if (cmd.swap && !throwing) swapWeapon(world, p);
 
-  const pressed = !!cmd.fire && !p.trigger;
-  p.trigger = !!cmd.fire;
   if (p.carrying && p.carrying.turret) return;   // both hands on the turret: no shooting
   const want = def.fire_mode === 'auto' ? !!cmd.fire : pressed;
   if (!want || p.reloadT > 0 || p.swapT > 0 || throwing) return;
@@ -205,7 +213,7 @@ export function updateProjectiles(world, dt) {
     const hit = traceSegment(world, ox, oy, oz, pr.x, pr.y, pr.z, { actors: targets.filter(a => !a.downed), ignore: pr.owner });
     if (!hit) {
       if (pr.life > 0 && pr.y > -5) keep.push(pr);
-      else if (pr.kind === 'rocket') explode(world, pr.x, pr.y, pr.z, world.data.weapons[pr.weapon], findActor(world, pr.owner));
+      else if (pr.kind === 'rocket' || pr.kind === 'mortar') explode(world, pr.x, pr.y, pr.z, world.data.weapons[pr.weapon], findActor(world, pr.owner));
       continue;
     }
     const wdef = world.data.weapons[pr.weapon];

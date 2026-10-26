@@ -3,8 +3,9 @@
 // world, so this works the same whether the world was simulated here or received
 // from a co-op host.
 import * as THREE from 'three';
-import { soldierModel, setSoldierWeapon, poseSoldier, pickupModel, rocketModel, grenadeModel, turretModel } from './models.js';
+import { soldierModel, setSoldierWeapon, poseSoldier, pickupModel, rocketModel, grenadeModel, turretModel, mortarShellModel } from './models.js';
 import { placementFor } from '../sim/turrets.js';
+import { laserFor } from '../sim/killstreaks.js';
 
 const MAX_TRACERS = 256;
 
@@ -31,6 +32,28 @@ export function createWorldView(scene, tex, initialLocalId) {
   const tracers = new THREE.LineSegments(tracerGeo, new THREE.LineBasicMaterial({ vertexColors: true, fog: false }));
   tracers.frustumCulled = false;
   scene.add(tracers);
+
+  // laser designators (kill streak): a faint green line from the designator to where it points,
+  // and a bright dot there; one per player at most
+  const laserGeo = new THREE.BufferGeometry();
+  const laserPos = new Float32Array(4 * 6), laserCol = new Float32Array(4 * 6);
+  laserGeo.setAttribute('position', new THREE.BufferAttribute(laserPos, 3));
+  laserGeo.setAttribute('color', new THREE.BufferAttribute(laserCol, 3));
+  const lasers = new THREE.LineSegments(laserGeo, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }));
+  lasers.frustumCulled = false;
+  scene.add(lasers);
+  const dotTex = (() => {
+    const c = document.createElement('canvas'); c.width = c.height = 16;
+    const g = c.getContext('2d'), grad = g.createRadialGradient(8, 8, 0, 8, 8, 8);
+    grad.addColorStop(0, 'rgba(220,255,220,1)'); grad.addColorStop(0.3, 'rgba(80,255,110,0.9)'); grad.addColorStop(1, 'rgba(40,255,80,0)');
+    g.fillStyle = grad; g.fillRect(0, 0, 16, 16);
+    return new THREE.CanvasTexture(c);
+  })();
+  const dots = [0, 1, 2, 3].map(() => {
+    const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: dotTex, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false, fog: false }));
+    s.visible = false; scene.add(s); return s;
+  });
+  const lv = new THREE.Vector3();
 
   function actorView(a) {
     let v = actors.get(a.id);
@@ -66,7 +89,7 @@ export function createWorldView(scene, tex, initialLocalId) {
         seen.add(a.id);
         const v = actorView(a);
         const m = v.model;
-        const gun = a.kind === 'enemy' ? a.weapon.w : (a.slots[a.active] && a.slots[a.active].w);
+        const gun = a.kind === 'enemy' ? a.weapon.w : a.designating ? 'designator' : (a.slots[a.active] && a.slots[a.active].w);
         // a suicide bomber carries no gun (his "weapon" is the vest)
         const thrown = gun && world.data.weapons[gun] && world.data.weapons[gun].projectile === 'grenade';
         if (gun && !thrown) setSoldierWeapon(m, gun);
@@ -138,6 +161,14 @@ export function createWorldView(scene, tex, initialLocalId) {
           r.rotation.x += sp * dt * 0.8; r.rotation.z += sp * dt * 0.5;   // tumbling in flight
           continue;
         }
+        if (pr.kind === 'mortar') {
+          seenR.add(pr.id);
+          let r = rockets.get(pr.id);
+          if (!r) { r = mortarShellModel(); scene.add(r); rockets.set(pr.id, r); }
+          r.position.set(pr.x, pr.y, pr.z);
+          r.lookAt(pr.x + pr.vx * 0.01 + 1e-4, pr.y + pr.vy * 0.01, pr.z + pr.vz * 0.01);
+          continue;
+        }
         if (pr.kind === 'rocket') {
           seenR.add(pr.id);
           let r = rockets.get(pr.id);
@@ -158,6 +189,34 @@ export function createWorldView(scene, tex, initialLocalId) {
         n++;
       }
       for (const [id, r] of rockets) if (!seenR.has(id)) { scene.remove(r); rockets.delete(id); }
+      // laser designators
+      let nl = 0;
+      for (const p of world.players) {
+        const L = nl < 4 ? laserFor(world, p) : null;
+        if (!L) continue;
+        // from the designator in their hands: a little right of and below the eye, in front
+        const sy = Math.sin(p.yaw), cy = Math.cos(p.yaw);
+        const fx = -sy, fz = -cy, rx = cy, rz = -sy;
+        const mine = p.id === localId;
+        const o = [L.from[0] + fx * (mine ? 0.5 : 0.45) + rx * (mine ? 0.14 : 0.18), L.from[1] - (mine ? 0.2 : 0.3), L.from[2] + fz * (mine ? 0.5 : 0.45) + rz * (mine ? 0.14 : 0.18)];
+        const i = nl * 6;
+        laserPos.set([...o, ...L.to], i);
+        laserCol.set([0.15, 0.5, 0.2, 0.3, 1, 0.4], i);   // fainter at the hand, brighter at the far end
+        const d = dots[nl];
+        d.visible = L.hit;
+        if (L.hit) {
+          d.position.set(L.to[0], L.to[1], L.to[2]);
+          // about the same size on screen near or far (a dot is easy to lose)
+          const dist = lv.set(L.to[0] - L.from[0], L.to[1] - L.from[1], L.to[2] - L.from[2]).length();
+          const s = 0.25 + dist * 0.012;
+          d.scale.set(s, s, 1);
+        }
+        nl++;
+      }
+      for (let k = nl; k < 4; k++) dots[k].visible = false;
+      laserGeo.setDrawRange(0, nl * 2);
+      laserGeo.attributes.position.needsUpdate = true;
+      laserGeo.attributes.color.needsUpdate = true;
       tracerGeo.setDrawRange(0, n * 2);
       tracerGeo.attributes.position.needsUpdate = true;
       tracerGeo.attributes.color.needsUpdate = true;

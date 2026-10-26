@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { makeCanvas, pixelTexture } from './textures.js';
 import { cellXYZ } from '../sim/grid.js';
 
-const POOL = 160;
+const POOL = 700;
 const MATERIAL_COLOUR = {
   wall: [0.75, 0.68, 0.55], lowwall: [0.68, 0.6, 0.47], crate: [0.6, 0.45, 0.26], sandbags: [0.7, 0.62, 0.44],
   concrete: [0.62, 0.6, 0.56], ground: [0.8, 0.68, 0.48], terrain: [0.8, 0.68, 0.48],
@@ -22,6 +22,13 @@ function blobTex(soft) {
 
 export function createEffects(scene) {
   const tex = blobTex(true), hard = blobTex(false);
+  // a solid round puff (the mortar trail): soft edge, no holes
+  const puff = pixelTexture(makeCanvas(8, 8, g => {
+    for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) {
+      const d = Math.hypot(x - 3.5, y - 3.5) / 4;
+      if (d < 1) { g.fillStyle = `rgba(255,255,255,${d < 0.7 ? 1 : 0.5})`; g.fillRect(x, y, 1, 1); }
+    }
+  }), false);
   const parts = [];
   for (let i = 0; i < POOL; i++) {
     const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false }));
@@ -31,6 +38,7 @@ export function createEffects(scene) {
   const debrisGeo = new THREE.BoxGeometry(0.18, 0.12, 0.15);
   const debris = [];
   let next = 0;
+  const trails = new Map();   // mortar shell id → where its trail got to
   const r = () => Math.random() - 0.5;
 
   function emit(x, y, z, colour, size, life, vx = 0, vy = 0, vz = 0, grow = 0, grav = 0, blend = false, map = tex) {
@@ -94,7 +102,26 @@ export function createEffects(scene) {
       }
     },
 
-    update(dt) {
+    update(dt, world) {
+      // mortar shells leave a trail of white smoke behind them as they come down: a puff every
+      // half metre along the path since the last frame, so the trail is solid at any frame rate
+      if (world) {
+        const seen = new Set();
+        for (const pr of world.projectiles) {
+          if (pr.kind !== 'mortar') continue;
+          seen.add(pr.id);
+          const last = trails.get(pr.id) || [pr.x, pr.y + 1, pr.z];
+          const dx = pr.x - last[0], dy = pr.y - last[1], dz = pr.z - last[2], len = Math.hypot(dx, dy, dz);
+          const n = Math.min(40, Math.floor(len / 0.5));
+          for (let i = 1; i <= n; i++) {
+            const k = i / n;
+            emit(last[0] + dx * k + r() * 0.12, last[1] + dy * k + 0.25, last[2] + dz * k + r() * 0.12, [0.98, 0.98, 0.97], 1.3, 2.6 + Math.random() * 0.8, r() * 0.3, 0.2, r() * 0.3, 2.2, 0, false, puff);
+          }
+          if (n > 0) trails.set(pr.id, [pr.x, pr.y, pr.z]);
+          else if (!trails.has(pr.id)) trails.set(pr.id, last);
+        }
+        for (const id of trails.keys()) if (!seen.has(id)) trails.delete(id);
+      }
       for (const p of parts) {
         if (p.life <= 0) continue;
         p.life -= dt;

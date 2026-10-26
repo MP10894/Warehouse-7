@@ -42,3 +42,7 @@ shot_fal,FAL_fire,1,140,0.06,A FAL fires
 shot_mk14ebr,,1,140,0.06,An Mk14 EBR fires
 shot_rpg7,,1,140,0.04,An RPG-7 fires
 shot_turret,,0.8,140,0.05,Your turret fires
+mortar_whistle,,1,200,0.08,A mortar shell (kill streak) whistles down; plays for about 1.5 s until it lands
+mortar_launch,,1,0,0,You or your partner call in a mortar strike: the tubes firing in the distance
+designator_on,,1,0,0,You raise the laser designator (kill streak button)
+killstreak_ready,,1,0,0,You reach a kill streak (MORTAR STRIKE AVAILABLE!)

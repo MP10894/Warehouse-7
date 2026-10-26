@@ -8,6 +8,7 @@ import { updateProjectiles } from './weapons.js';
 import { updateEnemy, updateGroups } from './enemies.js';
 import { updateTurrets } from './turrets.js';
 import { updateBlasting } from './blasting.js';
+import { updateStrikes } from './killstreaks.js';
 import { updateBase, respawnItem } from './base.js';
 import { updateWaves } from './waves.js';
 import { updateWeather } from './weather.js';
@@ -53,6 +54,7 @@ export function stepWorld(world, commands, dt) {
   if (!world.outcome && world.base.claimed) world.timeLeft = Math.max(0, world.timeLeft - dt);
   maintainNav(world);
   for (const p of world.players) updatePlayer(world, p, commands[p.id], dt);
+  updateStrikes(world, dt);
   updateProjectiles(world, dt);
   if (!world.outcome) {
     updateGroups(world, dt);

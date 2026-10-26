@@ -56,7 +56,7 @@ export function parseUpgrades(text) {
   return out;
 }
 
-export function buildData({ weaponsRows, enemiesRows = null, alliesRows = null, materialsCsv, enemiesCsv, wavesCsv, upgradesCsv = DEFAULT_UPGRADES_CSV, settings, levels }) {
+export function buildData({ weaponsRows, enemiesRows = null, alliesRows = null, materialsCsv, enemiesCsv, wavesCsv, upgradesCsv = DEFAULT_UPGRADES_CSV, killstreaksCsv = '', settings, levels }) {
   const weapons = byKey(weaponsRows, 'id');
   // Ammunition carried per calibre: the largest (max_total − magazine) among weapons of that calibre.
   const calibres = {};
@@ -81,6 +81,8 @@ export function buildData({ weaponsRows, enemiesRows = null, alliesRows = null, 
     allies: byKey(alliesRows || [], 'id'),
     waves: parseCsv(wavesCsv),
     upgrades: parseUpgrades(upgradesCsv),
+    // kill streaks (data/killstreaks.csv), fewest kills first
+    killstreaks: parseCsv(killstreaksCsv).filter(r => r.id && r.kills > 0).sort((a, b) => a.kills - b.kills),
     settings,
     levels: parsedLevels
   };

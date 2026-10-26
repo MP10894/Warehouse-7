@@ -377,14 +377,15 @@ export function createFpWeapon() {
         if (size && gun) throwCase(size);
       }
       else if (ev.type === 'reload') { st.reload = ev.time; st.reloadDur = ev.time; st.reloadEmpty = !!ev.empty; }
-      else if (ev.type === 'swap') { st.swap = 0.4; st.reload = 0; }
+      else if (ev.type === 'swap' || ev.type === 'designate') { st.swap = 0.4; st.reload = 0; }
       else if (ev.type === 'throw') { st.throwT = ev.time; st.throwDur = ev.time; st.releaseFrac = ev.release ? ev.release / ev.time : 0.45; }
     },
     update(dt, player, aspect) {
       camera.aspect = aspect; camera.updateProjectionMatrix();
       // carrying a turret: both hands are on it (it is shown out in front, where it would go)
       const slot = player && player.alive && !player.downed && !(player.carrying && player.carrying.turret) ? player.slots[player.active] : null;
-      setWeapon(slot ? slot.w : null);
+      // a kill streak's laser designator takes the gun's place while it is up
+      setWeapon(slot ? (player.designating ? 'designator' : slot.w) : null);
       updateCases(dt);
       if (!gun) return;
       st.ads += ((player.ads ? 1 : 0) - st.ads) * Math.min(1, dt * 14);
@@ -401,7 +402,12 @@ export function createFpWeapon() {
       holder.position.y += -Math.abs(Math.cos(st.bob * 0.5)) * 0.012 * sway;
       holder.position.z += st.kick * 0.05;
       holder.rotation.set(st.kick * 0.12, 0, 0);
-      if (R.war) {
+      if (gunId === 'designator') {
+        // held up in front, a little to the right and low; no reloading or muzzle flash
+        holder.position.set(0.15, -0.16, -0.58);
+        holder.position.y += -Math.abs(Math.cos(st.bob * 0.5)) * 0.01 * (player.moving ? 1 : 0.2);
+        holder.rotation.set(0, 0, 0);
+      } else if (R.war) {
         // an empty launcher shows no warhead
         R.war.position.copy(R.warPos); R.war.visible = slot.mag > 0;
         if (st.reload > 0) rocketReload(1 - st.reload / st.reloadDur);
