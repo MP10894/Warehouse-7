@@ -1,4 +1,4 @@
-// Checks the automatic turret: the level 3 ammunition supply hands one out per player; you
+// Checks the automatic turret: the ammunition supply (the level upgrades.csv says) hands one out per player; you
 // carry it (no shooting), DROP it on a good spot, PICK it UP again; it shoots enemies it sees,
 // enemies shoot it, and once destroyed it drops nothing and the armoury hands out a new one.
 // Usage: node tests/turret-check.mjs
@@ -47,10 +47,13 @@ const p = w.players[0];
 const standAt = (x, z, yaw = p.yaw) => { p.x = x; p.z = z; p.y = groundAt(w, x, z, 30); p.yaw = yaw; };
 standAt(b.build_spots[0].x + 0.5, b.build_spots[0].z + 0.5);
 step({}, 20);
-applyUpgrade(w, 'ammo', 1); applyUpgrade(w, 'ammo', 2);
-check(!armouryWeapons(w).includes('turret'), 'no turret from a level 2 ammunition supply');
+// the supply level that unlocks the turret comes from upgrades.csv (the `unlocks` column)
+const turretLevel = data.upgrades.ammo.levels.findIndex(r => String(r.unlocks || '').split(/[\s;,]+/).includes('turret')) + 1;
+check(turretLevel > 0, `upgrades.csv unlocks the turret at ammunition supply level ${turretLevel}`);
+if (turretLevel > 1) { applyUpgrade(w, 'ammo', turretLevel - 1); check(!armouryWeapons(w).includes('turret'), `no turret from a level ${turretLevel - 1} ammunition supply`); }
+applyUpgrade(w, 'ammo', turretLevel);
+check(armouryWeapons(w).includes('turret'), `the level ${turretLevel} ammunition supply offers the turret`);
 applyUpgrade(w, 'ammo', 3);
-check(armouryWeapons(w).includes('turret'), 'the level 3 ammunition supply offers the turret');
 
 // at the locker
 const sx = spot.x + 0.5, sz = spot.z + 0.5;

@@ -38,12 +38,14 @@ const standAt = (x, z) => { p.x = x; p.z = z; p.y = groundAt(w, x, z, 30); };
 standAt(b.build_spots[0].x + 0.5, b.build_spots[0].z + 0.5);
 step(w, {}, 20);
 check(w.base.claimed && armouryWeapons(w).length === 0, 'no armoury before the ammunition supply is built');
+// what each supply level should offer, read from upgrades.csv (so editing the sheet doesn't break this check)
+const offerAt = n => [...new Set(data.upgrades.ammo.levels.slice(0, n).flatMap(r => String(r.unlocks || '').split(/[\s;,]+/)).filter(x => x && data.weapons[x]))].join();
 applyUpgrade(w, 'ammo', 1);
 // stand next to the locker
 const sx = spot.x + 0.5, sz = spot.z + 0.5;
 let stand = null;
 for (const [dx, dz] of [[1.2, 0], [-1.2, 0], [0, 1.2], [0, -1.2]]) { standAt(sx + dx, sz + dz); step(w); if (p.context && p.context.kind === 'armoury') { stand = [p.x, p.z]; break; } }
-check(!!stand && armouryWeapons(w).join() === 'mp5', `at the level 1 ammunition supply the use button opens the ARMOURY, offering: ${armouryWeapons(w).join(', ')}`);
+check(!!stand && armouryWeapons(w).join() === offerAt(1), `at the level 1 ammunition supply the use button opens the ARMOURY, offering: ${armouryWeapons(w).join(', ')}`);
 step(w, { armoury: 'm4a1' });
 check(!p.slots.some(s => s && s.w === 'm4a1'), 'the M4A1 needs locker level 2');
 p.slots = [{ w: 'sig_p320', mag: 17 }, null]; p.active = 0;
@@ -53,7 +55,7 @@ const mp5 = data.weapons.mp5;
 check(p.slots[1] && p.slots[1].w === 'mp5' && p.slots[1].mag === mp5.mag_size && p.active === 1 && w.pickups.every(k => before.has(k.id)),
   'with an empty slot the MP5 goes into it, fully loaded, and nothing is dropped');
 applyUpgrade(w, 'ammo', 2); applyUpgrade(w, 'ammo', 3);
-check(armouryWeapons(w).join() === 'mp5,m4a1,mk14ebr,turret', `level 3 offers ${armouryWeapons(w).join(', ')}`);
+check(armouryWeapons(w).join() === offerAt(3), `level 3 offers ${armouryWeapons(w).join(', ')}`);
 step(w, { armoury: 'mk14ebr' });
 const mk = data.weapons.mk14ebr;
 const dropped = w.pickups.find(k => k.type === 'weapon' && k.weapon === 'mp5' && !before.has(k.id));

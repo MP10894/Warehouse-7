@@ -1,6 +1,6 @@
 // The automatic turret: a friendly sentry gun the players set down themselves.
 //
-// - A level 3 ammunition supply hands one out (upgrades.csv → `unlocks` lists "turret"),
+// - The ammunition supply hands one out from the level whose `unlocks` (upgrades.csv) lists "turret",
 //   one per player: while yours is carried or standing, the armoury won't give another.
 // - You carry it in both hands (no shooting) and see where it would go: DROP puts it there.
 //   Standing next to your own turret, PICK UP TURRET takes it back (damage and all).
