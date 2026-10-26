@@ -175,13 +175,6 @@ canvas.layer {
   color: var(--muted); font-size: 15px; line-height: 1; cursor: pointer; touch-action: none;
 }
 #leaveBtn[hidden] { display: none; }
-/* PROTOTYPE: try the gunship camera (gunship-view.js) */
-#gunshipTest {
-  position: absolute; top: calc(env(safe-area-inset-top, 0px) + 98px); left: max(12px, env(safe-area-inset-left, 0px));
-  height: 26px; padding: 0 8px; border: 1px solid rgba(255, 255, 255, .28); background: rgba(20, 18, 14, .45);
-  color: var(--muted); font-size: 11px; letter-spacing: .05em; cursor: pointer; touch-action: none;
-}
-#gunshipTest[hidden] { display: none; }
 /* the gunship's thermal camera: a grey-green picture (people are drawn white) */
 /* up in the gunship: the ground HUD (weapon, objective, buttons) is put away */
 #app.gunship #objective, #app.gunship #weapon, #app.gunship #hint, #app.gunship #grenade, #app.gunship #strike,

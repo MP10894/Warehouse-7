@@ -9,7 +9,7 @@ import { onBuild } from './waves.js';
 import { isAlly, takeTurret, placementFor, dropTurret, turretToPickUp, pickUpTurret } from './turrets.js';
 import { detonatorFor, detonate, blastWait } from './blasting.js';
 import { strikeButton } from './killstreaks.js';
-import { startGunship, updateGunship } from './gunship.js';
+import { updateGunship } from './gunship.js';
 
 export function createPlayer(world, id, spawn) {
   const s = world.data.settings.player;
@@ -248,8 +248,6 @@ export function updatePlayer(world, p, cmd, dt) {
   if (!p.alive) { p.moving = false; return; }
   cmd = cmd || {};
   regenerate(world, p, dt);
-  // the GUNSHIP TEST button: up into the gunship without earning it
-  if (cmd.gunshipTest && !p.gunship) startGunship(world, p, (world.data.killstreaks || []).find(k => k.id === 'gunship'), true);
   if (p.gunship) {
     // up in the gunship: the body stands where it was (and can still be shot)
     p.moving = false; p.ads = false; p.context = null;

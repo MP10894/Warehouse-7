@@ -13,7 +13,7 @@ import { groundAt } from '../src/sim/body.js';
 import { killActor, damageActor } from '../src/sim/damage.js';
 import { spawnEnemy } from '../src/sim/enemies.js';
 import { strikeFor, laserPoint, streakProgress } from '../src/sim/killstreaks.js';
-import { gunshipPos } from '../src/sim/gunship.js';
+import { gunshipPos, startGunship } from '../src/sim/gunship.js';
 import { createHostEncoder, createGuestDecoder } from '../src/net/snapshot.js';
 import { terrainHeight } from '../src/sim/terrain.js';
 
@@ -241,8 +241,7 @@ const killOne = (w, source) => {
 
   // out of both: over at once
   const w2 = fresh(), a = w2.players[0];
-  tick(w2, { p1: { gunshipTest: true } });
-  check(!!a.gunship && a.streak === 0, 'GUNSHIP TEST: up there without earning it');
+  startGunship(w2, a, data.killstreaks.find(k => k.id === 'gunship'), true);
   a.gunship.ammo = 3; a.gunship.rockets = 1;
   tick(w2, { p1: { ...aimAt(w2, a, a.x + 20, a.y, a.z), fire: true } }, 20);
   tick(w2, { p1: { swap: true } }); tick(w2, {}, 20);
@@ -258,7 +257,7 @@ const killOne = (w, source) => {
 
   // co-op: the partner's phone knows your gunship
   const w4 = fresh(['p1', 'p2']), guest = fresh(['p1', 'p2']);
-  tick(w4, { p1: { gunshipTest: true } });
+  startGunship(w4, w4.players[0], data.killstreaks.find(k => k.id === 'gunship'), true);
   w4.enemies = []; w4.events.length = 0;
   const enc = createHostEncoder(data), dec = createGuestDecoder(data);
   dec.apply(guest, enc.encode(w4), 'p2'); w4.tick++; dec.apply(guest, enc.encode(w4), 'p2');

@@ -19,7 +19,7 @@ export function gunshipPos(world, gs) {
   return [gs.cx + Math.cos(gs.ang) * R, gs.gy + ALT, gs.cz + Math.sin(gs.ang) * R];
 }
 
-/** Up into the gunship. test: from the GUNSHIP TEST button (the kill count is left alone). */
+/** Up into the gunship. test: for automated checks (the kill count is left alone). */
 export function startGunship(world, p, k, test = false) {
   if (!k || p.gunship || !p.alive || p.downed) return false;
   if (p.carrying && p.carrying.turret) return false;   // both hands on the turret

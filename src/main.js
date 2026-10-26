@@ -105,15 +105,8 @@ if (!view) {
   const audio = createAudio();
   const music = createMusic(S);
   const domHud = createDomHud();
-  // the gunship kill streak's view (render/gunship-view.js; rules in sim/gunship.js). The GUNSHIP
-  // TEST button sends you up without earning it (for trying it out)
+  // the gunship kill streak's view (render/gunship-view.js; rules in sim/gunship.js)
   const gunship = createGunshipView({ view, settings: S, canvas: $('view') });
-  const gunshipBtn = $('gunshipTest');
-  gunshipBtn.addEventListener('pointerdown', e => {
-    e.preventDefault(); e.stopPropagation();
-    if (mode !== 'playing' || local().gunship) return;
-    if (role === 'guest') net.edges.gtest++; else taps.gunshipTest = true;
-  });
   const buttons = { fire: $('fire'), ads: $('ads'), reload: $('reload'), swap: $('swap'), context: $('context'), grenade: $('grenade'), strike: $('strike') };
   const input = createInput({ app, touchEl: $('touch'), stick: $('stick'), knob: $('knob'), buttons, view, settings: S });
   const aim = { yaw: 0, pitch: 0 };
@@ -123,7 +116,7 @@ if (!view) {
   const aimOut = { yaw: 0, pitch: 0 };
   // taps on RELOAD, SWAP and the use button wait here until a game step takes them: on a
   // fast screen many frames have no game step, and a tap read on such a frame was lost
-  const taps = { reload: false, swap: false, interact: false, grenade: false, strike: false, gunshipTest: false, armoury: null };
+  const taps = { reload: false, swap: false, interact: false, grenade: false, strike: false, armoury: null };
   // the armoury panel at a built ammunition supply: picking a weapon becomes a command
   const armoury = createArmoury({ root: app, onPick: w => {
     if (role === 'guest') { net.armouryN++; net.armouryW = w; } else taps.armoury = w;
@@ -147,8 +140,8 @@ if (!view) {
   const net = {
     transport: null, session: null, code: '', run: 0,
     encoder: createHostEncoder(DATA), decoder: createGuestDecoder(DATA),
-    edges: { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0, strike: 0, gtest: 0 }, // guest: press counters it sends
-    seen: { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0, strike: 0, gtest: 0 },  // host: last counters it acted on
+    edges: { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0, strike: 0 }, // guest: press counters it sends
+    seen: { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0, strike: 0 },  // host: last counters it acted on
     prevFire: false, lostAt: 0, armouryN: 0, armouryW: '', seenArmoury: 0
   };
 
@@ -182,7 +175,7 @@ if (!view) {
     // the guest's counters keep counting across runs; act only on presses from now on
     const partner = net.session.partner();
     const c = partner && partner.state && partner.state.c;
-    net.seen = c ? { fire: c[5], reload: c[6], swap: c[7], interact: c[8], grenade: c[9] || 0, strike: c[10] || 0, gtest: c[11] || 0 } : { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0, strike: 0, gtest: 0 };
+    net.seen = c ? { fire: c[5], reload: c[6], swap: c[7], interact: c[8], grenade: c[9] || 0, strike: c[10] || 0 } : { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0, strike: 0 };
     net.seenArmoury = partner && partner.state && partner.state.a ? partner.state.a[0] : 0;
     const seed = (Math.random() * 1e9) | 0;
     enterPlay(seed, ['p1', 'p2']);
@@ -274,7 +267,7 @@ if (!view) {
         role = 'guest'; localId = 'p2'; mode = 'lobby';
         net.decoder.reset();
         net.run = -1;
-        net.edges = { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0, strike: 0, gtest: 0 };
+        net.edges = { fire: 0, reload: 0, swap: 0, interact: 0, grenade: 0, strike: 0 };
         net.session.set({ app: 'w7', role: 'guest', run: -1, v: VERSION });
         screens.showLobby({ role: 'guest', code, onLeave: leaveCoop });
       }
@@ -286,7 +279,7 @@ if (!view) {
     const partner = net.session && net.session.partner();
     const st = partner && partner.state;
     if (!st || st.role !== 'guest' || st.run !== net.run || !st.c || !st.pos) return {};
-    const [mx, my, yaw, pitch, flags, fireN, reloadN, swapN, interactN, grenadeN = 0, strikeN = 0, gtestN = 0] = st.c;
+    const [mx, my, yaw, pitch, flags, fireN, reloadN, swapN, interactN, grenadeN = 0, strikeN = 0] = st.c;
     const cmd = { move: { x: mx / 100, y: my / 100 }, yaw: yaw / 1000, pitch: pitch / 1000, ads: !!(flags & 2), moving: !!(flags & 4), pos: st.pos.map(v => v / 100) };
     cmd.fire = !!(flags & 1);
     if (first) {
@@ -296,7 +289,6 @@ if (!view) {
       if (interactN > net.seen.interact) { cmd.interact = true; net.seen.interact = interactN; }
       if (grenadeN > net.seen.grenade) { cmd.grenade = true; net.seen.grenade = grenadeN; }
       if (strikeN > net.seen.strike) { cmd.strike = true; net.seen.strike = strikeN; }
-      if (gtestN > net.seen.gtest) { cmd.gunshipTest = true; net.seen.gtest = gtestN; }
       if (st.a && st.a[0] > net.seenArmoury) { cmd.armoury = st.a[1]; net.seenArmoury = st.a[0]; }
     }
     return cmd;
@@ -393,7 +385,7 @@ if (!view) {
         let steps = 0, first = true;
         while (acc >= STEP && steps < 5) {
           const cmd = { ...base, yaw: aimOut.yaw, pitch: aimOut.pitch };
-          if (first) { cmd.reload = taps.reload; cmd.swap = taps.swap; cmd.interact = taps.interact; cmd.grenade = taps.grenade; cmd.strike = taps.strike; cmd.gunshipTest = taps.gunshipTest; cmd.armoury = taps.armoury; taps.reload = taps.swap = taps.interact = taps.grenade = taps.strike = taps.gunshipTest = false; taps.armoury = null; }
+          if (first) { cmd.reload = taps.reload; cmd.swap = taps.swap; cmd.interact = taps.interact; cmd.grenade = taps.grenade; cmd.strike = taps.strike; cmd.armoury = taps.armoury; taps.reload = taps.swap = taps.interact = taps.grenade = taps.strike = false; taps.armoury = null; }
           const cmds = { [localId]: cmd };
           if (role === 'host') cmds.p2 = guestCommand(first);
           first = false;
@@ -434,7 +426,7 @@ if (!view) {
         net.session.set({
           run: net.run,
           c: [Math.round(inp.moveX * 100), Math.round(inp.moveY * 100), Math.round(aimOut.yaw * 1000), Math.round(aimOut.pitch * 1000),
-            (inp.fire ? 1 : 0) | (inp.ads ? 2 : 0) | (p.moving ? 4 : 0), e.fire, e.reload, e.swap, e.interact, e.grenade, e.strike, e.gtest],
+            (inp.fire ? 1 : 0) | (inp.ads ? 2 : 0) | (p.moving ? 4 : 0), e.fire, e.reload, e.swap, e.interact, e.grenade, e.strike],
           pos: [Math.round(p.x * 100), Math.round(p.y * 100), Math.round(p.z * 100)],
           a: [net.armouryN, net.armouryW]
         });
@@ -501,7 +493,6 @@ if (!view) {
     }
     tagEl.hidden = !showTag;
 
-    gunshipBtn.hidden = mode !== 'playing' || gunship.active;
     app.classList.toggle('gunship', gunship.active);
     fpsFrames++; fpsT += dt;
     if (fpsT >= 0.5) {
